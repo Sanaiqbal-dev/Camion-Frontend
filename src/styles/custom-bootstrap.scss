@@ -89,7 +89,7 @@ $font-family-base: Inter, sans-serif;
   color: white;
 }
 
-.btn-container > button {
+.btn-container > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -97,6 +97,7 @@ $font-family-base: Inter, sans-serif;
   height: 100px;
   width: 150px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .customShipperButton {
@@ -156,8 +157,11 @@ $font-family-base: Inter, sans-serif;
 }
 
 .form,
-.form-container {
+.form-container, .form-container > * {
+  display: flex;
+  flex-direction: column;
   gap: 32px;
+ 
 }
 
 .btn-custom-upload {
