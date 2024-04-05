@@ -3,9 +3,15 @@ $theme-colors: (
   "secondary": #7b7878,
 );
 $font-family-base: Inter, sans-serif;
-
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1200px,
+  xxl: 1400px,
+);
 @import "../../node_modules/bootstrap/scss/bootstrap";
-
 
 .main-container {
   max-height: 100vh;
@@ -49,6 +55,7 @@ $font-family-base: Inter, sans-serif;
 
 .main_heading {
   font-weight: 700;
+  font-size: xx-large;
 }
 
 .sub_heading {
@@ -157,11 +164,11 @@ $font-family-base: Inter, sans-serif;
 }
 
 .form,
-.form-container, .form-container > * {
+.form-container,
+.form-container > * {
   display: flex;
   flex-direction: column;
   gap: 32px;
- 
 }
 
 .btn-custom-upload {
@@ -199,6 +206,200 @@ $font-family-base: Inter, sans-serif;
   gap: 24px;
 }
 
+.sidebar {
+  display: block;
+  min-width: 300px;
+  max-width: 300px;
+  height: 100vh;
+  font-size: 18px;
+  font-weight: 400;
+  background-color: #262a35;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+tr {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: #cdcdcd;
+  text-decoration: none;
+}
+
+.sidebar .active {
+  color: #0060b8;
+}
+
+.accordion {
+  margin-top: 100px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 10px;
+  --bs-accordion-color: white;
+  --bs-accordion-bg: transparent;
+  --bs-accordion-border-color: transparent;
+  --bs-accordion-border-width: 0px;
+  --bs-accordion-border-radius: 10px;
+  --bs-accordion-inner-border-radius: 0px;
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 0rem rgba(13, 110, 253, 0.25);
+  --bs-accordion-btn-color: white;
+  --bs-accordion-btn-bg: transparent;
+  --bs-accordion-active-color: white;
+  --bs-accordion-active-bg: transparent;
+  --bs-accordion-btn-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+}
+
+.accordion-not-collapsing-item {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 14px;
+  color: white;
+  text-align: left;
+  background-color: transparent;
+  border: 0;
+  border-radius: 10px;
+  overflow-anchor: none;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+    border-radius 0.15s ease;
+}
+
+.accordion-button {
+  font-size: 14px;
+  padding: 0%;
+}
+.accordion-button.collapsed::after{
+  --bs-accordion-btn-icon-transform: rotate(-180);
+}
+
+.accordion-button:not(.collapsed)::after {
+  --bs-accordion-btn-active-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+}
+
+.dashboard-item .accordion-button::after, .tracking-item .accordion-button::after{
+ background-image: none;
+}
+
+
+.burger-menu {
+  display: none;
+}
+
+.profile-img {
+  width: 35px;
+  height: 35px;
+}
+
+.notification-icon,
+.menu-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.page-title {
+  font-size: 2rem;
+}
+
+.menu-group {
+  gap: 40px;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.value-spinner {
+  height: 40px;
+  width: 60px;
+  justify-content: center;
+  display: flex;
+  width: max-content;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 0px 15px 0px 10px;
+  gap: 5px;
+}
+
+.value-spinner img {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.value-spinner input {
+  text-align: center;
+  width: 30px;
+  border: none;
+  font-weight: 700;
+  background-color: white;
+  color: #535353;
+  font-size: 16px;
+}
+
+.spinner-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+}
+
+.search-and-entries-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-control-feedback {
+  position: absolute;
+  margin-left: 5px;
+}
+
+.form-control {
+  height: 40px;
+}
+
+.submit-proposal {
+  height: 30px;
+  width: 160px;
+  border-radius: 6px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #0ebc93;
+  font-size: 12px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-proposal:active {
+  background-color: #0ca07e;
+}
+.selected-navlink > *{
+  background-color: #1d1f2b;
+  border-radius: 10px;
+}
+
+
 @media (max-width: 1024px) {
   .row {
     width: 100%;
@@ -229,3 +430,52 @@ $font-family-base: Inter, sans-serif;
 .g-recaptcha {
   height: 78px;
 }
+
+@media (max-width: 1024px) {
+  //   .parent-row {
+  //     padding-left: 0;
+  //   }
+
+  //   .img-container {
+  //     // max-width: 50%; /* Adjust image container width */
+  //     position: static; /* Adjust positioning if needed */
+  //   }
+
+  //   .background-img {
+  //     height: auto; /* Adjust height for responsive behavior */
+  //     max-height: 50vh; /* Limit image height on smaller screens */
+  //   }
+
+  //   .form-main-container, .login {
+  //     height: auto; /* Allow container to resize based on content */
+  //     min-height: 50vh; /* Minimum height to balance with image section */
+  //   }
+
+  //   /* Adjustments for form layout */
+  //   .form-container, .form-container > * {
+  //     flex-direction: column;
+  //   }
+}
+
+// @media (max-width: 768px) {
+//   /* Similar adjustments as above, tailored for even smaller screens */
+//   .background-img {
+//     display: none; /* Optionally hide the background image on very small screens */
+//   }
+
+//   .login {
+//     padding-top: 2rem; /* Adjust padding for top alignment */
+//   }
+
+//   /* Further adjust form layout and input sizes if necessary */
+//   .customInput {
+//     width: 100%; /* Ensure inputs span the full container width */
+//   }
+
+//   .register-container {
+//     flex-direction: column;
+//     align-items: center; /* Center align the elements for a vertical layout */
+//   }
+
+//   /* Adjust the size and layout of buttons and other interactive elements for easier touch */
+// }

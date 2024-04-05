@@ -50,7 +50,6 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     console.log(data);
-    // Handle form submission here
   };
 
   return (
@@ -67,10 +66,10 @@ const Register = () => {
             <div className="container">
               <div className="row">
                 <div className="col-sm-11 col-md-9 col-lg-9 mx-auto">
-                  <Image src={CamionLogo} />
+                  <Image className="col-lg-7" src={CamionLogo} />
 
                   <div className="mt-4">
-                    <h1 className="h1 mb-3 main_heading">
+                    <h1 className="h2 mb-3 font-weight-bolder">
                       Register a new account
                     </h1>
                     <p className="sub_heading mb-4">
