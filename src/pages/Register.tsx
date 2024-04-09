@@ -37,7 +37,6 @@ const schema = z
 
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-
   const [isCarrier, setIsCarrier] = useState(true);
 
   const {
