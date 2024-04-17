@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/Carrier/HomePage";
 import Dashboard from "../components/Carrier/Dashboard";
 import Tracking from "../components/Carrier/Tracking";
+import Requests from "../components/Carrier/Requests";
 
 export const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/requests",
-        element: <Dashboard />,
+        element: <Requests />,
       },
       {
         path: "/orders",

@@ -19,17 +19,15 @@ const HomePage = () => {
   ];
   const GetPageTitle = () => {
 
-    const title = pageTitleMap[currentPageTitle.pathname];
+    const pageObject = pageTitleMap.find((page) => page.pathname === currentPageTitle.pathname);
 
-    return title ? title : "";
+    return pageObject?.title ? pageObject.title : "";
   };
   const toggleSidebar = () => {};
 
   return (
     <div
       className="wrapper"
-      // className="d-flex flex-md-row flex-column fixed"
-      // style={{ height: "100vh", width: "100vw", backgroundColor:"#F3F3F3" }}
     >
       <CarrierSider />
       <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
