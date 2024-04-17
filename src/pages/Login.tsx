@@ -1,7 +1,6 @@
 import ShipperImage from "../assets/images/shipper-img.svg";
 import CamionLogo from "../assets/icons/ic-camion.svg";
 import Image from "react-bootstrap/Image";
-import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";

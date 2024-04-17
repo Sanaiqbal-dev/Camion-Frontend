@@ -2,12 +2,11 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
+    // "./pages/**/*.{ts,tsx}",
+    // "./components/**/*.{ts,tsx}",
+    // "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  prefix: "tw-",
   theme: {
     container: {
       center: true,
@@ -33,5 +32,7 @@ module.exports = {
       },
     },
   },
+  prefix: 'tw-',
+
   plugins: [require("tailwindcss-animate")],
 };

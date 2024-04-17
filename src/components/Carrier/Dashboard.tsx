@@ -5,7 +5,7 @@ import FleetStatus from "./FleetStatus";
 import FleetUsage from "./FleetUsage";
 const Dashboard = () => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+    <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="row main-stats">
         <div className="col stats-item border-right">
           <span className="stats-value">450</span>

@@ -4,7 +4,7 @@ import CamionLogo from "../assets/icons/ic-camion.svg";
 import Image from "react-bootstrap/Image";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
