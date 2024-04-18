@@ -5,11 +5,9 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-interface ILoginFormInput {
-  email: string;
-  password: string;
-}
+import { useDispatch } from "react-redux";
+import { setSession } from "../state/Session/sessionSlice";
+import { ILoginRequest } from "../interface/Session";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email."),
@@ -26,9 +24,13 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
+  // const dispatch = useDispatch();
   const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
     console.log(data);
     // Handle form submission here
+
+    // dispatch the new daat to store after succesfully logging in
+    // dispatch(setSession({username:data.email,token:"nmnnm",role:"carrier",status:"active"}));
   };
 
   return (
