@@ -6,31 +6,48 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { setSession } from "../state/Session/sessionSlice";
+import { setAuthSession } from "../state/Auth/authSlice";
 import { ILoginRequest } from "../interface/Session";
+import { useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../services/auth/authService";
 
 const schema = z.object({
-  email: z.string().email("Enter a valid email."),
+  username: z.string().email("Enter a valid email."),
   password: z.string().min(1, "Enter your password."),
 });
 
 const Login = () => {
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginFormInput>({
+  } = useForm<ILoginRequest>({
     resolver: zodResolver(schema),
   });
 
-  // const dispatch = useDispatch();
-  const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
-    console.log(data);
-    // Handle form submission here
+  const [login, { isLoading, isError, error }] = useLoginUserMutation();
 
-    // dispatch the new daat to store after succesfully logging in
-    // dispatch(setSession({username:data.email,token:"nmnnm",role:"carrier",status:"active"}));
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
+    try {
+      const loginResponse = await login(data).unwrap();
+      dispatch(
+        setAuthSession({
+          username: data.username,
+          token: loginResponse.token,
+          role: loginResponse.role,
+          status: "active",
+        })
+      );
+      console.log("Recieved Token is :", loginResponse);
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -65,12 +82,13 @@ const Login = () => {
                             <Form.Control
                               type="email"
                               className="form-control customInput"
-                              {...register("email")}
-                              isInvalid={!!errors.email}
+                              {...register("username")}
+                              isInvalid={!!errors.username}
                               placeholder="Enter email address"
+                              disabled={isLoading}
                             />
                             <Form.Control.Feedback type="invalid">
-                              {errors.email?.message}
+                              {errors.username?.message}
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
@@ -85,7 +103,11 @@ const Login = () => {
                               placeholder="Enter password"
                               {...register("password")}
                               isInvalid={!!errors.password}
+                              disabled={isLoading}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.password?.message}
+                            </Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
                               <a
                                 href=""
@@ -97,13 +119,15 @@ const Login = () => {
                                 Forgot your Password?
                               </a>
                             </div>
-                            <Form.Control.Feedback type="invalid">
-                              {errors.password?.message}
-                            </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
                       </div>
-
+                      {isError && error && (
+                        <p>
+                          Error: {error.data?.message || "An error occurred"}
+                        </p>
+                      )}
+                      {isLoading && <p>Loading...</p>}{" "}
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}

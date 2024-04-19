@@ -1,45 +1,117 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/Carrier/HomePage";
 import Dashboard from "../components/Carrier/Dashboard";
 import Tracking from "../components/Carrier/Tracking";
 import Requests from "../components/Carrier/Requests";
-import Login from "../pages/Login";
+import { Suspense, lazy } from "react";
+
+const LazyHome = lazy(() => import("../pages/Carrier/HomePage"));
+const LazyLogin = lazy(() => import("../pages/Login"));
+const LazyRegister = lazy(() => import("../pages/Register"));
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element:<Login/>
-    // element: <HomePage />,
-    // children: [
-    //   {
-    //     index:true,
-    //     path: "/dashboard",
-    //     element: <Dashboard />,
-    //   },
-    //   {
-    //     path: "/tracking",
-    //     element: <Tracking />,
-    //   },
-    //   {
-    //     path: "/requests",
-    //     element: <Requests />,
-    //   },
-    //   {
-    //     path: "/orders",
-    //     element: <Dashboard />,
-    //   },
-    //   {
-    //     path: "/drivermanagement",
-    //     element: <Dashboard />,
-    //   },
-    //   {
-    //     path: "/vehiclemanagement",
-    //     element: <Dashboard />,
-    //   },
-    //   {
-    //     path: "/bayan",
-    //     element: <Dashboard />,
-    //   },
-    // ],
+    path: "/carrier",
+    element: (
+      <Suspense>
+        <LazyHome />
+      </Suspense>
+    ),
+    children: [
+      {
+        index: true,
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/tracking",
+        element: <Tracking />,
+      },
+      {
+        path: "/requests",
+        element: <Requests />,
+      },
+      {
+        path: "/orders",
+        element: <Requests />,
+      },
+      {
+        path: "/drivermanagement",
+        element: <Requests />,
+      },
+      {
+        path: "/vehiclemanagement",
+        element: <Requests />,
+      },
+      {
+        path: "/bayan",
+        element: <Requests />,
+      },
+    ],
+  },
+  {
+    path: "/Shipper",
+    element: (
+      <Suspense>
+        <LazyHome />
+      </Suspense>
+    ),
+    children: [
+      {
+        index: true,
+        path: "/dashboard",
+      },
+      {
+        path: "/tracking",
+      },
+      {
+        path: "/requests",
+      },
+      {
+        path: "/orders",
+      },
+      {
+        path: "/proposals",
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <Suspense>
+        <LazyHome />
+      </Suspense>
+    ),
+    children: [
+      {
+        index: true,
+        path: "/profiles",
+        // element: <Dashboard />,
+      },
+      {
+        path: "/orderManagement",
+      },
+      {
+        path: "/reports",
+      },
+      {
+        path: "/adminUserManagement",
+      }
+    ],
+  },
+  {
+    path: "/login",
+    element: (
+      <Suspense fallback={<div>Loading Login...</div>}>
+        <LazyLogin />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <Suspense fallback={<div>Loading Register...</div>}>
+        <LazyRegister />
+      </Suspense>
+    ),
   },
 ]);

@@ -1,10 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sessionReducer from "./Session/sessionSlice";
-import { userApi } from "../services/UserApi";
+import sessionReducer from "./Auth/authSlice";
+import { userApi } from "../services/userApi";
 export const store = configureStore({
   reducer: {
     session: sessionReducer,
-
     [userApi.reducerPath]: userApi.reducer,
   },
 

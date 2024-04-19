@@ -9,18 +9,18 @@ const initialState: ISessionState = {
   status: "expired",
 };
 
-const sessionSlice = createSlice({
-  name: "session",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    setSession: (state, action:PayloadAction<ISessionState>) => {
+    setAuthSession: (state, action:PayloadAction<ISessionState>) => {
       const { username, role, token, status } = action.payload;
       state.username = username;
       state.role = role;
       state.token = token;
       state.status = status;
     },
-    clearSession: (state) => {
+    clearAuthSession: (state) => {
       state.username = null;
       state.role = null;
       state.token = null;
@@ -29,5 +29,5 @@ const sessionSlice = createSlice({
   },
 });
 
-export const { setSession, clearSession } = sessionSlice.actions;
-export default sessionSlice.reducer;
+export const { setAuthSession, clearAuthSession } = authSlice.actions;
+export default authSlice.reducer;
