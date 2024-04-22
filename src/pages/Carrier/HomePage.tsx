@@ -9,7 +9,7 @@ import { Image } from "react-bootstrap";
 const HomePage = () => {
   const currentPageTitle = useLocation();
   const pageTitleMap = [
-    { pathname: "/carrier/dashboard", title: "Dashboard" },
+    { pathname: "/dashboard", title: "Dashboard" },
     { pathname: "/tracking", title: "Tracking" },
     { pathname: "/requests", title: "Requests" },
     { pathname: "/orders", title: "Orders" },

@@ -23,7 +23,7 @@ const CarrierSider = () => {
       <Accordion defaultActiveKey="0" id="accordionExample">
         <NavLink
           key={"Dashboard"}
-          to={"/carrier/dashboard"}
+          to={"/dashboard"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }

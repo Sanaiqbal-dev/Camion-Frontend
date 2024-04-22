@@ -10,7 +10,7 @@ const LazyRegister = lazy(() => import("../pages/Register"));
 
 export const router = createBrowserRouter([
   {
-    path: "/carrier",
+    path: "/",
     element: (
       <Suspense>
         <LazyHome />
@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/Shipper",
+    path: "/",
     element: (
       <Suspense>
         <LazyHome />
@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "/",
     element: (
       <Suspense>
         <LazyHome />
