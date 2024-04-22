@@ -2,116 +2,104 @@ import { createBrowserRouter } from "react-router-dom";
 import Dashboard from "../components/Carrier/Dashboard";
 import Tracking from "../components/Carrier/Tracking";
 import Requests from "../components/Carrier/Requests";
-import { Suspense, lazy } from "react";
+import { ReactElement, Suspense, lazy } from "react";
 
 const LazyHome = lazy(() => import("../pages/Carrier/HomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
 const LazyRegister = lazy(() => import("../pages/Register"));
 
+const withSuspense = (
+  Component: ReactElement,
+  fallback: ReactElement = <div>Loading...</div>
+): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
+
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <Suspense>
-        <LazyHome />
-      </Suspense>
-    ),
+    path:"/",
+    element: withSuspense(<LazyHome />),
+  },
+  {
+    path: "/carrier",
+    element: withSuspense(<LazyHome />),
     children: [
       {
         index: true,
-        path: "/dashboard",
+        path: "dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/tracking",
+        path: "tracking",
         element: <Tracking />,
       },
       {
-        path: "/requests",
+        path: "requests",
         element: <Requests />,
       },
       {
-        path: "/orders",
+        path: "orders",
         element: <Requests />,
       },
       {
-        path: "/drivermanagement",
+        path: "drivermanagement",
         element: <Requests />,
       },
       {
-        path: "/vehiclemanagement",
+        path: "vehiclemanagement",
         element: <Requests />,
       },
       {
-        path: "/bayan",
+        path: "bayan",
         element: <Requests />,
       },
     ],
   },
   {
-    path: "/",
-    element: (
-      <Suspense>
-        <LazyHome />
-      </Suspense>
-    ),
+    path: "/shipper",
+    element: withSuspense(<LazyHome />),
     children: [
       {
         index: true,
-        path: "/dashboard",
+        path: "dashboard",
       },
       {
-        path: "/tracking",
+        path: "tracking",
       },
       {
-        path: "/requests",
+        path: "requests",
       },
       {
-        path: "/orders",
+        path: "orders",
       },
       {
-        path: "/proposals",
+        path: "proposals",
       },
     ],
   },
   {
-    path: "/",
-    element: (
-      <Suspense>
-        <LazyHome />
-      </Suspense>
-    ),
+    path: "/admin",
+    element: withSuspense(<LazyHome />),
     children: [
       {
         index: true,
-        path: "/profiles",
-        // element: <Dashboard />,
+        path: "profiles",
       },
       {
-        path: "/orderManagement",
+        path: "orderManagement",
       },
       {
-        path: "/reports",
+        path: "reports",
       },
       {
-        path: "/adminUserManagement",
-      }
+        path: "adminUserManagement",
+      },
     ],
   },
   {
     path: "/login",
-    element: (
-      <Suspense fallback={<div>Loading Login...</div>}>
-        <LazyLogin />
-      </Suspense>
-    ),
+    element: withSuspense(<LazyLogin />, <div>Loading Login...</div>),
   },
   {
     path: "/register",
-    element: (
-      <Suspense fallback={<div>Loading Register...</div>}>
-        <LazyRegister />
-      </Suspense>
-    ),
+    element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
   },
 ]);

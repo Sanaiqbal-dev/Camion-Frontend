@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { RootState } from "../../state/store";
 import { ILoginResponse, ILoginRequest } from "../../interface/Session";
 
 export const authApi = createApi({
@@ -7,7 +6,7 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://b89cf619-9148-4bf4-b8d3-4061b9d8566b.mock.pstmn.io/",
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).session.token;
+      const token = (getState() as any).session.token;
       if (token) {
         headers.set("authorization", "Bearer ${token}");
         return headers;

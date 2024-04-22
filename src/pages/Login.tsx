@@ -6,7 +6,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { setAuthSession } from "../state/Auth/authSlice";
+import { setAuthSession } from "../state/slice/authSlice";
 import { ILoginRequest } from "../interface/Session";
 import { useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../services/auth/authService";
@@ -44,7 +44,7 @@ const Login = () => {
       );
       console.log("Recieved Token is :", loginResponse);
 
-      navigate("/dashboard");
+      navigate("/carrier");
     } catch (error) {
       console.error("Login failed:", error);
     }

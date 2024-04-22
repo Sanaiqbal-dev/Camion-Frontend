@@ -23,7 +23,7 @@ const CarrierSider = () => {
       <Accordion defaultActiveKey="0" id="accordionExample">
         <NavLink
           key={"Dashboard"}
-          to={"/dashboard"}
+          to={"/carrier/dashboard"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -42,7 +42,7 @@ const CarrierSider = () => {
         </NavLink>
         <NavLink
           key={"Tracking"}
-          to={"/tracking"}
+          to={"/carrier/tracking"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -72,7 +72,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Requests"}
-              to={"/requests"}
+              to={"/carrier/requests"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -91,7 +91,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Orders"}
-              to={"/orders"}
+              to={"/carrier/orders"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -123,7 +123,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Driver Management"}
-              to={"/driverManagement"}
+              to={"/carrier/driverManagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -142,7 +142,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Vehicle Management"}
-              to={"/vehicleManagement"}
+              to={"/carrier/vehicleManagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -161,7 +161,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Bayan"}
-              to={"/bayan"}
+              to={"/carrier/bayan"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
