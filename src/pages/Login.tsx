@@ -13,7 +13,7 @@ import { useLoginUserMutation } from "../services/auth/authService";
 
 const schema = z.object({
   username: z.string().email("Enter a valid email."),
-  password: z.string().min(1, "Enter your password."),
+  password: z.string().min(6, "Enter your password."),
 });
 
 const Login = () => {
@@ -42,9 +42,9 @@ const Login = () => {
           status: "active",
         })
       );
-      console.log("Recieved Token is :", loginResponse);
+      // console.log("Recieved Token is :", loginResponse);
 
-      navigate("/carrier");
+      navigate("/carrier/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
     }
