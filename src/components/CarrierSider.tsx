@@ -18,7 +18,7 @@ const CarrierSider = () => {
         src={CamionLogo}
         alt="logo"
         height={27}
-        style={{ width: "100%", margin: "0 auto" }}
+        style={{ width: "80%", margin: "0 auto" }}
       />
       <Accordion defaultActiveKey="0" id="accordionExample">
         <NavLink
@@ -123,7 +123,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Driver Management"}
-              to={"/carrier/driverManagement"}
+              to={"/carrier/drivermanagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -142,7 +142,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Vehicle Management"}
-              to={"/carrier/vehicleManagement"}
+              to={"/carrier/vehiclemanagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }

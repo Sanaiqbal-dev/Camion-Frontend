@@ -19,7 +19,8 @@ const persistConfig = {
 
 const store = configureStore({
   reducer: persistReducer(persistConfig, reducer),
-  // middleware: middlewares,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(middlewares),
   devTools: ENVIRONMENT === "development",
 });
 

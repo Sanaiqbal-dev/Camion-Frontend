@@ -8,6 +8,7 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
 
 interface IRegisterFormInput {
   firstName: string;
@@ -274,7 +275,7 @@ const Register = () => {
                         <div className="d-flex justify-content-start">
                           <div>Already have an account?</div>
                           <div>
-                            <a
+                            <Link to="/Login"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",
@@ -282,10 +283,9 @@ const Register = () => {
                                 textDecoration: "none",
                                 marginLeft: "15px",
                               }}
-                              href="Login.html"
                             >
                               Sign in
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>

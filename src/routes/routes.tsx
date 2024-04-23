@@ -3,6 +3,10 @@ import Dashboard from "../components/Carrier/Dashboard";
 import Tracking from "../components/Carrier/Tracking";
 import Requests from "../components/Carrier/Requests";
 import { ReactElement, Suspense, lazy } from "react";
+import Orders from "../components/Carrier/Orders";
+import DriverManagement from "../components/Carrier/DriverManagement";
+import VehicleManagement from "../components/Carrier/VehicleManagement";
+import Bayan from "../components/Carrier/Bayan";
 
 const LazyHome = lazy(() => import("../pages/Carrier/HomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
@@ -15,7 +19,7 @@ const withSuspense = (
 
 export const router = createBrowserRouter([
   {
-    path:"/",
+    path: "/",
     element: withSuspense(<LazyHome />),
   },
   {
@@ -37,19 +41,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "orders",
-        element: <Requests />,
+        element: <Orders />,
       },
       {
         path: "drivermanagement",
-        element: <Requests />,
+        element: <DriverManagement />,
       },
       {
         path: "vehiclemanagement",
-        element: <Requests />,
+        element: <VehicleManagement />,
       },
       {
         path: "bayan",
-        element: <Requests />,
+        element: <Bayan />,
       },
     ],
   },

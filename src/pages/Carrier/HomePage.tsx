@@ -10,13 +10,13 @@ const HomePage = () => {
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
   const pageTitleMap = [
-    { pathname: "/dashboard", title: "Dashboard" },
-    { pathname: "/tracking", title: "Tracking" },
-    { pathname: "/requests", title: "Requests" },
-    { pathname: "/orders", title: "Orders" },
-    { pathname: "/drivermanagement", title: "Driver Management" },
-    { pathname: "/vehiclemanagement", title: "Vehicle Management" },
-    { pathname: "/bayan", title: "Bayan" },
+    { pathname: "/carrier/dashboard", title: "Dashboard" },
+    { pathname: "/carrier/tracking", title: "Tracking" },
+    { pathname: "/carrier/requests", title: "Requests" },
+    { pathname: "/carrier/orders", title: "Orders" },
+    { pathname: "/carrier/drivermanagement", title: "Driver Management" },
+    { pathname: "/carrier/vehiclemanagement", title: "Vehicle Management" },
+    { pathname: "/carrier/bayan", title: "Bayan" },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find(
@@ -33,7 +33,7 @@ const HomePage = () => {
     return (
       <div className="wrapper">
         <CarrierSider />
-        <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
+        <div className="content-container col *:m-1 m-sm-2 m-md-3 m-xl-5 tw-mb-0 mb-0 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
           <div className="burger-menu">
             <span onClick={toggleSidebar}>
               <svg

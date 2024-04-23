@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
 import { setAuthSession } from "../state/slice/authSlice";
 import { ILoginRequest } from "../interface/Session";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginUserMutation } from "../services/auth/authService";
 
 const schema = z.object({
@@ -141,7 +141,7 @@ const Login = () => {
                         <div className="d-flex justify-content-start">
                           <div>Don’t have an account?</div>
                           <div>
-                            <a
+                            <Link to="/Register"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",
@@ -149,10 +149,9 @@ const Login = () => {
                                 textDecoration: "none",
                                 marginLeft: "30px",
                               }}
-                              href="Login.html"
                             >
                               Register your account
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>

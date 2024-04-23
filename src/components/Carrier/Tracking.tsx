@@ -2,7 +2,7 @@ import {
   APIProvider,
   Map,
 } from "@vis.gl/react-google-maps";
-import { MapMarker } from "./MapMarker";
+import { MapMarker } from "../ui/MapMarker";
 
 const Tracking = () => {
   const mapApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;

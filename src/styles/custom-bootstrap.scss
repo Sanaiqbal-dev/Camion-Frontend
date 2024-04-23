@@ -28,7 +28,6 @@ $grid-breakpoints: (
   position: absolute;
   padding-left: 270px;
   background-color: #f3f3f3;
-  
 }
 .content-container {
   max-width: calc(100vw - 300px);
@@ -552,20 +551,27 @@ tr {
   border-radius: 1px;
 }
 
-
 // Table styling...
 
 .table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 15px;
-  overflow-y: auto;
+  overflow: hidden;
   position: relative;
-  max-height: calc(80vh - 30px);
   box-sizing: border-box;
 }
 
+.table-contents div:nth-child(1) {
+  max-height: calc(100vh - 300px);
+}
 .data-table {
+  width: 100%;
+  margin-top: 20px;
   border-collapse: separate;
   border-spacing: 0 10px;
+  overflow-y: auto;
 }
 .data-table tbody tr:hover {
   background-color: #dbd9d9;
@@ -585,13 +591,70 @@ thead th:last-child {
 }
 
 .equal-columns {
-  width: 100%;
   table-layout: fixed;
 }
+.auto-width-columns {
+  table-layout: auto;
+}
 
+.img-prev,
+.img-next {
+  padding: 5px 20px;
+  cursor: pointer;
+}
+.img-prev:hover,
+.img-next:hover {
+  background-color: #7a7a7a;
+}
+.img-prev img,
+.img-next img {
+  transform: rotate(-90deg);
+}
+
+.action-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  cursor: pointer;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.add-item-btn {
+  height: 40px;
+  background-color: #0060b8;
+  color: white;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  padding: 0px 30px;
+}
+
+.filter-btn {
+  height: 40px;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  padding: 0px 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
 ///////////////////////////////////
-/// 
-/// 
+///
+///
 .proposal-btn {
   height: 30px;
   width: 160px;
