@@ -33,7 +33,7 @@ const HomePage = () => {
     return (
       <div className="wrapper">
         <CarrierSider />
-        <div className="content-container col *:m-1 m-sm-2 m-md-3 m-xl-5 tw-mb-0 mb-0 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
+        <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
           <div className="burger-menu">
             <span onClick={toggleSidebar}>
               <svg
