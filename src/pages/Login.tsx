@@ -42,7 +42,7 @@ const Login = () => {
           status: "active",
         })
       );
-      console.log("Recieved Token is :", loginResponse);
+      // console.log("Recieved Token is :", loginResponse);
 
       navigate("/carrier/dashboard");
     } catch (error) {
