@@ -3,8 +3,9 @@ import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { Order, OrderColumns } from "./TableColumns/OrdersColumn";
+import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
+import { Order } from "../../interface/carrier";
 
 const Orders = () => {
   const ordersData: Order[] = [
@@ -104,16 +105,17 @@ const Orders = () => {
   ];
 
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
+ 
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }

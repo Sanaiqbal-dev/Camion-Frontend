@@ -44,7 +44,8 @@ const Login = () => {
       );
       // console.log("Recieved Token is :", loginResponse);
 
-      navigate("/carrier/dashboard");
+      // navigate("/carrier/dashboard");
+      navigate("/admin/profiles");
     } catch (error) {
       console.error("Login failed:", error);
     }

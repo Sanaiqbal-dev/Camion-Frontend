@@ -6,7 +6,7 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
-import { Vehicle } from "../../interface/vehicle";
+import { Vehicle } from "../../interface/carrier";
 
 const VehicleManagement = () => {
   const vehiclesData: Vehicle[] = [
@@ -123,16 +123,17 @@ const VehicleManagement = () => {
     },
   ];
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
+  
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }

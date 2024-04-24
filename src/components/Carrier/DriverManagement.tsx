@@ -1,4 +1,3 @@
-import { Driver } from "../../interface/driver";
 import { DataTable } from "../ui/DataTable";
 import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -7,6 +6,7 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
+import { Driver } from "../../interface/carrier";
 
 const DriverManagement = () => {
   const driversData: Driver[] = [
@@ -114,16 +114,16 @@ const DriverManagement = () => {
     },
   ];
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }
