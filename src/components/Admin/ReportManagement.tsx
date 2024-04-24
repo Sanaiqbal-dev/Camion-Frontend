@@ -1,103 +1,97 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { Report } from "../../interface/admin";
+import { ReportsColumn } from "./TableColumns/ReportColumns";
 
-const Requests = () => {
-  const data: Request[] = [
+const ReportManagement = () => {
+  const reportsData: Report[] = [
     {
       id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
     {
       id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
 
     {
       id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
 
     {
       id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
 
     {
       id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
     {
       id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
     {
       id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
     {
       id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
     {
       id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      userType: "Shipper",
+      shipperName: "Acme Co.",
+      contact: "+96 876 5678",
+      email: "mr_abasi@mail.com",
+      activeOrders: "10",
+      report: "",
     },
   ];
 
@@ -105,7 +99,6 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
-  
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -172,8 +165,9 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+      {reportsData && <DataTable columns={ReportsColumn} data={reportsData} />}
     </div>
   );
 };
-export default Requests;
+
+export default ReportManagement;

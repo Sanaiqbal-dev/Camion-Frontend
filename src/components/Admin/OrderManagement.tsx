@@ -1,103 +1,115 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { Order } from "../../interface/admin";
+import { OrderColumns } from "./TableColumns/OrdersColumn";
 
-const Requests = () => {
-  const data: Request[] = [
+const OrderManagement = () => {
+  const ordersData: Order[] = [
     {
       id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
     {
       id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
 
     {
       id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
 
     {
       id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
 
     {
       id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
     {
       id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
     {
       id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
     {
       id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
     {
       id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      assignedCarrier: "Binford Ltd",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      dimentions: "30x45x15",
+      ETA: "9/20/2024",
+      orderStatus: "enroute",
+      action: "",
     },
   ];
 
@@ -105,7 +117,6 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
-  
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -172,8 +183,9 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+      {ordersData && <DataTable columns={OrderColumns} data={ordersData} />}
     </div>
   );
 };
-export default Requests;
+
+export default OrderManagement;

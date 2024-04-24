@@ -1,29 +1,20 @@
-import {
-  Link,
-  Navigate,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-import CarrierSider from "../../components/CarrierSider";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+import AdminSider from "../../components/Admin/AdminSider";
 import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Image } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { clearAuthSession } from "../../state/slice/authSlice";
+import { useSelector } from "react-redux";
 
-const HomePage = () => {
+const AdminHomePage = () => {
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
   const pageTitleMap = [
-    { pathname: "/carrier/dashboard", title: "Dashboard" },
-    { pathname: "/carrier/tracking", title: "Tracking" },
-    { pathname: "/carrier/requests", title: "Requests" },
-    { pathname: "/carrier/orders", title: "Orders" },
-    { pathname: "/carrier/drivermanagement", title: "Driver Management" },
-    { pathname: "/carrier/vehiclemanagement", title: "Vehicle Management" },
-    { pathname: "/carrier/bayan", title: "Bayan" },
+    { pathname: "/admin/profiles", title: "Profiles" },
+    { pathname: "/admin/orderManagement", title: "Order Managment" },
+    { pathname: "/admin/reportManagement", title: "Reports" },
+    { pathname: "/admin/settings", title: "Settings" },
+    { pathname: "/admin/adminUserManagement", title: "Admin User Management" },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find(
@@ -44,15 +35,9 @@ const HomePage = () => {
     );
   }
 
-  const dispatch = useDispatch();
-
-  const handleReplaceNavigate = () => {
-    dispatch(clearAuthSession());
-  };
-
   return (
     <div className="wrapper">
-      <CarrierSider />
+      <AdminSider />
       <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
         <div className="burger-menu">
           <span onClick={toggleSidebar}>
@@ -77,11 +62,9 @@ const HomePage = () => {
           </span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Image
-              className="profile-img"
-              src={ProfileIcon}
-              onClick={handleReplaceNavigate}
-            />
+            <Link to={"/admin/adminUserManagement"}>
+              <Image className="profile-img" src={ProfileIcon} />
+            </Link>
             <Image
               className="notification-icon"
               src={NotificationIcon}
@@ -106,4 +89,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default AdminHomePage;

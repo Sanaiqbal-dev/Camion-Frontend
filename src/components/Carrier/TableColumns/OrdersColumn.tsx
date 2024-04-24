@@ -3,17 +3,10 @@ import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconPrintBill from "../../../assets/icons/ic-printer.svg";
+import { Collapse, Card } from "react-bootstrap";
+import { useState } from "react";
+import { Order } from "../../../interface/carrier";
 
-export type Order = {
-  id: string;
-  origin: string;
-  destination: string;
-  weight: string;
-  dimentions: string;
-  ETA: string;
-  status: string;
-  action: string;
-};
 export const OrderColumns: ColumnDef<Order>[] = [
   {
     accessorKey: "origin",
@@ -39,6 +32,41 @@ export const OrderColumns: ColumnDef<Order>[] = [
   {
     accessorKey: "status",
     header: "status",
+    cell:() => {
+        const [open, setOpen] = useState(false);
+
+       return (
+         <div>
+           <p>
+             <div
+               onClick={() => setOpen(!open)}
+               aria-controls="example-collapse-text"
+               aria-expanded={open}
+               style={{ cursor: "pointer" }}
+             >
+               Select Status{" "}
+               <img src="assets/ic-down.svg" alt="Toggle Dropdown" />
+             </div>
+           </p>
+           <Collapse in={open}>
+             <div
+               id="example-collapse-text"
+               style={{ position: "fixed", zIndex: 1000 }}
+             >
+               <Card>
+                 <Card.Body>
+                   <ul>
+                     <li>Item 1</li>
+                     <li>Item 2</li>
+                     <li>Item 3</li>
+                   </ul>
+                 </Card.Body>
+               </Card>
+             </div>
+           </Collapse>
+         </div>
+       );
+    }
   },
   {
     accessorKey: "action",

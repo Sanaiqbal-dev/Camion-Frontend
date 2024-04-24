@@ -5,8 +5,8 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
-import { BayanItem } from "../../interface/bayan";
 import { BayanColumns } from "./TableColumns/BayanColums";
+import { BayanItem } from "../../interface/carrier";
 
 const Bayan = () => {
   const bayanData: BayanItem[] = [

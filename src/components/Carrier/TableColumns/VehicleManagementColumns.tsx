@@ -3,8 +3,8 @@ import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconDriver from "../../../assets/icons/ic-driver.svg";
 import { Link } from "react-router-dom";
-import { Vehicle } from "../../../interface/vehicle";
 import clsx from "clsx";
+import { Vehicle } from "../../../interface/carrier";
 
 export const VehicleManagementColumns: ColumnDef<Vehicle>[] = [
   {
