@@ -1,103 +1,124 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { profiles } from "../../interface/admin";
+import { ProfileColumns } from "./TableColumns/ProfileColumns";
 
-const Requests = () => {
-  const data: Request[] = [
-    {
-      id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
-    },
-
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-
+const Profiles = () => {
+  const profilesData: profiles[] = [
     {
       id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      profileType: "Shipper",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Not Approved",
+      action: "",
     },
 
     {
       id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      profileType: "Carrier",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Not Approved",
+      action: "",
     },
+
     {
       id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      profileType: "Shipper",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Deactivated",
+      action: "",
     },
     {
       id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      profileType: "Carrier",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Deactivated",
+      action: "",
     },
     {
       id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      profileType: "Shipper",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Active",
+      action: "",
     },
     {
       id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      profileType: "Carrier",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Active",
+      action: "",
+    },
+    {
+      id: "728ed52f",
+      profileType: "Carrier",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Not Approved",
+      action: "",
+    },
+    {
+      id: "489e1d42",
+      profileType: "Shipper",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Not Approved",
+      action: "",
+    },
+
+    {
+      id: "489e1e742",
+      profileType: "Carrier",
+      firstName: "Ali",
+      lastName: "Abbasi",
+      email: "aliabbasi@mail.com",
+      contact: "+96 987 9876",
+      company: "Jaguar Group",
+      CRDocument: "",
+      status: "Not Approved",
+      action: "",
     },
   ];
 
@@ -105,7 +126,6 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
-  
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -172,8 +192,10 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+      {profilesData && (
+        <DataTable columns={ProfileColumns} data={profilesData} />
+      )}
     </div>
   );
 };
-export default Requests;
+export default Profiles;

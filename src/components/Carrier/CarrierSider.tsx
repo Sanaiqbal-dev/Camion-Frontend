@@ -1,14 +1,14 @@
 import { Accordion, Image } from "react-bootstrap";
-import CamionLogo from "../assets/images/camion-logo.svg";
-import IconDashboard from "../assets/icons/ic-dashboard.svg";
-import IconTracking from "../assets/icons/ic-tracking.svg";
-import IconOrderManagment from "../assets/icons/ic-order-management.svg";
-import IconRequest from "../assets/icons/ic-request.svg";
-import IconOrder from "../assets/icons/ic-orders.svg";
-import IconFleetManagment from "../assets/icons/ic-fleet.svg";
-import IconDriverManagment from "../assets/icons/ic-driver-management.svg";
-import IconVehicleManagment from "../assets/icons/ic-vehicle-management.svg";
-import IconBayan from "../assets/icons/ic-bayan.svg";
+import CamionLogo from "../../assets/images/camion-logo.svg";
+import IconDashboard from "../../assets/icons/ic-dashboard.svg";
+import IconTracking from "../../assets/icons/ic-tracking.svg";
+import IconOrderManagment from "../../assets/icons/ic-order-management.svg";
+import IconRequest from "../../assets/icons/ic-request.svg";
+import IconOrder from "../../assets/icons/ic-orders.svg";
+import IconFleetManagment from "../../assets/icons/ic-fleet.svg";
+import IconDriverManagment from "../../assets/icons/ic-driver-management.svg";
+import IconVehicleManagment from "../../assets/icons/ic-vehicle-management.svg";
+import IconBayan from "../../assets/icons/ic-bayan.svg";
 import { NavLink } from "react-router-dom";
 
 const CarrierSider = () => {

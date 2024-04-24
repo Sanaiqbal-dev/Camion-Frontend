@@ -7,8 +7,14 @@ import Orders from "../components/Carrier/Orders";
 import DriverManagement from "../components/Carrier/DriverManagement";
 import VehicleManagement from "../components/Carrier/VehicleManagement";
 import Bayan from "../components/Carrier/Bayan";
+import Profiles from "../components/Admin/Profiles";
+import OrderManagement from "../components/Admin/OrderManagement";
+import ReportManagement from "../components/Admin/ReportManagement";
+import AdminUserManagement from "../components/Admin/AdminUserManagement";
+import Settings from "../components/Admin/Settings";
 
-const LazyHome = lazy(() => import("../pages/Carrier/HomePage"));
+const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
+const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
 const LazyRegister = lazy(() => import("../pages/Register"));
 
@@ -20,11 +26,12 @@ const withSuspense = (
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: withSuspense(<LazyHome />),
+    // element: withSuspense(<LazyCarrierHome />),
+    element: withSuspense(<LazyAdminHome />),
   },
   {
     path: "/carrier",
-    element: withSuspense(<LazyHome />),
+    element: withSuspense(<LazyCarrierHome />),
     children: [
       {
         index: true,
@@ -59,7 +66,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/shipper",
-    element: withSuspense(<LazyHome />),
+    element: withSuspense(<LazyCarrierHome />),
     children: [
       {
         index: true,
@@ -81,20 +88,28 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: withSuspense(<LazyHome />),
+    element: withSuspense(<LazyAdminHome />),
     children: [
       {
         index: true,
         path: "profiles",
+        element: <Profiles />,
       },
       {
         path: "orderManagement",
+        element: <OrderManagement />,
       },
       {
-        path: "reports",
+        path: "reportManagement",
+        element: <ReportManagement />,
       },
       {
         path: "adminUserManagement",
+        element: <AdminUserManagement />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
       },
     ],
   },

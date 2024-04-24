@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconSubmitted from "../../../assets/icons/ic-submitted.svg";
-import { Request } from "../../../interface/request";
+import { Request } from "../../../interface/carrier";
 
 export const RequestColumns: ColumnDef<Request>[] = [
   {
