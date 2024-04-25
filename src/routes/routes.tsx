@@ -1,8 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/Carrier/HomePage";
-import Dashboard from "../components/Carrier/Dashboard";
+import HomePage from "../pages/Shipper/HomePage";
+import Dashboard from "../components/Shipper/Dashboard";
 import Tracking from "../components/Carrier/Tracking";
-import Requests from "../components/Carrier/Requests";
+import Requests from "../components/Shipper/Requests";
+import Orders from "../components/Shipper/Orders";
+import UserManagement from "../components/Shipper/UserManagement";
+import Proposals from "../components/Shipper/Proposals";
+import ProposalsSecond from "../components/Shipper/ProposalsSecond";
 
 export const router = createBrowserRouter([
   {
@@ -10,7 +14,7 @@ export const router = createBrowserRouter([
     element: <HomePage />,
     children: [
       {
-        index:true,
+        index: true,
         path: "/dashboard",
         element: <Dashboard />,
       },
@@ -24,15 +28,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/orders",
-        element: <Dashboard />,
+        element: <Orders />,
       },
       {
-        path: "/drivermanagement",
-        element: <Dashboard />,
+        path: "/usermanagement",
+        element: <UserManagement />,
       },
       {
-        path: "/vehiclemanagement",
-        element: <Dashboard />,
+        path: "/proposals",
+        element: <Proposals />,
+      },
+      {
+        path: "/proposalssecond",
+        element: <ProposalsSecond />,
       },
       {
         path: "/bayan",
