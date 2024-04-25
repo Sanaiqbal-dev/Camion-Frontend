@@ -11,10 +11,12 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { IRequest } from "../../interface/carrier";
+import { ColumnDef } from "@tanstack/react-table";
+import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
 
 const Requests = () => {
-  const data: Request[] = [
+  const data: IRequest[] = [
     {
       id: "728ed52f",
       origin: "Brussels, Belgium",
@@ -101,11 +103,21 @@ const Requests = () => {
     },
   ];
 
+  
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  const [showProposalForm, setShowProposalForm] = useState(false);
   
+  
+  const onSubmitProposal = () => {
+    setShowProposalForm(true);
+  };
+  const columns: ColumnDef<IRequest>[] = RequestColumns({
+    onSubmitProposal,
+  });
+
+
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -172,7 +184,12 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable isAction={false} columns={RequestColumns} data={data} />}
+      {data && <DataTable isAction={false} columns={columns} data={data} />}
+      <ProposalDetailsForm
+        show={showProposalForm}
+        handleClose={() => setShowProposalForm(false)}
+        submitProposal={()=> onSubmitProposal()}
+      />
     </div>
   );
 };

@@ -67,8 +67,7 @@ const Tracking = () => {
         defaultZoom={13}
         mapId='9b0a2c44ded1af0e'
         style={{
-          width: "100vw",
-          height: "100vh",
+          height: "100%",
           zIndex: "0",
           position: "relative",
         }}

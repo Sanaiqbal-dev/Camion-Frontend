@@ -5,7 +5,7 @@ import FleetStatus from "../ui/FleetStatus";
 import FleetUsage from "../ui/FleetUsage";
 const Dashboard = () => {
   return (
-    <div className="tw-flex tw-flex-col tw-gap-5">
+    <div className="tw-flex tw-flex-col tw-gap-5" style={{paddingTop:"15px", maxHeight:"calc(100vh - 60px)", overflowY:"scroll"}}>
       <div className="row main-stats">
         <div className="col stats-item border-right">
           <span className="stats-value">450</span>

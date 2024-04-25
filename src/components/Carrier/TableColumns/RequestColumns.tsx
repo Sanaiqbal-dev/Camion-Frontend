@@ -1,8 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconSubmitted from "../../../assets/icons/ic-submitted.svg";
-import { Request } from "../../../interface/carrier";
+import { IRequest } from "../../../interface/carrier";
 
-export const RequestColumns: ColumnDef<Request>[] = [
+interface RequestActionProps {
+  onSubmitProposal: () => void;
+}
+
+export const RequestColumns = ({
+  onSubmitProposal,
+}: RequestActionProps): ColumnDef<IRequest>[] => [
   {
     accessorKey: "origin",
     header: "Origin",
@@ -31,6 +37,7 @@ export const RequestColumns: ColumnDef<Request>[] = [
 
       return (
         <button
+          onClick={() => isSubmitted && onSubmitProposal()}
           className={
             isSubmitted
               ? "proposal-btn submit-proposal"

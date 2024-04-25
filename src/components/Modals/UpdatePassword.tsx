@@ -64,7 +64,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicCurrentPassword">
               <Form.Label>Current Password</Form.Label>
               <Form.Control
                 type="password"
@@ -78,7 +78,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formBasicNewPassword">
               <Form.Label>New Password</Form.Label>
               <Form.Control
                 type="password"
