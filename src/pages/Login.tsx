@@ -5,30 +5,50 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-interface ILoginFormInput {
-  email: string;
-  password: string;
-}
+import { useDispatch } from "react-redux";
+import { setAuthSession } from "../state/slice/authSlice";
+import { ILoginRequest } from "../interface/Session";
+import { Link, useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../services/auth/authService";
 
 const schema = z.object({
-  email: z.string().email("Enter a valid email."),
-  password: z.string().min(1, "Enter your password."),
+  username: z.string().email("Enter a valid email."),
+  password: z.string().min(6, "Enter your password."),
 });
 
 const Login = () => {
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginFormInput>({
+  } = useForm<ILoginRequest>({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<ILoginFormInput> = (data) => {
-    console.log(data);
-    // Handle form submission here
+  const [login, { isLoading, isError, error }] = useLoginUserMutation();
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
+    try {
+      const loginResponse = await login(data).unwrap();
+      dispatch(
+        setAuthSession({
+          username: data.username,
+          token: loginResponse.token,
+          role: loginResponse.role,
+          status: "active",
+        })
+      );
+      // console.log("Recieved Token is :", loginResponse);
+
+      // navigate("/carrier/dashboard");
+      navigate("/admin/profiles");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -63,12 +83,13 @@ const Login = () => {
                             <Form.Control
                               type="email"
                               className="form-control customInput"
-                              {...register("email")}
-                              isInvalid={!!errors.email}
+                              {...register("username")}
+                              isInvalid={!!errors.username}
                               placeholder="Enter email address"
+                              disabled={isLoading}
                             />
                             <Form.Control.Feedback type="invalid">
-                              {errors.email?.message}
+                              {errors.username?.message}
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
@@ -83,7 +104,11 @@ const Login = () => {
                               placeholder="Enter password"
                               {...register("password")}
                               isInvalid={!!errors.password}
+                              disabled={isLoading}
                             />
+                            <Form.Control.Feedback type="invalid">
+                              {errors.password?.message}
+                            </Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
                               <a
                                 href=""
@@ -95,13 +120,15 @@ const Login = () => {
                                 Forgot your Password?
                               </a>
                             </div>
-                            <Form.Control.Feedback type="invalid">
-                              {errors.password?.message}
-                            </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
                       </div>
-
+                      {isError && error && (
+                        <p>
+                          Error: {error.data?.message || "An error occurred"}
+                        </p>
+                      )}
+                      {isLoading && <p>Loading...</p>}{" "}
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}
@@ -115,7 +142,7 @@ const Login = () => {
                         <div className="d-flex justify-content-start">
                           <div>Don’t have an account?</div>
                           <div>
-                            <a
+                            <Link to="/Register"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",
@@ -123,10 +150,9 @@ const Login = () => {
                                 textDecoration: "none",
                                 marginLeft: "30px",
                               }}
-                              href="Login.html"
                             >
                               Register your account
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>

@@ -1,28 +1,23 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
+import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { Order } from "../../interface/carrier";
 
-const Requests = () => {
-  const data: Request[] = [
+const Orders = () => {
+  const ordersData: Order[] = [
     {
       id: "728ed52f",
       origin: "Brussels, Belgium",
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
     {
       id: "489e1d42",
@@ -30,8 +25,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
 
     {
@@ -40,8 +36,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
 
     {
@@ -50,8 +47,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
 
     {
@@ -60,8 +58,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
     {
       id: "7tf5d52f",
@@ -69,8 +68,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
     {
       id: "720ui72f",
@@ -78,8 +78,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
     {
       id: "728eb92f",
@@ -87,8 +88,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
     {
       id: "72ted52f",
@@ -96,8 +98,9 @@ const Requests = () => {
       destination: "Warsaw, Poland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      ETA: "9/20/2024",
+      status: "enroute",
+      action: "",
     },
   ];
 
@@ -105,7 +108,7 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
-  
+ 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -172,8 +175,9 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+      {ordersData && <DataTable columns={OrderColumns} data={ordersData} />}
     </div>
   );
 };
-export default Requests;
+
+export default Orders;

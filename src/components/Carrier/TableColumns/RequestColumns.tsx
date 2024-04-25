@@ -1,16 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconSubmitted from "../../../assets/icons/ic-submitted.svg";
+import { Request } from "../../../interface/carrier";
 
-export type Payment = {
-  id: string;
-  origin: string;
-  destination: string;
-  weight: string;
-  dimentions: string;
-  EDT: string;
-  action: string;
-};
-export const RequestColumns: ColumnDef<Payment>[] = [
+export const RequestColumns: ColumnDef<Request>[] = [
   {
     accessorKey: "origin",
     header: "Origin",

@@ -1,51 +1,124 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/Shipper/HomePage";
-import Dashboard from "../components/Shipper/Dashboard";
-import Tracking from "../components/Shipper/Tracking";
-import Requests from "../components/Shipper/Requests";
-import Orders from "../components/Shipper/Orders";
-import UserManagement from "../components/Shipper/UserManagement";
-import Proposals from "../components/Shipper/Proposals";
-import ProposalsSecond from "../components/Shipper/ProposalsSecond";
+import Dashboard from "../components/Carrier/Dashboard";
+import Tracking from "../components/Carrier/Tracking";
+import Requests from "../components/Carrier/Requests";
+import { ReactElement, Suspense, lazy } from "react";
+import Orders from "../components/Carrier/Orders";
+import DriverManagement from "../components/Carrier/DriverManagement";
+import VehicleManagement from "../components/Carrier/VehicleManagement";
+import Bayan from "../components/Carrier/Bayan";
+import Profiles from "../components/Admin/Profiles";
+import OrderManagement from "../components/Admin/OrderManagement";
+import ReportManagement from "../components/Admin/ReportManagement";
+import AdminUserManagement from "../components/Admin/AdminUserManagement";
+import Settings from "../components/Admin/Settings";
+
+const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
+const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
+const LazyLogin = lazy(() => import("../pages/Login"));
+const LazyRegister = lazy(() => import("../pages/Register"));
+
+const withSuspense = (
+  Component: ReactElement,
+  fallback: ReactElement = <div>Loading...</div>
+): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    // element: withSuspense(<LazyCarrierHome />),
+    element: withSuspense(<LazyAdminHome />),
+  },
+  {
+    path: "/carrier",
+    element: withSuspense(<LazyCarrierHome />),
     children: [
       {
         index: true,
-        path: "/dashboard",
+        path: "dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/tracking",
+        path: "tracking",
         element: <Tracking />,
       },
       {
-        path: "/requests",
+        path: "requests",
         element: <Requests />,
       },
       {
-        path: "/orders",
+        path: "orders",
         element: <Orders />,
       },
       {
-        path: "/usermanagement",
-        element: <UserManagement />,
+        path: "drivermanagement",
+        element: <DriverManagement />,
       },
       {
-        path: "/proposals",
-        element: <Proposals />,
+        path: "vehiclemanagement",
+        element: <VehicleManagement />,
       },
       {
-        path: "/proposalssecond",
-        element: <ProposalsSecond />,
-      },
-      {
-        path: "/bayan",
-        element: <Dashboard />,
+        path: "bayan",
+        element: <Bayan />,
       },
     ],
+  },
+  {
+    path: "/shipper",
+    element: withSuspense(<LazyCarrierHome />),
+    children: [
+      {
+        index: true,
+        path: "dashboard",
+      },
+      {
+        path: "tracking",
+      },
+      {
+        path: "requests",
+      },
+      {
+        path: "orders",
+      },
+      {
+        path: "proposals",
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: withSuspense(<LazyAdminHome />),
+    children: [
+      {
+        index: true,
+        path: "profiles",
+        element: <Profiles />,
+      },
+      {
+        path: "orderManagement",
+        element: <OrderManagement />,
+      },
+      {
+        path: "reportManagement",
+        element: <ReportManagement />,
+      },
+      {
+        path: "adminUserManagement",
+        element: <AdminUserManagement />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: withSuspense(<LazyLogin />, <div>Loading Login...</div>),
+  },
+  {
+    path: "/register",
+    element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
   },
 ]);

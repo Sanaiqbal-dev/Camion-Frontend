@@ -1,14 +1,14 @@
 import { Accordion, Image } from "react-bootstrap";
-import CamionLogo from "../assets/images/camion-logo.svg";
-import IconDashboard from "../assets/icons/ic-dashboard.svg";
-import IconTracking from "../assets/icons/ic-tracking.svg";
-import IconOrderManagment from "../assets/icons/ic-order-management.svg";
-import IconRequest from "../assets/icons/ic-request.svg";
-import IconOrder from "../assets/icons/ic-orders.svg";
-import IconFleetManagment from "../assets/icons/ic-fleet.svg";
-import IconDriverManagment from "../assets/icons/ic-driver-management.svg";
-import IconVehicleManagment from "../assets/icons/ic-vehicle-management.svg";
-import IconBayan from "../assets/icons/ic-bayan.svg";
+import CamionLogo from "../../assets/images/camion-logo.svg";
+import IconDashboard from "../../assets/icons/ic-dashboard.svg";
+import IconTracking from "../../assets/icons/ic-tracking.svg";
+import IconOrderManagment from "../../assets/icons/ic-order-management.svg";
+import IconRequest from "../../assets/icons/ic-request.svg";
+import IconOrder from "../../assets/icons/ic-orders.svg";
+import IconFleetManagment from "../../assets/icons/ic-fleet.svg";
+import IconDriverManagment from "../../assets/icons/ic-driver-management.svg";
+import IconVehicleManagment from "../../assets/icons/ic-vehicle-management.svg";
+import IconBayan from "../../assets/icons/ic-bayan.svg";
 import { NavLink } from "react-router-dom";
 
 const CarrierSider = () => {
@@ -18,12 +18,12 @@ const CarrierSider = () => {
         src={CamionLogo}
         alt="logo"
         height={27}
-        style={{ width: "100%", margin: "0 auto" }}
+        style={{ width: "80%", margin: "0 auto" }}
       />
       <Accordion defaultActiveKey="0" id="accordionExample">
         <NavLink
           key={"Dashboard"}
-          to={"/dashboard"}
+          to={"/carrier/dashboard"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -42,7 +42,7 @@ const CarrierSider = () => {
         </NavLink>
         <NavLink
           key={"Tracking"}
-          to={"/tracking"}
+          to={"/carrier/tracking"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -72,7 +72,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Requests"}
-              to={"/requests"}
+              to={"/carrier/requests"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -91,7 +91,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Orders"}
-              to={"/orders"}
+              to={"/carrier/orders"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -123,7 +123,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Driver Management"}
-              to={"/driverManagement"}
+              to={"/carrier/drivermanagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -142,7 +142,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Vehicle Management"}
-              to={"/vehicleManagement"}
+              to={"/carrier/vehiclemanagement"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -161,7 +161,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Bayan"}
-              to={"/bayan"}
+              to={"/carrier/bayan"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }

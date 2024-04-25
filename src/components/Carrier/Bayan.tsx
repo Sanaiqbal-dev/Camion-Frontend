@@ -1,103 +1,98 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
+import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
-import { Request } from "../../interface/carrier";
+import { BayanColumns } from "./TableColumns/BayanColums";
+import { BayanItem } from "../../interface/carrier";
 
-const Requests = () => {
-  const data: Request[] = [
+const Bayan = () => {
+  const bayanData: BayanItem[] = [
     {
       id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
     {
       id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
 
     {
       id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
 
     {
       id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
 
     {
       id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
     {
       id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
     {
       id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
     {
       id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
     {
       id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
+      type: "flatbed",
+      ETA: "3/25/2024",
+      action: "",
     },
   ];
 
@@ -105,7 +100,6 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
-  
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -118,6 +112,18 @@ const Requests = () => {
   }
   return (
     <div className="table-container">
+      <div className="search-and-entries-container">
+        <div>
+          <button className="filter-btn">
+            <img src={IconFilter} /> Filter
+          </button>
+        </div>
+        <div>
+          <button className="add-item-btn" id="create-bayan-btn">
+            Create Bayan
+          </button>
+        </div>
+      </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
@@ -172,8 +178,9 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+      {bayanData && <DataTable columns={BayanColumns} data={bayanData} />}
     </div>
   );
 };
-export default Requests;
+
+export default Bayan;
