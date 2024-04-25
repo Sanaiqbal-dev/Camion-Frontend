@@ -1,15 +1,17 @@
-import {
-  APIProvider,
-  Map,
-} from "@vis.gl/react-google-maps";
+import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { MapMarker } from "./MapMarker";
+import { useEffect, useState } from "react";
 
 const Tracking = () => {
-  const mapApiKey = import.meta.env.VITE_GOOGLE_MAP_API_KEY;
+  const [mapApiKey, setMapApiKey] = useState("");
+
+  useEffect(() => {
+    setMapApiKey(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
+  }, []);
   console.log(mapApiKey);
   const position = { lat: 24.686111, lng: 46.827661 };
 
-  var markers = [
+  const markers = [
     {
       lng: 46.72672,
       lat: 24.75635,
@@ -65,7 +67,7 @@ const Tracking = () => {
       <Map
         defaultCenter={position}
         defaultZoom={13}
-        mapId='9b0a2c44ded1af0e'
+        mapId="9b0a2c44ded1af0e"
         style={{
           width: "100vw",
           height: "100vh",
@@ -73,9 +75,13 @@ const Tracking = () => {
           position: "relative",
         }}
       >
-        {markers.map((item) => 
-          <MapMarker lat={item.lat} lng={item.lng} infoWindowText={item.content}/>
-        )}
+        {markers.map((item) => (
+          <MapMarker
+            lat={item.lat}
+            lng={item.lng}
+            infoWindowText={item.content}
+          />
+        ))}
       </Map>
     </APIProvider>
   );

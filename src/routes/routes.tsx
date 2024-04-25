@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/Shipper/HomePage";
 import Dashboard from "../components/Shipper/Dashboard";
-import Tracking from "../components/Carrier/Tracking";
+import Tracking from "../components/Shipper/Tracking";
 import Requests from "../components/Shipper/Requests";
 import Orders from "../components/Shipper/Orders";
 import UserManagement from "../components/Shipper/UserManagement";

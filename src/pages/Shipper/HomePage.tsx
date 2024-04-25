@@ -17,6 +17,7 @@ const HomePage = () => {
     { pathname: "/usermanagement", title: "User Management" },
     { pathname: "/proposals", title: "Proposals" },
     { pathname: "/proposalssecond", title: "ProposalsSecond" },
+    { pathname: "/tracking", title: "Tracking" },
   ];
 
   const GetPageTitle = () => {
@@ -28,8 +29,7 @@ const HomePage = () => {
   };
 
   const handleUserManagementClick = () => {
-    // setPageTitle("User Management");
-    setPageTitle("Proposals");
+    setPageTitle("User Management");
   };
 
   const toggleSidebar = () => {};
@@ -65,7 +65,7 @@ const HomePage = () => {
           </span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Link to="/proposals" onClick={handleUserManagementClick}>
+            <Link to="/userManagement" onClick={handleUserManagementClick}>
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
             <Image

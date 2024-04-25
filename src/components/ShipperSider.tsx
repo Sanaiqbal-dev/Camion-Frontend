@@ -88,6 +88,25 @@ const CarrierSider = () => {
               </div>
             </NavLink>
             <NavLink
+              key={"Proposals"}
+              to={"/proposals"}
+              className={({ isActive }) =>
+                isActive ? "selected-navlink" : undefined
+              }
+            >
+              <div className="accordion-item">
+                <h2 className="accordion-header" id="headingOne">
+                  <div
+                    className="accordion-not-collapsing-item"
+                    style={{ gap: "12px" }}
+                  >
+                    <Image src={IconRequest} />
+                    <span>Proposals1</span>
+                  </div>
+                </h2>
+              </div>
+            </NavLink>
+            <NavLink
               key={"ProposalsSecond"}
               to={"/proposalssecond"}
               className={({ isActive }) =>
@@ -102,6 +121,25 @@ const CarrierSider = () => {
                   >
                     <Image src={IconRequest} />
                     <span>Proposals</span>
+                  </div>
+                </h2>
+              </div>
+            </NavLink>
+            <NavLink
+              key={"Tracking"}
+              to={"/tracking"}
+              className={({ isActive }) =>
+                isActive ? "selected-navlink" : undefined
+              }
+            >
+              <div className="accordion-item">
+                <h2 className="accordion-header" id="headingOne">
+                  <div
+                    className="accordion-not-collapsing-item"
+                    style={{ gap: "12px" }}
+                  >
+                    <Image src={IconRequest} />
+                    <span>Tracking</span>
                   </div>
                 </h2>
               </div>
