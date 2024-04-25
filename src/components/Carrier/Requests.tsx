@@ -172,7 +172,7 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-        {data && <DataTable columns={RequestColumns} data={data} />}
+        {data && <DataTable isAction={false} columns={RequestColumns} data={data} />}
     </div>
   );
 };

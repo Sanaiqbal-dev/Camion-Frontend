@@ -196,7 +196,7 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && (
-        <DataTable columns={DriverManagementColumns} data={driversData} />
+        <DataTable isAction={true} columns={DriverManagementColumns} data={driversData} />
       )}
     </div>
   );

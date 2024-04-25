@@ -5,10 +5,15 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
-import { Order } from "../../interface/carrier";
+import { IOrder } from "../../interface/carrier";
+import { ColumnDef } from "@tanstack/react-table";
 
+export interface StatusProps {
+  id: string;
+  statusValue: string;
+}
 const Orders = () => {
-  const ordersData: Order[] = [
+  const ordersData: IOrder[] = [
     {
       id: "728ed52f",
       origin: "Brussels, Belgium",
@@ -104,11 +109,33 @@ const Orders = () => {
     },
   ];
 
+  const onSave = () => {
+    console.log("Save is clicked");
+  };
+  const onDelete = () => {
+    console.log("Delete is clicked");
+  };
+  const onAssignVehicle = () => {
+    console.log("Assign Vehicle is clicked");
+  };
+  const onPrintBill = () => {
+    console.log("Print Bayan Bill is clicked");
+  };
+  const onUpdateStatus = (id: string, statusVal: string) => {
+    console.log("status id : ", id);
+    console.log("status value : ", statusVal);
+  };
+  const columns: ColumnDef<IOrder>[] = OrderColumns({
+    onSave,
+    onDelete,
+    onAssignVehicle,
+    onPrintBill,
+    onUpdateStatus,
+  });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
 
- 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -120,7 +147,7 @@ const Orders = () => {
     setEntriesValue(values[currentIndex]);
   }
   return (
-    <div className="table-container">
+    <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
@@ -175,7 +202,9 @@ const Orders = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && <DataTable columns={OrderColumns} data={ordersData} />}
+      {ordersData && (
+        <DataTable isAction={false} columns={columns} data={ordersData} />
+      )}
     </div>
   );
 };

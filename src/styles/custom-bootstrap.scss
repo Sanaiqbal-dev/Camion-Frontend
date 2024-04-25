@@ -24,16 +24,17 @@ $grid-breakpoints: (
 
 .wrapper {
   width: 100vw;
-  max-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   position: absolute;
   padding-left: 270px;
   background-color: #f3f3f3;
 }
 .content-container {
-  max-width: calc(100vw - 300px);
+  width: 100%;
   position: relative;
-  min-height: calc(100vh - 80px);
-  box-sizing: border-box;
+  min-height: 100vh;
+  padding-bottom: 0 !important;
 }
 .parent-row {
   padding-left: 50%;
@@ -556,14 +557,15 @@ tr {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 15px;
+  height: calc(100vh - 64px);
+  padding-top: 15px;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
 }
 
-.table-contents div:nth-child(1) {
-  max-height: calc(100vh - 300px);
+.table-contents>div:nth-child(1) {
+  height: 100%;
 }
 .data-table {
   width: 100%;
@@ -582,10 +584,14 @@ thead th:first-child {
   padding-left: 20px;
 }
 
+.orders-table .data-table tr td:last-child{
+  width: 0px;
+}
 .data-table tr td:last-child,
 thead th:last-child {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+  // width: 0px;
   padding-right: 20px;
 }
 
@@ -618,7 +624,6 @@ thead th:last-child {
 .action-container {
   display: flex;
   align-items: center;
-  justify-content: space-around;
   gap: 20px;
   cursor: pointer;
 
@@ -657,6 +662,15 @@ thead th:last-child {
   gap: 10px;
 }
 
+// .statusMenu{
+//   display: flex;
+//   flex-direction: column;
+//   gap: 10px;
+//   padding: 10px;
+// }
+// .statusMenuItem:hover{
+//   background-color: #0060b8;
+// }
 //Modals
 .modal {
   --bs-modal-width: 1000px;

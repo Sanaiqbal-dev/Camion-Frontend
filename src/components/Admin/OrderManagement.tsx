@@ -183,7 +183,7 @@ const OrderManagement = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && <DataTable columns={OrderColumns} data={ordersData} />}
+      {ordersData && <DataTable isAction={false} columns={OrderColumns} data={ordersData} />}
     </div>
   );
 };
