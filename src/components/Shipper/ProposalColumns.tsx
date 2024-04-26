@@ -2,7 +2,7 @@ import CompanyLogo from "../../assets/icons/companyLogo.svg";
 
 const ProposalColumns = () => {
   return (
-    <div className="table-container">
+    <div style={{ marginBottom: "10px" }}>
       <div
         style={{
           display: "flex",

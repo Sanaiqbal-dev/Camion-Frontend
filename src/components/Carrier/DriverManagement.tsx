@@ -3,7 +3,7 @@ import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import IconFilter from "../../assets/icons/ic-filter.svg";
+import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
 import { IDriver } from "../../interface/carrier";
@@ -132,7 +132,7 @@ const DriverManagement = () => {
       <div className="search-and-entries-container">
         <div>
           <button className="filter-btn">
-            <img src={IconFilter} /> Filter
+            <img src={FilterIcon} /> Filter
           </button>
         </div>
         <div>

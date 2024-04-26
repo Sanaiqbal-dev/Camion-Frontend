@@ -119,99 +119,75 @@ const ShipperRequests = () => {
   }
   return (
     <div className="table-container">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingRight: "10px",
-          marginBottom: "20px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            width: "131px",
-            height: "54px",
-            padding: "15px 30px 15px 30px",
-            gap: "11px",
-            borderRadius: "10px 0px 0px 0px",
-            backgroundColor: "#FFF",
-          }}
-        >
-          <Image src={FilterIcon} />
-          Filter
+      <div className="search-and-entries-container">
+        <div>
+          <button className="filter-btn">
+            <img src={FilterIcon} /> Filter
+          </button>
         </div>
-        <Button
-          style={{ height: "53px", borderRadius: "10px" }}
-          onClick={() => console.warn("Not implemented yet")}
-        >
-          Create new Request
-        </Button>
+        <div>
+          <button className="add-item-btn" id="add-driver-btn">
+            Add Driver
+          </button>
+        </div>
       </div>
-      <Container className="tw-flex tw-justify-between tw-items-center">
-        <Row className="tw-align-items-center" style={{ alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <Col xs="auto" className="tw-text-secondary">
-              Show
-            </Col>
-            <Col xs="auto">
-              <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-py-0 tw-w-max tw-h-10">
-                <input
-                  className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                  type="text"
-                  readOnly
-                  value={entriesValue}
-                />
-                <div className="tw-flex tw-flex-col tw-items-center">
-                  <Button
-                    className="tw-border-none"
-                    variant="outline-none"
-                    onClick={() => handleChangeValue(-1)}
-                  >
-                    <Image
-                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                      src={PreviousIcon}
-                    />
-                  </Button>
-                  <Button
-                    className="tw-border-none"
-                    variant="outline-none"
-                    onClick={() => handleChangeValue(1)}
-                  >
-                    <Image
-                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                      src={NextIcon}
-                    />
-                  </Button>
-                </div>
+      <div className="tw-flex tw-justify-between tw-items-center">
+        <Row className="tw-items-center">
+          <Col xs="auto" className="tw-text-secondary">
+            Show
+          </Col>
+          <Col xs="auto">
+            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+              <input
+                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
+                type="text"
+                readOnly
+                value={entriesValue}
+              />
+              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                <button
+                  className="tw-border-none"
+                  onClick={() => handleChangeValue(1)}
+                >
+                  <Image
+                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                    src={PreviousIcon}
+                  />
+                </button>
+                <button
+                  className="tw-border-none"
+                  onClick={() => handleChangeValue(-1)}
+                >
+                  <Image
+                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                    src={NextIcon}
+                  />
+                </button>
               </div>
-            </Col>
-            <Col xs="auto" className="tw-text-secondary">
-              entries
-            </Col>
-          </div>
+            </div>
+          </Col>
+          <Col xs="auto" className="tw-text-secondary">
+            entries
+          </Col>
         </Row>
         <Row className="tw-mt-3">
           <Col>
             <InputGroup>
-              <div
-                style={{ position: "absolute", zIndex: "2", margin: "15px" }}
-              >
+              <InputGroup.Text>
                 <Image src={SearchIcon} />
-              </div>
-
+              </InputGroup.Text>
               <FormControl
                 type="text"
                 placeholder="Search"
                 className="form-control"
-                style={{ width: "560px", height: "55px", paddingLeft: "40px" }}
-              />
+              ></FormControl>
             </InputGroup>
           </Col>
         </Row>
-      </Container>
-      {data && <DataTable columns={RequestColumns} data={data} />}
+      </div>
+      {data && (
+        <DataTable columns={RequestColumns} data={data} isAction={false} />
+      )}
     </div>
   );
 };
