@@ -14,6 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../@/components/ui/table";
+import clsx from "clsx";
+import IconPrevious from "../../assets/icons/ic-previous.svg";
+import IconNext from "../../assets/icons/ic-next.svg";
+import { Button } from "react-bootstrap";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

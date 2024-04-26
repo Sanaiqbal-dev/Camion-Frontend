@@ -12,9 +12,17 @@ import OrderManagement from "../components/Admin/OrderManagement";
 import ReportManagement from "../components/Admin/ReportManagement";
 import AdminUserManagement from "../components/Admin/AdminUserManagement";
 import Settings from "../components/Admin/Settings";
+import ShipperDashboard from "../components/Shipper/ShipperDashboard";
+import ShipperOrders from "../components/Shipper/ShipperOrders";
+import ShipperRequests from "../components/Shipper/ShipperRequests";
+import Proposals from "../components/Shipper/Proposals";
+import UserManagement from "../components/Shipper/UserManagement";
+import ProposalsSecond from "../components/Shipper/ProposalsSecond";
+import ShipperTracking from "../components/Shipper/ShipperTracking";
 
 const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
 const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
+const LazyShipperHome = lazy(() => import("../pages/Shipper/HomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
 const LazyRegister = lazy(() => import("../pages/Register"));
 
@@ -26,8 +34,9 @@ const withSuspense = (
 export const router = createBrowserRouter([
   {
     path: "/",
+    element: withSuspense(<LazyShipperHome />),
     // element: withSuspense(<LazyCarrierHome />),
-    element: withSuspense(<LazyAdminHome />),
+    // element: withSuspense(<LazyAdminHome />),
   },
   {
     path: "/carrier",
@@ -66,23 +75,36 @@ export const router = createBrowserRouter([
   },
   {
     path: "/shipper",
-    element: withSuspense(<LazyCarrierHome />),
+    element: withSuspense(<LazyShipperHome />),
     children: [
       {
         index: true,
-        path: "dashboard",
+        path: "shipperdashboard",
+        element: <ShipperDashboard />,
       },
       {
-        path: "tracking",
+        path: "shippertracking",
+        element: <ShipperTracking />,
       },
       {
-        path: "requests",
+        path: "shipperrequests",
+        element: <ShipperRequests />,
       },
       {
-        path: "orders",
+        path: "usermanagement",
+        element: <UserManagement />,
+      },
+      {
+        path: "shipperorders",
+        element: <ShipperOrders />,
       },
       {
         path: "proposals",
+        element: <Proposals />,
+      },
+      {
+        path: "proposalssecond",
+        element: <ProposalsSecond />,
       },
     ],
   },

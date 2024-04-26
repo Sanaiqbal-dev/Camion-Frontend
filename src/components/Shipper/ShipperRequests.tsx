@@ -1,4 +1,4 @@
-import { Payment, OrderColumns } from "./OrderColumn";
+import { Payment, RequestColumns } from "./RequestColumns";
 import { DataTable } from "../ui/DataTable";
 import {
   Button,
@@ -15,107 +15,89 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 
-const Orders = () => {
+const ShipperRequests = () => {
   const data: Payment[] = [
     {
       id: "728ed52f",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Maputo, Mozambique",
+      destination: "Dublin, Ireland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
     {
       id: "489e1d42",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
 
     {
       id: "489e1e742",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
 
     {
       id: "9e19od42",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
 
     {
       id: "56te1d42",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
     {
       id: "7tf5d52f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
     {
       id: "720ui72f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
     {
       id: "728eb92f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
     {
       id: "72ted52f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
+      origin: "Brussels, Belgium",
+      destination: "Warsaw, Poland",
       weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
+      dimentions: "45x45x45",
       ETA: "9/20/2024",
       action: "",
     },
@@ -160,6 +142,12 @@ const Orders = () => {
           <Image src={FilterIcon} />
           Filter
         </div>
+        <Button
+          style={{ height: "53px", borderRadius: "10px" }}
+          onClick={() => console.warn("Not implemented yet")}
+        >
+          Create new Request
+        </Button>
       </div>
       <Container className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-align-items-center" style={{ alignItems: "center" }}>
@@ -223,8 +211,8 @@ const Orders = () => {
           </Col>
         </Row>
       </Container>
-      {data && <DataTable columns={OrderColumns} data={data} />}
+      {data && <DataTable columns={RequestColumns} data={data} />}
     </div>
   );
 };
-export default Orders;
+export default ShipperRequests;

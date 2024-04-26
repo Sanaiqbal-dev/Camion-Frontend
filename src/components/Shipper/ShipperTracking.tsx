@@ -1,8 +1,8 @@
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
-import { MapMarker } from "../Carrier/MapMarker";
+import { MapMarker } from "../ui/MapMarker";
 import { useEffect, useState } from "react";
 
-const Tracking = () => {
+const ShipperTracking = () => {
   const [mapApiKey, setMapApiKey] = useState("");
 
   useEffect(() => {
@@ -175,4 +175,4 @@ const Tracking = () => {
   );
 };
 
-export default Tracking;
+export default ShipperTracking;

@@ -1,27 +1,22 @@
 import { Accordion, Image } from "react-bootstrap";
-import CamionLogo from "../assets/images/camion-logo.svg";
-import IconDashboard from "../assets/icons/ic-dashboard.svg";
-import IconOrderManagment from "../assets/icons/ic-order-management.svg";
-import IconRequest from "../assets/icons/ic-request.svg";
-import IconOrder from "../assets/icons/ic-orders.svg";
-import SettingIcon from "../assets/icons/ic-settingIcon.svg";
-import LogoutIcon from "../assets/icons/ic-logoutIcon.svg";
+import CamionLogo from "../../assets/icons/ic-smallCamionlogo.svg";
+import IconDashboard from "../../assets/icons/ic-dashboard.svg";
+import IconOrderManagment from "../../assets/icons/ic-order-management.svg";
+import IconRequest from "../../assets/icons/ic-request.svg";
+import IconOrder from "../../assets/icons/ic-orders.svg";
+import SettingIcon from "../../assets/icons/ic-settingIcon.svg";
+import LogoutIcon from "../../assets/icons/ic-logoutIcon.svg";
 
 import { NavLink } from "react-router-dom";
 
-const CarrierSider = () => {
+const ShipperSider = () => {
   return (
     <div className="text-light pt-5 sidebar" id="sidebar-container">
-      <Image
-        src={CamionLogo}
-        alt="logo"
-        height={27}
-        style={{ margin: "0 auto" }}
-      />
+      <Image src={CamionLogo} alt="logo" style={{ margin: "0 auto" }} />
       <Accordion defaultActiveKey="0" id="accordionExample">
         <NavLink
           key={"Dashboard"}
-          to={"/dashboard"}
+          to={"/shipper/shipperdashboard"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -51,7 +46,7 @@ const CarrierSider = () => {
           <Accordion.Body>
             <NavLink
               key={"Orders"}
-              to={"/orders"}
+              to={"/shipper/shipperorders"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -70,7 +65,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Requests"}
-              to={"/requests"}
+              to={"/Shipper/shipperrequests"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -89,26 +84,7 @@ const CarrierSider = () => {
             </NavLink>
             <NavLink
               key={"Proposals"}
-              to={"/proposals"}
-              className={({ isActive }) =>
-                isActive ? "selected-navlink" : undefined
-              }
-            >
-              <div className="accordion-item">
-                <h2 className="accordion-header" id="headingOne">
-                  <div
-                    className="accordion-not-collapsing-item"
-                    style={{ gap: "12px" }}
-                  >
-                    <Image src={IconRequest} />
-                    <span>Proposals1</span>
-                  </div>
-                </h2>
-              </div>
-            </NavLink>
-            <NavLink
-              key={"ProposalsSecond"}
-              to={"/proposalssecond"}
+              to={"/shipper/proposals"}
               className={({ isActive }) =>
                 isActive ? "selected-navlink" : undefined
               }
@@ -121,25 +97,6 @@ const CarrierSider = () => {
                   >
                     <Image src={IconRequest} />
                     <span>Proposals</span>
-                  </div>
-                </h2>
-              </div>
-            </NavLink>
-            <NavLink
-              key={"Tracking"}
-              to={"/tracking"}
-              className={({ isActive }) =>
-                isActive ? "selected-navlink" : undefined
-              }
-            >
-              <div className="accordion-item">
-                <h2 className="accordion-header" id="headingOne">
-                  <div
-                    className="accordion-not-collapsing-item"
-                    style={{ gap: "12px" }}
-                  >
-                    <Image src={IconRequest} />
-                    <span>Tracking</span>
                   </div>
                 </h2>
               </div>
@@ -206,4 +163,4 @@ const CarrierSider = () => {
   );
 };
 
-export default CarrierSider;
+export default ShipperSider;

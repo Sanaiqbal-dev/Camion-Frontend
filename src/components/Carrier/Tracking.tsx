@@ -1,5 +1,5 @@
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
-import { MapMarker } from "./MapMarker";
+import { MapMarker } from "../ui/MapMarker";
 import { useEffect, useState } from "react";
 
 const Tracking = () => {

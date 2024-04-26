@@ -38,6 +38,7 @@ const ProposalColumns = () => {
             textAlign: "center",
             color: "#FFF",
             marginRight: "20px",
+            zIndex: "3",
           }}
         >
           SAR: 5670

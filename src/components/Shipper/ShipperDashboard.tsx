@@ -1,7 +1,8 @@
 import TrendUpIcon from "../../assets/icons/ic-trend-up.svg";
 import TrendDownIcon from "../../assets/icons/ic-trend-down.svg";
 import { Image } from "react-bootstrap";
-const Dashboard = () => {
+import { Link } from "react-router-dom";
+const ShipperDashboard = () => {
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="row main-stats">
@@ -509,17 +510,19 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="col-sm">
-                <button
-                  style={{
-                    height: "44px",
-                    width: "110px",
-                    color: "#fff",
-                    backgroundColor: "#0060B8",
-                    borderRadius: "10px",
-                  }}
-                >
-                  Track
-                </button>
+                <Link to={"/shipper/shippertracking"}>
+                  <button
+                    style={{
+                      height: "44px",
+                      width: "110px",
+                      color: "#fff",
+                      backgroundColor: "#0060B8",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    Track
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -1340,4 +1343,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default ShipperDashboard;

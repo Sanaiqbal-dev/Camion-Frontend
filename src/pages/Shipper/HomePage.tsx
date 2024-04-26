@@ -5,19 +5,19 @@ import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { Col, FormControl, Image, InputGroup } from "react-bootstrap";
-import ShipperSider from "../../components/ShipperSider";
+import ShipperSider from "../../components/Shipper/ShipperSider";
 
 const HomePage = () => {
   const currentPageTitle = useLocation();
   const [pageTitle, setPageTitle] = useState("");
   const pageTitleMap = [
-    { pathname: "/dashboard", title: "Dashboard" },
-    { pathname: "/requests", title: "Requests" },
-    { pathname: "/orders", title: "Orders" },
-    { pathname: "/usermanagement", title: "User Management" },
-    { pathname: "/proposals", title: "Proposals" },
-    { pathname: "/proposalssecond", title: "ProposalsSecond" },
-    { pathname: "/tracking", title: "Tracking" },
+    { pathname: "/shipper/dashboard", title: "Dashboard" },
+    { pathname: "/Shipper/shipperrequests.", title: "Requests" },
+    { pathname: "/shipper/shipperorders", title: "Orders" },
+    { pathname: "shipper//usermanagement", title: "User Management" },
+    { pathname: "/shipper/proposals", title: "Proposals" },
+    { pathname: "/shipper/proposalssecond", title: "Proposals" },
+    { pathname: "/shipper/shippertracking", title: "Tracking" },
   ];
 
   const GetPageTitle = () => {
@@ -34,9 +34,7 @@ const HomePage = () => {
 
   const toggleSidebar = () => {};
 
-  const shouldSHowSearchAbove =
-    currentPageTitle.pathname === "/proposals" ||
-    currentPageTitle.pathname === "/proposalssecond";
+  const shouldSHowSearchAbove = currentPageTitle.pathname === "/proposals";
 
   return (
     <div className="wrapper" style={{ backgroundColor: "#F3F3F3" }}>
@@ -65,7 +63,10 @@ const HomePage = () => {
           </span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Link to="/userManagement" onClick={handleUserManagementClick}>
+            <Link
+              to="shipper/usermanagement"
+              onClick={handleUserManagementClick}
+            >
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
             <Image
