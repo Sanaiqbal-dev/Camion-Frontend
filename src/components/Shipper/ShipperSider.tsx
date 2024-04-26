@@ -8,156 +8,145 @@ import SettingIcon from "../../assets/icons/ic-settingIcon.svg";
 import LogoutIcon from "../../assets/icons/ic-logoutIcon.svg";
 
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearAuthSession } from "../../state/slice/authSlice";
 
 const ShipperSider = () => {
+
+  
+  const dispatch = useDispatch();
+
+  const handleReplaceNavigate = () => {
+    dispatch(clearAuthSession());
+  };
+
   return (
     <div className="text-light pt-5 sidebar" id="sidebar-container">
-      <Image src={CamionLogo} alt="logo" style={{ margin: "0 auto" }} />
-      <Accordion defaultActiveKey="0" id="accordionExample">
-        <NavLink
-          key={"Dashboard"}
-          to={"/shipper/shipperdashboard"}
-          className={({ isActive }) =>
-            isActive ? "selected-navlink" : undefined
-          }
-        >
-          <Accordion.Item className="dashboard-item" eventKey="0">
+      <div className="sidebar-admin">
+        <Image
+          src={CamionLogo}
+          alt="logo"
+          height={27}
+          style={{ width: "80%", margin: "0 auto" }}
+        />
+        <Accordion defaultActiveKey="0" id="accordionExample">
+          <NavLink
+            key={"Dashboard"}
+            to={"/shipper/shipperdashboard"}
+            className={({ isActive }) =>
+              isActive ? "selected-navlink" : undefined
+            }
+          >
+            <Accordion.Item className="dashboard-item" eventKey="0">
+              <Accordion.Header>
+                <div
+                  className="accordion-not-collapsing-item"
+                  style={{ gap: "12px" }}
+                >
+                  <Image src={IconDashboard} />
+                  Dashboard
+                </div>
+              </Accordion.Header>
+            </Accordion.Item>
+          </NavLink>
+          <Accordion.Item className="order-management-item" eventKey="2">
             <Accordion.Header>
               <div
                 className="accordion-not-collapsing-item"
                 style={{ gap: "12px" }}
               >
-                <Image src={IconDashboard} />
-                Dashboard
+                <Image src={IconOrderManagment} />
+                Order Management
               </div>
             </Accordion.Header>
+            <Accordion.Body>
+              <NavLink
+                key={"Orders"}
+                to={"/shipper/shipperorders"}
+                className={({ isActive }) =>
+                  isActive ? "selected-navlink" : undefined
+                }
+              >
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="headingOne">
+                    <div
+                      className="accordion-not-collapsing-item"
+                      style={{ gap: "12px" }}
+                    >
+                      <Image src={IconOrder} />
+                      <span>Orders</span>
+                    </div>
+                  </h2>
+                </div>
+              </NavLink>
+              <NavLink
+                key={"Requests"}
+                to={"/Shipper/shipperrequests"}
+                className={({ isActive }) =>
+                  isActive ? "selected-navlink" : undefined
+                }
+              >
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="headingOne">
+                    <div
+                      className="accordion-not-collapsing-item"
+                      style={{ gap: "12px" }}
+                    >
+                      <Image src={IconRequest} />
+                      <span>Requests</span>
+                    </div>
+                  </h2>
+                </div>
+              </NavLink>
+              <NavLink
+                key={"Proposals"}
+                to={"/shipper/proposals"}
+                className={({ isActive }) =>
+                  isActive ? "selected-navlink" : undefined
+                }
+              >
+                <div className="accordion-item">
+                  <h2 className="accordion-header" id="headingOne">
+                    <div
+                      className="accordion-not-collapsing-item"
+                      style={{ gap: "12px" }}
+                    >
+                      <Image src={IconRequest} />
+                      <span>Proposals</span>
+                    </div>
+                  </h2>
+                </div>
+              </NavLink>
+            </Accordion.Body>
           </Accordion.Item>
-        </NavLink>
-        <Accordion.Item className="order-management-item" eventKey="2">
-          <Accordion.Header>
-            <div
-              className="accordion-not-collapsing-item"
-              style={{ gap: "12px" }}
-            >
-              <Image src={IconOrderManagment} />
-              Order Management
+        </Accordion>
+        <div className="accordion">
+          <NavLink
+            key={"Settings"}
+            to={"/admin/settings"}
+            className={({ isActive }) =>
+              isActive ? "selected-navlink" : undefined
+            }
+          >
+            <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+              <Image src={SettingIcon} />
+              Settings
             </div>
-          </Accordion.Header>
-          <Accordion.Body>
-            <NavLink
-              key={"Orders"}
-              to={"/shipper/shipperorders"}
-              className={({ isActive }) =>
-                isActive ? "selected-navlink" : undefined
-              }
-            >
-              <div className="accordion-item">
-                <h2 className="accordion-header" id="headingOne">
-                  <div
-                    className="accordion-not-collapsing-item"
-                    style={{ gap: "12px" }}
-                  >
-                    <Image src={IconOrder} />
-                    <span>Orders</span>
-                  </div>
-                </h2>
-              </div>
-            </NavLink>
-            <NavLink
-              key={"Requests"}
-              to={"/Shipper/shipperrequests"}
-              className={({ isActive }) =>
-                isActive ? "selected-navlink" : undefined
-              }
-            >
-              <div className="accordion-item">
-                <h2 className="accordion-header" id="headingOne">
-                  <div
-                    className="accordion-not-collapsing-item"
-                    style={{ gap: "12px" }}
-                  >
-                    <Image src={IconRequest} />
-                    <span>Requests</span>
-                  </div>
-                </h2>
-              </div>
-            </NavLink>
-            <NavLink
-              key={"Proposals"}
-              to={"/shipper/proposals"}
-              className={({ isActive }) =>
-                isActive ? "selected-navlink" : undefined
-              }
-            >
-              <div className="accordion-item">
-                <h2 className="accordion-header" id="headingOne">
-                  <div
-                    className="accordion-not-collapsing-item"
-                    style={{ gap: "12px" }}
-                  >
-                    <Image src={IconRequest} />
-                    <span>Proposals</span>
-                  </div>
-                </h2>
-              </div>
-            </NavLink>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-      <div style={{ paddingLeft: "30px", position: "absolute", top: "82%" }}>
-        <NavLink
-          key={""}
-          to={"notdefinedyet"}
-          className={({ isActive }) =>
-            isActive ? "selected-navlink" : undefined
-          }
-        >
-          <div className="accordion-item">
-            <h2 className="accordion-header" id="headingOne">
-              <div
-                className="accordion-not-collapsing-item"
-                style={{ gap: "12px" }}
-              >
-                <Image src={SettingIcon} />
-                <span
-                  style={{
-                    fontWeight: "600px",
-                    fontSize: "24px",
-                  }}
-                >
-                  Settings
-                </span>
-              </div>
-            </h2>
-          </div>
-        </NavLink>
-        <NavLink
-          key={""}
-          to={"/login"}
-          className={({ isActive }) =>
-            isActive ? "selected-navlink" : undefined
-          }
-        >
-          <div className="accordion-item">
-            <h2 className="accordion-header" id="headingOne">
-              <div
-                className="accordion-not-collapsing-item"
-                style={{ gap: "12px" }}
-              >
-                <Image src={LogoutIcon} />
-                <span
-                  style={{
-                    color: "#FF3939",
-                    fontWeight: "600px",
-                    fontSize: "24px",
-                  }}
-                >
-                  Logout
-                </span>
-              </div>
-            </h2>
-          </div>
-        </NavLink>
+          </NavLink>
+          <NavLink
+            key={"Logout"}
+            to={"/login"}
+            onClick={handleReplaceNavigate}
+            className={({ isActive }) =>
+              isActive ? "selected-navlink" : undefined
+            }
+          >
+            <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+              <Image src={LogoutIcon} />
+              <span style={{ color: "#FF3939" }}>Logout</span>
+            </div>
+          </NavLink>
+        </div>
       </div>
     </div>
   );
