@@ -113,9 +113,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
             <Form.Group controlId="formBasicOtherDetails">
               <Form.Label className="tw-text-sm">Other Details</Form.Label>
               <Form.Control
-                type="text"
+                as="textarea"
+                rows={5}
                 placeholder="Enter text here"
-                style={{ width: "100%", height: "200px" }}
+                style={{ width: "100%"}}
                 {...register("otherDetails")}
                 isInvalid={!!errors.otherDetails}
               />
@@ -124,13 +125,11 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group controlId="formBasicUploadDocument">
+            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
               <Form.Label className="tw-text-sm">
                 Upload Document (if any)
               </Form.Label>
-              <Button
-                className="tw-p-0 tw-border-slate-600 tw-bg-slate-300"
-              >
+              <Button variant="default" style={{borderColor:"darkgray", backgroundColor:"grey", padding:"10px"}}>
                 Upload the document
               </Button>
             </Form.Group>
