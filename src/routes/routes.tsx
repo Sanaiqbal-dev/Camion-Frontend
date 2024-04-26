@@ -16,9 +16,10 @@ import ShipperDashboard from "../components/Shipper/ShipperDashboard";
 import ShipperOrders from "../components/Shipper/ShipperOrders";
 import ShipperRequests from "../components/Shipper/ShipperRequests";
 import Proposals from "../components/Shipper/Proposals";
-import UserManagement from "../components/Shipper/UserManagement";
 import ProposalsSecond from "../components/Shipper/ProposalsSecond";
 import ShipperTracking from "../components/Shipper/ShipperTracking";
+import UserManagementShipper from "../components/Shipper/UserManagementShipper";
+import UserManagement from "../components/Carrier/UserManagement";
 
 const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
 const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
@@ -71,6 +72,10 @@ export const router = createBrowserRouter([
         path: "bayan",
         element: <Bayan />,
       },
+      {
+        path: "userManagement",
+        element: <UserManagement />,
+      },
     ],
   },
   {
@@ -91,8 +96,8 @@ export const router = createBrowserRouter([
         element: <ShipperRequests />,
       },
       {
-        path: "usermanagement",
-        element: <UserManagement />,
+        path: "userManagement",
+        element: <UserManagementShipper />,
       },
       {
         path: "shipperorders",

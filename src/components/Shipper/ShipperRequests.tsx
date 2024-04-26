@@ -1,4 +1,4 @@
-import { Payment, RequestColumns } from "./RequestColumns";
+import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
 import {
   Button,

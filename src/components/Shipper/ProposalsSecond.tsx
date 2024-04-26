@@ -1,4 +1,4 @@
-import { Payment, Proposals1Column } from "./Proposals1Columns";
+import { Payment, Proposals1Column } from "./TableColumns/Proposals1Columns";
 import { DataTable } from "../ui/DataTable";
 
 const ProposalsSecond = () => {

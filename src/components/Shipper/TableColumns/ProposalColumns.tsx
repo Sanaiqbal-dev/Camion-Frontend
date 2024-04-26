@@ -1,4 +1,4 @@
-import CompanyLogo from "../../assets/icons/companyLogo.svg";
+import CompanyLogo from "../../../assets/icons/companyLogo.svg";
 
 const ProposalColumns = () => {
   return (

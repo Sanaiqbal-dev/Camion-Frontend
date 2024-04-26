@@ -3,9 +3,9 @@ import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import { Collapse, Card } from "react-bootstrap";
 import { useState } from "react";
-import { Order } from "../../../interface/admin";
+import { IOrder } from "../../../interface/admin";
 
-export const OrderColumns: ColumnDef<Order>[] = [
+export const OrderColumns: ColumnDef<IOrder>[] = [
   {
     accessorKey: "assignedCarrier",
     header: "Assigned Carrier",

@@ -94,7 +94,7 @@ const AdminUserManagement = () => {
       >
         <button
           className="add-item-btn"
-          id="add-driver-btn"
+          id="add-user-btn"
           onClick={() => setshowCreateUserModal(true)}
         >
           Create New User

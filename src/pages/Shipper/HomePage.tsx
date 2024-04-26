@@ -12,9 +12,9 @@ const HomePage = () => {
   const [pageTitle, setPageTitle] = useState("");
   const pageTitleMap = [
     { pathname: "/shipper/dashboard", title: "Dashboard" },
-    { pathname: "/Shipper/shipperrequests.", title: "Requests" },
+    { pathname: "/shipper/shipperrequests", title: "Requests" },
     { pathname: "/shipper/shipperorders", title: "Orders" },
-    { pathname: "shipper//usermanagement", title: "User Management" },
+    { pathname: "/shipper/userManagement", title: "User Management" },
     { pathname: "/shipper/proposals", title: "Proposals" },
     { pathname: "/shipper/proposalssecond", title: "Proposals" },
     { pathname: "/shipper/shippertracking", title: "Tracking" },
@@ -67,7 +67,7 @@ const HomePage = () => {
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link
-              to="shipper/usermanagement"
+              to="/shipper/userManagement"
               onClick={handleUserManagementClick}
             >
               <Image className="profile-img" src={ProfileIcon} />

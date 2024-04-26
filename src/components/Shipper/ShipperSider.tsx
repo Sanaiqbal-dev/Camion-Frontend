@@ -12,8 +12,6 @@ import { useDispatch } from "react-redux";
 import { clearAuthSession } from "../../state/slice/authSlice";
 
 const ShipperSider = () => {
-
-  
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
@@ -21,8 +19,11 @@ const ShipperSider = () => {
   };
 
   return (
-    <div className="text-light pt-5 sidebar" id="sidebar-container">
-      <div className="sidebar-admin">
+    <div
+      className="text-light pt-5 sidebar  sidebar-admin"
+      id="sidebar-container"
+    >
+      <div>
         <Image
           src={CamionLogo}
           alt="logo"
@@ -120,33 +121,34 @@ const ShipperSider = () => {
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
-        <div className="accordion">
-          <NavLink
-            key={"Settings"}
-            to={"/admin/settings"}
-            className={({ isActive }) =>
-              isActive ? "selected-navlink" : undefined
-            }
-          >
-            <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
-              <Image src={SettingIcon} />
-              Settings
-            </div>
-          </NavLink>
-          <NavLink
-            key={"Logout"}
-            to={"/login"}
-            onClick={handleReplaceNavigate}
-            className={({ isActive }) =>
-              isActive ? "selected-navlink" : undefined
-            }
-          >
-            <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
-              <Image src={LogoutIcon} />
-              <span style={{ color: "#FF3939" }}>Logout</span>
-            </div>
-          </NavLink>
-        </div>
+      </div>
+
+      <div className="sidebar-admin">
+        <NavLink
+          key={"Settings"}
+          to={"/admin/settings"}
+          className={({ isActive }) =>
+            isActive ? "selected-navlink" : undefined
+          }
+        >
+          <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+            <Image src={SettingIcon} />
+            Settings
+          </div>
+        </NavLink>
+        <NavLink
+          key={"Logout"}
+          to={"/login"}
+          onClick={handleReplaceNavigate}
+          className={({ isActive }) =>
+            isActive ? "selected-navlink" : undefined
+          }
+        >
+          <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+            <Image src={LogoutIcon} />
+            <span style={{ color: "#FF3939" }}>Logout</span>
+          </div>
+        </NavLink>
       </div>
     </div>
   );

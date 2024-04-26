@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import TickIcon from "../../assets/icons/ic-tickIcon.svg";
-import CrossIcon from "../../assets/icons/ic-crossIcon.svg";
-import CompanyLogo from "../../assets/icons/companyLogo.svg";
+import TickIcon from "../../../assets/icons/ic-tickIcon.svg";
+import CrossIcon from "../../../assets/icons/ic-crossIcon.svg";
+import CompanyLogo from "../../../assets/icons/companyLogo.svg";
 
 export type Payment = {
   id: string;

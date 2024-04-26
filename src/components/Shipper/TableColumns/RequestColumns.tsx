@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import DeleteIcon from "../../assets/icons/ic-delete.svg";
-import EditIcon from "../../assets/icons/ic-edit.svg";
-import ProposalIcon from "../../assets/icons/ic-proposal.svg";
+import DeleteIcon from "../../../assets/icons/ic-delete.svg";
+import EditIcon from "../../../assets/icons/ic-edit.svg";
+import ProposalIcon from "../../../assets/icons/ic-proposal.svg";
 import { Link } from "react-router-dom";
 
 export type Payment = {

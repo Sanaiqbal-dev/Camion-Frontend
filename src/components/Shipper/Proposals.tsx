@@ -1,4 +1,4 @@
-import ProposalColumns from "./ProposalColumns";
+import ProposalColumns from "./TableColumns/ProposalColumns";
 
 const Proposals = () => {
   return (

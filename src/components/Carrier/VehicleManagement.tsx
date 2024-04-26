@@ -7,7 +7,6 @@ import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
 import { IVehicle } from "../../interface/carrier";
-import AssignVehicle from "../Modals/AssignVehicle";
 
 const VehicleManagement = () => {
   const vehiclesData: IVehicle[] = [
