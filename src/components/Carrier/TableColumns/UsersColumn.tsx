@@ -1,13 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { IAdminUser } from "../../../interface/admin";
+import { IUser } from "../../../interface/common";
 
-interface AdminUserActionsProps{
+interface UserActionsProps{
   onEdit : () => void;
 }
 
-export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<IAdminUser>[] => [
+export const UsersColumn = ({onEdit} : UserActionsProps) : ColumnDef<IUser>[] => [
   {
     accessorKey: "userName",
     header: "User Name",
@@ -15,14 +15,6 @@ export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<I
   {
     accessorKey: "email",
     header: "Email Address",
-  },
-  {
-    accessorKey: "password",
-    header: "Password",
-    cell: ({ row }) => {
-      const count: string = row.getValue("password");
-      return <span>{"*".repeat(count.length)}</span>;
-    },
   },
   {
     accessorKey: "action",

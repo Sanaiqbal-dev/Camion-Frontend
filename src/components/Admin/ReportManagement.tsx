@@ -165,7 +165,7 @@ const ReportManagement = () => {
           </Col>
         </Row>
       </div>
-      {reportsData && <DataTable columns={ReportsColumn} data={reportsData} />}
+      {reportsData && <DataTable isAction={false} columns={ReportsColumn} data={reportsData} />}
     </div>
   );
 };

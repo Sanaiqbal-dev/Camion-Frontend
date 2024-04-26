@@ -1,15 +1,10 @@
-import {
-  Navigate,
-  Outlet,
-  useLocation,
-} from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import CarrierSider from "../../components/Carrier/CarrierSider";
 import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Image } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { clearAuthSession } from "../../state/slice/authSlice";
+import { useSelector } from "react-redux";
 
 const CarrierHomePage = () => {
   const token = useSelector((state: any) => state.session.token);
@@ -22,6 +17,7 @@ const CarrierHomePage = () => {
     { pathname: "/carrier/drivermanagement", title: "Driver Management" },
     { pathname: "/carrier/vehiclemanagement", title: "Vehicle Management" },
     { pathname: "/carrier/bayan", title: "Bayan" },
+    { pathname: "/carrier/userManagement", title: "User Management" },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find(
@@ -42,16 +38,10 @@ const CarrierHomePage = () => {
     );
   }
 
-  const dispatch = useDispatch();
-
-  const handleReplaceNavigate = () => {
-    dispatch(clearAuthSession());
-  };
-
   return (
     <div className="wrapper">
       <CarrierSider />
-      <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
+      <div className="content-container col px-1 pt-4 px-sm-2 px-md-3 px-xl-5">
         <div className="burger-menu">
           <span onClick={toggleSidebar}>
             <svg
@@ -75,11 +65,12 @@ const CarrierHomePage = () => {
           </span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Image
-              className="profile-img"
-              src={ProfileIcon}
-              onClick={handleReplaceNavigate}
-            />
+            <Link to={"/carrier/userManagement"}>
+              <Image
+                className="profile-img"
+                src={ProfileIcon}
+              />
+            </Link>
             <Image
               className="notification-icon"
               src={NotificationIcon}
@@ -96,9 +87,7 @@ const CarrierHomePage = () => {
             />
           </div>
         </header>
-        <div className="mt-4">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </div>
   );

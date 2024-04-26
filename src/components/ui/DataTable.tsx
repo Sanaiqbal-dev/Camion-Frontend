@@ -14,18 +14,19 @@ import {
   TableHeader,
   TableRow,
 } from "../../../@/components/ui/table";
-
-import { Button } from "../../../@/components/ui/button";
+import clsx from "clsx";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
-import clsx from "clsx";
+import { Button } from "react-bootstrap";
 
 interface DataTableProps<TData, TValue> {
+  isAction: boolean;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
 export function DataTable<TData, TValue>({
+  isAction,
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -41,8 +42,15 @@ export function DataTable<TData, TValue>({
     "data-table auto-width-columns": columns.length > 6,
   });
   return (
-    <div style={{ maxHeight: "75vh" }}>
-      <div className="table-contents">
+    <>
+      <div
+        className="table-contents"
+        style={
+          isAction
+            ? { height: `calc(100vh - 250px)` }
+            : { height: `calc(100vh - 200px)` }
+        }
+      >
         <Table className={tableColumnStyle}>
           <TableHeader className="tw-border-none">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -116,6 +124,6 @@ export function DataTable<TData, TValue>({
           <img src={IconNext} />
         </Button>
       </div>
-    </div>
+    </>
   );
 }

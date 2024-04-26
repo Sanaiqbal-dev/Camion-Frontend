@@ -67,7 +67,7 @@ const AdminSider = () => {
           </NavLink>
         </div>
       </div>
-      <div className="accordion">
+      <div className="sidebar-admin">
         <NavLink
           key={"Settings"}
           to={"/admin/settings"}

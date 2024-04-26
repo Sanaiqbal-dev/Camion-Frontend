@@ -1,4 +1,4 @@
-import { JSXElementConstructor } from "react";
+import { JSXElementConstructor, ReactNode } from "react";
 import {
   AdvancedMarker,
   InfoWindow,
@@ -11,24 +11,33 @@ import { Image } from "react-bootstrap";
 interface MapMarkerParams {
   lat: number;
   lng: number;
-  infoWindowText: JSXElementConstructor;
+  shipperTrackingInfo?: ReactNode;
+  infoWindowText?: JSXElementConstructor;
 }
 export const MapMarker: React.FC<MapMarkerParams> = ({
   lat,
   lng,
   infoWindowText,
+  shipperTrackingInfo,
 }) => {
-  //   const [infowindowOpen, setInfowindowOpen] = useState(true);
   const [markerRef, marker] = useAdvancedMarkerRef();
 
   return (
     <>
       <AdvancedMarker ref={markerRef} position={{ lat: lat, lng: lng }}>
-        <Pin><Image src={MarkerImage}/></Pin>
+        {shipperTrackingInfo ? (
+          <Pin>{shipperTrackingInfo}</Pin>
+        ) : (
+          <Pin>
+            <Image src={MarkerImage} />
+          </Pin>
+        )}
       </AdvancedMarker>
-      <InfoWindow anchor={marker} maxWidth={200}>
-        {infoWindowText}
-      </InfoWindow>
+      {shipperTrackingInfo == undefined && (
+        <InfoWindow anchor={marker} maxWidth={200}>
+          {infoWindowText}
+        </InfoWindow>
+      )}
     </>
   );
 };

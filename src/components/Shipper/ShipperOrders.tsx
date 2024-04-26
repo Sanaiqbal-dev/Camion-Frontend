@@ -1,153 +1,154 @@
+import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { OrderColumns } from "./TableColumns/OrdersColumn";
+import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
-import { IOrder } from "../../interface/carrier";
-import { ColumnDef } from "@tanstack/react-table";
 
-export interface StatusProps {
-  id: string;
-  statusValue: string;
-}
-const Orders = () => {
-  const ordersData: IOrder[] = [
+const ShipperOrders = () => {
+  const data: Payment[] = [
     {
       id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "-",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
       id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "-",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
     {
       id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
     {
       id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "-",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
     {
       id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
       id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
       id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
       id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
       id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      trackingId: "EV-2017002346 ",
+      origin: "Riyadh, KSA",
+      destination: "Riyadh, KSA",
       weight: "82.5 kg",
-      dimentions: "45x45x45",
+      type: "flatbed",
+      status: "pending",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
   ];
 
-  const onSave = () => {
-    console.log("Save is clicked");
-  };
-  const onDelete = () => {
-    console.log("Delete is clicked");
-  };
-  const onAssignVehicle = () => {
-    console.log("Assign Vehicle is clicked");
-  };
-  const onPrintBill = () => {
-    console.log("Print Bayan Bill is clicked");
-  };
-  const onUpdateStatus = (id: string, statusVal: string) => {
-    console.log("status id : ", id);
-    console.log("status value : ", statusVal);
-  };
-  const columns: ColumnDef<IOrder>[] = OrderColumns({
-    onSave,
-    onDelete,
-    onAssignVehicle,
-    onPrintBill,
-    onUpdateStatus,
-  });
   const values = [10, 20, 30, 40, 50];
-  const [currentIndex, setCurrentIndex] = useState(0);
+  let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    setCurrentIndex(currentIndex + direction);
+    currentIndex += direction;
 
     if (currentIndex >= values.length) {
-      setCurrentIndex(values.length - 1);
+      currentIndex = values.length - 1;
     } else if (currentIndex < 0) {
-      setCurrentIndex(0);
+      currentIndex = 0;
     }
     setEntriesValue(values[currentIndex]);
   }
   return (
-    <div className="table-container orders-table">
+    <div className="table-container">
+      <div className="search-and-entries-container">
+        <div>
+          <button className="filter-btn">
+            <img src={FilterIcon} /> Filter
+          </button>
+        </div>
+        <div>
+          <button className="add-item-btn" id="add-driver-btn">
+            Add Driver
+          </button>
+        </div>
+      </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
@@ -202,11 +203,8 @@ const Orders = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && (
-        <DataTable isAction={false} columns={columns} data={ordersData} />
-      )}
+      {data && <DataTable isAction={false} columns={OrderColumns} data={data} />}
     </div>
   );
 };
-
-export default Orders;
+export default ShipperOrders;

@@ -45,6 +45,7 @@ const Login = () => {
       // console.log("Recieved Token is :", loginResponse);
 
       // navigate("/carrier/dashboard");
+      navigate("/Shipper/dashboard");
       navigate("/admin/profiles");
     } catch (error) {
       console.error("Login failed:", error);
@@ -142,7 +143,8 @@ const Login = () => {
                         <div className="d-flex justify-content-start">
                           <div>Don’t have an account?</div>
                           <div>
-                            <Link to="/Register"
+                            <Link
+                              to="/Register"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",

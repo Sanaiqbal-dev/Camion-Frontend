@@ -6,10 +6,10 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
-import { Vehicle } from "../../interface/carrier";
+import { IVehicle } from "../../interface/carrier";
 
 const VehicleManagement = () => {
-  const vehiclesData: Vehicle[] = [
+  const vehiclesData: IVehicle[] = [
     {
       id: "728ed52f",
       driverName: "Driver Not Assign",
@@ -206,7 +206,11 @@ const VehicleManagement = () => {
         </Row>
       </div>
       {vehiclesData && (
-        <DataTable columns={VehicleManagementColumns} data={vehiclesData} />
+        <DataTable
+          isAction={true}
+          columns={VehicleManagementColumns}
+          data={vehiclesData}
+        />
       )}
     </div>
   );

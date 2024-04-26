@@ -1,27 +1,29 @@
+import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { OrderColumns } from "./TableColumns/OrdersColumn";
+import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
-import { IOrder } from "../../interface/carrier";
-import { ColumnDef } from "@tanstack/react-table";
 
-export interface StatusProps {
-  id: string;
-  statusValue: string;
-}
-const Orders = () => {
-  const ordersData: IOrder[] = [
+const ShipperRequests = () => {
+  const data: Payment[] = [
     {
       id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
+      origin: "Maputo, Mozambique",
+      destination: "Dublin, Ireland",
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
@@ -31,7 +33,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
@@ -42,7 +43,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
@@ -53,7 +53,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
 
@@ -64,7 +63,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
@@ -74,7 +72,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
@@ -84,7 +81,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
@@ -94,7 +90,6 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
     {
@@ -104,50 +99,38 @@ const Orders = () => {
       weight: "82.5 kg",
       dimentions: "45x45x45",
       ETA: "9/20/2024",
-      status: "enroute",
       action: "",
     },
   ];
 
-  const onSave = () => {
-    console.log("Save is clicked");
-  };
-  const onDelete = () => {
-    console.log("Delete is clicked");
-  };
-  const onAssignVehicle = () => {
-    console.log("Assign Vehicle is clicked");
-  };
-  const onPrintBill = () => {
-    console.log("Print Bayan Bill is clicked");
-  };
-  const onUpdateStatus = (id: string, statusVal: string) => {
-    console.log("status id : ", id);
-    console.log("status value : ", statusVal);
-  };
-  const columns: ColumnDef<IOrder>[] = OrderColumns({
-    onSave,
-    onDelete,
-    onAssignVehicle,
-    onPrintBill,
-    onUpdateStatus,
-  });
   const values = [10, 20, 30, 40, 50];
-  const [currentIndex, setCurrentIndex] = useState(0);
+  let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    setCurrentIndex(currentIndex + direction);
+    currentIndex += direction;
 
     if (currentIndex >= values.length) {
-      setCurrentIndex(values.length - 1);
+      currentIndex = values.length - 1;
     } else if (currentIndex < 0) {
-      setCurrentIndex(0);
+      currentIndex = 0;
     }
     setEntriesValue(values[currentIndex]);
   }
   return (
-    <div className="table-container orders-table">
+    <div className="table-container">
+      <div className="search-and-entries-container">
+        <div>
+          <button className="filter-btn">
+            <img src={FilterIcon} /> Filter
+          </button>
+        </div>
+        <div>
+          <button className="add-item-btn" id="add-driver-btn">
+            Add Driver
+          </button>
+        </div>
+      </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
@@ -202,11 +185,10 @@ const Orders = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && (
-        <DataTable isAction={false} columns={columns} data={ordersData} />
+      {data && (
+        <DataTable columns={RequestColumns} data={data} isAction={false} />
       )}
     </div>
   );
 };
-
-export default Orders;
+export default ShipperRequests;

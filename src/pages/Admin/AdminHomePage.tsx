@@ -38,7 +38,7 @@ const AdminHomePage = () => {
   return (
     <div className="wrapper">
       <AdminSider />
-      <div className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5">
+      <div className="content-container col px-1 pt-4 px-sm-2 px-md-3 px-xl-5">
         <div className="burger-menu">
           <span onClick={toggleSidebar}>
             <svg
@@ -81,9 +81,7 @@ const AdminHomePage = () => {
             />
           </div>
         </header>
-        <div className="mt-4">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </div>
   );

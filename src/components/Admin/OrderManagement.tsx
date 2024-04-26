@@ -4,11 +4,11 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Order } from "../../interface/admin";
+import { IOrder } from "../../interface/admin";
 import { OrderColumns } from "./TableColumns/OrdersColumn";
 
 const OrderManagement = () => {
-  const ordersData: Order[] = [
+  const ordersData: IOrder[] = [
     {
       id: "728ed52f",
       assignedCarrier: "Binford Ltd",
@@ -183,7 +183,7 @@ const OrderManagement = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && <DataTable columns={OrderColumns} data={ordersData} />}
+      {ordersData && <DataTable isAction={false} columns={OrderColumns} data={ordersData} />}
     </div>
   );
 };

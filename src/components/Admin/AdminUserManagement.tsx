@@ -3,6 +3,8 @@ import { AdminUsersColumn } from "./TableColumns/AdminUsersColumn";
 import { IAdminUser } from "../../interface/admin";
 import CreateUser from "../Modals/CreateUser";
 import { useState } from "react";
+import UpdatePassword from "../Modals/UpdatePassword";
+import { ColumnDef } from "@tanstack/react-table";
 
 const AdminUserManagement = () => {
   const userData: IAdminUser[] = [
@@ -73,7 +75,16 @@ const AdminUserManagement = () => {
       action: "",
     },
   ];
-    const [showCreateUser, setshowCreateUser] = useState(false);
+  const [showCreateUserModal, setshowCreateUserModal] = useState(false);
+  const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
+
+  const onEdit = () => {
+    console.log(" Show password clicked");
+    setshowUpdatePasswordModal(true);
+  };
+  const columns: ColumnDef<IAdminUser>[] = AdminUsersColumn({
+    onEdit,
+  });
 
   return (
     <div className="table-container">
@@ -81,14 +92,24 @@ const AdminUserManagement = () => {
         className="search-and-entries-container"
         style={{ flexDirection: "row-reverse" }}
       >
-        <button className="add-item-btn" id="add-driver-btn"onClick={() => setshowCreateUser(true)}>
+        <button
+          className="add-item-btn"
+          id="add-user-btn"
+          onClick={() => setshowCreateUserModal(true)}
+        >
           Create New User
         </button>
       </div>
-      {userData && <DataTable columns={AdminUsersColumn} data={userData} />}
+      {userData && (
+        <DataTable isAction={false} columns={columns} data={userData} />
+      )}
       <CreateUser
-        show={showCreateUser}
-        handleClose={() => setshowCreateUser(false)}
+        show={showCreateUserModal}
+        handleClose={() => setshowCreateUserModal(false)}
+      />
+      <UpdatePassword
+        show={showUpdatePasswordModal}
+        handleClose={() => setshowUpdatePasswordModal(false)}
       />
     </div>
   );
