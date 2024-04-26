@@ -6,10 +6,10 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
-import { Driver } from "../../interface/carrier";
+import { IDriver } from "../../interface/carrier";
 
 const DriverManagement = () => {
-  const driversData: Driver[] = [
+  const driversData: IDriver[] = [
     {
       id: "728ed52f",
       driverName: "Ali Abbasi",
