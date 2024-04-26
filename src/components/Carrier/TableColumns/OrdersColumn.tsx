@@ -3,11 +3,30 @@ import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconPrintBill from "../../../assets/icons/ic-printer.svg";
-import { Collapse, Card } from "react-bootstrap";
-import { useState } from "react";
-import { Order } from "../../../interface/carrier";
+import IconDown from "../../../assets/icons/ic-down.svg";
+import { IOrder } from "../../../interface/carrier";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../../@/components/ui/dropdown-menu";
+import { Button } from "../../../../@/components/ui/button";
 
-export const OrderColumns: ColumnDef<Order>[] = [
+interface OrderActionsProps {
+  onSave: (orderItem: IOrder) => void;
+  onDelete: (orderItem: IOrder) => void;
+  onAssignVehicle: (orderItem: IOrder) => void;
+  onPrintBill: (orderItem: IOrder) => void;
+  onUpdateStatus: (id: string, statusVal: string) => void;
+}
+export const OrderColumns = ({
+  onSave,
+  onDelete,
+  onAssignVehicle,
+  onPrintBill,
+  onUpdateStatus,
+}: OrderActionsProps): ColumnDef<IOrder>[] => [
   {
     accessorKey: "origin",
     header: "Origin",
@@ -32,61 +51,68 @@ export const OrderColumns: ColumnDef<Order>[] = [
   {
     accessorKey: "status",
     header: "status",
-    cell:() => {
-        const [open, setOpen] = useState(false);
+    cell: ({ row }) => {
+      const item = row.original;
 
-       return (
-         <div>
-           <p>
-             <div
-               onClick={() => setOpen(!open)}
-               aria-controls="example-collapse-text"
-               aria-expanded={open}
-               style={{ cursor: "pointer" }}
-             >
-               Select Status{" "}
-               <img src="assets/ic-down.svg" alt="Toggle Dropdown" />
-             </div>
-           </p>
-           <Collapse in={open}>
-             <div
-               id="example-collapse-text"
-               style={{ position: "fixed", zIndex: 1000 }}
-             >
-               <Card>
-                 <Card.Body>
-                   <ul>
-                     <li>Item 1</li>
-                     <li>Item 2</li>
-                     <li>Item 3</li>
-                   </ul>
-                 </Card.Body>
-               </Card>
-             </div>
-           </Collapse>
-         </div>
-       );
-    }
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only tw-flex tw-gap-1">
+                Select Status <img src={IconDown} />
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            className="tw-flex tw-flex-col tw-gap-2 tw-p-2"
+            align="end"
+          >
+            <DropdownMenuItem
+              className="hover:tw-bg-black hover:tw-text-white"
+              onClick={() => onUpdateStatus(item.id, "waiting")}
+            >
+              Waiting
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="hover:tw-bg-black hover:tw-text-white"
+              onClick={() => onUpdateStatus(item.id, "enroute")}
+            >
+              Enroute
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="hover:tw-bg-black hover:tw-text-white"
+              onClick={() => onUpdateStatus(item.id, "delivered")}
+            >
+              Delivered
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div onClick={() => onSave(row.original)}>
             <img src={IconSaveFile} />
-            <span style={{ color: "#27AE60" }}>Share</span>
+            <span style={{ color: "#27AE60" }}>Save</span>
           </div>
-          <div>
+          <div onClick={() => onDelete(row.original)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div id="assign-vehicle">
+          <div onClick={() => onAssignVehicle(row.original)}>
             <img src={IconAssignVehicle} />
             <span style={{ color: "#0060B8" }}>Assign Vehicle</span>
           </div>
-          <div style={{ marginLeft: "10px" }}>
+          <div
+            style={{ marginLeft: "10px" }}
+            onClick={() => onPrintBill(row.original)}
+          >
             <img src={IconPrintBill} />
             <span style={{ color: "#F48031" }}>Print Bayan Bill</span>
           </div>

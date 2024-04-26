@@ -5,13 +5,22 @@ import FleetStatus from "../ui/FleetStatus";
 import FleetUsage from "../ui/FleetUsage";
 const Dashboard = () => {
   return (
-    <div className="tw-flex tw-flex-col tw-gap-5">
+    <div
+      className="tw-flex tw-flex-col tw-gap-5"
+      style={{
+        paddingTop: "15px",
+        maxHeight: "calc(100vh - 60px)",
+        overflowY: "scroll",
+      }}
+    >
       <div className="row main-stats">
         <div className="col stats-item border-right">
           <span className="stats-value">450</span>
           <span className="stats-label">Total Orders</span>
-          <div className="stats-indicator">
-            Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+          <div className="tw-flex tw-flex-row tw-gap-2">
+            <span>
+              Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+            </span>
             <Image src={TrendUpIcon} />
           </div>
         </div>
@@ -19,8 +28,10 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">78</span>
           <span className="stats-label">Active Orders</span>
-          <div className="stats-indicator">
-            Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+          <div className="tw-flex tw-flex-row tw-gap-2">
+            <span>
+              Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+            </span>
             <Image src={TrendUpIcon} />
           </div>
         </div>
@@ -28,8 +39,10 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">55</span>
           <span className="stats-label">On Route</span>
-          <div className="stats-indicator">
-            Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+          <div className="tw-flex tw-flex-row tw-gap-2">
+            <span>
+              Order Increase <span style={{ color: "#0ebc93" }}>5%</span>
+            </span>
             <Image src={TrendUpIcon} />
           </div>
         </div>
@@ -37,8 +50,10 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">33</span>
           <span className="stats-label">Orders this month</span>
-          <div className="stats-indicator">
-            Order Decrease <span style={{ color: "red" }}>5%</span>
+          <div className="tw-flex tw-flex-row tw-gap-2">
+            <span>
+              Order Decrease <span style={{ color: "red" }}>5%</span>
+            </span>
             <Image src={TrendDownIcon} />
           </div>
         </div>

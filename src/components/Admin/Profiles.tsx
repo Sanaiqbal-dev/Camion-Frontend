@@ -193,7 +193,7 @@ const Profiles = () => {
         </Row>
       </div>
       {profilesData && (
-        <DataTable columns={ProfileColumns} data={profilesData} />
+        <DataTable isAction={false} columns={ProfileColumns} data={profilesData} />
       )}
     </div>
   );

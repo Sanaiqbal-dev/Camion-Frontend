@@ -1,9 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { AdminUser } from "../../../interface/admin";
+import { IAdminUser } from "../../../interface/admin";
 
-export const AdminUsersColumn: ColumnDef<AdminUser>[] = [
+interface AdminUserActionsProps{
+  onEdit : () => void;
+}
+
+export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<IAdminUser>[] => [
   {
     accessorKey: "userName",
     header: "User Name",
@@ -17,7 +21,6 @@ export const AdminUsersColumn: ColumnDef<AdminUser>[] = [
     header: "Password",
     cell: ({ row }) => {
       const count: string = row.getValue("password");
-
       return <span>{"*".repeat(count.length)}</span>;
     },
   },
@@ -27,7 +30,7 @@ export const AdminUsersColumn: ColumnDef<AdminUser>[] = [
     cell: () => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div onClick={() => onEdit()}>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>

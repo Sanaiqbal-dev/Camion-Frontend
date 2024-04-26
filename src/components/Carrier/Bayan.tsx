@@ -6,10 +6,10 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { BayanColumns } from "./TableColumns/BayanColums";
-import { BayanItem } from "../../interface/carrier";
+import { IBayanItem } from "../../interface/carrier";
 
 const Bayan = () => {
-  const bayanData: BayanItem[] = [
+  const bayanData: IBayanItem[] = [
     {
       id: "728ed52f",
       origin: "Riyadh, KSA",
@@ -178,7 +178,7 @@ const Bayan = () => {
           </Col>
         </Row>
       </div>
-      {bayanData && <DataTable columns={BayanColumns} data={bayanData} />}
+      {bayanData && <DataTable isAction={true} columns={BayanColumns} data={bayanData} />}
     </div>
   );
 };
