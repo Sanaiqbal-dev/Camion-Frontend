@@ -211,7 +211,9 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </Container>
-      {data && <DataTable columns={RequestColumns} data={data} />}
+      {data && (
+        <DataTable columns={RequestColumns} data={data} isAction={false} />
+      )}
     </div>
   );
 };

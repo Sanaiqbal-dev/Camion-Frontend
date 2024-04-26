@@ -104,10 +104,10 @@ const ShipperSider = () => {
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
-      <div style={{ paddingLeft: "20px", position: "absolute", top: "82%" }}>
+      <div style={{ paddingLeft: "30px", position: "absolute", top: "82%" }}>
         <NavLink
           key={""}
-          to={""}
+          to={"notdefinedyet"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }
@@ -133,7 +133,7 @@ const ShipperSider = () => {
         </NavLink>
         <NavLink
           key={""}
-          to={""}
+          to={"/login"}
           className={({ isActive }) =>
             isActive ? "selected-navlink" : undefined
           }

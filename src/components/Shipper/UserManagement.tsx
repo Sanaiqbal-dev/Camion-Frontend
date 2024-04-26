@@ -168,7 +168,13 @@ const UserManagement = () => {
           </Col>
         </Row>
       </Container>
-      {data && <DataTable columns={UserManagementColumns} data={data} />}
+      {data && (
+        <DataTable
+          columns={UserManagementColumns}
+          data={data}
+          isAction={false}
+        />
+      )}
     </div>
   );
 };

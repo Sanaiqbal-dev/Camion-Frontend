@@ -2,7 +2,7 @@ import ProposalColumns from "./ProposalColumns";
 
 const Proposals = () => {
   return (
-    <div>
+    <div style={{ overflowY: "auto", maxHeight: "80vh" }}>
       {[...Array(10)].map((_, index) => (
         <ProposalColumns key={index} />
       ))}

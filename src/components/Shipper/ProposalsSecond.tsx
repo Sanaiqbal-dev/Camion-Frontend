@@ -109,7 +109,9 @@ const ProposalsSecond = () => {
 
   return (
     <div className="table-container">
-      {data && <DataTable columns={Proposals1Column} data={data} />}
+      {data && (
+        <DataTable columns={Proposals1Column} data={data} isAction={false} />
+      )}
     </div>
   );
 };
