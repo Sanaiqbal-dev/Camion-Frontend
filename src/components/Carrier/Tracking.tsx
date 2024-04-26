@@ -69,9 +69,11 @@ const Tracking = () => {
         defaultZoom={13}
         mapId="9b0a2c44ded1af0e"
         style={{
-          height: "100%",
-          zIndex: "0",
-          position: "relative",
+          width:"calc(100vw - 360px)",
+          height: "calc(100vh - 90px)",
+          marginTop:"15px",
+          // zIndex: "0",
+          position: "absolute",
         }}
       >
         {markers.map((item) => (
