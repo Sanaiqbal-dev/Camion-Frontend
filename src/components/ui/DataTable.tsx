@@ -14,11 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "../../../@/components/ui/table";
-
-import { Button } from "../../../@/components/ui/button";
+import clsx from "clsx";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
-import clsx from "clsx";
+import { Button } from "react-bootstrap";
 
 interface DataTableProps<TData, TValue> {
   isAction: boolean;
