@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
-import { IAdminUser } from "../../interface/admin";
 
 interface IPassword {
   currentPassword: string;
@@ -38,6 +37,8 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
+        console.log(data);
+
     //    try {
     //      const loginResponse = await login(data).unwrap();
     //      dispatch(

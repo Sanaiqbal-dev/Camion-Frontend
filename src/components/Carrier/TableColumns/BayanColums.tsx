@@ -1,9 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconShare from "../../../assets/icons/ic-file-earmark.svg";
 import IconPrint from "../../../assets/icons/ic-printer.svg";
-import { BayanItem } from "../../../interface/carrier";
+import { IBayanItem } from "../../../interface/carrier";
 
-export const BayanColumns: ColumnDef<BayanItem>[] = [
+export const BayanColumns: ColumnDef<IBayanItem>[] = [
   {
     accessorKey: "origin",
     header: "Origin",

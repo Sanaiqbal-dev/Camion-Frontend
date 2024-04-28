@@ -4,11 +4,11 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { profiles } from "../../interface/admin";
+import { Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
 
 const Profiles = () => {
-  const profilesData: profiles[] = [
+  const profilesData: Iprofiles[] = [
     {
       id: "9e19od42",
       profileType: "Shipper",

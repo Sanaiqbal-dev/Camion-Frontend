@@ -34,22 +34,7 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    //    try {
-    //      const loginResponse = await login(data).unwrap();
-    //      dispatch(
-    //        setAuthSession({
-    //          username: data.username,
-    //          token: loginResponse.token,
-    //          role: loginResponse.role,
-    //          status: "active",
-    //        })
-    //      );
-    //      // console.log("Recieved Token is :", loginResponse);
-    //      // navigate("/carrier/dashboard");
-    //      navigate("/admin/profiles");
-    //    } catch (error) {
-    //      console.error("Login failed:", error);
-    //    }
+    console.log(data);
   };
 
   return (

@@ -2,9 +2,9 @@ import { ColumnDef } from "@tanstack/react-table";
 import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import { Link } from "react-router-dom";
-import { Driver } from "../../../interface/carrier";
+import { IDriver } from "../../../interface/carrier";
 
-export const DriverManagementColumns: ColumnDef<Driver>[] = [
+export const DriverManagementColumns: ColumnDef<IDriver>[] = [
   {
     accessorKey: "driverName",
     header: "Driver Name",

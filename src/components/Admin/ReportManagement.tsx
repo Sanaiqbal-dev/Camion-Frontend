@@ -4,11 +4,11 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Report } from "../../interface/admin";
+import { IReport } from "../../interface/admin";
 import { ReportsColumn } from "./TableColumns/ReportColumns";
 
 const ReportManagement = () => {
-  const reportsData: Report[] = [
+  const reportsData: IReport[] = [
     {
       id: "728ed52f",
       userType: "Shipper",
