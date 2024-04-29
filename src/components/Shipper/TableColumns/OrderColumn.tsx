@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteIcon from "../../../assets/icons/ic-delete.svg";
 import EditIcon from "../../../assets/icons/ic-edit.svg";
-import TrackingIcon from "../../../assets/icons/ic-vehicle.svg";
+import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
 
 export type Payment = {
   id: string;
@@ -48,19 +48,19 @@ export const OrderColumns: ColumnDef<Payment>[] = [
     header: "Action",
     cell: () => {
       return (
-        <div style={{ display: "flex", gap: "20px" }}>
-          <img
-            src={EditIcon}
-            onClick={() => console.warn("Not implemented yet")}
-          />
-          <img
-            src={DeleteIcon}
-            onClick={() => console.warn("Not implemented yet")}
-          />
-          <img
-            src={TrackingIcon}
-            onClick={() => console.warn("Not implemented yet")}
-          />
+        <div className="action-container" style={{ justifyContent: "start" }}>
+          <div>
+            <img src={EditIcon} />
+            <span style={{ color: "#27AE60" }}>Edit</span>
+          </div>
+          <div>
+            <img src={DeleteIcon} />
+            <span style={{ color: "#EB5757" }}>Delete</span>
+          </div>
+          <div>
+            <img src={IconAssignVehicle} />
+            <span style={{ color: "#0060B8" }}>Assign Vehicle</span>
+          </div>
         </div>
       );
     },
