@@ -1,6 +1,6 @@
 import { CommonSelect, IAPIResponse } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';		
-import { IOrderDetail, IOrderDetailIndex,IOrderDetailSingle, OrderDetailIndexQuery } from '@/interface/orderDetail';
+import { IOrderDetail, IOrderDetailIndex,IOrderDetailSingle } from '@/interface/orderDetail';
 import baseApi from './baseApi';
 
 export const orderDetailApi = baseApi.injectEndpoints({
@@ -20,9 +20,9 @@ export const orderDetailApi = baseApi.injectEndpoints({
       providesTags: (result, error, arg) => {
         const { id } = arg || {};
         if (id) {
-          return [{ type: 'OrderDetail', id }];
+          return [{ type: 'OrderDetail', id,  result:result,error:error }];
         }
-        return [{ type: 'OrderDetail' }];
+        return [{ type: "OrderDetail", result: result, error: error }];
       },
     }), 
     

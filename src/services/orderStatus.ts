@@ -1,6 +1,6 @@
 import { CommonSelect, IAPIResponse } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';		
-import { IOrderStatus, IOrderStatusIndex,IOrderStatusSingle, OrderStatusIndexQuery } from '@/interface/orderStatus';
+import { IOrderStatus, IOrderStatusIndex,IOrderStatusSingle } from '@/interface/orderStatus';
 import baseApi from './baseApi';
 
 export const orderStatusApi = baseApi.injectEndpoints({
@@ -20,9 +20,9 @@ export const orderStatusApi = baseApi.injectEndpoints({
       providesTags: (result, error, arg) => {
         const { id } = arg || {};
         if (id) {
-          return [{ type: 'OrderStatus', id }];
+          return [{ type: "OrderStatus", id, result: result, error: error }];
         }
-        return [{ type: 'OrderStatus' }];
+        return [{ type: "OrderStatus", result: result, error: error }];
       },
     }), 
     

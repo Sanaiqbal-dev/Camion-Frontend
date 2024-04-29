@@ -147,12 +147,21 @@ const Orders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+  const queryParams = {
+    page: 1,
+    pageSize: 10,
+    filter: "active", // example parameter
+  };
+
+  // Hook call with query parameters
+  const { data, error, isLoading } = useGetOrdersQuery(queryParams);
 
 
-   const { data, error, isLoading } = useGetOrdersQuery();
-
-   if (isLoading) return <div>Loading...</div>;
-   if (error) return <div>Error: {error.message}</div>;
+  console.log(data);
+  console.log(error);
+  console.log(isLoading);
+  // if (isLoading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="table-container orders-table">
