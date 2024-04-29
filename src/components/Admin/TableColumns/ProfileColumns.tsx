@@ -2,11 +2,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import IconTick from "../../../assets/icons/ic-submitted.svg";
 import IconDeleteProfile from "../../../assets/icons/ic-delete-profile.svg";
 import IconRejectProfile from "../../../assets/icons/ic-reject-profile.svg";
-import { profiles } from "../../../interface/admin";
+import { Iprofiles } from "../../../interface/admin";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
-export const ProfileColumns: ColumnDef<profiles>[] = [
+export const ProfileColumns: ColumnDef<Iprofiles>[] = [
   {
     accessorKey: "profileType",
     header: "ProfileType",

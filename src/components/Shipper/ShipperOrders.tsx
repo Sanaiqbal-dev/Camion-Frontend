@@ -1,6 +1,12 @@
 import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";

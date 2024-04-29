@@ -1,4 +1,4 @@
-import { JSXElementConstructor, ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   AdvancedMarker,
   InfoWindow,
@@ -12,7 +12,7 @@ interface MapMarkerParams {
   lat: number;
   lng: number;
   shipperTrackingInfo?: ReactNode;
-  infoWindowText?: JSXElementConstructor;
+  infoWindowText?: JSX.Element;
 }
 export const MapMarker: React.FC<MapMarkerParams> = ({
   lat,

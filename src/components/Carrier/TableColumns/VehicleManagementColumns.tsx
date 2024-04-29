@@ -4,9 +4,9 @@ import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconDriver from "../../../assets/icons/ic-driver.svg";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { Vehicle } from "../../../interface/carrier";
+import { IVehicle } from "../../../interface/carrier";
 
-export const VehicleManagementColumns: ColumnDef<Vehicle>[] = [
+export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
   {
     accessorKey: "driverName",
     header: "Driver Name",

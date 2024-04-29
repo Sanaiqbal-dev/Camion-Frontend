@@ -28,6 +28,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
+    console.log(data);
   };
 
   return (

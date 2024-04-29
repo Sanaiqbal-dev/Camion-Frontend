@@ -124,11 +124,7 @@ const Login = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      {isError && error && (
-                        <p>
-                          Error: {error.data?.message || "An error occurred"}
-                        </p>
-                      )}
+                      {isError && error && <p>"An error occurred"</p>}
                       {isLoading && <p>Loading...</p>}{" "}
                       <div
                         className="register-container"

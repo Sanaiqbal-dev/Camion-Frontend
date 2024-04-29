@@ -1,8 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconDownload from "../../../assets/icons/ic-download.svg";
-import { IRequest } from "../../../interface/carrier";
+import { IReport } from "../../../interface/admin";
 
-export const ReportsColumn: ColumnDef<IRequest>[] = [
+export const ReportsColumn: ColumnDef<IReport>[] = [
   {
     accessorKey: "userType",
     header: "User Type",
