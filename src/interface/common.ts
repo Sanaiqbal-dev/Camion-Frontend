@@ -63,7 +63,6 @@ export interface IAPIResponse<T> {
   pageNumber: number;
   total: number;
 }
-
 export interface IUser {
   id: String;
   userName: String;

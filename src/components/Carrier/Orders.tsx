@@ -7,6 +7,7 @@ import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
 import { IOrder } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
+import { useGetOrdersQuery } from "@/services/order";
 
 export interface StatusProps {
   id: string;
@@ -146,6 +147,13 @@ const Orders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+
+   const { data, error, isLoading } = useGetOrdersQuery();
+
+   if (isLoading) return <div>Loading...</div>;
+   if (error) return <div>Error: {error.message}</div>;
+
   return (
     <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
