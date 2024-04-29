@@ -1,14 +1,6 @@
-import { UserManagementColumns, UserManagementShipperColumns } from "./TableColumns/UserManagementShipperColumns";
+import { UserManagementShipperColumns } from "./TableColumns/UserManagementShipperColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  Container,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -19,61 +11,61 @@ import { IUser } from "../../interface/common";
 import { ColumnDef } from "@tanstack/react-table";
 
 const UserManagementShipper = () => {
-  const data: Payment[] = [
+  const data: IUser[] = [
     {
       id: "728ed52f",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
     {
       id: "489e1d42",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
 
     {
       id: "489e1e742",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
 
     {
       id: "9e19od42",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
 
     {
       id: "56te1d42",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
     {
       id: "7tf5d52f",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
     {
       id: "720ui72f",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
     {
       id: "728eb92f",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
     {
       id: "72ted52f",
-      username: "hossein_rezaei",
+      userName: "hossein_rezaei",
       email: "pkplex@optonline.net",
       action: "",
     },
@@ -96,7 +88,7 @@ const UserManagementShipper = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-  
+
   const onEdit = () => {
     setshowUpdatePasswordModal(true);
   };
@@ -171,13 +163,7 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {data && (
-        <DataTable
-          columns={columns}
-          data={data}
-          isAction={false}
-        />
-      )}
+      {data && <DataTable columns={columns} data={data} isAction={false} />}
 
       <CreateUser
         show={showCreateUserModal}

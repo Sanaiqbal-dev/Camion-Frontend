@@ -1,14 +1,6 @@
 import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  Container,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -127,7 +119,7 @@ const ShipperRequests = () => {
         </div>
         <div>
           <button className="add-item-btn" id="add-driver-btn">
-            Add Driver
+            Create new Request
           </button>
         </div>
       </div>

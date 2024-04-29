@@ -6,9 +6,11 @@ import { IUser } from "../../../interface/common";
 interface UserActionsProps {
   onEdit: () => void;
 }
-export const UserManagementShipperColumns = ({onEdit} : UserActionsProps): ColumnDef<IUser>[] => [
+export const UserManagementShipperColumns = ({
+  onEdit,
+}: UserActionsProps): ColumnDef<IUser>[] => [
   {
-    accessorKey: "username",
+    accessorKey: "userName",
     header: "User Name",
   },
   {

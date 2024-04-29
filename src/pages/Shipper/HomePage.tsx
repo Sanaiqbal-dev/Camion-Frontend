@@ -1,20 +1,17 @@
-import { useState } from "react";
 import { Outlet, useLocation, Link } from "react-router-dom";
 import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import { Col, FormControl, Image, InputGroup } from "react-bootstrap";
+import { Image } from "react-bootstrap";
 import ShipperSider from "../../components/Shipper/ShipperSider";
 
 const HomePage = () => {
   const currentPageTitle = useLocation();
-  const [pageTitle, setPageTitle] = useState("");
   const pageTitleMap = [
-    { pathname: "/shipper/dashboard", title: "Dashboard" },
+    { pathname: "/shipper/shipperdashboard", title: "Dashboard" },
     { pathname: "/shipper/shipperrequests", title: "Requests" },
     { pathname: "/shipper/shipperorders", title: "Orders" },
-    { pathname: "/shipper/userManagement", title: "User Management" },
+    { pathname: "/shipper/usermanagement", title: "User Management" },
     { pathname: "/shipper/proposals", title: "Proposals" },
     { pathname: "/shipper/proposalssecond", title: "Proposals" },
     { pathname: "/shipper/shippertracking", title: "Tracking" },
@@ -28,13 +25,7 @@ const HomePage = () => {
     return pageObject?.title ? pageObject.title : "";
   };
 
-  const handleUserManagementClick = () => {
-    setPageTitle("User Management");
-  };
-
   const toggleSidebar = () => {};
-
-  const shouldSHowSearchAbove = currentPageTitle.pathname === "/proposals";
 
   return (
     <div className="wrapper" style={{ backgroundColor: "#F3F3F3" }}>
@@ -62,14 +53,11 @@ const HomePage = () => {
         </div>
         <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
           <span style={{ fontWeight: "700", color: "#535353" }}>
-            {GetPageTitle() || pageTitle}
+            {GetPageTitle()}
           </span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Link
-              to="/shipper/userManagement"
-              onClick={handleUserManagementClick}
-            >
+            <Link to="/shipper/usermanagement">
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
             <Image
@@ -86,7 +74,7 @@ const HomePage = () => {
               width="22"
               height="22"
             />
-            {currentPageTitle.pathname === "/dashboard" && (
+            {currentPageTitle.pathname === "/shipper/shipperdashboard" && (
               <div
                 style={{
                   fontFamily: "Inter",
@@ -99,7 +87,7 @@ const HomePage = () => {
                   padding: "4px",
                 }}
               >
-                To activate your profile please complete your profile details,{" "}
+                To activate your profile please complete your profile details,
                 <span
                   style={{ textDecoration: "underline", cursor: "pointer" }}
                   onClick={() => console.warn("Not implemented yet")}
@@ -107,32 +95,6 @@ const HomePage = () => {
                   Click Here
                 </span>
               </div>
-            )}
-            {shouldSHowSearchAbove && (
-              <Col>
-                <InputGroup>
-                  <div
-                    style={{
-                      position: "absolute",
-                      zIndex: "2",
-                      margin: "15px",
-                    }}
-                  >
-                    <Image src={SearchIcon} />
-                  </div>
-
-                  <FormControl
-                    type="text"
-                    placeholder="Search"
-                    className="form-control"
-                    style={{
-                      width: "560px",
-                      height: "55px",
-                      paddingLeft: "40px",
-                    }}
-                  />
-                </InputGroup>
-              </Col>
             )}
           </div>
         </header>

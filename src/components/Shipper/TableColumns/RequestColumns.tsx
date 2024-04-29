@@ -40,12 +40,34 @@ export const RequestColumns: ColumnDef<Payment>[] = [
     header: "Action",
     cell: () => {
       return (
-        <div style={{ display: "flex", gap: "20px" }}>
-          <img src={EditIcon} />
-          <img src={DeleteIcon} />
-          <Link to={"/shipper/proposalssecond"}>
-            <img src={ProposalIcon} />
-          </Link>
+        <div
+          className="action-container"
+          style={{ justifyContent: "start", gap: "20px" }}
+        >
+          <div>
+            <img src={EditIcon} />
+            <span style={{ color: "#27AE60" }}>Edit</span>
+          </div>
+          <div>
+            <img src={DeleteIcon} />
+            <span style={{ color: "#EB5757" }}>Delete</span>
+          </div>
+          <div>
+            <Link
+              to={"/shipper/proposalssecond"}
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img src={ProposalIcon} />
+              <span style={{ color: "#F2994A", marginTop: "5px" }}>
+                Proposals
+              </span>
+            </Link>
+          </div>
         </div>
       );
     },
