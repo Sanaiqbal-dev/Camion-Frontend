@@ -63,7 +63,9 @@ export const RequestColumns: ColumnDef<Payment>[] = [
               }}
             >
               <img src={ProposalIcon} />
-              <span style={{ color: "#F2994A" }}>Proposals</span>
+              <span style={{ color: "#F2994A", marginTop: "5px" }}>
+                Proposals
+              </span>
             </Link>
           </div>
         </div>

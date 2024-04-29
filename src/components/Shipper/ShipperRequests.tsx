@@ -119,7 +119,7 @@ const ShipperRequests = () => {
         </div>
         <div>
           <button className="add-item-btn" id="add-driver-btn">
-            Creatre new Requests
+            Create new Request
           </button>
         </div>
       </div>
