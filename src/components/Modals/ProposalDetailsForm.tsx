@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRef, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,7 +21,6 @@ const schema = z.object({
   amount: z.number().min(1, "Enter amount"),
   EDD: z.string().refine(
     (value) => {
-      // Check if the string is a valid date
       const date = Date.parse(value);
       return !isNaN(date);
     },
@@ -47,24 +47,14 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   });
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
     submitProposal(data);
-    //    try {
-    //      const loginResponse = await login(data).unwrap();
-    //      dispatch(
-    //        setAuthSession({
-    //          username: data.username,
-    //          token: loginResponse.token,
-    //          role: loginResponse.role,
-    //          status: "active",
-    //        })
-    //      );
-    //      // console.log("Recieved Token is :", loginResponse);
-    //      // navigate("/carrier/dashboard");
-    //      navigate("/admin/profiles");
-    //    } catch (error) {
-    //      console.error("Login failed:", error);
-    //    }
   };
 
+  const fileInputRef = useRef<HTMLInputElement>(null); // Specify the element type for better type assertion
+  const [selectedFile, setSeletedFile] = useState<File>();
+  const handleFileInputClick = () => {
+    // Trigger the hidden file input click via ref
+    fileInputRef.current?.click();
+  };
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>
@@ -73,7 +63,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <div className=" singleLineControl  tw-flex  tw-gap-5">
+            <div className="singleLineControl tw-flex  tw-gap-5">
               <Form.Group
                 className="tw-mb-3 tw-flex-1"
                 controlId="formBasicAmount"
@@ -116,7 +106,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
                 as="textarea"
                 rows={5}
                 placeholder="Enter text here"
-                style={{ width: "100%"}}
+                style={{ width: "100%" }}
                 {...register("otherDetails")}
                 isInvalid={!!errors.otherDetails}
               />
@@ -125,13 +115,38 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
+            <Form.Group
+              className="tw-flex tw-flex-col"
+              controlId="formBasicUploadDocument"
+            >
               <Form.Label className="tw-text-sm">
                 Upload Document (if any)
               </Form.Label>
-              <Button variant="default" style={{borderColor:"darkgray", backgroundColor:"grey", padding:"10px"}}>
-                Upload the document
-              </Button>
+              <div className="tw-flex">
+                <Button
+                  variant="default"
+                  onClick={handleFileInputClick}
+                  className="custom-file-upload-button"
+                >
+                  Upload the document
+                </Button>
+                <p className="tw-mt-auto tw-mb-auto tw-ml-1">
+                  {selectedFile?.name}
+                </p>
+              </div>
+              <Form.Control
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }} // Hide the default file input
+                onChange={(e) => {
+                  const files = (e.target as HTMLInputElement).files;
+                  if (files && files.length > 0) {
+                    const file = files[0]; // Get the first file if multiple files are not supported
+                    setSeletedFile(file);
+                    console.log(file);
+                  }
+                }}
+              />
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">

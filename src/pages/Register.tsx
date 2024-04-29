@@ -8,7 +8,7 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IRegisterFormInput {
   firstName: string;
@@ -39,7 +39,7 @@ const schema = z
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [isCarrier, setIsCarrier] = useState(true);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -50,6 +50,7 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     console.log(data);
+    navigate('/companyVerification');
   };
 
   return (

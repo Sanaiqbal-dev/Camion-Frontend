@@ -497,6 +497,20 @@ tr {
   gap: 0%;
 }
 
+.custom-file-upload-button {
+    background-color: #F2F2F2;
+    color: black;
+    border: 1px solid #E0E0E0;
+    padding: 7px 20px !important;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-file-upload-button:hover {
+    background-color: #e7e6e6; 
+}
+
+
 @media (max-width: 1024px) {
   .row {
     width: 100%;

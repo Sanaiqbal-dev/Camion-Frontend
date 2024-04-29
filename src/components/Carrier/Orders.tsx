@@ -7,6 +7,8 @@ import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
 import { IOrder } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
+import AssignVehicle from "../Modals/AssignVehicle";
+import { useNavigate } from "react-router-dom";
 
 export interface StatusProps {
   id: string;
@@ -109,21 +111,35 @@ const Orders = () => {
     },
   ];
 
+  const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
+  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrder>();
+  const navigate = useNavigate();
+  const onAssignVehicle = (orderItem:IOrder) => {
+    setShowAssignVehicleForm(true);
+    setSelectedOrderItem(orderItem);
+  };
+
+  const onAssignVehicleToOrderItem = (vehicleType:string) => {
+    console.log("vehicle type is :",vehicleType);
+    console.log("Seleted order is : ", selectedOrderItem);
+
+    //Add API request to assign vehicle type here...
+  }
   const onSave = () => {
     console.log("Save is clicked");
   };
   const onDelete = () => {
     console.log("Delete is clicked");
   };
-  const onAssignVehicle = () => {
-    console.log("Assign Vehicle is clicked");
-  };
-  const onPrintBill = () => {
+  const onPrintBill = (orderItem:IOrder) => {
     console.log("Print Bayan Bill is clicked");
+    navigate("/carrier/bayanBill");
   };
   const onUpdateStatus = (id: string, statusVal: string) => {
     console.log("status id : ", id);
     console.log("status value : ", statusVal);
+
+    //add API call to update order status here...
   };
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onSave,
@@ -146,6 +162,7 @@ const Orders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
   return (
     <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -205,6 +222,13 @@ const Orders = () => {
       {ordersData && (
         <DataTable isAction={false} columns={columns} data={ordersData} />
       )}
+      <AssignVehicle
+        show={showAssignVehicleForm}
+        handleClose={() => setShowAssignVehicleForm(false)}
+        onAssignVehicleToOrderItem={(data) =>
+          onAssignVehicleToOrderItem(data)
+        }
+      />
     </div>
   );
 };

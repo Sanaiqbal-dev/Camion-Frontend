@@ -18,6 +18,7 @@ const CarrierHomePage = () => {
     { pathname: "/carrier/vehiclemanagement", title: "Vehicle Management" },
     { pathname: "/carrier/bayan", title: "Bayan" },
     { pathname: "/carrier/userManagement", title: "User Management" },
+    { pathname: "/carrier/bayanBill", title: "Bayan Bill" },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find(
