@@ -6,10 +6,10 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { setAuthSession } from "../state/slice/authSlice";
-import { ILoginRequest } from "../interface/Session";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginUserMutation } from "../services/auth/authService";
+import { useAspNetUserLoginMutation } from "@/services/aspNetUserAuth";
+import { AspNetUserLoginRequest } from "@/interface/aspNetUser";
+import { setSession } from "@/state/slice/sessionSlice";
 
 const schema = z.object({
   username: z.string().email("Enter a valid email."),
@@ -21,37 +21,38 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginRequest>({
+  } = useForm<AspNetUserLoginRequest>({
     resolver: zodResolver(schema),
   });
 
-  const [login, { isLoading, isError, error }] = useLoginUserMutation();
+  			const { isLoggedIn, dir, lang } = useAppSelector(
+          (state) => state.session
+        );
+
+			const [aspNetUserLogin, { isLoading, error }] =
+        useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
-    try {
-      // const loginResponse = await login(data).unwrap()
-      await login(data).unwrap();
-      
-      dispatch(
-        setAuthSession({
-          username: data.username,
-          token: "token",
-          role: "carrier",
-          status: "active",
-        })
-      );
-      // console.log("Recieved Token is :", loginResponse);
-
-      navigate("/carrier/dashboard");
-      // navigate("/Shipper/dashboard");
-      // navigate("/admin/profiles");
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (
+    values: AspNetUserLoginRequest
+  ) => {
+    aspNetUserLogin(values).then((result: any) => {
+      if (result) {
+        dispatch(
+          setSession({
+            token: result.data.token,
+            user: result.data.user,
+            isLoggedIn: true,
+            dir: dir,
+            lang: lang,
+          })
+        );
+        navigate(from, { replace: true });
+      }
+    });
   };
 
   return (
@@ -64,7 +65,7 @@ const Login = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="auth-form-container">
+                <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
                   <Image src={CamionLogo} />
 
                   <div className="mt-4">
@@ -113,15 +114,15 @@ const Login = () => {
                               {errors.password?.message}
                             </Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
-                              <Link
-                                to="/forgotPassword"
+                              <a
+                                href=""
                                 style={{
                                   color: "#2D9CDB",
                                   textDecoration: "none",
                                 }}
                               >
                                 Forgot your Password?
-                              </Link>
+                              </a>
                             </div>
                           </Form.Group>
                         </Row>

@@ -1,11 +1,13 @@
-import storage from "redux-persist/lib/storage";
-import { ENVIRONMENT, PERSIST_STORE_NAME } from "../config/app";
-import reducer from "./reducer";
-import { persistReducer, persistStore } from "redux-persist";
-import { setupListeners } from "@reduxjs/toolkit/query";
 import { configureStore } from "@reduxjs/toolkit";
-import { thunk } from "redux-thunk";
-import baseApi from "../services/baseApi";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { combineReducers } from "redux";
+import { setupListeners } from "@reduxjs/toolkit/query";
+import { baseApi } from "@/services/baseApi";
+
+import thunk from "redux-thunk";
+import { ENVIRONMENT, PERSIST_STORE_NAME } from "@/config/app";
+import reducer from "./reducer";
 
 const middlewares = [thunk, baseApi.middleware];
 
@@ -16,14 +18,11 @@ const persistConfig = {
   whitelist: ["session", "tableConfiguration"],
 };
 
-
 const store = configureStore({
   reducer: persistReducer(persistConfig, reducer),
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(middlewares),
+  middleware: middlewares,
   devTools: ENVIRONMENT === "development",
 });
-
 
 setupListeners(store.dispatch);
 
