@@ -788,11 +788,11 @@ thead th:last-child {
   overflow-y: auto;
 }
 
-.auth-form-container::-webkit-scrollbar {
+body *::-webkit-scrollbar {
   display: none;
 }
 
-.auth-form-container {
+body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
