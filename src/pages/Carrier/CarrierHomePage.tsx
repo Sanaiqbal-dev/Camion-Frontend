@@ -1,9 +1,9 @@
-import { Link, Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import CarrierSider from "../../components/Carrier/CarrierSider";
 import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
-import { Button, Dropdown, Image } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,

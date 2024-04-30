@@ -33,7 +33,9 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
     try {
-      // const loginResponse = await login(data).unwrap();
+      // const loginResponse = await login(data).unwrap()
+      await login(data).unwrap();
+      
       dispatch(
         setAuthSession({
           username: data.username,
