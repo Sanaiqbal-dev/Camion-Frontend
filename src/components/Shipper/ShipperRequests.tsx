@@ -6,8 +6,16 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
+import CreateNewUser from "../Modals/CreateNewUser";
+import ShippementDetails from "../Modals/ShippementDetails";
 
 const ShipperRequests = () => {
+  const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
+    useState(false);
+  const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] =
+    useState(false);
+  const [showShippementDetailsModal, setShowShippementDeatilsModal] =
+    useState(false);
   const data: Payment[] = [
     {
       id: "728ed52f",
@@ -99,6 +107,16 @@ const ShipperRequests = () => {
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
+  const CreateUserNextStep = () => {
+    SetShowCreateUserModalFirstStep(false);
+    SetShowCreateUserModalSecondStep(true);
+  };
+
+  const goToShippementDetails = () => {
+    SetShowCreateUserModalSecondStep(false);
+    setShowShippementDeatilsModal(true);
+  };
+
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -118,7 +136,11 @@ const ShipperRequests = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="add-driver-btn">
+          <button
+            className="add-item-btn"
+            id="add-driver-btn"
+            onClick={() => SetShowCreateUserModalFirstStep(true)}
+          >
             Create new Request
           </button>
         </div>
@@ -180,6 +202,26 @@ const ShipperRequests = () => {
       {data && (
         <DataTable columns={RequestColumns} data={data} isAction={false} />
       )}
+      <CreateNewUser
+        show={showCreateUserModalFirstStep}
+        handleClose={() => SetShowCreateUserModalFirstStep(false)}
+        handleNextStep={CreateUserNextStep}
+      />
+      <CreateNewUser
+        show={showCreateUserModalSecondStep}
+        infoType={"destination"}
+        handleClose={() => SetShowCreateUserModalSecondStep(false)}
+        handleNextStep={goToShippementDetails}
+      />
+      <ShippementDetails
+        show={showShippementDetailsModal}
+        handleClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        handleNextStep={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 };

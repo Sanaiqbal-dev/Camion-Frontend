@@ -4,8 +4,11 @@ import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Image } from "react-bootstrap";
 import ShipperSider from "../../components/Shipper/ShipperSider";
+import ActivateProfile from "../../components/Modals/ActivatePropfile";
+import { useState } from "react";
 
 const HomePage = () => {
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const currentPageTitle = useLocation();
   const pageTitleMap = [
     { pathname: "/shipper/shipperdashboard", title: "Dashboard" },
@@ -90,7 +93,7 @@ const HomePage = () => {
                 To activate your profile please complete your profile details,
                 <span
                   style={{ textDecoration: "underline", cursor: "pointer" }}
-                  onClick={() => console.warn("Not implemented yet")}
+                  onClick={() => setShowProfileModal(true)}
                 >
                   Click Here
                 </span>
@@ -98,6 +101,12 @@ const HomePage = () => {
             )}
           </div>
         </header>
+        <ActivateProfile
+          show={showProfileModal}
+          handleClose={function (): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
         <div className="mt-4">
           <Outlet />
         </div>
