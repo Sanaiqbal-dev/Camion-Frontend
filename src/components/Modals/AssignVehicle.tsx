@@ -11,6 +11,7 @@ interface IVehicleType {
 interface AssignVehicleModalProps {
   show: boolean;
   handleClose: () => void;
+  onAssignVehicleToOrderItem: (vehicleType: string) => void;
 }
 export const schema = z.object({
   vehicleType: z.enum(["Truck", "Ship", "plane"]),
@@ -19,6 +20,7 @@ export const schema = z.object({
 const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
   show,
   handleClose,
+  onAssignVehicleToOrderItem,
 }) => {
   const {
     register,
@@ -29,6 +31,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
   });
   const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
     console.log(data);
+    onAssignVehicleToOrderItem(data.vehicleType);
   };
 
   return (
@@ -38,7 +41,11 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group
+            className="mb-3"
+            style={{ minWidth: "436px" }}
+            controlId="formBasicEmail"
+          >
             <Form.Label>Vehicles</Form.Label>
             <Form.Control
               as="select"

@@ -3,12 +3,19 @@ import CarrierSider from "../../components/Carrier/CarrierSider";
 import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
-import { Image } from "react-bootstrap";
-import { useSelector } from "react-redux";
-
+import { Button, Image } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { clearAuthSession } from "../../state/slice/authSlice";
 const CarrierHomePage = () => {
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
+  const dispatch = useDispatch();
   const pageTitleMap = [
     { pathname: "/carrier/dashboard", title: "Dashboard" },
     { pathname: "/carrier/tracking", title: "Tracking" },
@@ -18,6 +25,7 @@ const CarrierHomePage = () => {
     { pathname: "/carrier/vehiclemanagement", title: "Vehicle Management" },
     { pathname: "/carrier/bayan", title: "Bayan" },
     { pathname: "/carrier/userManagement", title: "User Management" },
+    { pathname: "/carrier/bayanBill", title: "Bayan Bill" },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find(
@@ -36,6 +44,11 @@ const CarrierHomePage = () => {
         replace
       />
     );
+  }
+
+  function onLogoutClick(): void {
+        dispatch(clearAuthSession());
+
   }
 
   return (
@@ -66,10 +79,7 @@ const CarrierHomePage = () => {
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to={"/carrier/userManagement"}>
-              <Image
-                className="profile-img"
-                src={ProfileIcon}
-              />
+              <Image className="profile-img" src={ProfileIcon} />
             </Link>
             <Image
               className="notification-icon"
@@ -78,13 +88,40 @@ const CarrierHomePage = () => {
               width="22"
               height="22"
             />
-            <Image
-              className="menu-icon"
-              src={MenuIcon}
-              alt="Menu"
-              width="22"
-              height="22"
-            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  <Image
+                    className="menu-icon"
+                    src={MenuIcon}
+                    alt="Menu"
+                    width="22"
+                    height="22"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => onLogoutClick()}>
+                  <Button variant="primary">Logout</Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {/* <Dropdown className="menu-dropdown">
+              <Dropdown.Toggle className="menu-toggle">
+                <Image
+                  className="menu-icon"
+                  src={MenuIcon}
+                  alt="Menu"
+                  width="22"
+                  height="22"
+                />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item href="#/action">Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown> */}
           </div>
         </header>
         <Outlet />

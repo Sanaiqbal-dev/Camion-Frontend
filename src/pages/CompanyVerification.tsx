@@ -1,58 +1,65 @@
 import ShipperImage from "../assets/images/shipper-img.svg";
 import CamionLogo from "../assets/icons/ic-camion.svg";
 import Image from "react-bootstrap/Image";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Button } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch } from "react-redux";
-import { setAuthSession } from "../state/slice/authSlice";
-import { ILoginRequest } from "../interface/Session";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginUserMutation } from "../services/auth/authService";
+import { useRef, useState } from "react";
+
+interface IVerification {
+  companyName: string;
+  CRDocument: File;
+}
+
+const fileSchema = z
+  .instanceof(File)
+  .refine((file) => file.size <= 1024 * 1024 * 5, {
+    message: "File too large (max 5MB)",
+  })
+  .refine((file) => ["image/jpeg", "image/png"].includes(file.type), {
+    message: "Unsupported file type (only JPEG or PNG)",
+  });
 
 const schema = z.object({
-  username: z.string().email("Enter a valid email."),
-  password: z.string().min(6, "Enter your password."),
+  companyName: z.string().min(1, "Enter company name"),
+  CRDocument: fileSchema,
 });
 
-const Login = () => {
+const CompanyVerification = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm<ILoginRequest>({
+  } = useForm<IVerification>({
     resolver: zodResolver(schema),
   });
 
-  const [login, { isLoading, isError, error }] = useLoginUserMutation();
-
-  const dispatch = useDispatch();
-
+  const [selectedFile, setSeletedFile] = useState<File>();
   const navigate = useNavigate();
-
-  const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
-    try {
-      // const loginResponse = await login(data).unwrap()
-      await login(data).unwrap();
-      
-      dispatch(
-        setAuthSession({
-          username: data.username,
-          token: "token",
-          role: "carrier",
-          status: "active",
-        })
-      );
-      // console.log("Recieved Token is :", loginResponse);
-
-      navigate("/carrier/dashboard");
-      // navigate("/Shipper/dashboard");
-      // navigate("/admin/profiles");
-    } catch (error) {
-      console.error("Login failed:", error);
+  const handleFileInputClick = () => {
+    // Trigger the hidden file input click via ref
+    fileInputRef.current?.click();
+  };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setValue("CRDocument", files[0], { shouldValidate: true });
+      setSeletedFile(files[0]);
+    } else {
+      // Clear the file value if no file is selected
+      setValue("CRDocument", null as any, { shouldValidate: true });
     }
   };
+
+  const onSubmit: SubmitHandler<IVerification> = (data) => {
+    console.log(data);
+    navigate("/Login", { replace: true });
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null); // Specify the element type for better type assertion
 
   return (
     <div className="main-container">
@@ -64,15 +71,17 @@ const Login = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="auth-form-container">
+                <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
                   <Image src={CamionLogo} />
 
                   <div className="mt-4">
-                    <h1 className="h1 mb-3 main_heading">Login your account</h1>
+                    <h1 className="h2 mb-3 font-weight-bolder">
+                      Register a new account
+                    </h1>
                     <p className="sub_heading mb-4">
-                      Log in to a serviced account and create and manage your
+                      By registering a new account with us, you can view and
                       <br />
-                      shipments the way that suits you best
+                      create your shipments with ease
                     </p>
                   </div>
                   <div className="form-container">
@@ -81,53 +90,55 @@ const Login = () => {
                         <Row className="form-group mb-4">
                           <Form.Group as={Col}>
                             <Form.Label className="customLabel">
-                              Email
+                              Company Name
                             </Form.Label>
                             <Form.Control
-                              type="email"
                               className="form-control customInput"
-                              {...register("username")}
-                              isInvalid={!!errors.username}
-                              placeholder="Enter email address"
-                              disabled={isLoading}
+                              {...register("companyName")}
+                              isInvalid={!!errors.companyName}
+                              placeholder="Enter company name"
+                              //   disabled={isLoading}
                             />
                             <Form.Control.Feedback type="invalid">
-                              {errors.username?.message}
+                              {errors.companyName?.message}
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
                         <Row className="form-group">
                           <Form.Group as={Col} controlId="validationCustom05">
                             <Form.Label className="customLabel">
-                              Password
+                              CR Document
                             </Form.Label>
+                            <Button
+                              variant="default"
+                              onClick={handleFileInputClick}
+                              style={{
+                                textAlign: "left",
+                                minHeight: "60px",
+                                color: "#4F4F4F",
+                              }}
+                              className="custom-file-upload-button tw-w-full"
+                            >
+                              Upload Document
+                            </Button>
+                            <p className="tw-mt-auto tw-mb-auto tw-ml-1">
+                              {selectedFile?.name}
+                            </p>
+
                             <Form.Control
-                              type="password"
-                              className="form-control customInput"
-                              placeholder="Enter password"
-                              {...register("password")}
-                              isInvalid={!!errors.password}
-                              disabled={isLoading}
+                              type="file"
+                              ref={fileInputRef}
+                              style={{ display: "none" }} // Hide the default file input
+                              onChange={handleFileChange}
+                              isInvalid={!!errors.CRDocument}
                             />
                             <Form.Control.Feedback type="invalid">
-                              {errors.password?.message}
+                              {errors.CRDocument?.message}
                             </Form.Control.Feedback>
-                            <div className="mt-2 d-flex flex-row-reverse">
-                              <Link
-                                to="/forgotPassword"
-                                style={{
-                                  color: "#2D9CDB",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                Forgot your Password?
-                              </Link>
-                            </div>
                           </Form.Group>
                         </Row>
                       </div>
-                      {isError && error && <p>"An error occurred"</p>}
-                      {isLoading && <p>Loading...</p>}{" "}
+
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}
@@ -136,22 +147,22 @@ const Login = () => {
                           type="submit"
                           className="btn customRegisterButton w-100"
                         >
-                          Login
+                          Verify Document
                         </button>
                         <div className="d-flex justify-content-start">
-                          <div>Don’t have an account?</div>
+                          <div>Already have an account?</div>
                           <div>
                             <Link
-                              to="/Register"
+                              to="/Login"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",
                                 cursor: "pointer",
                                 textDecoration: "none",
-                                marginLeft: "30px",
+                                marginLeft: "15px",
                               }}
                             >
-                              Register your account
+                              Sign in
                             </Link>
                           </div>
                         </div>
@@ -168,4 +179,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default CompanyVerification;

@@ -2,6 +2,7 @@ import TrendUpIcon from "../../assets/icons/ic-trend-up.svg";
 import TrendDownIcon from "../../assets/icons/ic-trend-down.svg";
 import { Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
+
 const ShipperDashboard = () => {
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">

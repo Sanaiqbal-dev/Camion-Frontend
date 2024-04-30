@@ -9,7 +9,7 @@ const Dashboard = () => {
       className="tw-flex tw-flex-col tw-gap-5"
       style={{
         paddingTop: "15px",
-        maxHeight: "calc(100vh - 60px)",
+        maxHeight: "calc(100vh - 80px)",
         overflowY: "scroll",
       }}
     >

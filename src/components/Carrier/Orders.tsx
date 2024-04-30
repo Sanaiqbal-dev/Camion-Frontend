@@ -7,6 +7,9 @@ import { OrderColumns } from "./TableColumns/OrdersColumn";
 import { useState } from "react";
 import { IOrder } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
+import AssignVehicle from "../Modals/AssignVehicle";
+import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 import { useGetOrdersQuery } from "@/services/order";
 
 export interface StatusProps {
@@ -110,21 +113,39 @@ const Orders = () => {
     },
   ];
 
-  const onSave = () => {
-    console.log("Save is clicked");
+  const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
+  const [showSaveForm, setShowSaveForm] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [selectedOrderItemId, setSelectedOrderItemId] = useState<string>();
+  const navigate = useNavigate();
+  const onAssignVehicle = (orderItemId: string) => {
+    setShowAssignVehicleForm(true);
+    setSelectedOrderItemId(orderItemId);
   };
-  const onDelete = () => {
-    console.log("Delete is clicked");
+
+  const onAssignVehicleToOrderItem = (vehicleType: string) => {
+    console.log("vehicle type is :", vehicleType);
+    console.log("Seleted order is : ", selectedOrderItemId);
+
+    //Add API request to assign vehicle type here...
   };
-  const onAssignVehicle = () => {
-    console.log("Assign Vehicle is clicked");
+  const onSave = (orderId:string) => {
+    console.log("Save is clicked on :", orderId);
+    setShowSaveForm(true);
   };
-  const onPrintBill = () => {
-    console.log("Print Bayan Bill is clicked");
+  const onDelete = (orderId: string) => {
+    console.log("Delete is clicked on :", orderId);
+    setShowDeleteForm(true);
+  };
+  const onPrintBill = (orderItemId: string) => {
+    console.log("Print Bayan Bill is clicked on order: ", orderItemId);
+    navigate("/carrier/bayanBill");
   };
   const onUpdateStatus = (id: string, statusVal: string) => {
     console.log("status id : ", id);
     console.log("status value : ", statusVal);
+
+    //add API call to update order status here...
   };
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onSave,
@@ -147,22 +168,16 @@ const Orders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-  const queryParams = {
-    page: 1,
-    pageSize: 10,
-    filter: "active", // example parameter
+
+  const saveOrder = () => {
+    setShowSaveForm(false);
+    // Add save order request here...
   };
 
-  // Hook call with query parameters
-  const { data, error, isLoading } = useGetOrdersQuery(queryParams);
-
-
-  console.log(data);
-  console.log(error);
-  console.log(isLoading);
-  // if (isLoading) return <div>Loading...</div>;
-  // if (error) return <div>Error: {error.message}</div>;
-
+  const deleteOrder = () => {
+    setShowDeleteForm(false);
+    // Add delete order request here...
+  };
   return (
     <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -222,6 +237,23 @@ const Orders = () => {
       {ordersData && (
         <DataTable isAction={false} columns={columns} data={ordersData} />
       )}
+      <AssignVehicle
+        show={showAssignVehicleForm}
+        handleClose={() => setShowAssignVehicleForm(false)}
+        onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
+      />
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to save this order?"}
+        show={showSaveForm}
+        handleClose={() => setShowSaveForm(false)}
+        performOperation={() => saveOrder()}
+      />
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to delete this order?"}
+        show={showDeleteForm}
+        handleClose={() => setShowDeleteForm(false)}
+        performOperation={() => deleteOrder()}
+      />
     </div>
   );
 };

@@ -20,12 +20,15 @@ import ProposalsSecond from "../components/Shipper/ProposalsSecond";
 import ShipperTracking from "../components/Shipper/ShipperTracking";
 import UserManagementShipper from "../components/Shipper/UserManagementShipper";
 import UserManagement from "../components/Carrier/UserManagement";
+import BayanBill from "../components/Carrier/BayanBill";
 
 const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
 const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
 const LazyShipperHome = lazy(() => import("../pages/Shipper/HomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
 const LazyRegister = lazy(() => import("../pages/Register"));
+const LazyCompanyVerification = lazy(() => import("../pages/CompanyVerification"));
+const LazyForgotPassword = lazy(() => import("../pages/ForgetPassword"));
 
 const withSuspense = (
   Component: ReactElement,
@@ -75,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "userManagement",
         element: <UserManagement />,
+      },
+      {
+        path: "bayanBill",
+        element: <BayanBill />,
       },
     ],
   },
@@ -147,5 +154,13 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
+  },
+  {
+    path: "/companyVerification",
+    element: withSuspense(<LazyCompanyVerification />, <div>Loading...</div>),
+  },
+  {
+    path: "/forgotPassword",
+    element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
   },
 ]);

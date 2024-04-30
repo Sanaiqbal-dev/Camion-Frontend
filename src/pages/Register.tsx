@@ -8,7 +8,7 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IRegisterFormInput {
   firstName: string;
@@ -28,7 +28,13 @@ const schema = z
       .string()
       .regex(/^\+?\d[\d\s]{10,}$/, "Enter a valid contact number."),
 
-    password: z.string().min(8, "Password must be at least 8 characters."),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*\W).+$/, {
+        message:
+          "Password must include a special character, a capital letter, a lowercase letter, a one number",
+      }),
     confirmPassword: z.string().min(8, "Confirm your password."),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -39,7 +45,7 @@ const schema = z
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [isCarrier, setIsCarrier] = useState(true);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -50,6 +56,7 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     console.log(data);
+    navigate('/companyVerification');
   };
 
   return (
@@ -65,7 +72,7 @@ const Register = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="col-sm-11 col-md-9 col-lg-9 mx-auto">
+                <div className="auth-form-container">
                   <Image className="col-lg-7" src={CamionLogo} />
 
                   <div className="mt-4">
