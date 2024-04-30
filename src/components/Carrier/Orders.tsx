@@ -9,6 +9,7 @@ import { IOrder } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import AssignVehicle from "../Modals/AssignVehicle";
 import { useNavigate } from "react-router-dom";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 export interface StatusProps {
   id: string;
@@ -112,27 +113,31 @@ const Orders = () => {
   ];
 
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
-  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrder>();
+  const [showSaveForm, setShowSaveForm] = useState(false);
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [selectedOrderItemId, setSelectedOrderItemId] = useState<string>();
   const navigate = useNavigate();
-  const onAssignVehicle = (orderItem:IOrder) => {
+  const onAssignVehicle = (orderItemId: string) => {
     setShowAssignVehicleForm(true);
-    setSelectedOrderItem(orderItem);
+    setSelectedOrderItemId(orderItemId);
   };
 
-  const onAssignVehicleToOrderItem = (vehicleType:string) => {
-    console.log("vehicle type is :",vehicleType);
-    console.log("Seleted order is : ", selectedOrderItem);
+  const onAssignVehicleToOrderItem = (vehicleType: string) => {
+    console.log("vehicle type is :", vehicleType);
+    console.log("Seleted order is : ", selectedOrderItemId);
 
     //Add API request to assign vehicle type here...
-  }
-  const onSave = () => {
-    console.log("Save is clicked");
   };
-  const onDelete = () => {
-    console.log("Delete is clicked");
+  const onSave = (orderId:string) => {
+    console.log("Save is clicked on :", orderId);
+    setShowSaveForm(true);
   };
-  const onPrintBill = (orderItem:IOrder) => {
-    console.log("Print Bayan Bill is clicked on order: ", orderItem);
+  const onDelete = (orderId: string) => {
+    console.log("Delete is clicked on :", orderId);
+    setShowDeleteForm(true);
+  };
+  const onPrintBill = (orderItemId: string) => {
+    console.log("Print Bayan Bill is clicked on order: ", orderItemId);
     navigate("/carrier/bayanBill");
   };
   const onUpdateStatus = (id: string, statusVal: string) => {
@@ -163,6 +168,15 @@ const Orders = () => {
     setEntriesValue(values[currentIndex]);
   }
 
+  const saveOrder = () => {
+    setShowSaveForm(false);
+    // Add save order request here...
+  };
+
+  const deleteOrder = () => {
+    setShowDeleteForm(false);
+    // Add delete order request here...
+  };
   return (
     <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -225,9 +239,19 @@ const Orders = () => {
       <AssignVehicle
         show={showAssignVehicleForm}
         handleClose={() => setShowAssignVehicleForm(false)}
-        onAssignVehicleToOrderItem={(data) =>
-          onAssignVehicleToOrderItem(data)
-        }
+        onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
+      />
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to save this order?"}
+        show={showSaveForm}
+        handleClose={() => setShowSaveForm(false)}
+        performOperation={() => saveOrder()}
+      />
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to delete this order?"}
+        show={showDeleteForm}
+        handleClose={() => setShowDeleteForm(false)}
+        performOperation={() => deleteOrder()}
       />
     </div>
   );

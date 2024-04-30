@@ -14,10 +14,10 @@ import {
 import { Button } from "../../../../@/components/ui/button";
 
 interface OrderActionsProps {
-  onSave: (orderItem: IOrder) => void;
-  onDelete: (orderItem: IOrder) => void;
-  onAssignVehicle: (orderItem: IOrder) => void;
-  onPrintBill: (orderItem: IOrder) => void;
+  onSave: (orderItemId: string) => void;
+  onDelete: (orderItemId: string) => void;
+  onAssignVehicle: (orderItemId: string) => void;
+  onPrintBill: (orderItemId: string) => void;
   onUpdateStatus: (id: string, statusVal: string) => void;
 }
 export const OrderColumns = ({
@@ -53,13 +53,15 @@ export const OrderColumns = ({
     header: "status",
     cell: ({ row }) => {
       const item = row.original;
+      const noItemSeleted = ( <span>Select Status <img src={IconDown} /></span>);
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
+
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only tw-flex tw-gap-1">
-                Select Status <img src={IconDown} />
+                {item.status ? item.status : noItemSeleted}
               </span>
             </Button>
           </DropdownMenuTrigger>
@@ -97,21 +99,21 @@ export const OrderColumns = ({
     cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div onClick={() => onSave(row.original)}>
+          <div onClick={() => onSave(row.original.id)}>
             <img src={IconSaveFile} />
             <span style={{ color: "#27AE60" }}>Save</span>
           </div>
-          <div onClick={() => onDelete(row.original)}>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div onClick={() => onAssignVehicle(row.original)}>
+          <div onClick={() => onAssignVehicle(row.original.id)}>
             <img src={IconAssignVehicle} />
             <span style={{ color: "#0060B8" }}>Assign Vehicle</span>
           </div>
           <div
             style={{ marginLeft: "10px" }}
-            onClick={() => onPrintBill(row.original)}
+            onClick={() => onPrintBill(row.original.id)}
           >
             <img src={IconPrintBill} />
             <span style={{ color: "#F48031" }}>Print Bayan Bill</span>
