@@ -141,11 +141,6 @@ const ShipperOrders = () => {
             <img src={FilterIcon} /> Filter
           </button>
         </div>
-        <div>
-          <button className="add-item-btn" id="add-driver-btn">
-            Add Driver
-          </button>
-        </div>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
@@ -201,7 +196,9 @@ const ShipperOrders = () => {
           </Col>
         </Row>
       </div>
-      {data && <DataTable isAction={false} columns={OrderColumns} data={data} />}
+      {data && (
+        <DataTable isAction={false} columns={OrderColumns} data={data} />
+      )}
     </div>
   );
 };

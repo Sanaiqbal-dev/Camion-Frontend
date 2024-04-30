@@ -1,12 +1,6 @@
 import { UserManagementShipperColumns } from "./TableColumns/UserManagementShipperColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -94,7 +88,7 @@ const UserManagementShipper = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-  
+
   const onEdit = () => {
     setshowUpdatePasswordModal(true);
   };
@@ -169,13 +163,7 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {data && (
-        <DataTable
-          columns={columns}
-          data={data}
-          isAction={false}
-        />
-      )}
+      {data && <DataTable columns={columns} data={data} isAction={false} />}
 
       <CreateUser
         show={showCreateUserModal}
