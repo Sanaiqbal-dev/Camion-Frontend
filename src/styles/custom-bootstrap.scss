@@ -789,10 +789,27 @@ thead th:last-child {
 }
 
 .auth-form-container::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .auth-form-container {
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.menu-toggle {
+  background-color: transparent;
+  border: none;
+  padding: 0%;
+}
+.menu-toggle::after {
+  display: none;
+}
+.menu-dropdown{
+  z-index: 10;
+}
+.menu-dropdown .btn-primary {
+  --bs-btn-active-bg: transparent;
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: transparent;
 }

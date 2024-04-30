@@ -33,20 +33,20 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<ILoginRequest> = async (data) => {
     try {
-      const loginResponse = await login(data).unwrap();
+      // const loginResponse = await login(data).unwrap();
       dispatch(
         setAuthSession({
           username: data.username,
-          token: loginResponse.token,
-          role: loginResponse.role,
+          token: "token",
+          role: "carrier",
           status: "active",
         })
       );
       // console.log("Recieved Token is :", loginResponse);
 
-      // navigate("/carrier/dashboard");
-      navigate("/Shipper/dashboard");
-      navigate("/admin/profiles");
+      navigate("/carrier/dashboard");
+      // navigate("/Shipper/dashboard");
+      // navigate("/admin/profiles");
     } catch (error) {
       console.error("Login failed:", error);
     }
