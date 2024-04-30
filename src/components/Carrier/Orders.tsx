@@ -132,7 +132,7 @@ const Orders = () => {
     console.log("Delete is clicked");
   };
   const onPrintBill = (orderItem:IOrder) => {
-    console.log("Print Bayan Bill is clicked");
+    console.log("Print Bayan Bill is clicked on order: ", orderItem);
     navigate("/carrier/bayanBill");
   };
   const onUpdateStatus = (id: string, statusVal: string) => {

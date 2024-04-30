@@ -66,7 +66,7 @@ const Register = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="col-sm-11 col-md-9 col-lg-9 mx-auto">
+                <div className="auth-form-container">
                   <Image className="col-lg-7" src={CamionLogo} />
 
                   <div className="mt-4">

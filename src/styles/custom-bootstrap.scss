@@ -255,7 +255,7 @@ tr {
   flex-direction: column;
   justify-content: space-between;
 }
-.accordion{
+.accordion {
   margin-top: 100px;
   margin-left: 20px;
   margin-right: 20px;
@@ -498,30 +498,59 @@ tr {
 }
 
 .custom-file-upload-button {
-    background-color: #F2F2F2;
-    color: black;
-    border: 1px solid #E0E0E0;
-    padding: 7px 20px !important;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: #f2f2f2;
+  color: black;
+  border: 1px solid #e0e0e0;
+  padding: 7px 20px !important;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .custom-file-upload-button:hover {
-    background-color: #e7e6e6; 
+  background-color: #e7e6e6;
 }
 
+.bayan-bill-card {
+  border: none;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0px 20px 50px 0px #dce0f980;
+  padding: 30px 20px;
+  gap: 20px;
+}
+.bill-main-content > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
 
+  p {
+    line-height: 10px;
+    padding: 0px;
+  }
+}
+.bayan-bill-container {
+  padding-top: 1.5rem;
+  max-height: calc(100vh - 160px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
 @media (max-width: 1024px) {
+  .parent-row {
+    padding-left: 0;
+  }
+
+  .img-container {
+    img {
+      display: none;
+    }
+  }
   .row {
     width: 100%;
   }
 
   .form-group {
     display: block;
-  }
-
-  .form-control {
-    width: auto;
   }
 
   .customInput {
@@ -578,7 +607,7 @@ tr {
   box-sizing: border-box;
 }
 
-.table-contents>div:nth-child(1) {
+.table-contents > div:nth-child(1) {
   height: 100%;
 }
 .data-table {
@@ -598,7 +627,7 @@ thead th:first-child {
   padding-left: 20px;
 }
 
-.orders-table .data-table tr td:last-child{
+.orders-table .data-table tr td:last-child {
   width: 0px;
 }
 .data-table tr td:last-child,
@@ -676,12 +705,11 @@ thead th:last-child {
   gap: 10px;
 }
 
-
 //Modals
 .modal {
   --bs-modal-width: 1000px;
 }
-.modal-dialog{
+.modal-dialog {
   justify-content: center;
 }
 .modal-content {
@@ -751,51 +779,20 @@ thead th:last-child {
 .submit-proposal:active {
   background-color: #0ca07e;
 }
-@media (max-width: 1024px) {
-  //   .parent-row {
-  //     padding-left: 0;
-  //   }
-
-  //   .img-container {
-  //     // max-width: 50%; /* Adjust image container width */
-  //     position: static; /* Adjust positioning if needed */
-  //   }
-
-  //   .background-img {
-  //     height: auto; /* Adjust height for responsive behavior */
-  //     max-height: 50vh; /* Limit image height on smaller screens */
-  //   }
-
-  //   .form-main-container, .login {
-  //     height: auto; /* Allow container to resize based on content */
-  //     min-height: 50vh; /* Minimum height to balance with image section */
-  //   }
-
-  //   /* Adjustments for form layout */
-  //   .form-container, .form-container > * {
-  //     flex-direction: column;
-  //   }
+.auth-form-container {
+  padding: 0px 30px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0px auto;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
-// @media (max-width: 768px) {
-//   /* Similar adjustments as above, tailored for even smaller screens */
-//   .background-img {
-//     display: none; /* Optionally hide the background image on very small screens */
-//   }
+.auth-form-container::-webkit-scrollbar {
+  display: none; 
+}
 
-//   .login {
-//     padding-top: 2rem; /* Adjust padding for top alignment */
-//   }
-
-//   /* Further adjust form layout and input sizes if necessary */
-//   .customInput {
-//     width: 100%; /* Ensure inputs span the full container width */
-//   }
-
-//   .register-container {
-//     flex-direction: column;
-//     align-items: center; /* Center align the elements for a vertical layout */
-//   }
-
-//   /* Adjust the size and layout of buttons and other interactive elements for easier touch */
-// }
+.auth-form-container {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
