@@ -12,7 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { clearAuthSession } from "../../state/slice/authSlice";
+import ActivateProfile from "@/components/Modals/ActivatePropfile";
+import { useState } from "react";
 const CarrierHomePage = () => {
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
   const dispatch = useDispatch();
@@ -47,8 +50,7 @@ const CarrierHomePage = () => {
   }
 
   function onLogoutClick(): void {
-        dispatch(clearAuthSession());
-
+    dispatch(clearAuthSession());
   }
 
   return (
@@ -101,6 +103,29 @@ const CarrierHomePage = () => {
                 </Button>
               </DropdownMenuTrigger>
 
+              {currentRouteLocation.pathname === "/carrier/dashboard" && (
+                <div
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    textAlign: "left",
+                    color: "#000000",
+                    backgroundColor: "#F9090973",
+                    borderRadius: "45px",
+                    padding: "4px",
+                  }}
+                >
+                  To activate your profile please complete your profile details,
+                  <span
+                    style={{ textDecoration: "underline", cursor: "pointer" }}
+                    onClick={() => setShowProfileModal(true)}
+                  >
+                    Click Here
+                  </span>
+                </div>
+              )}
+
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => onLogoutClick()}>
                   <Button variant="primary">Logout</Button>
@@ -123,6 +148,12 @@ const CarrierHomePage = () => {
               </Dropdown.Menu>
             </Dropdown> */}
           </div>
+          <ActivateProfile
+            show={showProfileModal}
+            handleClose={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+          />
         </header>
         <Outlet />
       </div>

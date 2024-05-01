@@ -7,6 +7,7 @@ import IconFilter from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
 import { IVehicle } from "../../interface/carrier";
+import AddVehicle from "../Modals/AddVehicle";
 
 const VehicleManagement = () => {
   const vehiclesData: IVehicle[] = [
@@ -125,8 +126,8 @@ const VehicleManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
+  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
 
-  
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -146,7 +147,11 @@ const VehicleManagement = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="add-vehicle-btn">
+          <button
+            className="add-item-btn"
+            id="add-vehicle-btn"
+            onClick={() => setShowAddVehicleModal(true)}
+          >
             Add Vehicle
           </button>
         </div>
@@ -212,6 +217,12 @@ const VehicleManagement = () => {
           data={vehiclesData}
         />
       )}
+      <AddVehicle
+        show={showAddVehicleModal}
+        handleClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 };
