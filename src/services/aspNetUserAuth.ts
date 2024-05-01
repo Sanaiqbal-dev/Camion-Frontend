@@ -3,20 +3,26 @@ import baseApi from './baseApi';
 
 export const aspNetUserAuthApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    aspNetUserLogin: builder.mutation<AspNetUserLoginResponse , AspNetUserLoginRequest>({
+    aspNetUserLogin: builder.mutation<
+      AspNetUserLoginResponse,
+      AspNetUserLoginRequest
+    >({
       query: (body) => ({
-        url: '/aspNetUserAuth/login',
-        method: 'POST',
+        url: "/Account/Login",
+        method: "POST",
         body,
       }),
     }),
-    aspNetUserRegister: builder.mutation<AspNetUserLoginResponse, Partial<IAspNetUser>>({
+    aspNetUserRegister: builder.mutation<
+      AspNetUserLoginResponse,
+      Partial<IAspNetUser>
+    >({
       query: (body) => ({
-        url: '/aspNetUserAuth/register',
-        method: 'POST',
+        url: "/aspNetUserAuth/register",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['AspNetUser'],
+      invalidatesTags: ["AspNetUser"],
     }),
   }),
 });

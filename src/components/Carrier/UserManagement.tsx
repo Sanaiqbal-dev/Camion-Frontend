@@ -4,7 +4,7 @@ import CreateUser from "../Modals/CreateUser";
 import { useState } from "react";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { ColumnDef } from "@tanstack/react-table";
-import { IUser } from "../../interface/common";
+import { IUserManagement } from "../../interface/common";
 import { Col, FormControl, InputGroup,Image, Row } from "react-bootstrap";
 
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -12,7 +12,7 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 
 const UserManagement = () => {
-  const userData: IUser[] = [
+  const userData: IUserManagement[] = [
     {
       id: "9e19od42",
       userName: "Ali Abbasi",
@@ -94,7 +94,7 @@ const UserManagement = () => {
     console.log(" Show password clicked");
     setshowUpdatePasswordModal(true);
   };
-  const columns: ColumnDef<IUser>[] = UsersColumn({
+  const columns: ColumnDef<IUserManagement>[] = UsersColumn({
     onEdit,
   });
 

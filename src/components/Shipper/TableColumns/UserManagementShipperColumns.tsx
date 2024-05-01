@@ -1,14 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteIcon from "../../../assets/icons/ic-delete.svg";
 import EditIcon from "../../../assets/icons/ic-edit.svg";
-import { IUser } from "../../../interface/common";
+import { IUserManagement } from "../../../interface/common";
 
 interface UserActionsProps {
   onEdit: () => void;
 }
 export const UserManagementShipperColumns = ({
   onEdit,
-}: UserActionsProps): ColumnDef<IUser>[] => [
+}: UserActionsProps): ColumnDef<IUserManagement>[] => [
   {
     accessorKey: "userName",
     header: "User Name",

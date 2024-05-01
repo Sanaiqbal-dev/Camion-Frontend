@@ -8,14 +8,14 @@ import SettingIcon from "../../assets/icons/ic-settingIcon.svg";
 import LogoutIcon from "../../assets/icons/ic-logoutIcon.svg";
 
 import { NavLink } from "react-router-dom";
+import { setLogout } from "@/state/slice/sessionSlice";
 import { useDispatch } from "react-redux";
-import { clearAuthSession } from "../../state/slice/authSlice";
 
 const ShipperSider = () => {
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
-    dispatch(clearAuthSession());
+    dispatch(setLogout());
   };
 
   return (

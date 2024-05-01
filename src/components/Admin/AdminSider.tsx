@@ -7,13 +7,13 @@ import IconSettings from "../../assets/icons/ic-settings.svg";
 import IconLogout from "../../assets/icons/ic-logout.svg";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { clearAuthSession } from "../../state/slice/authSlice";
+import { setLogout } from "@/state/slice/sessionSlice";
 
 const AdminSider = () => {
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
-    dispatch(clearAuthSession());
+    dispatch(setLogout());
   };
 
   return (

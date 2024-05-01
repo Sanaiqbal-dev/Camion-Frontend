@@ -7,11 +7,11 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
 import CreateUser from "../Modals/CreateUser";
 import UpdatePassword from "../Modals/UpdatePassword";
-import { IUser } from "../../interface/common";
+import { IUserManagement } from "../../interface/common";
 import { ColumnDef } from "@tanstack/react-table";
 
 const UserManagementShipper = () => {
-  const data: IUser[] = [
+  const data: IUserManagement[] = [
     {
       id: "728ed52f",
       userName: "hossein_rezaei",
@@ -92,7 +92,7 @@ const UserManagementShipper = () => {
   const onEdit = () => {
     setshowUpdatePasswordModal(true);
   };
-  const columns: ColumnDef<IUser>[] = UserManagementShipperColumns({
+  const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,
   });
   return (

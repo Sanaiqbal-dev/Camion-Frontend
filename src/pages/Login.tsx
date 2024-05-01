@@ -6,10 +6,12 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAspNetUserLoginMutation } from "@/services/aspNetUserAuth";
 import { AspNetUserLoginRequest } from "@/interface/aspNetUser";
 import { setSession } from "@/state/slice/sessionSlice";
+import { useAppSelector } from "@/state";
+import { useEffect } from "react";
 
 const schema = z.object({
   username: z.string().email("Enter a valid email."),
@@ -25,36 +27,50 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  			const { isLoggedIn, dir, lang } = useAppSelector(
-          (state) => state.session
-        );
+  const { isLoggedIn, dir, lang } = useAppSelector((state) => state.session);
 
-			const [aspNetUserLogin, { isLoading, error }] =
-        useAspNetUserLoginMutation();
+  const {
+    selectedObj: { primaryKeys },
+    session: { user },
+  } = useAppSelector((state) => state);
+
+  const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const location = useLocation;
+
+  const from = location.state?.from?.pathname || "/";
 
   const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (
     values: AspNetUserLoginRequest
   ) => {
     aspNetUserLogin(values).then((result: any) => {
       if (result) {
+        console.log(result);
+        // const user_ = {}
         dispatch(
           setSession({
             token: result.data.token,
-            user: result.data.user,
+            user: { email: values.email, role: result.data.role },
             isLoggedIn: true,
             dir: dir,
             lang: lang,
           })
         );
+        console.log("sesssion is:", user);
         navigate(from, { replace: true });
       }
     });
   };
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(from, { replace: true });
+    }
+  }, []);
   return (
     <div className="main-container">
       <div className="parent-row row g-0">
@@ -127,8 +143,7 @@ const Login = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      {isError && error && <p>"An error occurred"</p>}
-                      {isLoading && <p>Loading...</p>}{" "}
+                      {isLoading && <p>Loading...</p>}
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}

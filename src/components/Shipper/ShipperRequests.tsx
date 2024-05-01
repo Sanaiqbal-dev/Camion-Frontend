@@ -6,8 +6,10 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
-import CreateNewUser from "../Modals/CreateNewUser";
+import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
+import { IProposal } from "@/interface/proposal";
+import { INewRequest } from "@/interface/shipper";
 
 const ShipperRequests = () => {
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
@@ -107,9 +109,15 @@ const ShipperRequests = () => {
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
-  const CreateUserNextStep = () => {
+  // const proposalObject:IProposal;
+
+  const CreateUserNextStep = (requestObj: INewRequest, requestType: string) => {
     SetShowCreateUserModalFirstStep(false);
     SetShowCreateUserModalSecondStep(true);
+    console.log(requestObj);
+    console.log(requestType);
+    // console.log(proposalObject);
+    // proposalObject.originBuildingNo= req
   };
 
   const goToShippementDetails = () => {
@@ -202,12 +210,12 @@ const ShipperRequests = () => {
       {data && (
         <DataTable columns={RequestColumns} data={data} isAction={false} />
       )}
-      <CreateNewUser
+      <CreateNewRequest
         show={showCreateUserModalFirstStep}
         handleClose={() => SetShowCreateUserModalFirstStep(false)}
         handleNextStep={CreateUserNextStep}
       />
-      <CreateNewUser
+      <CreateNewRequest
         show={showCreateUserModalSecondStep}
         infoType={"destination"}
         handleClose={() => SetShowCreateUserModalSecondStep(false)}
@@ -215,9 +223,7 @@ const ShipperRequests = () => {
       />
       <ShippementDetails
         show={showShippementDetailsModal}
-        handleClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        handleClose={() => setShowShippementDeatilsModal(false)}
         handleNextStep={function (): void {
           throw new Error("Function not implemented.");
         }}

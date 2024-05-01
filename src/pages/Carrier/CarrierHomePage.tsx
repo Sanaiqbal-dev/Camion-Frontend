@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { clearAuthSession } from "../../state/slice/authSlice";
+import { setLogout } from "@/state/slice/sessionSlice";
 const CarrierHomePage = () => {
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
@@ -47,7 +47,8 @@ const CarrierHomePage = () => {
   }
 
   function onLogoutClick(): void {
-        dispatch(clearAuthSession());
+        //Add implementation to logout...
+        dispatch(setLogout());
 
   }
 

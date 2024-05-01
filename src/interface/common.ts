@@ -34,8 +34,7 @@ export interface ChildObj {
 }
 export interface ISessionUser {
   email: string;
-  status: boolean;
-  scope: string;
+  role: "Admin"|"Carrier"|"Shipper";
 }
 
 export interface MenuItem {
@@ -63,9 +62,9 @@ export interface IAPIResponse<T> {
   pageNumber: number;
   total: number;
 }
-export interface IUser {
-  id: String;
-  userName: String;
+export interface IUserManagement {
+  id: string;
+  userName: string;
   email: string;
   action: string;
 }

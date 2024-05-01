@@ -1,3 +1,3 @@
 export * from "./store";
-export * from "./hooks";
-export * from "./reducers/index";
+export * from "@/state/hooks";
+export * from "@/state/reducer";
