@@ -30,11 +30,10 @@ const Login = () => {
   const { isLoggedIn, dir, lang } = useAppSelector((state) => state.session);
 
   const {
-    selectedObj: { primaryKeys },
     session: { user },
   } = useAppSelector((state) => state);
 
-  const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
+  const [aspNetUserLogin, { isLoading }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
@@ -54,7 +53,7 @@ const Login = () => {
         dispatch(
           setSession({
             token: result.data.token,
-            user: { email: values.email, role: result.data.role },
+            user: { email: values.email, role: result.data.role, userId:result.data.userId },
             isLoggedIn: true,
             dir: dir,
             lang: lang,

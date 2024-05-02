@@ -1,10 +1,9 @@
 export interface INewRequest {
-  address: string;
-  buildingNumber: number;
+  buildingNumber: string;
   streetName: string;
   districtName: string;
   cityName: string;
-  zipCode: number;
-  additionalNumber: number;
-  unitNo: number;
+  zipCode: string;
+  additionalNumber: string;
+  unitNo: string;
 }

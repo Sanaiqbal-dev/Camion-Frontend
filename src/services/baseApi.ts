@@ -19,6 +19,8 @@ export const baseApi = createApi({
     "Vehicle",
     "AspNetUser",
     "Driver",
+    "ShipmentType",
+    "TruckType",
     "Company",
     "DriverAssignment",
     "OrderDetail",

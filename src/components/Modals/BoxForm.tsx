@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 
 interface IShippementDetails {
   numberOfPallets: number;
@@ -85,6 +85,14 @@ const BoxForm = () => {
               </div>
             </div>
           </Form.Group>
+
+          <Button
+            className="tw-ml-auto tw-mr-auto"
+            variant="primary"
+            type="submit"
+          >
+            Submit
+          </Button>
         </div>
       </Form>
     </Modal.Body>

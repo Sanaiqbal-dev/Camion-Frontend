@@ -13,10 +13,17 @@ import AddTruckForm from "./AddTruckForm";
 import OtherForm from "./OtherForm";
 
 interface IShippementDetails {
-  numberOfPallets: number;
-  length: number;
-  width: number;
-  weightPerItem: number;
+  // typeOfShippment: string;
+  // shippmentQuantity?: number;
+  // length?: number;
+  // width?: number;
+  // height?:number;
+  // weightPerItem?: number;
+  // othername?:string;
+  // isCargoItemsStackable: boolean;
+  // isIncludingItemsARGood:boolean;
+  // isShippmentTruck:boolean;
+  // truckShipments?: ITruckItem[];
 }
 
 interface CreateUserModalProps {
@@ -24,24 +31,26 @@ interface CreateUserModalProps {
   handleClose: () => void;
   handleNextStep: () => void;
 }
-const schema = z.object({
-  numberOfPallet: z.string().min(1, "Please enter number of Pallet"),
-  length: z.string().min(1, "Please enter length"),
-  width: z.string().email("Please enter width in centemeters"),
-  weightPerItem: z.string().min(1, "Please enter weight per item"),
-});
+// const schema = z.object({
+//   shippmentQuantity: z.string().min(1, "Please enter number of Pallet"),
+//   length: z.string().min(1, "Please enter length"),
+//   width: z.string().min(1,"Please enter width in centemeters"),
+//   height: z.string().min(1,"Please enter height in centemeters"),
+//   weightPerItem: z.string().min(1, "Please enter weight per item"),
+// });
 
 const CreateNewUser: React.FC<CreateUserModalProps> = ({
   show,
   handleClose,
   handleNextStep,
 }) => {
-  const { handleSubmit } = useForm<IShippementDetails>({
-    resolver: zodResolver(schema),
-  });
-  const onSubmit: SubmitHandler<IShippementDetails> = async (data) => {
-    console.log(data);
-  };
+  // const { handleSubmit } = useForm<IShippementDetails>({
+  //   resolver: zodResolver(schema),
+  // });
+  // const onSubmit: SubmitHandler<IShippementDetails> = async (data) => {
+  //   console.log(data);
+  //   console.log("next is clicked");
+  // };
   const [showPalletForm, setShowPalletForm] = useState(true);
   const [showBoxForm, setShowBoxForm] = useState(false);
   const [showTruckForm, setShowTruckForm] = useState(false);
@@ -92,7 +101,7 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
                 justifyContent: "center",
                 width: "71px",
                 height: "69px",
-                borderRadius: "8px 0px 0px 0px",
+                borderRadius: "8px",
                 border:
                   activeIndex === 0 ? "1px solid blue" : "1px #7B787880 solid",
                 padding: "20px",
@@ -110,7 +119,7 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
                 justifyContent: "center",
                 width: "71px",
                 height: "69px",
-                borderRadius: "8px 0px 0px 0px",
+                borderRadius: "8px",
                 border:
                   activeIndex === 1 ? "1px solid blue" : "1px #7B787880 solid",
                 padding: "20px",
@@ -128,7 +137,7 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
                 justifyContent: "center",
                 width: "71px",
                 height: "69px",
-                borderRadius: "8px 0px 0px 0px",
+                borderRadius: "8px",
                 border:
                   activeIndex === 2 ? "1px solid blue" : "1px #7B787880 solid",
                 padding: "20px",
@@ -146,7 +155,7 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
                 justifyContent: "center",
                 width: "71px",
                 height: "69px",
-                borderRadius: "8px 0px 0px 0px",
+                borderRadius: "8px",
                 border:
                   activeIndex === 3 ? "1px solid blue" : "1px #7B787880 solid",
                 padding: "20px",
@@ -161,16 +170,10 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
       </Modal.Header>
 
       <Modal.Body>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          {showPalletForm && <PalletForm />}
-          {showBoxForm && <BoxForm />}
-          {showTruckForm && <AddTruckForm />}
-          {showOtherForm && <OtherForm />}
-
-          <Button variant="primary" onClick={handleNextStep}>
-            Submit
-          </Button>
-        </Form>
+        {showPalletForm && <PalletForm onSubmitPalletForm={handleNextStep} />}
+        {showBoxForm && <BoxForm />}
+        {showTruckForm && <AddTruckForm />}
+        {showOtherForm && <OtherForm />}
       </Modal.Body>
     </Modal>
   );
