@@ -70,7 +70,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
               >
                 <Form.Label className="tw-text-sm">Amount</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   className="form-control customInput"
                   {...register("amount")}
                   isInvalid={!!errors.amount}

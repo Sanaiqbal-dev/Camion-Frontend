@@ -12,12 +12,11 @@ interface CreateRequestModalProps {
   handleNextStep: (requestObj:INewRequest, requestType:string) => void;
 }
 const schema = z.object({
-  address: z.string().min(1, "Please enter your address"),
   buildingNumber: z.string().min(1, "Building number is required"),
-  streetName: z.string().email("Enter street name"),
+  streetName: z.string().min(1,"Enter street name"),
   districtName: z.string().min(1, "Please enter your district name"),
   cityName: z.string().min(1, "City name is required"),
-  zipCode: z.string().min(1, "ZIp code is required"),
+  zipCode: z.string().min(1, "Zip code is required"),
   additionalNumber: z.string().min(1, "Additional number is required"),
   unitNo: z.string().min(1, "unit no is required"),
 });
@@ -29,6 +28,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   infoType = "origin",
 }) => {
   const {
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm<INewRequest>({
@@ -39,6 +39,9 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     handleNextStep(data, "")
   };
 
+  const onError = (error:any)=> {
+    console.error("Form errors", error);
+  }
   return (
     <Modal show={show} onHide={handleClose} centered size={"sm"}>
       <Modal.Header
@@ -47,7 +50,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
         <Modal.Title>Fill in the {infoType} information</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <Form.Group className="mb-3">
               <Form.Label>
@@ -60,11 +63,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                   width: "560px",
                   height: "59px",
                 }}
-                isInvalid={!!errors.address}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.address?.message}
-              </Form.Control.Feedback>
             </Form.Group>
             <div style={{ display: "flex", gap: "18px" }}>
               <Form.Group className="mb-3">
@@ -72,6 +71,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="12345"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -79,6 +79,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("buildingNumber")}
                   isInvalid={!!errors.buildingNumber}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -90,6 +91,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Any street name"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -97,6 +99,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("streetName")}
                   isInvalid={!!errors.streetName}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -110,6 +113,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="any district name"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -117,6 +121,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("districtName")}
                   isInvalid={!!errors.districtName}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -124,10 +129,11 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Street name</Form.Label>
+                <Form.Label>City name</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Any city name"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -135,6 +141,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("cityName")}
                   isInvalid={!!errors.cityName}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -148,6 +155,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="15618"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -155,6 +163,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("zipCode")}
                   isInvalid={!!errors.zipCode}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -166,6 +175,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="121212"
+                  value={"abc"}
                   style={{
                     width: "270px",
                     height: "50px",
@@ -173,6 +183,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
+                  {...register("additionalNumber")}
                   isInvalid={!!errors.additionalNumber}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -186,6 +197,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Control
                 type="text"
                 placeholder="121212"
+                value={"abc"}
                 style={{
                   width: "560px",
                   height: "59px",
@@ -193,6 +205,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                   borderRight: "none",
                   borderLeft: "none",
                 }}
+                {...register("unitNo")}
                 isInvalid={!!errors.unitNo}
               />
               <Form.Control.Feedback type="invalid">
@@ -200,7 +213,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               </Form.Control.Feedback>
             </Form.Group>
           </div>
-          <Button variant="primary" >
+          <Button variant="primary" type="submit">
             Next
           </Button>
         </Form>

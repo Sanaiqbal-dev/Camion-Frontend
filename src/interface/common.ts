@@ -35,6 +35,7 @@ export interface ChildObj {
 export interface ISessionUser {
   email: string;
   role: "Admin"|"Carrier"|"Shipper";
+  userId: string;
 }
 
 export interface MenuItem {

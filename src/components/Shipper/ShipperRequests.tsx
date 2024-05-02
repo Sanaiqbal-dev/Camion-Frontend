@@ -5,20 +5,31 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
 import { IProposal } from "@/interface/proposal";
 import { INewRequest } from "@/interface/shipper";
+import {
+  useGetShipmentTypesQuery,
+  useGetTruckTypesQuery,
+} from "@/services/shipmentType";
 
 const ShipperRequests = () => {
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
     useState(false);
   const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] =
     useState(false);
-  const [showShippementDetailsModal, setShowShippementDeatilsModal] =
+  const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
-  const data: Payment[] = [
+  const shippmentData = useGetShipmentTypesQuery();
+  const truckData = useGetTruckTypesQuery();
+
+  useEffect(() => {
+    console.log("Shippment types are: ", shippmentData.data);
+    console.log("Truck types are: ", truckData.data);
+  }, [shippmentData]);
+  const paymentData: Payment[] = [
     {
       id: "728ed52f",
       origin: "Maputo, Mozambique",
@@ -109,22 +120,46 @@ const ShipperRequests = () => {
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
-  // const proposalObject:IProposal;
+  const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
 
-  const CreateUserNextStep = (requestObj: INewRequest, requestType: string) => {
+  const CreateUserNextStep = (requestObj: INewRequest) => {
+    setProposalItem((prevUser) => ({
+      ...prevUser,
+      originBuildingNo: requestObj.buildingNumber,
+      originStreetName: requestObj.streetName,
+      originCityName: requestObj.cityName,
+      originZipCode: requestObj.zipCode,
+      originAdditionalNo: requestObj.additionalNumber,
+      originUnitNo: requestObj.unitNo,
+      originDistrictName: requestObj.districtName,
+    }));
+
+    console.log("proposal object is :", proposalItem);
+
     SetShowCreateUserModalFirstStep(false);
     SetShowCreateUserModalSecondStep(true);
-    console.log(requestObj);
-    console.log(requestType);
-    // console.log(proposalObject);
-    // proposalObject.originBuildingNo= req
   };
 
-  const goToShippementDetails = () => {
+  const goToShippementDetails = (requestObj: INewRequest) => {
+    setProposalItem((prevUser) => ({
+      ...prevUser,
+      destinationBuildingNo: requestObj.buildingNumber,
+      destinationStreetName: requestObj.streetName,
+      destinationCityName: requestObj.cityName,
+      destinationZipCode: requestObj.zipCode,
+      destinationAdditionalNo: requestObj.additionalNumber,
+      destinationUnitNo: requestObj.unitNo,
+      destinationDistrictName: requestObj.districtName,
+    }));
+
+    console.log("proposal object is :", proposalItem);
     SetShowCreateUserModalSecondStep(false);
-    setShowShippementDeatilsModal(true);
+    setShowShippementDetailsModal(true);
   };
 
+  const setShipmentDetails = (data: any) => {
+    console.log(" In shipper request : ", data);
+  };
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -135,6 +170,7 @@ const ShipperRequests = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
@@ -207,8 +243,12 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {data && (
-        <DataTable columns={RequestColumns} data={data} isAction={false} />
+      {paymentData && (
+        <DataTable
+          columns={RequestColumns}
+          data={paymentData}
+          isAction={false}
+        />
       )}
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
@@ -223,10 +263,8 @@ const ShipperRequests = () => {
       />
       <ShippementDetails
         show={showShippementDetailsModal}
-        handleClose={() => setShowShippementDeatilsModal(false)}
-        handleNextStep={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        handleClose={() => setShowShippementDetailsModal(false)}
+        handleNextStep={setShipmentDetails}
       />
     </div>
   );

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 
+
+interface ITruckItem {
+  noOfTruck: number;
+  truckTypeId: number;
+}
 const AddTruckForm = () => {
   const [trucks, setTrucks] = useState([{ id: 1 }]);
 
