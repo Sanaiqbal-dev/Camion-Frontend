@@ -1,18 +1,37 @@
 import ShipperImage from "../assets/images/shipper-img.svg";
 import CamionLogo from "../assets/icons/ic-camion.svg";
 import Image from "react-bootstrap/Image";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
+import { useAspNetUserResetPasswordMutation } from "@/services/aspNetUserAuth";
+import { useDispatch } from "react-redux";
+import { setSession } from "@/state/slice/sessionSlice";
+import { useAppSelector } from "@/state";
 
 interface IForgetPassword {
   email: string;
+  password: string;
+  confirmPassword: string;
 }
-const schema = z.object({
-  email: z.string().email("Enter a valid email."),
-});
+const schema = z
+  .object({
+    email: z.string().email("Enter a valid email."),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters.")
+      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*\W).+$/, {
+        message:
+          "Password must include a special character, a capital letter, a lowercase letter, and a number",
+      }),
+    confirmPassword: z.string().min(8, "Confirm your password."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const ForgetPassword = () => {
   const {
@@ -24,9 +43,29 @@ const ForgetPassword = () => {
   });
 
   const navigate = useNavigate();
+  const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
+  const dispatch = useDispatch();
+  const { dir, lang } = useAppSelector((state) => state.session);
+  const onSubmit: SubmitHandler<IForgetPassword> = async (
+    values: IForgetPassword
+  ) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    aspNetUserResetPassword(values).then((result: any) => {
+      if (result) {
+        dispatch(
+          setSession({
+            token: result.data.token,
+            user: { email: values.email, role: result.data.role },
+            isLoggedIn: true,
+            dir: dir,
+            lang: lang,
+          })
+        );
+        console.log("Values are: ", values);
+      }
+    });
 
-  const onSubmit: SubmitHandler<IForgetPassword> = async (data) => {
-    console.log(data);
+    console.log(values);
     navigate("/Login", { replace: true });
   };
 
@@ -51,25 +90,54 @@ const ForgetPassword = () => {
                   </div>
                   <div className="form-container">
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                      <div>
-                        <Row className="form-group mb-4">
-                          <Form.Group as={Col}>
-                            <Form.Label className="customLabel">
-                              Email address
-                            </Form.Label>
-                            <Form.Control
-                              type="email"
-                              className="form-control customInput"
-                              {...register("email")}
-                              isInvalid={!!errors.email}
-                              placeholder="Enter email address"
-                            />
-                            <Form.Control.Feedback type="invalid">
-                              {errors.email?.message}
-                            </Form.Control.Feedback>
-                          </Form.Group>
-                        </Row>
+                      <div className="form-group mb-4">
+                        <Form.Group as={Col}>
+                          <Form.Label className="customLabel">
+                            Email address
+                          </Form.Label>
+                          <Form.Control
+                            type="email"
+                            className="form-control customInput"
+                            {...register("email")}
+                            isInvalid={!!errors.email}
+                            placeholder="Enter email address"
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.email?.message}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                          <Form.Label className="customLabel">
+                            Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            className="form-control customInput"
+                            {...register("password")}
+                            isInvalid={!!errors.password}
+                            placeholder="Enter password"
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.password?.message}
+                          </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                          <Form.Label className="customLabel">
+                            Confirm Password
+                          </Form.Label>
+                          <Form.Control
+                            type="password"
+                            className="form-control customInput"
+                            {...register("confirmPassword")}
+                            isInvalid={!!errors.confirmPassword}
+                            placeholder="Confirm password"
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            {errors.confirmPassword?.message}
+                          </Form.Control.Feedback>
+                        </Form.Group>
                       </div>
+
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}

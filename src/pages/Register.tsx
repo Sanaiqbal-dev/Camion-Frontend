@@ -8,13 +8,18 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "@/state";
+import { useAspNetUserRegisterMutation } from "@/services/aspNetUserAuth";
+import { useDispatch } from "react-redux";
+import { setSession } from "@/state/slice/sessionSlice";
 
 interface IRegisterFormInput {
+  role: string;
   firstName: string;
   lastName: string;
   email: string;
-  contactNumber: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
 }
@@ -24,7 +29,7 @@ const schema = z
     firstName: z.string().min(1, "Enter first name."),
     lastName: z.string().min(1, "Enter last name."),
     email: z.string().email("Enter a valid email."),
-    contactNumber: z
+    phoneNumber: z
       .string()
       .regex(/^\+?\d[\d\s]{10,}$/, "Enter a valid contact number."),
 
@@ -45,7 +50,7 @@ const schema = z
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [isCarrier, setIsCarrier] = useState(true);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -53,10 +58,29 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
+  const dispatch = useDispatch();
+  const [aspNetUserRegister] = useAspNetUserRegisterMutation();
+  const { dir, lang } = useAppSelector((state) => state.session);
+  const onSubmit: SubmitHandler<IRegisterFormInput> = async (
+    values: IRegisterFormInput
+  ) => {
+    values.role = isCarrier ? "carrier" : "shipper";
+    aspNetUserRegister(values).then((result: any) => {
+      if (result) {
+        dispatch(
+          setSession({
+            token: result.data.token,
+            user: { email: values.email, role: result.data.role },
+            isLoggedIn: true,
+            dir: dir,
+            lang: lang,
+          })
+        );
+        console.log("Values are: ", values);
+      }
+    });
 
-  const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
-    console.log(data);
-    navigate('/companyVerification');
+    // navigate('/companyVerification');
   };
 
   return (
@@ -216,12 +240,12 @@ const Register = () => {
                             <Form.Control
                               type="text"
                               className="form-control customInput"
-                              {...register("contactNumber")}
-                              isInvalid={!!errors.contactNumber}
+                              {...register("phoneNumber")}
+                              isInvalid={!!errors.phoneNumber}
                               placeholder="Enter contact number"
                             />
                             <Form.Control.Feedback type="invalid">
-                              {errors.contactNumber?.message}
+                              {errors.phoneNumber?.message}
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Row>
@@ -282,7 +306,8 @@ const Register = () => {
                         <div className="d-flex justify-content-start">
                           <div>Already have an account?</div>
                           <div>
-                            <Link to="/Login"
+                            <Link
+                              to="/Login"
                               style={{
                                 color: "#0060b8",
                                 fontSize: "16px",
