@@ -26,9 +26,9 @@ export const proposalApi = baseApi.injectEndpoints({
       },
     }), 
     
-		addProposal: builder.mutation<IAPIResponse<IProposal>, Partial<IProposal>>({
+		createNewProposal: builder.mutation<IAPIResponse<IProposal>, Partial<IProposal>>({
 			query: (body) => ({
-				url: 'proposal/add',
+				url: 'api/Proposals/CreateNewProposal',
 				method: 'POST',
 				body,
 			}),
@@ -56,4 +56,4 @@ export const proposalApi = baseApi.injectEndpoints({
 
 // Export hooks for use in the app
 	 export const { useGetProposalsQuery, useGetProposalQuery, useGetSelectProposalsQuery, 
-	 								useAddProposalMutation, useUpdateProposalMutation, useDeleteProposalMutation} = proposalApi;
+	 								useCreateNewProposalMutation, useUpdateProposalMutation, useDeleteProposalMutation} = proposalApi;

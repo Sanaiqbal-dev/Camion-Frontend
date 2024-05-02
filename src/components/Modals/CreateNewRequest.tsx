@@ -35,7 +35,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    console.log(data);
     handleNextStep(data, "")
   };
 

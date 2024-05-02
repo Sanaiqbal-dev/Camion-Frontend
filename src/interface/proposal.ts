@@ -1,4 +1,4 @@
-import { Pager } from './common';
+import { Pager } from "./common";
 export interface IProposal {
   id: number;
   originBuildingNo: string;
@@ -14,51 +14,66 @@ export interface IProposal {
   destinationZipCode: string;
   destinationAdditionalNo: string;
   destinationUnitNo: string;
-  destinationDistrictName : string;
-  shipmentType: string;
+  destinationDistrictName: string;
+  shipmentTypeId: number;
+  shipmentQuantity: number;
+  length: number;
+  width: number;
+  height: number;
+  isCargoItemsStackable: boolean;
+  isIncludingItemsARGood: boolean;
   weight: string;
+  otherName?: string;
   dimensions: string;
   preferredDeliveryDate: Date;
   createdById?: number;
   createdDate: Date;
   updatedById?: number;
   updatedDate: Date;
+  shipmentTruckType:IShipmentTruckType[];
+  userId:string;
+  proposalId:number;
 }
 
+interface IShipmentTruckType {
+  noOfTruck: number;
+  truckTypeId: number;
+}
 export interface IShipmentType {
   id: number;
   shipmentTypeName: string;
 }
-export interface ITruckTypes{
-  id: number:
-  name:string;
+export interface ITruckTypes {
+  id: number;
+  name: string;
 }
 
+export interface IShipmentDetails {
+  numberOfPallets: number;
+  length: number;
+  width: number;
+  weightPerItem: string;
+  isCargoItemsStackable: boolean;
+  isIncludingItemsARGood: boolean;
+}
 
 export interface IProposalIndex extends IProposal {
-
-		 proposalLabel: string;
-		 aspNetUserLabel?:	any;
-
+  proposalLabel: string;
+  aspNetUserLabel?: any;
 }
 
 export interface IProposalSingle extends IProposal {
-
-		 aspNetUserLabel?:	any;
-
+  aspNetUserLabel?: any;
 }
 
 export interface ProposalPager extends Pager {
-	results: IProposalIndex[];
+  results: IProposalIndex[];
 }
 export interface ProposalIndexQuery extends Pager {
-		 createdById : 	number;
-		 updatedById : 	number;
-
+  createdById: number;
+  updatedById: number;
 }
 export interface IProposalSearch {
-		id?:	number;
-		searchTerm?:	string;
-
-
+  id?: number;
+  searchTerm?: string;
 }

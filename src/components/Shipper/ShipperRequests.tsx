@@ -8,12 +8,15 @@ import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useEffect, useState } from "react";
 import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
-import { IProposal } from "@/interface/proposal";
+import { IProposal, IShipmentDetails } from "@/interface/proposal";
 import { INewRequest } from "@/interface/shipper";
 import {
   useGetShipmentTypesQuery,
   useGetTruckTypesQuery,
 } from "@/services/shipmentType";
+import { useCreateNewProposalMutation } from "@/services/proposal";
+import { useAppSelector } from "@/state";
+import session from "redux-persist/lib/storage/session";
 
 const ShipperRequests = () => {
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
@@ -22,13 +25,20 @@ const ShipperRequests = () => {
     useState(false);
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
-  const shippmentData = useGetShipmentTypesQuery();
+  const shipmentData = useGetShipmentTypesQuery();
   const truckData = useGetTruckTypesQuery();
+  const [createNewProposal, { isLoading, data, error }] =
+    useCreateNewProposalMutation(); // Destructure the mutation hook
+  
+    const userData = useAppSelector(
+    (state) => state.session
+  );
 
+  const [sendRequest, setSendRequest] = useState(false);
   useEffect(() => {
-    console.log("Shippment types are: ", shippmentData.data);
+    console.log("Shippment types are: ", shipmentData.data);
     console.log("Truck types are: ", truckData.data);
-  }, [shippmentData]);
+  }, [shipmentData]);
   const paymentData: Payment[] = [
     {
       id: "728ed52f",
@@ -123,8 +133,8 @@ const ShipperRequests = () => {
   const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
 
   const CreateUserNextStep = (requestObj: INewRequest) => {
-    setProposalItem((prevUser) => ({
-      ...prevUser,
+    setProposalItem((prevItem) => ({
+      ...prevItem,
       originBuildingNo: requestObj.buildingNumber,
       originStreetName: requestObj.streetName,
       originCityName: requestObj.cityName,
@@ -134,15 +144,14 @@ const ShipperRequests = () => {
       originDistrictName: requestObj.districtName,
     }));
 
-    console.log("proposal object is :", proposalItem);
-
+    console.log("userId: ", userData);
     SetShowCreateUserModalFirstStep(false);
     SetShowCreateUserModalSecondStep(true);
   };
 
   const goToShippementDetails = (requestObj: INewRequest) => {
-    setProposalItem((prevUser) => ({
-      ...prevUser,
+    setProposalItem((prevItem) => ({
+      ...prevItem,
       destinationBuildingNo: requestObj.buildingNumber,
       destinationStreetName: requestObj.streetName,
       destinationCityName: requestObj.cityName,
@@ -152,14 +161,47 @@ const ShipperRequests = () => {
       destinationDistrictName: requestObj.districtName,
     }));
 
-    console.log("proposal object is :", proposalItem);
     SetShowCreateUserModalSecondStep(false);
     setShowShippementDetailsModal(true);
   };
 
-  const setShipmentDetails = (data: any) => {
-    console.log(" In shipper request : ", data);
+  const setShipmentDetails = async (
+    data: IShipmentDetails,
+    shipmentType: string
+  ) => {
+    const shipmentDataAll = shipmentData.data;
+    const shipmentTypeId =
+      shipmentDataAll?.find((type) => type.shipmentTypeName === shipmentType) &&
+      shipmentDataAll?.find((type) => type.shipmentTypeName === shipmentType)
+        .id;
+
+    const shipmentTruckType = [{ noOfTruck: 0, truckTypeId: 0 }];
+
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      shipmentTypeId: shipmentTypeId,
+      shipmentQuantity: data.numberOfPallets,
+      length: data.length,
+      width: data.width,
+      height: 0,
+      isCargoItemsStackable: data.isCargoItemsStackable,
+      isIncludingItemsARGood: data.isIncludingItemsARGood,
+      shipmentTruckType: shipmentTruckType,
+    }));
+
+    setSendRequest(true);
   };
+
+  useEffect(() => {
+    if (sendRequest) {
+      console.log(proposalItem);
+      const response = createNewProposal(proposalItem);
+      console.log("Create New Proposal response: ", response);
+    }
+
+    setSendRequest(false);
+  }, [sendRequest]);
+
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -264,7 +306,7 @@ const ShipperRequests = () => {
       <ShippementDetails
         show={showShippementDetailsModal}
         handleClose={() => setShowShippementDetailsModal(false)}
-        handleNextStep={setShipmentDetails}
+        handleFormDataSubmission={setShipmentDetails}
       />
     </div>
   );
