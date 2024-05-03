@@ -1,11 +1,11 @@
 import { CommonSelect, IAPIResponse } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';		
-import { IProposal, IProposalIndex,IProposalSingle } from '@/interface/proposal';
+import { IProposal, IProposalIndex,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
 import baseApi from './baseApi';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProposals: builder.query<IAPIResponse<IProposalIndex[]>, any>({
+    getProposals: builder.query<IAPIResponse<IProposalResponseObject[]>, any>({
       query: (queryParams) =>
         `api/Proposals/GetAllProposals${
           queryParams !== null ? "?" + CreateQueryParams(queryParams) : ""

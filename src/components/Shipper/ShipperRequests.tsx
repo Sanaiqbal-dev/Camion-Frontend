@@ -1,4 +1,8 @@
-import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
+import {
+  IRequestTableData,
+  Payment,
+  RequestColumns,
+} from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
 import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -8,7 +12,11 @@ import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useEffect, useState } from "react";
 import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
-import { IProposal, IShipmentDetails } from "@/interface/proposal";
+import {
+  IProposal,
+  IProposalResponseData,
+  IShipmentDetails,
+} from "@/interface/proposal";
 import { INewRequest } from "@/interface/shipper";
 import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
@@ -37,22 +45,16 @@ const ShipperRequests = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
-			const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-        (state) => state.childObj
-      );
-
-  const { currentData: proposalPager, isFetching } = useGetProposalsQuery({
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+  const { data: currentData, isFetching } = useGetProposalsQuery({
     page: pager.page - 1,
     pageSize: pager.pageSize,
     ...filterKeys,
   });
 
-  useEffect(() => {
-    // if (proposalPager) setProposalCount(proposalPager?.total);
-    console.log("Proposal content :  ", proposalPager?.content);
-  }, [proposalPager]);
-
-  const paymentData: Payment[] = [
+  const requestData: IRequestTableData[] = [
     {
       id: "728ed52f",
       origin: "Maputo, Mozambique",
@@ -62,82 +64,18 @@ const ShipperRequests = () => {
       ETA: "9/20/2024",
       action: "",
     },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
   ];
+
+  useEffect(() => {
+    // if (proposalPager) setProposalCount(proposalPager?.total);
+
+    // const requestItems: IProposalResponseData = currentData.result.result;
+    // console.log("requestItems : ", requestItems);
+
+    // requestData.concat();
+
+    console.log("Proposal content :  ", currentData?.result.result);
+  }, [currentData]);
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -324,10 +262,10 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {paymentData && (
+      {requestData && (
         <DataTable
           columns={RequestColumns}
-          data={paymentData}
+          data={requestData}
           isAction={false}
         />
       )}

@@ -11,13 +11,13 @@ import OtherForm from "./OtherForm";
 import { IShipmentDetails } from "@/interface/proposal";
 
 
-interface CreateUserModalProps {
+interface CreateNewRequestModalProps {
   show: boolean;
   handleClose: () => void;
-  handleFormDataSubmission: (data: IShipmentDetails) => void;
+  handleFormDataSubmission: (data: IShipmentDetails, shipmentType:string ) => void;
 }
 
-const CreateNewUser: React.FC<CreateUserModalProps> = ({
+const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   show,
   handleClose,
   handleFormDataSubmission,
