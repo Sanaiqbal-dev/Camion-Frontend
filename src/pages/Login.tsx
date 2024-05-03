@@ -59,7 +59,7 @@ const Login = () => {
             lang: lang,
           })
         );
-        console.log("session is:", user);
+        // console.log("session is:", user);
         navigate(from, { replace: true });
       }
     });

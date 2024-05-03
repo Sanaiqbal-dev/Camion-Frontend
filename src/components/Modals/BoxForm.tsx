@@ -2,28 +2,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-
-interface IShippementDetails {
-  numberOfPallets: number;
-  weightPerItem: number;
-}
+import { IShipmentDetails } from "@/interface/proposal";
 
 const schema = z.object({
-  numberOfPallet: z.string().min(1, "Please enter number of Pallet"),
+  numberOfBoxes: z.string().min(1, "Please enter number of Boxes"),
   weightPerItem: z.string().min(1, "Please enter weight per item"),
+  isCargoItemsStackable: z.boolean().optional().default(false),
+  isIncludingItemsARGood: z.boolean().optional().default(false),
 });
 
-const BoxForm = () => {
+
+interface IBoxForm {
+  onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
+}
+const BoxForm: React.FC<IBoxForm> = ({ onSubmitShipmentForm }) => {
   const {
+    register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IShippementDetails>({
+  } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<IShippementDetails> = async (data) => {
-    console.log(data);
-  };
 
+  const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
+    onSubmitShipmentForm(data, "Box");
+  };
   return (
     <Modal.Body>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -38,6 +41,7 @@ const BoxForm = () => {
                 height: "59px",
               }}
               isInvalid={!!errors.numberOfPallets}
+              {...register("numberOfBoxes")}
             />
             <Form.Control.Feedback type="invalid">
               {errors.numberOfPallets?.message}
@@ -53,6 +57,7 @@ const BoxForm = () => {
                 height: "59px",
               }}
               isInvalid={!!errors.weightPerItem}
+              {...register("weightPerItem")}
             />
             <Form.Control.Feedback type="invalid">
               {errors.weightPerItem?.message}
@@ -70,6 +75,7 @@ const BoxForm = () => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckDefault"
+                  {...register("isCargoItemsStackable")}
                 />
                 <label className="form-check-label">
                   Cargo item are stackable
@@ -80,6 +86,7 @@ const BoxForm = () => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckChecked"
+                  {...register("isIncludingItemsADRGood")}
                 />
                 <label>Including ADR goods</label>
               </div>

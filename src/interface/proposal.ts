@@ -21,7 +21,7 @@ export interface IProposal {
   width: number;
   height: number;
   isCargoItemsStackable: boolean;
-  isIncludingItemsARGood: boolean;
+  isIncludingItemsADRGood: boolean;
   weight: string;
   otherName?: string;
   dimensions: string;
@@ -35,7 +35,7 @@ export interface IProposal {
   proposalId:number;
 }
 
-interface IShipmentTruckType {
+export interface IShipmentTruckType {
   noOfTruck: number;
   truckTypeId: number;
 }
@@ -49,12 +49,16 @@ export interface ITruckTypes {
 }
 
 export interface IShipmentDetails {
-  numberOfPallets: number;
-  length: number;
-  width: number;
-  weightPerItem: string;
-  isCargoItemsStackable: boolean;
-  isIncludingItemsARGood: boolean;
+  numberOfPallets?: number | undefined;
+  numberOfBoxes?: number | undefined;
+  length?: number | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
+  weightPerItem?: string | undefined;
+  shipmentTruckType?: IShipmentTruckType[] | undefined;
+  otherType?: string | undefined;
+  isCargoItemsStackable?: boolean | undefined;
+  isIncludingItemsADRGood?: boolean | undefined;
 }
 
 export interface IProposalIndex extends IProposal {

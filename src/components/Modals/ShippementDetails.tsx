@@ -141,10 +141,18 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
       </Modal.Header>
 
       <Modal.Body>
-        {showPalletForm && <PalletForm onSubmitPalletForm={handleFormDataSubmission} />}
-        {showBoxForm && <BoxForm />}
-        {showTruckForm && <AddTruckForm />}
-        {showOtherForm && <OtherForm />}
+        {showPalletForm && (
+          <PalletForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showBoxForm && (
+          <BoxForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showTruckForm && (
+          <AddTruckForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showOtherForm && (
+          <OtherForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
       </Modal.Body>
     </Modal>
   );

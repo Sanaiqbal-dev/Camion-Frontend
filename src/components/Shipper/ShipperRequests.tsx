@@ -10,15 +10,19 @@ import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
 import { IProposal, IShipmentDetails } from "@/interface/proposal";
 import { INewRequest } from "@/interface/shipper";
+import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
-  useGetShipmentTypesQuery,
-  useGetTruckTypesQuery,
-} from "@/services/shipmentType";
-import { useCreateNewProposalMutation } from "@/services/proposal";
+  useCreateNewProposalMutation,
+  useGetProposalsQuery,
+} from "@/services/proposal";
 import { useAppSelector } from "@/state";
-import session from "redux-persist/lib/storage/session";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
 
 const ShipperRequests = () => {
+  const userData = useAppSelector((state) => state.session);
+  const [sendCreateNewRequest, setSendCreateNewRequest] = useState(false);
+
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
     useState(false);
   const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] =
@@ -26,19 +30,28 @@ const ShipperRequests = () => {
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
   const shipmentData = useGetShipmentTypesQuery();
-  const truckData = useGetTruckTypesQuery();
   const [createNewProposal, { isLoading, data, error }] =
-    useCreateNewProposalMutation(); // Destructure the mutation hook
-  
-    const userData = useAppSelector(
-    (state) => state.session
-  );
+    useCreateNewProposalMutation();
 
-  const [sendRequest, setSendRequest] = useState(false);
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+			const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+        (state) => state.childObj
+      );
+
+  const { currentData: proposalPager, isFetching } = useGetProposalsQuery({
+    page: pager.page - 1,
+    pageSize: pager.pageSize,
+    ...filterKeys,
+  });
+
   useEffect(() => {
-    console.log("Shippment types are: ", shipmentData.data);
-    console.log("Truck types are: ", truckData.data);
-  }, [shipmentData]);
+    // if (proposalPager) setProposalCount(proposalPager?.total);
+    console.log("Proposal content :  ", proposalPager?.content);
+  }, [proposalPager]);
+
   const paymentData: Payment[] = [
     {
       id: "728ed52f",
@@ -128,8 +141,21 @@ const ShipperRequests = () => {
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
+
   const [entriesValue, setEntriesValue] = useState(10);
 
+  function handleChangeValue(direction: number) {
+    currentIndex += direction;
+
+    if (currentIndex >= values.length) {
+      currentIndex = values.length - 1;
+    } else if (currentIndex < 0) {
+      currentIndex = 0;
+    }
+    setEntriesValue(values[currentIndex]);
+  }
+
+  //Create New Proposal implementation...
   const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
 
   const CreateUserNextStep = (requestObj: INewRequest) => {
@@ -171,47 +197,60 @@ const ShipperRequests = () => {
   ) => {
     const shipmentDataAll = shipmentData.data;
     const shipmentTypeId =
-      shipmentDataAll?.find((type) => type.shipmentTypeName === shipmentType) &&
-      shipmentDataAll?.find((type) => type.shipmentTypeName === shipmentType)
-        .id;
+      shipmentDataAll?.find(
+        (type: { shipmentTypeName: string }) =>
+          type.shipmentTypeName === shipmentType
+      ) &&
+      shipmentDataAll?.find(
+        (type: { shipmentTypeName: string }) =>
+          type.shipmentTypeName === shipmentType
+      ).id;
 
-    const shipmentTruckType = [{ noOfTruck: 0, truckTypeId: 0 }];
+    const shipmentTruckTypeDefault =
+      shipmentType === "Truck" ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
+    const shipmentQuantityVal =
+      shipmentType === "Box"
+        ? data.numberOfBoxes
+        : shipmentType === "Pallet"
+        ? data.numberOfPallets
+        : 0;
+
+    const itemWeight = shipmentType === "Truck" ? "0" : data.weightPerItem;
+    const itemHeight = shipmentType === "Other" ? data.height : 0;
+    const otherItemName = shipmentType === "Other" ? data.otherType : "";
 
     setProposalItem((prevItem) => ({
       ...prevItem,
       shipmentTypeId: shipmentTypeId,
-      shipmentQuantity: data.numberOfPallets,
-      length: data.length,
-      width: data.width,
-      height: 0,
-      isCargoItemsStackable: data.isCargoItemsStackable,
-      isIncludingItemsARGood: data.isIncludingItemsARGood,
-      shipmentTruckType: shipmentTruckType,
+      shipmentQuantity: shipmentQuantityVal,
+      length: data.length ? data.length : 0,
+      width: data.width ? data.length : 0,
+      height: itemHeight,
+      isCargoItemsStackable: data.isCargoItemsStackable
+        ? data.isCargoItemsStackable
+        : false,
+      isIncludingItemsADRGood: data.isIncludingItemsADRGood
+        ? data.isIncludingItemsADRGood
+        : false,
+      shipmentTruckType: shipmentTruckTypeDefault,
+      userId: userData.user.userId,
+      weight: itemWeight,
+      otherName: otherItemName,
+      proposalId: 0,
     }));
 
-    setSendRequest(true);
+    setSendCreateNewRequest(true);
   };
 
   useEffect(() => {
-    if (sendRequest) {
+    if (sendCreateNewRequest) {
       console.log(proposalItem);
       const response = createNewProposal(proposalItem);
       console.log("Create New Proposal response: ", response);
     }
 
-    setSendRequest(false);
-  }, [sendRequest]);
-
-  function handleChangeValue(direction: number) {
-    currentIndex += direction;
-
-    if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
-    } else if (currentIndex < 0) {
-      currentIndex = 0;
-    }
-    setEntriesValue(values[currentIndex]);
-  }
+    setSendCreateNewRequest(false);
+  }, [sendCreateNewRequest]);
 
   return (
     <div className="table-container">

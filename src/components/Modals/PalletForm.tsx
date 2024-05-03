@@ -14,9 +14,9 @@ const schema = z.object({
 });
 
 interface IPalletForm {
-  onSubmitPalletForm: (data: IShipmentDetails, shipmentType:string) => void;
+  onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
-const PalletForm : React.FC<IPalletForm> = ({onSubmitPalletForm}) => {
+const PalletForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ const PalletForm : React.FC<IPalletForm> = ({onSubmitPalletForm}) => {
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
-    onSubmitPalletForm(data, "Pallet");
+    onSubmitShipmentForm(data, "Pallet");
   };
 
   const onerror = (error: any) => {
@@ -125,7 +125,7 @@ const PalletForm : React.FC<IPalletForm> = ({onSubmitPalletForm}) => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckChecked"
-                  {...register("isIncludingItemsARGood")}
+                  {...register("isIncludingItemsADRGood")}
                 />
                 <label>Including ADR goods</label>
               </div>
