@@ -14,6 +14,7 @@ import {
   useGetShipmentTypesQuery,
   useGetTruckTypesQuery,
 } from "@/services/shipmentType";
+import { useGetAllProposalsQuery } from "@/services/proposal";
 
 const ShipperRequests = () => {
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
@@ -29,92 +30,20 @@ const ShipperRequests = () => {
     console.log("Shippment types are: ", shippmentData.data);
     console.log("Truck types are: ", truckData.data);
   }, [shippmentData]);
-  const paymentData: Payment[] = [
-    {
-      id: "728ed52f",
-      origin: "Maputo, Mozambique",
-      destination: "Dublin, Ireland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-  ];
+  const data = useGetAllProposalsQuery("");
+  const TableData = data.data?.result.result;
+  console.log("TableData", TableData);
+  const mappedData = TableData?.map((item) => ({
+    id: item.id,
+    origin: `${item.originCityName}, ${item.originDistrictName}`,
+    destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
+    weight: item.weight ? item.weight : "-",
+    dimentions: `${item.length}x${item.width}x${item.height}`,
+    EDT: item.preferredDeliveryDate
+      ? item.preferredDeliveryDate
+      : "Time not assigned yet",
+    action: "Submit Proposal",
+  }));
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -243,10 +172,10 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {paymentData && (
+      {mappedData && (
         <DataTable
           columns={RequestColumns}
-          data={paymentData}
+          data={mappedData}
           isAction={false}
         />
       )}

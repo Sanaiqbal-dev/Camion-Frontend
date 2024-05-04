@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CarrierImage from "../assets/images/carrier-img.svg";
 import ShipperImage from "../assets/images/shipper-img.svg";
 import CamionLogo from "../assets/icons/ic-camion.svg";
@@ -70,7 +71,11 @@ const Register = () => {
         dispatch(
           setSession({
             token: result.data.token,
-            user: { email: values.email, role: result.data.role },
+            user: {
+              email: values.email,
+              role: result.data.role,
+              userId: result.data.userId,
+            },
             isLoggedIn: true,
             dir: dir,
             lang: lang,

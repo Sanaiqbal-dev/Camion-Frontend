@@ -1,4 +1,4 @@
-import { Pager } from './common';
+import { Pager } from "./common";
 export interface IProposal {
   id: number;
   originBuildingNo: string;
@@ -14,7 +14,7 @@ export interface IProposal {
   destinationZipCode: string;
   destinationAdditionalNo: string;
   destinationUnitNo: string;
-  destinationDistrictName : string;
+  destinationDistrictName: string;
   shipmentType: string;
   weight: string;
   dimensions: string;
@@ -29,36 +29,33 @@ export interface IShipmentType {
   id: number;
   shipmentTypeName: string;
 }
-export interface ITruckTypes{
-  id: number:
-  name:string;
+export interface ITruckTypes {
+  id: number;
+  name: string;
 }
 
+export interface IFileType {
+  id: number;
+  description: string;
+}
 
 export interface IProposalIndex extends IProposal {
-
-		 proposalLabel: string;
-		 aspNetUserLabel?:	any;
-
+  proposalLabel: string;
+  aspNetUserLabel?: any;
 }
 
 export interface IProposalSingle extends IProposal {
-
-		 aspNetUserLabel?:	any;
-
+  aspNetUserLabel?: any;
 }
 
 export interface ProposalPager extends Pager {
-	results: IProposalIndex[];
+  results: IProposalIndex[];
 }
 export interface ProposalIndexQuery extends Pager {
-		 createdById : 	number;
-		 updatedById : 	number;
-
+  createdById: number;
+  updatedById: number;
 }
 export interface IProposalSearch {
-		id?:	number;
-		searchTerm?:	string;
-
-
+  id?: number;
+  searchTerm?: string;
 }

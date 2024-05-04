@@ -1,3 +1,6 @@
+import useFileTypeValidation, {
+  useGetFileTypesQuery,
+} from "@/services/fileType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
@@ -51,6 +54,12 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null); // Specify the element type for better type assertion
   const [selectedFile, setSeletedFile] = useState<File>();
+  const fileError = useFileTypeValidation({
+    extension: selectedFile ? `.${selectedFile.name.split(".").pop()}` : "",
+  });
+
+  const fileTypes = useGetFileTypesQuery();
+  console.log("FileTypes", fileTypes);
   const handleFileInputClick = () => {
     // Trigger the hidden file input click via ref
     fileInputRef.current?.click();
@@ -137,16 +146,19 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
               <Form.Control
                 type="file"
                 ref={fileInputRef}
-                style={{ display: "none" }} // Hide the default file input
+                style={{ display: "none" }}
                 onChange={(e) => {
                   const files = (e.target as HTMLInputElement).files;
                   if (files && files.length > 0) {
-                    const file = files[0]; // Get the first file if multiple files are not supported
+                    const file = files[0];
                     setSeletedFile(file);
                     console.log(file);
                   }
                 }}
               />
+              {selectedFile && fileError && (
+                <div className="tw-text-red-500">{fileError}</div>
+              )}
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
