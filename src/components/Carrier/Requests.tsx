@@ -1,12 +1,6 @@
 import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -14,109 +8,35 @@ import { useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
+import { useGetAllProposalsQuery } from "@/services/proposal";
 
 const Requests = () => {
-  const data: IRequest[] = [
-    {
-      id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
-    },
+  const data = useGetAllProposalsQuery("");
+  const TableData = data.data?.result.result;
+  console.log("TableData", TableData);
+  const mappedData = TableData?.map((item) => ({
+    id: item.id,
+    origin: `${item.originCityName}, ${item.originDistrictName}`,
+    destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
+    weight: item.weight ? item.weight : "-",
+    dimentions: `${item.length}x${item.width}x${item.height}`,
+    EDT: item.preferredDeliveryDate
+      ? item.preferredDeliveryDate
+      : "Time not assigned yet",
+    action: "Submit Proposal",
+  }));
 
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Proposal Submitted",
-    },
-
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      EDT: "9/20/2024",
-      action: "Submit Proposal",
-    },
-  ];
-
-  
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showProposalForm, setShowProposalForm] = useState(false);
-  
-  
+
   const onSubmitProposal = () => {
     setShowProposalForm(true);
   };
   const columns: ColumnDef<IRequest>[] = RequestColumns({
     onSubmitProposal,
   });
-
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -184,11 +104,14 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-      {data && <DataTable isAction={false} columns={columns} data={data} />}
+      {mappedData && (
+        <DataTable isAction={false} columns={columns} data={mappedData} />
+      )}
+
       <ProposalDetailsForm
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
-        submitProposal={()=> onSubmitProposal()}
+        submitProposal={() => onSubmitProposal()}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { CommonSelect, Pager, IFile } from './common';
+import { CommonSelect, Pager, IFile } from "./common";
 export interface IAspNetUser {
   id: number;
   firstName: string;
@@ -19,6 +19,7 @@ export interface IAspNetUser {
   phoneNumberConfirmed: boolean;
   lockoutEnabled: boolean;
   accessFailedCount: number;
+  role?: string;
 }
 
 export interface IAspNetUserIndex extends IAspNetUser {

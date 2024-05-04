@@ -27,7 +27,9 @@ const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
 const LazyShipperHome = lazy(() => import("../pages/Shipper/HomePage"));
 const LazyLogin = lazy(() => import("../pages/Login"));
 const LazyRegister = lazy(() => import("../pages/Register"));
-const LazyCompanyVerification = lazy(() => import("../pages/CompanyVerification"));
+const LazyCompanyVerification = lazy(
+  () => import("../pages/CompanyVerification")
+);
 const LazyForgotPassword = lazy(() => import("../pages/ForgetPassword"));
 
 const withSuspense = (
@@ -38,7 +40,7 @@ const withSuspense = (
 export const router = createBrowserRouter([
   {
     path: "/",
-    // element: withSuspense(<LazyCarrierHome />),
+    //element: withSuspense(<LazyCarrierHome />),
     element: withSuspense(<LazyShipperHome />),
     // element: withSuspense(<LazyAdminHome />),
   },

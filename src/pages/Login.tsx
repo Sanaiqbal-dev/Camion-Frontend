@@ -129,15 +129,18 @@ const Login = () => {
                               {errors.password?.message}
                             </Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
-                              <a
-                                href=""
+                              <Link
+                                to="/forgotPassword"
                                 style={{
-                                  color: "#2D9CDB",
+                                  color: "#0060b8",
+                                  fontSize: "16px",
+                                  cursor: "pointer",
                                   textDecoration: "none",
+                                  marginLeft: "30px",
                                 }}
                               >
                                 Forgot your Password?
-                              </a>
+                              </Link>
                             </div>
                           </Form.Group>
                         </Row>

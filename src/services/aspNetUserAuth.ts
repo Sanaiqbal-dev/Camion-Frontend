@@ -1,5 +1,9 @@
-import { AspNetUserLoginRequest, AspNetUserLoginResponse, IAspNetUser } from '@/interface/aspNetUser';
-import baseApi from './baseApi';
+import {
+  AspNetUserLoginRequest,
+  AspNetUserLoginResponse,
+  IAspNetUser,
+} from "@/interface/aspNetUser";
+import baseApi from "./baseApi";
 
 export const aspNetUserAuthApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,7 +22,18 @@ export const aspNetUserAuthApi = baseApi.injectEndpoints({
       Partial<IAspNetUser>
     >({
       query: (body) => ({
-        url: "/aspNetUserAuth/register",
+        url: "/Account/Register",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["AspNetUser"],
+    }),
+    aspNetUserResetPassword: builder.mutation<
+      AspNetUserLoginResponse,
+      Partial<IAspNetUser>
+    >({
+      query: (body) => ({
+        url: "/Account/ResetPassword",
         method: "POST",
         body,
       }),
@@ -27,4 +42,8 @@ export const aspNetUserAuthApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAspNetUserLoginMutation, useAspNetUserRegisterMutation } = aspNetUserAuthApi;
+export const {
+  useAspNetUserLoginMutation,
+  useAspNetUserRegisterMutation,
+  useAspNetUserResetPasswordMutation,
+} = aspNetUserAuthApi;
