@@ -2,15 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
+import { IShipmentDetails } from "@/interface/proposal";
 
-interface IShippementDetails {
-  numberOfPallets: number;
-  length: number;
-  width: number;
-  weightPerItem: string;
-  isCargoItemsStackable: boolean;
-  isIncludingItemsARGood: boolean;
-}
 const schema = z.object({
   numberOfPallets: z.coerce.number().int().min(1, "Enter number of items"),
   length: z.coerce.number().int().min(1, "Enter length in centimeters"),
@@ -21,19 +14,18 @@ const schema = z.object({
 });
 
 interface IPalletForm {
-  onSubmitPalletForm: (data: IShippementDetails) => void;
+  onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
-const PalletForm : React.FC<IPalletForm> = (onSubmitPalletForm) => {
+const PalletForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IShippementDetails>({
+  } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<IShippementDetails> = async (data) => {
-    console.log(data);
-    // onSubmitPalletForm(data);
+  const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
+    onSubmitShipmentForm(data, "Pallet");
   };
 
   const onerror = (error: any) => {
@@ -109,15 +101,6 @@ const PalletForm : React.FC<IPalletForm> = (onSubmitPalletForm) => {
               {errors.weightPerItem?.message}
             </Form.Control.Feedback>
 
-            {/* <Form.Group >
-              <Form.Check
-                type="checkbox"
-                label="Is Cargo Stackable"
-                {...register("isCargoItemsStackable")}
-                // checked={isChecked}
-                // onChange={handleCheckboxChange}
-              />
-            </Form.Group> */}
             <div
               style={{
                 display: "flex",
@@ -142,7 +125,7 @@ const PalletForm : React.FC<IPalletForm> = (onSubmitPalletForm) => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckChecked"
-                  {...register("isIncludingItemsARGood")}
+                  {...register("isIncludingItemsADRGood")}
                 />
                 <label>Including ADR goods</label>
               </div>

@@ -15,16 +15,37 @@ export interface IProposal {
   destinationAdditionalNo: string;
   destinationUnitNo: string;
   destinationDistrictName: string;
-  shipmentType: string;
-  weight: string;
+  shipmentTypeId: number;
+  shipmentQuantity: number;
+  length: number|null;
+  width: number|null;
+  height: number|null;
+  isCargoItemsStackable: boolean;
+  isIncludingItemsADRGood: boolean;
+  weight: string|null;
+   createdBy: string|null;
+  createdDate?: Date|null;
+  updatedBy: string|null;
+  updatedDate:Date|null;
+  otherName?: string;
   dimensions: string;
-  preferredDeliveryDate: Date;
-  createdById?: number;
-  createdDate: Date;
-  updatedById?: number;
-  updatedDate: Date;
+  preferredDeliveryDate: Date|null;
+  shipmentTruckType:IShipmentTruckType[];
+  userId:string;
+  proposalId:number;
+
 }
 
+export interface IProposalResponseData extends IProposal{
+  shipmentTypes:IShipmentType;
+  createdById: string;
+  updatedById:string|null;    
+  truckShipmentDetail: ITruckShipmentDetails;
+}
+export interface IShipmentTruckType {
+  noOfTruck: number;
+  truckTypeId: number;
+}
 export interface IShipmentType {
   id: number;
   shipmentTypeName: string;
@@ -34,9 +55,17 @@ export interface ITruckTypes {
   name: string;
 }
 
-export interface IFileType {
-  id: number;
-  description: string;
+export interface IShipmentDetails {
+  numberOfPallets?: number | undefined;
+  numberOfBoxes?: number | undefined;
+  length?: number | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
+  weightPerItem?: string | undefined;
+  shipmentTruckType?: IShipmentTruckType[] | undefined;
+  otherType?: string | undefined;
+  isCargoItemsStackable?: boolean | undefined;
+  isIncludingItemsADRGood?: boolean | undefined;
 }
 
 export interface IProposalIndex extends IProposal {
@@ -51,6 +80,18 @@ export interface IProposalSingle extends IProposal {
 export interface ProposalPager extends Pager {
   results: IProposalIndex[];
 }
+
+export interface ProposalResult{
+  total:number;
+  currentPage:number;
+  showCount:number;
+  pageCount:number;
+  result:IProposalResponseData[];
+}
+export interface IProposalResponseObject{
+  statusCode:number;
+  result: ProposalResult;
+}
 export interface ProposalIndexQuery extends Pager {
   createdById: number;
   updatedById: number;
@@ -58,4 +99,11 @@ export interface ProposalIndexQuery extends Pager {
 export interface IProposalSearch {
   id?: number;
   searchTerm?: string;
+}
+
+export interface ITruckShipmentDetails{
+  id:number;
+  noOfTrucks:number;
+  truckTypeId:number;
+  proposalId:number;
 }

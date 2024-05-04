@@ -29,9 +29,9 @@ const Login = () => {
 
   const { isLoggedIn, dir, lang } = useAppSelector((state) => state.session);
 
-  const {
-    session: { user },
-  } = useAppSelector((state) => state);
+  // const {
+  //   session: { user },
+  // } = useAppSelector((state) => state);
 
   const [aspNetUserLogin, { isLoading }] = useAspNetUserLoginMutation();
 
@@ -59,7 +59,7 @@ const Login = () => {
             lang: lang,
           })
         );
-        console.log("sesssion is:", user);
+        // console.log("session is:", user);
         navigate(from, { replace: true });
       }
     });

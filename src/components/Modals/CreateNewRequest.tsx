@@ -35,7 +35,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    console.log(data);
     handleNextStep(data, "")
   };
 
@@ -71,7 +70,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="12345"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -91,7 +90,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Any street name"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -113,7 +112,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="any district name"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -133,7 +132,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Any city name"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -155,7 +154,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="15618"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -175,7 +174,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="121212"
-                  value={"abc"}
+                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -197,7 +196,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Control
                 type="text"
                 placeholder="121212"
-                value={"abc"}
+                
                 style={{
                   width: "560px",
                   height: "59px",

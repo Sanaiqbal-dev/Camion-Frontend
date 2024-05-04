@@ -4,7 +4,7 @@ import EditIcon from "../../../assets/icons/ic-edit.svg";
 import ProposalIcon from "../../../assets/icons/ic-proposal.svg";
 import { Link } from "react-router-dom";
 
-export type Payment = {
+export type IRequestTableData = {
   id: string;
   origin: string;
   destination: string;
@@ -14,7 +14,7 @@ export type Payment = {
   action: string;
   onProposalClick?: () => void;
 };
-export const RequestColumns: ColumnDef<Payment>[] = [
+export const RequestColumns: ColumnDef<IRequestTableData>[] = [
   {
     accessorKey: "origin",
     header: "Origin",

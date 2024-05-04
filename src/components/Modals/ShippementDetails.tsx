@@ -1,7 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button, Form, Modal, Image } from "react-bootstrap";
+import { Modal, Image } from "react-bootstrap";
 import PalletIcon from "../../assets/icons/ic-pallet.svg";
 import BoxIcon from "../../assets/icons/ic-boxIcon.svg";
 import VehicleIcon from "../../assets/icons/ic-vehicle.svg";
@@ -11,46 +8,20 @@ import PalletForm from "./PalletForm";
 import BoxForm from "./BoxForm";
 import AddTruckForm from "./AddTruckForm";
 import OtherForm from "./OtherForm";
+import { IShipmentDetails } from "@/interface/proposal";
 
-interface IShippementDetails {
-  // typeOfShippment: string;
-  // shippmentQuantity?: number;
-  // length?: number;
-  // width?: number;
-  // height?:number;
-  // weightPerItem?: number;
-  // othername?:string;
-  // isCargoItemsStackable: boolean;
-  // isIncludingItemsARGood:boolean;
-  // isShippmentTruck:boolean;
-  // truckShipments?: ITruckItem[];
-}
 
-interface CreateUserModalProps {
+interface CreateNewRequestModalProps {
   show: boolean;
   handleClose: () => void;
-  handleNextStep: () => void;
+  handleFormDataSubmission: (data: IShipmentDetails, shipmentType:string ) => void;
 }
-// const schema = z.object({
-//   shippmentQuantity: z.string().min(1, "Please enter number of Pallet"),
-//   length: z.string().min(1, "Please enter length"),
-//   width: z.string().min(1,"Please enter width in centemeters"),
-//   height: z.string().min(1,"Please enter height in centemeters"),
-//   weightPerItem: z.string().min(1, "Please enter weight per item"),
-// });
 
-const CreateNewUser: React.FC<CreateUserModalProps> = ({
+const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   show,
   handleClose,
-  handleNextStep,
+  handleFormDataSubmission,
 }) => {
-  // const { handleSubmit } = useForm<IShippementDetails>({
-  //   resolver: zodResolver(schema),
-  // });
-  // const onSubmit: SubmitHandler<IShippementDetails> = async (data) => {
-  //   console.log(data);
-  //   console.log("next is clicked");
-  // };
   const [showPalletForm, setShowPalletForm] = useState(true);
   const [showBoxForm, setShowBoxForm] = useState(false);
   const [showTruckForm, setShowTruckForm] = useState(false);
@@ -170,10 +141,18 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({
       </Modal.Header>
 
       <Modal.Body>
-        {showPalletForm && <PalletForm onSubmitPalletForm={handleNextStep} />}
-        {showBoxForm && <BoxForm />}
-        {showTruckForm && <AddTruckForm />}
-        {showOtherForm && <OtherForm />}
+        {showPalletForm && (
+          <PalletForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showBoxForm && (
+          <BoxForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showTruckForm && (
+          <AddTruckForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
+        {showOtherForm && (
+          <OtherForm onSubmitShipmentForm={handleFormDataSubmission} />
+        )}
       </Modal.Body>
     </Modal>
   );

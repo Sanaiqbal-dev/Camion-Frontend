@@ -1,4 +1,8 @@
-import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
+import {
+  IRequestTableData,
+  Payment,
+  RequestColumns,
+} from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
 import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -8,87 +12,76 @@ import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useEffect, useState } from "react";
 import CreateNewRequest from "../Modals/CreateNewRequest";
 import ShippementDetails from "../Modals/ShippementDetails";
-import { IProposal } from "@/interface/proposal";
-import { INewRequest } from "@/interface/shipper";
 import {
-  useGetShipmentTypesQuery,
-  useGetTruckTypesQuery,
-} from "@/services/shipmentType";
-import { useGetAllProposalsQuery } from "@/services/proposal";
+  IProposal,
+  IProposalResponseData,
+  IShipmentDetails,
+} from "@/interface/proposal";
+import { INewRequest } from "@/interface/shipper";
+import { useGetShipmentTypesQuery } from "@/services/shipmentType";
+import {
+  useCreateNewProposalMutation,
+  useGetProposalsQuery,
+} from "@/services/proposal";
+import { useAppSelector } from "@/state";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
 
 const ShipperRequests = () => {
+  const userData = useAppSelector((state) => state.session);
+  const [sendCreateNewRequest, setSendCreateNewRequest] = useState(false);
+
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
     useState(false);
   const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] =
     useState(false);
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
-  const shippmentData = useGetShipmentTypesQuery();
-  const truckData = useGetTruckTypesQuery();
+  const shipmentData = useGetShipmentTypesQuery();
+  const [createNewProposal, { isLoading, data, error }] =
+    useCreateNewProposalMutation();
+
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+  const { data: currentData, isFetching } = useGetProposalsQuery({
+    page: pager.page - 1,
+    pageSize: pager.pageSize,
+    ...filterKeys,
+  });
+
+  const requestData: IRequestTableData[] = [
+    {
+      id: "728ed52f",
+      origin: "Maputo, Mozambique",
+      destination: "Dublin, Ireland",
+      weight: "82.5 kg",
+      dimentions: "45x45x45",
+      ETA: "9/20/2024",
+      action: "",
+    },
+  ];
 
   useEffect(() => {
-    console.log("Shippment types are: ", shippmentData.data);
-    console.log("Truck types are: ", truckData.data);
-  }, [shippmentData]);
-  const data = useGetAllProposalsQuery("");
-  const TableData = data.data?.result.result;
-  console.log("TableData", TableData);
-  const mappedData = TableData?.map((item) => ({
-    id: item.id,
-    origin: `${item.originCityName}, ${item.originDistrictName}`,
-    destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
-    weight: item.weight ? item.weight : "-",
-    dimentions: `${item.length}x${item.width}x${item.height}`,
-    EDT: item.preferredDeliveryDate
-      ? item.preferredDeliveryDate
-      : "Time not assigned yet",
-    action: "Submit Proposal",
-  }));
+    // if (proposalPager) setProposalCount(proposalPager?.total);
+
+    // const requestItems: IProposalResponseData = currentData.result.result;
+    // console.log("requestItems : ", requestItems);
+
+    // requestData.concat();
+
+    console.log("Proposal content :  ", currentData?.result.result);
+  }, [currentData]);
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
+
   const [entriesValue, setEntriesValue] = useState(10);
 
-  const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
-
-  const CreateUserNextStep = (requestObj: INewRequest) => {
-    setProposalItem((prevUser) => ({
-      ...prevUser,
-      originBuildingNo: requestObj.buildingNumber,
-      originStreetName: requestObj.streetName,
-      originCityName: requestObj.cityName,
-      originZipCode: requestObj.zipCode,
-      originAdditionalNo: requestObj.additionalNumber,
-      originUnitNo: requestObj.unitNo,
-      originDistrictName: requestObj.districtName,
-    }));
-
-    console.log("proposal object is :", proposalItem);
-
-    SetShowCreateUserModalFirstStep(false);
-    SetShowCreateUserModalSecondStep(true);
-  };
-
-  const goToShippementDetails = (requestObj: INewRequest) => {
-    setProposalItem((prevUser) => ({
-      ...prevUser,
-      destinationBuildingNo: requestObj.buildingNumber,
-      destinationStreetName: requestObj.streetName,
-      destinationCityName: requestObj.cityName,
-      destinationZipCode: requestObj.zipCode,
-      destinationAdditionalNo: requestObj.additionalNumber,
-      destinationUnitNo: requestObj.unitNo,
-      destinationDistrictName: requestObj.districtName,
-    }));
-
-    console.log("proposal object is :", proposalItem);
-    SetShowCreateUserModalSecondStep(false);
-    setShowShippementDetailsModal(true);
-  };
-
-  const setShipmentDetails = (data: any) => {
-    console.log(" In shipper request : ", data);
-  };
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -99,6 +92,103 @@ const ShipperRequests = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  //Create New Proposal implementation...
+  const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
+
+  const CreateUserNextStep = (requestObj: INewRequest) => {
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      originBuildingNo: requestObj.buildingNumber,
+      originStreetName: requestObj.streetName,
+      originCityName: requestObj.cityName,
+      originZipCode: requestObj.zipCode,
+      originAdditionalNo: requestObj.additionalNumber,
+      originUnitNo: requestObj.unitNo,
+      originDistrictName: requestObj.districtName,
+    }));
+
+    console.log("userId: ", userData);
+    SetShowCreateUserModalFirstStep(false);
+    SetShowCreateUserModalSecondStep(true);
+  };
+
+  const goToShippementDetails = (requestObj: INewRequest) => {
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      destinationBuildingNo: requestObj.buildingNumber,
+      destinationStreetName: requestObj.streetName,
+      destinationCityName: requestObj.cityName,
+      destinationZipCode: requestObj.zipCode,
+      destinationAdditionalNo: requestObj.additionalNumber,
+      destinationUnitNo: requestObj.unitNo,
+      destinationDistrictName: requestObj.districtName,
+    }));
+
+    SetShowCreateUserModalSecondStep(false);
+    setShowShippementDetailsModal(true);
+  };
+
+  const setShipmentDetails = async (
+    data: IShipmentDetails,
+    shipmentType: string
+  ) => {
+    const shipmentDataAll = shipmentData.data;
+    const shipmentTypeId =
+      shipmentDataAll?.find(
+        (type: { shipmentTypeName: string }) =>
+          type.shipmentTypeName === shipmentType
+      ) &&
+      shipmentDataAll?.find(
+        (type: { shipmentTypeName: string }) =>
+          type.shipmentTypeName === shipmentType
+      ).id;
+
+    const shipmentTruckTypeDefault =
+      shipmentType === "Truck" ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
+    const shipmentQuantityVal =
+      shipmentType === "Box"
+        ? data.numberOfBoxes
+        : shipmentType === "Pallet"
+        ? data.numberOfPallets
+        : 0;
+
+    const itemWeight = shipmentType === "Truck" ? "0" : data.weightPerItem;
+    const itemHeight = shipmentType === "Other" ? data.height : 0;
+    const otherItemName = shipmentType === "Other" ? data.otherType : "";
+
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      shipmentTypeId: shipmentTypeId,
+      shipmentQuantity: shipmentQuantityVal,
+      length: data.length ? data.length : 0,
+      width: data.width ? data.length : 0,
+      height: itemHeight,
+      isCargoItemsStackable: data.isCargoItemsStackable
+        ? data.isCargoItemsStackable
+        : false,
+      isIncludingItemsADRGood: data.isIncludingItemsADRGood
+        ? data.isIncludingItemsADRGood
+        : false,
+      shipmentTruckType: shipmentTruckTypeDefault,
+      userId: userData.user.userId,
+      weight: itemWeight,
+      otherName: otherItemName,
+      proposalId: 0,
+    }));
+
+    setSendCreateNewRequest(true);
+  };
+
+  useEffect(() => {
+    if (sendCreateNewRequest) {
+      console.log(proposalItem);
+      const response = createNewProposal(proposalItem);
+      console.log("Create New Proposal response: ", response);
+    }
+
+    setSendCreateNewRequest(false);
+  }, [sendCreateNewRequest]);
 
   return (
     <div className="table-container">
@@ -172,10 +262,10 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {mappedData && (
+      {requestData && (
         <DataTable
           columns={RequestColumns}
-          data={mappedData}
+          data={requestData}
           isAction={false}
         />
       )}
@@ -193,7 +283,7 @@ const ShipperRequests = () => {
       <ShippementDetails
         show={showShippementDetailsModal}
         handleClose={() => setShowShippementDetailsModal(false)}
-        handleNextStep={setShipmentDetails}
+        handleFormDataSubmission={setShipmentDetails}
       />
     </div>
   );

@@ -1,23 +1,15 @@
-import { CommonSelect, IAPIResponse } from "@/interface/common";
-import { CreateQueryParams } from "@/util/PrepareQueryParams";
-import {
-  IProposal,
-  IProposalIndex,
-  IProposalSingle,
-} from "@/interface/proposal";
-import baseApi from "./baseApi";
+import { CommonSelect, IAPIResponse } from '@/interface/common';
+import { CreateQueryParams } from '@/util/PrepareQueryParams';		
+import { IProposal, IProposalIndex,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
+import baseApi from './baseApi';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProposals: builder.query<IAPIResponse<IProposalIndex[]>, any>({
+    getProposals: builder.query<IAPIResponse<IProposalResponseObject[]>, any>({
       query: (queryParams) =>
-        `proposal/list${
+        `api/Proposals/GetAllProposals${
           queryParams !== null ? "?" + CreateQueryParams(queryParams) : ""
         }`,
-      providesTags: ["Proposal"],
-    }),
-    getAllProposals: builder.query<IAPIResponse<IProposal[]>, any>({
-      query: () => `/api/Proposals/GetAllProposals`,
       providesTags: ["Proposal"],
     }),
 
@@ -43,9 +35,12 @@ export const proposalApi = baseApi.injectEndpoints({
       },
     }),
 
-    addProposal: builder.mutation<IAPIResponse<IProposal>, Partial<IProposal>>({
+    createNewProposal: builder.mutation<
+      IAPIResponse<IProposal>,
+      Partial<IProposal>
+    >({
       query: (body) => ({
-        url: "proposal/add",
+        url: "api/Proposals/CreateNewProposal",
         method: "POST",
         body,
       }),
@@ -75,12 +70,5 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const {
-  useGetProposalsQuery,
-  useGetAllProposalsQuery,
-  useGetProposalQuery,
-  useGetSelectProposalsQuery,
-  useAddProposalMutation,
-  useUpdateProposalMutation,
-  useDeleteProposalMutation,
-} = proposalApi;
+	 export const { useGetProposalsQuery, useGetProposalQuery, useGetSelectProposalsQuery, 
+	 								useCreateNewProposalMutation, useUpdateProposalMutation, useDeleteProposalMutation} = proposalApi;
