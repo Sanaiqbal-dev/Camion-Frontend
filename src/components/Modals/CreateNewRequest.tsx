@@ -4,11 +4,14 @@ import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
 import { INewRequest } from "@/interface/shipper";
+import { IProposal } from "@/interface/proposal";
 
 interface CreateRequestModalProps {
   show: boolean;
   handleClose: () => void;
   infoType?: string;
+  isEdit:boolean;
+  proposalObject?:IProposal;
   handleNextStep: (requestObj:INewRequest, requestType:string) => void;
 }
 const schema = z.object({
@@ -36,8 +39,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    handleNextStep(data, "")
-    if(infoType != "origin") reset();
+    handleNextStep(data, "");
+    reset();
   };
 
   const onError = (error:any)=> {

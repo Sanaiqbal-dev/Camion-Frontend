@@ -8,10 +8,10 @@ import { useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import { useGetAllProposalsQuery } from "@/services/proposal";
+import { useGetProposalsQuery } from "@/services/proposal";
 
 const Requests = () => {
-  const data = useGetAllProposalsQuery("");
+  const data = useGetProposalsQuery("");
   const TableData = data.data?.result.result;
   console.log("TableData", TableData);
   const mappedData = TableData?.map((item) => ({

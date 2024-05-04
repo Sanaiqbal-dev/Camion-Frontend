@@ -49,7 +49,6 @@ const Login = () => {
     aspNetUserLogin(values).then((result: any) => {
       if (result) {
         console.log(result);
-        // const user_ = {}
         dispatch(
           setSession({
             token: result.data.token,
@@ -59,15 +58,19 @@ const Login = () => {
             lang: lang,
           })
         );
-        // console.log("session is:", user);
-        navigate(from, { replace: true });
-      }
+        let userRole = result.data.role;
+
+        userRole == "Shipper"
+          ? navigate("/shipper/shipperdashboard")
+          : navigate("/carrier/dashboard");
+
+              }
     });
   };
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
     }
   }, []);
   return (

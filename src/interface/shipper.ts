@@ -7,3 +7,14 @@ export interface INewRequest {
   additionalNumber: string;
   unitNo: string;
 }
+
+
+export interface IRequestTable {
+  id: number;
+  origin: string;
+  destination: string;
+  weight: string;
+  dimentions: string;
+  ETA: string;
+  action: string;
+};

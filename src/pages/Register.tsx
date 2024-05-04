@@ -9,7 +9,7 @@ import { Form, Row, Col } from "react-bootstrap";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/state";
 import { useAspNetUserRegisterMutation } from "@/services/aspNetUserAuth";
 import { useDispatch } from "react-redux";
@@ -51,7 +51,7 @@ const schema = z
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [isCarrier, setIsCarrier] = useState(true);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -68,20 +68,21 @@ const Register = () => {
     values.role = isCarrier ? "carrier" : "shipper";
     aspNetUserRegister(values).then((result: any) => {
       if (result) {
-        dispatch(
-          setSession({
-            token: result.data.token,
-            user: {
-              email: values.email,
-              role: result.data.role,
-              userId: result.data.userId,
-            },
-            isLoggedIn: true,
-            dir: dir,
-            lang: lang,
-          })
-        );
+        // dispatch(
+        //   setSession({
+        //     token: result.data.token,
+        //     user: {
+        //       email: values.email,
+        //       role: result.data.role,
+        //       userId: result.data.userId,
+        //     },
+        //     isLoggedIn: true,
+        //     dir: dir,
+        //     lang: lang,
+        //   })
+        // );
         console.log("Values are: ", values);
+        navigate('/Login');
       }
     });
 

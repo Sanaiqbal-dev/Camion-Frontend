@@ -16,7 +16,7 @@ import {
   IProposalResponseData,
   IShipmentDetails,
 } from "@/interface/proposal";
-import { INewRequest } from "@/interface/shipper";
+import { INewRequest, IRequestTable } from "@/interface/shipper";
 import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
   useCreateNewProposalMutation,
@@ -25,6 +25,7 @@ import {
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
+import { ColumnDef } from "@tanstack/react-table";
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
@@ -44,6 +45,8 @@ const ShipperRequests = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [isEditProposal, setIsEditProposal] = useState(false);
+
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
@@ -54,6 +57,7 @@ const ShipperRequests = () => {
   });
 
   const [requestData, setRequestData] = useState<IRequestTableData[]>([]);
+  const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -153,8 +157,8 @@ const ShipperRequests = () => {
       weight: itemWeight,
       otherName: otherItemName,
       proposalId: 0,
-      FileName:"",
-      FilePath:"",
+      FileName: "",
+      FilePath: "",
     }));
 
     setSendCreateNewRequest(true);
@@ -168,29 +172,51 @@ const ShipperRequests = () => {
         origin: currentRequestObject.originCityName,
         destination: currentRequestObject.destinationCityName,
         weight: currentRequestObject.weight,
-        dimentions:currentRequestObject.shipmentTypes.shipmentTypeName==="Truck" ? "-" : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
+        dimentions:
+          currentRequestObject.shipmentTypes.shipmentTypeName === "Truck"
+            ? "-"
+            : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
         ETA: "",
         action: "",
       }));
 
       setRequestData((prevData) => [...prevData, ...updatedRequestData]);
-      // console.log("requestItems : ", requestItems);
+      console.log("fetched requestItems : ", requestItems);
       // console.log("request New Data : ", requestData);
     }
   };
 
-  useEffect(() => {
-    const requestItems: IProposalResponseData[] = currentData?.result.result;
+  const onEdit = (proposalItemId: number) => {
+    console.log("Edit is clicked on :", proposalItemId);
 
-    if (requestItems) {
-      FilterDataForTable(requestItems);
+    const selectedProposalItem = requestItems?.find(
+      (item: { proposalId: number }) => item.proposalId === proposalItemId
+    );
+    console.log("Selected proposal Item:", selectedProposalItem);
+  };
+  const onDelete = (proposalItemId: number) => {};
+  const onProposalList = (proposalItemId: number) => {};
+  const columns: ColumnDef<IRequestTable>[] = RequestColumns({
+    onEdit,
+    onDelete,
+    onProposalList,
+  });
+
+  useEffect(() => {
+    // setRequestItems(currentData?.result.result);
+
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
     }
   }, [currentData?.result.result]);
 
   const SendCreateNewRequest = async () => {
-    const response =await createNewProposal(proposalItem);
+    const response = await createNewProposal(proposalItem);
     if (response) {
-      console.log("Create New Proposal response: ", response?.data.result?.result);
+      console.log(
+        "Create New Proposal response: ",
+        response?.data.result?.result
+      );
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
       setProposalItem({} as IProposal);
@@ -277,14 +303,11 @@ const ShipperRequests = () => {
         </Row>
       </div>
       {requestData && (
-        <DataTable
-          columns={RequestColumns}
-          data={requestData}
-          isAction={false}
-        />
+        <DataTable columns={columns} data={requestData} isAction={false} />
       )}
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
+        isEdit
         handleClose={() => SetShowCreateUserModalFirstStep(false)}
         handleNextStep={CreateUserNextStep}
       />
@@ -293,6 +316,7 @@ const ShipperRequests = () => {
         infoType={"destination"}
         handleClose={() => SetShowCreateUserModalSecondStep(false)}
         handleNextStep={goToShippementDetails}
+        isEdit={false}
       />
       <ShippementDetails
         show={showShippementDetailsModal}

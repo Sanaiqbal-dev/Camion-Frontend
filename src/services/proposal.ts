@@ -1,11 +1,7 @@
-import { CommonSelect, IAPIResponse } from "@/interface/common";
-import { CreateQueryParams } from "@/util/PrepareQueryParams";
-import {
-  IProposal,
-  IProposalIndex,IProposalResponseObject,
-  IProposalSingle,
-} from "@/interface/proposal";
-import baseApi from "./baseApi";
+import { CommonSelect, IAPIResponse } from '@/interface/common';
+import { CreateQueryParams } from '@/util/PrepareQueryParams';		
+import { IProposal, IProposalIndex,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
+import baseApi from './baseApi';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,19 +21,6 @@ export const proposalApi = baseApi.injectEndpoints({
       providesTags: ["Proposal"],
     }),
 
-    getSelectProposals: builder.query<IAPIResponse<CommonSelect[]>, any>({
-      query: (queryParams) =>
-        `proposal/select${
-          queryParams !== null ? "?" + CreateQueryParams(queryParams) : ""
-        }`,
-      providesTags: ["Proposal"],
-    }),
-
-    getProposal: builder.query<
-      IAPIResponse<IProposalSingle>,
-      Partial<IProposal>
-    >({
-      query: ({ id }) => `/proposal/detail/${id}`,
     getProposal: builder.query<
       IAPIResponse<IProposalSingle>,
       Partial<IProposal>
@@ -47,9 +30,7 @@ export const proposalApi = baseApi.injectEndpoints({
         const { id } = arg || {};
         if (id) {
           return [{ type: "Proposal", id }];
-          return [{ type: "Proposal", id }];
         }
-        return [{ type: "Proposal" }];
         return [{ type: "Proposal" }];
       },
     }),
