@@ -30,12 +30,14 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<INewRequest>({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     handleNextStep(data, "")
+    if(infoType != "origin") reset();
   };
 
   const onError = (error:any)=> {

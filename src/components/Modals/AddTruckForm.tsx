@@ -15,12 +15,12 @@ interface IPalletForm {
 }
 
 interface ITruckItem {
-  numberOfTrucks: number;
-  truckType: string;
+  noOfTruck: number;
+  truckTypeId: string;
 }
 const schema =z.object({
-    numberOfTrucks: z.coerce.number().int().min(1, "Enter number of trucks"),
-    truckType: z.coerce
+    noOfTruck: z.coerce.number().int().min(1, "Enter number of trucks"),
+    truckTypeId: z.coerce
       .number()
       .int()
       .min(1, "Please select at least one option"),
@@ -53,10 +53,10 @@ const AddTruckForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
     const trucksData = Object.keys(formData).map((key) => {
       const truck = formData[key];
       const truckTypeObject = truckTypesData.data.find(
-        (type) => type.name === truck.truckType
+        (type) => type.name === truck.truckTypeId
       );
       const truckTypeId = truckTypeObject ? truckTypeObject.id : null;
-      return { ...truck, truckType: truckTypeId };
+      return { ...truck, truckTypeId: truckTypeId };
     });
 
     const isValid = trucksData.every((truck) => {
@@ -91,11 +91,11 @@ const AddTruckForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
                   width: "229px",
                   height: "59px",
                 }}
-                isInvalid={!!errors[index]?.numberOfTrucks}
-                {...register(`${index}.numberOfTrucks` as const)}
+                isInvalid={!!errors[index]?.noOfTruck}
+                {...register(`${index}.noOfTruck` as const)}
               />
               <Form.Control.Feedback type="invalid">
-                {errors[index]?.numberOfTrucks?.message}
+                {errors[index]?.noOfTruck?.message}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -106,8 +106,8 @@ const AddTruckForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
                   width: "229px",
                   height: "59px",
                 }}
-                isInvalid={!!errors[index]?.truckType}
-                {...register(`${index}.truckType` as const)}
+                isInvalid={!!errors[index]?.truckTypeId}
+                {...register(`${index}.truckTypeId` as const)}
               >
                 <option value="">Select Truck Type</option>
                 {truckTypesData &&
@@ -122,7 +122,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
                   )}
               </Form.Select>
               <Form.Control.Feedback type="invalid">
-                {errors[index]?.truckType?.message}
+                {errors[index]?.truckTypeId?.message}
               </Form.Control.Feedback>
             </Form.Group>
             {index === 0 ? (

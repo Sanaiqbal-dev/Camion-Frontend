@@ -52,7 +52,7 @@ export const proposalApi = baseApi.injectEndpoints({
       Partial<IProposal>
     >({
       query: ({ id, ...rest }) => ({
-        url: `proposal/${id}`,
+        url: `api/Proposals/UpdateProposal`,
         method: "PUT",
         body: { id, ...rest },
       }),

@@ -5,7 +5,7 @@ import ProposalIcon from "../../../assets/icons/ic-proposal.svg";
 import { Link } from "react-router-dom";
 
 export type IRequestTableData = {
-  id: string;
+  id: number;
   origin: string;
   destination: string;
   weight: string;

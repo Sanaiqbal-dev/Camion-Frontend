@@ -1,6 +1,5 @@
 import {
   IRequestTableData,
-  Payment,
   RequestColumns,
 } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
@@ -54,28 +53,7 @@ const ShipperRequests = () => {
     ...filterKeys,
   });
 
-  const requestData: IRequestTableData[] = [
-    {
-      id: "728ed52f",
-      origin: "Maputo, Mozambique",
-      destination: "Dublin, Ireland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-  ];
-
-  useEffect(() => {
-    // if (proposalPager) setProposalCount(proposalPager?.total);
-
-    // const requestItems: IProposalResponseData = currentData.result.result;
-    // console.log("requestItems : ", requestItems);
-
-    // requestData.concat();
-
-    console.log("Proposal content :  ", currentData?.result.result);
-  }, [currentData]);
+  const [requestData, setRequestData] = useState<IRequestTableData[]>([]);
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -175,19 +153,55 @@ const ShipperRequests = () => {
       weight: itemWeight,
       otherName: otherItemName,
       proposalId: 0,
+      FileName:"",
+      FilePath:"",
     }));
 
     setSendCreateNewRequest(true);
   };
 
+  const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
+    setRequestData([]);
+    if (requestItems) {
+      const updatedRequestData = requestItems.map((currentRequestObject) => ({
+        id: currentRequestObject.id,
+        origin: currentRequestObject.originCityName,
+        destination: currentRequestObject.destinationCityName,
+        weight: currentRequestObject.weight,
+        dimentions:currentRequestObject.shipmentTypes.shipmentTypeName==="Truck" ? "-" : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
+        ETA: "",
+        action: "",
+      }));
+
+      setRequestData((prevData) => [...prevData, ...updatedRequestData]);
+      // console.log("requestItems : ", requestItems);
+      // console.log("request New Data : ", requestData);
+    }
+  };
+
+  useEffect(() => {
+    const requestItems: IProposalResponseData[] = currentData?.result.result;
+
+    if (requestItems) {
+      FilterDataForTable(requestItems);
+    }
+  }, [currentData?.result.result]);
+
+  const SendCreateNewRequest = async () => {
+    const response =await createNewProposal(proposalItem);
+    if (response) {
+      console.log("Create New Proposal response: ", response?.data.result?.result);
+      FilterDataForTable(response?.data.result.result);
+      setShowShippementDetailsModal(false);
+      setProposalItem({} as IProposal);
+      setSendCreateNewRequest(false);
+    }
+  };
   useEffect(() => {
     if (sendCreateNewRequest) {
-      console.log(proposalItem);
-      const response = createNewProposal(proposalItem);
-      console.log("Create New Proposal response: ", response);
+      SendCreateNewRequest();
+      // console.log("after sending request  : ",proposalItem);
     }
-
-    setSendCreateNewRequest(false);
   }, [sendCreateNewRequest]);
 
   return (

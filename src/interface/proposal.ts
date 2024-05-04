@@ -17,29 +17,28 @@ export interface IProposal {
   destinationDistrictName: string;
   shipmentTypeId: number;
   shipmentQuantity: number;
-  length: number|null;
-  width: number|null;
-  height: number|null;
+  length: number | null;
+  width: number | null;
+  height: number | null;
   isCargoItemsStackable: boolean;
   isIncludingItemsADRGood: boolean;
-  weight: string|null;
-   createdBy: string|null;
-  createdDate?: Date|null;
-  updatedBy: string|null;
-  updatedDate:Date|null;
+  weight: string | null;
+  createdBy: string | null;
+  createdDate?: Date | null;
+  updatedBy: string | null;
+  updatedDate: Date | null;
   otherName?: string;
   dimensions: string;
-  preferredDeliveryDate: Date|null;
-  shipmentTruckType:IShipmentTruckType[];
-  userId:string;
-  proposalId:number;
-
+  preferredDeliveryDate: Date | null;
+  shipmentTruckType: IShipmentTruckType[];
+  userId: string;
+  proposalId: number;
 }
 
-export interface IProposalResponseData extends IProposal{
-  shipmentTypes:IShipmentType;
+export interface IProposalResponseData extends IProposal {
+  shipmentTypes: IShipmentType;
   createdById: string;
-  updatedById:string|null;    
+  updatedById: string | null;
   truckShipmentDetail: ITruckShipmentDetails;
 }
 export interface IShipmentTruckType {
@@ -81,16 +80,17 @@ export interface ProposalPager extends Pager {
   results: IProposalIndex[];
 }
 
-export interface ProposalResult{
-  total:number;
-  currentPage:number;
-  showCount:number;
-  pageCount:number;
-  result:IProposalResponseData[];
+export interface ProposalResult {
+  total: number;
+  currentPage: number;
+  showCount: number;
+  pageCount: number;
+  result: IProposalResponseData[];
 }
-export interface IProposalResponseObject{
-  statusCode:number;
+export interface IProposalResponseObject {
+  statusCode: number;
   result: ProposalResult;
+  message?: string;
 }
 export interface ProposalIndexQuery extends Pager {
   createdById: number;
@@ -101,9 +101,9 @@ export interface IProposalSearch {
   searchTerm?: string;
 }
 
-export interface ITruckShipmentDetails{
-  id:number;
-  noOfTrucks:number;
-  truckTypeId:number;
-  proposalId:number;
+export interface ITruckShipmentDetails {
+  id: number;
+  noOfTrucks: number;
+  truckTypeId: number;
+  proposalId: number;
 }
