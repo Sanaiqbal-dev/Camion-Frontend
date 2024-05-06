@@ -8,10 +8,12 @@ import { useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import { useGetAllProposalsQuery } from "@/services/proposal";
+import { useGetProposalsQuery } from "@/services/proposal";
+
+// import { useGetFileTypesQuery } from "@/services/fileType";
 
 const Requests = () => {
-  const data = useGetAllProposalsQuery("");
+  const data = useGetProposalsQuery("");
   const TableData = data.data?.result.result;
   console.log("TableData", TableData);
   const mappedData = TableData?.map((item) => ({
@@ -19,7 +21,10 @@ const Requests = () => {
     origin: `${item.originCityName}, ${item.originDistrictName}`,
     destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
     weight: item.weight ? item.weight : "-",
-    dimentions: `${item.length}x${item.width}x${item.height}`,
+    dimentions:
+      item.length && item.width && item.height
+        ? `${item.length}x${item.width}x${item.height}`
+        : "-",
     EDT: item.preferredDeliveryDate
       ? item.preferredDeliveryDate
       : "Time not assigned yet",
@@ -30,6 +35,13 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showProposalForm, setShowProposalForm] = useState(false);
+  // const [fileTypes, setFileTypes] = useState<IFile[]>();
+
+  // const acceptedFileTypes = useGetFileTypesQuery();
+  // const filesData = acceptedFileTypes?.data;
+  // // useEffect(() => {
+  // //   setFileTypes(filesData);
+  // // });
 
   const onSubmitProposal = () => {
     setShowProposalForm(true);
@@ -112,6 +124,7 @@ const Requests = () => {
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
         submitProposal={() => onSubmitProposal()}
+        fileType={4}
       />
     </div>
   );

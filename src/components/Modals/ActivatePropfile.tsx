@@ -4,24 +4,33 @@ import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import PropfileImage from "../../assets/icons/ic-profile.svg";
-import React from "react";
-
+import React, { useRef, useState } from "react";
+import useFileTypeValidation from "@/services/fileType";
+interface IFileDownload {
+  filePath: string;
+  fileName: string;
+  fileType: number;
+}
 interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  contactNumber: string;
+  phoneNumber: string;
   password: string;
   confirmPassword: string;
+  companyName: string;
+  fileDownLoad: IFileDownload[];
+  userId: string;
 }
 
 interface CreateUserModalProps {
   show: boolean;
   handleClose: () => void;
+  submitProfileInfo: (proposal: IUser) => void;
 }
 const schema = z
   .object({
-    firstName: z.string().min(5, "Please enter your first name"),
+    firstName: z.string().min(4, "Please enter your first name"),
     lastName: z.string().min(5, "Please enter your Second name"),
     email: z.string().email("Enter email address"),
     contactNumber: z
@@ -29,6 +38,9 @@ const schema = z
       .min(12, "Please enter your 12 digit phone number"),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string().min(6, "Confirm your password."),
+    companyName: z
+      .string()
+      .min(6, "Company name should be atleast 5 characters."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -46,8 +58,25 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
+  const [vatFile, setVatFile] = useState<File>();
+  const [crFile, setCrFile] = useState<File>();
+  const vatFileInputRef = useRef<HTMLInputElement>(null);
+  const crFileInputRef = useRef<HTMLInputElement>(null);
+
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
+    console.log("Data", data.companyName);
+  };
+  const vatFileError = useFileTypeValidation({
+    extension: vatFile ? `.${vatFile.name.split(".").pop()}` : "",
+  });
+
+  const crFileError = useFileTypeValidation({
+    extension: crFile ? `.${crFile.name.split(".").pop()}` : "",
+  });
+  const handleFileInputClick = (
+    inputRef: React.RefObject<HTMLInputElement>
+  ) => {
+    inputRef.current?.click();
   };
 
   return (
@@ -82,7 +111,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                   type="text"
                   placeholder="Enter first name"
                   style={{ width: "270px", height: "50px" }}
-                  {...register("email")}
+                  {...register("firstName")}
                   isInvalid={!!errors.firstName}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -95,7 +124,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                   type="text"
                   placeholder="Enter your last name"
                   style={{ width: "270px", height: "50px" }}
-                  {...register("email")}
+                  {...register("lastName")}
                   isInvalid={!!errors.lastName}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -123,11 +152,11 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                   type="text"
                   placeholder="Enter your phone number"
                   style={{ width: "270px", height: "50px" }}
-                  {...register("email")}
-                  isInvalid={!!errors.contactNumber}
+                  {...register("phoneNumber")}
+                  isInvalid={!!errors.phoneNumber}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.contactNumber?.message}
+                  {errors.phoneNumber?.message}
                 </Form.Control.Feedback>
               </Form.Group>
             </div>
@@ -162,33 +191,78 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
             </div>
             <div style={{ display: "flex", gap: "18px" }}>
               <Form.Group className="mb-3">
-                <Form.Label>VAT certificate</Form.Label>
+                <Form.Label>Company Name</Form.Label>
                 <Form.Control
-                  type="file"
-                  placeholder="Upload Document"
+                  type="text"
+                  placeholder="Company Name"
                   style={{ width: "270px", height: "50px" }}
-                  {...register("password")}
-                  isInvalid={!!errors.password}
+                  {...register("companyName")}
+                  isInvalid={!!errors.companyName}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.password?.message}
+                  {errors.companyName?.message}
                 </Form.Control.Feedback>
               </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-                <Form.Label>CR Document</Form.Label>
+              <Form.Group className="tw-flex tw-flex-col">
+                <Form.Label className="tw-text-sm">VAT certificate</Form.Label>
+                <div className="tw-flex">
+                  <Button
+                    variant="default"
+                    onClick={() => handleFileInputClick(vatFileInputRef)}
+                    className="custom-file-upload-button"
+                  >
+                    Upload the document
+                  </Button>
+                  <p className="tw-mt-auto tw-mb-auto tw-ml-1">
+                    {vatFile?.name}
+                  </p>
+                </div>
                 <Form.Control
                   type="file"
-                  placeholder="Confirm Password"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("confirmPassword")}
-                  isInvalid={!!errors.confirmPassword}
+                  ref={vatFileInputRef}
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const files = (e.target as HTMLInputElement).files;
+                    if (files && files.length > 0) {
+                      const file = files[0];
+                      setVatFile(file);
+                    }
+                  }}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.confirmPassword?.message}
-                </Form.Control.Feedback>
+                {vatFile && vatFileError && (
+                  <div className="tw-text-red-500">{vatFileError}</div>
+                )}
               </Form.Group>
             </div>
+            <Form.Group className="tw-flex tw-flex-col">
+              <Form.Label className="tw-text-sm">CR Document</Form.Label>
+              <div className="tw-flex">
+                <Button
+                  variant="default"
+                  onClick={() => handleFileInputClick(crFileInputRef)}
+                  className="custom-file-upload-button"
+                >
+                  Upload the document
+                </Button>
+                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{crFile?.name}</p>
+              </div>
+
+              <Form.Control
+                type="file"
+                ref={crFileInputRef}
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const files = (e.target as HTMLInputElement).files;
+                  if (files && files.length > 0) {
+                    const file = files[0];
+                    setCrFile(file);
+                  }
+                }}
+              />
+              {crFile && crFileError && (
+                <div className="tw-text-red-500">{crFileError}</div>
+              )}
+            </Form.Group>
           </div>
           <Button variant="primary" type="submit">
             Update profile

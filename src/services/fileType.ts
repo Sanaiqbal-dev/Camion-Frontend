@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 
-import { IFileType } from "@/interface/proposal";
 import baseApi from "./baseApi";
-import { IAPIResponse } from "@/interface/common";
+import {
+  IAPIResponse,
+  IFile,
+  IProposalForm,
+  IUploadFile,
+} from "@/interface/common";
+import { IProposalResponseObject } from "@/interface/proposal";
 
 interface FileType {
   extension: string;
@@ -10,7 +15,6 @@ interface FileType {
 
 const useFileTypeValidation = (props: FileType) => {
   const { extension } = props;
-  const [allFileTypes, setAllFileTypes] = useState<IFileType[]>([]);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -41,11 +45,31 @@ const useFileTypeValidation = (props: FileType) => {
 
 export const fileTypeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getFileTypes: builder.query<IAPIResponse<IFileType[]>, void>({
+    getFileTypes: builder.query<IAPIResponse<IFile[]>, void>({
       query: () => `api/FileTypes/GetFileTypes`,
       providesTags: ["FileType"],
     }),
+    uploadFile: builder.mutation<IAPIResponse<IFile>, IUploadFile>({
+      query: (body) => ({
+        url: "/Account/FileUpload",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["FileUpload"],
+    }),
+    addNewProposal: builder.mutation<IAPIResponse<IFile>, IProposalForm>({
+      query: (body) => ({
+        url: "/api/ProposalQuotations/AddNewProposalQuotation",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["ProposalQuotation"],
+    }),
   }),
 });
-export const { useGetFileTypesQuery } = fileTypeApi;
+export const {
+  useGetFileTypesQuery,
+  useUploadFileMutation,
+  useAddNewProposalMutation,
+} = fileTypeApi;
 export default useFileTypeValidation;

@@ -19,7 +19,7 @@ export type IDriver = {
   action: string;
 };
 export type IRequest = {
-  id: string;
+  id: number;
   origin: string;
   destination: string;
   weight: string;
