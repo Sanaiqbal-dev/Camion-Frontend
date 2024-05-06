@@ -28,6 +28,7 @@ import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { ColumnDef } from "@tanstack/react-table";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
@@ -39,6 +40,8 @@ const ShipperRequests = () => {
     useState(false);
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
+  const [showSaveForm, setShowSaveForm] = useState(false);
+
   const shipmentData = useGetShipmentTypesQuery();
   const [createNewProposal] = useCreateNewProposalMutation();
   const [updateProposal] = useUpdateProposalMutation();
@@ -170,7 +173,8 @@ const ShipperRequests = () => {
       FilePath: "",
     }));
 
-    setSendProposalRequest(true);
+    // setSendProposalRequest(true);
+    setShowSaveForm(true);
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
@@ -191,7 +195,6 @@ const ShipperRequests = () => {
 
       setRequestData((prevData) => [...prevData, ...updatedRequestData]);
       console.log("fetched requestItems : ", requestItems);
-      // console.log("request New Data : ", requestData);
     }
   };
 
@@ -205,7 +208,7 @@ const ShipperRequests = () => {
   };
   const onDelete = async (proposalItemId: number) => {
     try {
-      const result = await deleteProposal({ id:proposalItemId});
+      const result = await deleteProposal({ id: proposalItemId });
       console.log("Proposal deleted successfully:", result);
     } catch (error) {
       console.error("Error deleting proposal:", error);
@@ -241,6 +244,7 @@ const ShipperRequests = () => {
       );
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
+      setIsEditProposal(false);
       setProposalItem({} as IProposal);
       setSendProposalRequest(false);
     }
@@ -368,6 +372,15 @@ const ShipperRequests = () => {
           setSelecetdProposalItem({} as IProposalResponseData);
         }}
         handleFormDataSubmission={setShipmentDetails}
+      />
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to update this request?"}
+        show={showSaveForm}
+        handleClose={() => setShowSaveForm(false)}
+        performOperation={() => {
+          setShowSaveForm(false);
+          setSendProposalRequest(true);
+        }}
       />
     </div>
   );

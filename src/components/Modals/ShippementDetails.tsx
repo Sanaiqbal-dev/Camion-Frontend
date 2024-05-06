@@ -164,7 +164,11 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
 
       <Modal.Body>
         {showPalletForm && (
-          <PalletForm onSubmitShipmentForm={handleFormDataSubmission} />
+          <PalletForm
+            isEdit={isEdit}
+            proposalObject={proposalObject}
+            onSubmitShipmentForm={handleFormDataSubmission}
+          />
         )}
         {showBoxForm && (
           <BoxForm

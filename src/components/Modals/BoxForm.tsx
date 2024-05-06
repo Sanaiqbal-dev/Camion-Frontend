@@ -56,7 +56,7 @@ const BoxForm: React.FC<IBoxForm> = ({
           <Form.Group className="mb-3">
             <Form.Label>No. of Box</Form.Label>
             <Form.Control
-              type="number"
+              type="text"
               placeholder="1"
               style={{
                 width: "560px",

@@ -2,7 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IShipmentDetails } from "@/interface/proposal";
+import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import { useEffect } from "react";
 
 const schema = z.object({
   numberOfPallets: z.coerce.number().int().min(1, "Enter number of items"),
@@ -14,16 +15,42 @@ const schema = z.object({
 });
 
 interface IPalletForm {
+  isEdit: boolean;
+  proposalObject?: IProposalResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
-const PalletForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
+const PalletForm: React.FC<IPalletForm> = ({
+  isEdit,
+  proposalObject,
+  onSubmitShipmentForm,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
+  
+  useEffect(() => {
+    if (isEdit && proposalObject) {
+      let currentObj = {
+        numberOfPallets: proposalObject.shipmentQuantity,
+        length: proposalObject.length,
+        width: proposalObject.width,
+        weightPerItem: proposalObject.weight,
+        isCargoItemsStackable: proposalObject.isCargoItemsStackable,
+        isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+      };
+
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof IShipmentDetails, value);
+      });
+    }
+  }, [isEdit, setValue]);
+
+  
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     onSubmitShipmentForm(data, "Pallet");
   };
