@@ -60,7 +60,7 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
   const dispatch = useDispatch();
-  const [aspNetUserRegister] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister,{isLoading, isError}] = useAspNetUserRegisterMutation();
   const { dir, lang } = useAppSelector((state) => state.session);
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (
     values: IRegisterFormInput
@@ -68,25 +68,10 @@ const Register = () => {
     values.role = isCarrier ? "carrier" : "shipper";
     aspNetUserRegister(values).then((result: any) => {
       if (result) {
-        // dispatch(
-        //   setSession({
-        //     token: result.data.token,
-        //     user: {
-        //       email: values.email,
-        //       role: result.data.role,
-        //       userId: result.data.userId,
-        //     },
-        //     isLoggedIn: true,
-        //     dir: dir,
-        //     lang: lang,
-        //   })
-        // );
         console.log("Values are: ", values);
         navigate('/Login');
       }
     });
-
-    // navigate('/companyVerification');
   };
 
   return (
@@ -300,6 +285,7 @@ const Register = () => {
                         sitekey={siteKey}
                         // onChange={onChange}
                       />
+                      {isLoading && <p>Loading ...</p>}
                       <div className="register-container">
                         <div>
                           <button

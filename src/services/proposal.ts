@@ -1,7 +1,13 @@
-import { CommonSelect, IAPIResponse } from '@/interface/common';
-import { CreateQueryParams } from '@/util/PrepareQueryParams';		
-import { IProposal, IProposalIndex,IProposalResponseData,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
-import baseApi from './baseApi';
+import { CommonSelect, IAPIResponse } from "@/interface/common";
+import { CreateQueryParams } from "@/util/PrepareQueryParams";
+import {
+  IProposal,
+  IProposalIndex,
+  IProposalResponseData,
+  IProposalResponseObject,
+  IProposalSingle,
+} from "@/interface/proposal";
+import baseApi from "./baseApi";
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -61,7 +67,7 @@ export const proposalApi = baseApi.injectEndpoints({
 
     deleteProposal: builder.mutation<IAPIResponse<void>, Partial<IProposal>>({
       query: ({ id }) => ({
-        url: `api/Proposals/DeleteProposal/${id}`,
+        url: `api/Proposals/DeleteProposal?id=${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Proposal", "Order", "ProposalQuotation"],
@@ -70,5 +76,11 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-	 export const { useGetProposalsQuery, useGetProposalQuery, useGetSelectProposalsQuery, 
-	 								useCreateNewProposalMutation, useUpdateProposalMutation, useDeleteProposalMutation} = proposalApi;
+export const {
+  useGetProposalsQuery,
+  useGetProposalQuery,
+  useGetSelectProposalsQuery,
+  useCreateNewProposalMutation,
+  useUpdateProposalMutation,
+  useDeleteProposalMutation,
+} = proposalApi;

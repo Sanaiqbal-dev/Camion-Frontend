@@ -205,7 +205,7 @@ const ShipperRequests = () => {
   };
   const onDelete = async (proposalItemId: number) => {
     try {
-      const result = await deleteProposal({ proposalId:proposalItemId });
+      const result = await deleteProposal({ id:proposalItemId});
       console.log("Proposal deleted successfully:", result);
     } catch (error) {
       console.error("Error deleting proposal:", error);

@@ -64,7 +64,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: "This has to be a path when The file upload Api is completed",
-        purposalId: 88,
+        purposalId: 93,
         userId: userId,
       });
       console.log("Proposal submitted successfully:", proposalResponse);
