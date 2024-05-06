@@ -4,10 +4,12 @@ import { IRequest } from "../../../interface/carrier";
 
 interface RequestActionProps {
   onSubmitProposal: (id: number) => void;
+  submissionStatus: { [key: number]: boolean };
 }
 
 export const RequestColumns = ({
   onSubmitProposal,
+  submissionStatus,
 }: RequestActionProps): ColumnDef<IRequest>[] => [
   {
     accessorKey: "origin",
@@ -33,20 +35,20 @@ export const RequestColumns = ({
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
-      const isSubmitted = row.getValue("action") === "Submit Proposal";
+      const isSubmitted = submissionStatus[row.original.id];
 
       return (
         <button
-          onClick={() => isSubmitted && onSubmitProposal(row.original.id)}
+          onClick={() => onSubmitProposal(row.original.id)}
           className={
             isSubmitted
-              ? "proposal-btn submit-proposal"
-              : "proposal-btn submitted-proposal"
+              ? "proposal-btn submitted-proposal"
+              : "proposal-btn submit-proposal"
           }
           id="submit-proposal-btn"
         >
-          {!isSubmitted && <img src={IconSubmitted} />}
-          {row.getValue("action")}
+          {isSubmitted && <img src={IconSubmitted} />}
+          {isSubmitted ? "Proposal Submitted" : "Submit proposal"}
         </button>
       );
     },

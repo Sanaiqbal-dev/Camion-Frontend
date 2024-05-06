@@ -33,15 +33,23 @@ const Requests = () => {
   const [entriesValue, setEntriesValue] = useState(10);
   const [showProposalForm, setShowProposalForm] = useState(false);
   const [selectedProposalItem, setSelectedProposalItem] = useState<IRequest>();
+  const [submissionStatus, setSubmissionStatus] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   const onSubmitProposal = (proposalItemId: number) => {
+    setShowProposalForm(true);
     const selectedItem = mappedData.find((item) => item.id === proposalItemId);
     setSelectedProposalItem(selectedItem);
-    setShowProposalForm(true);
+    setSubmissionStatus((prevStatus) => ({
+      ...prevStatus,
+      [proposalItemId]: true,
+    }));
   };
 
   const columns: ColumnDef<IRequest>[] = RequestColumns({
     onSubmitProposal,
+    submissionStatus,
   });
 
   function handleChangeValue(direction: number) {
