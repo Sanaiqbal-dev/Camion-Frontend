@@ -103,9 +103,8 @@ const HomePage = () => {
         </header>
         <ActivateProfile
           show={showProfileModal}
-          handleClose={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          handleClose={() => setShowProfileModal(false)}
+          submitProfileInfo={() => setShowProfileModal(false)}
         />
         <div className="mt-4">
           <Outlet />

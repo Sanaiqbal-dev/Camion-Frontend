@@ -34,7 +34,7 @@ export interface ChildObj {
 }
 export interface ISessionUser {
   email: string;
-  role: "Admin"|"Carrier"|"Shipper";
+  role: "Admin" | "Carrier" | "Shipper";
   userId: string;
 }
 
@@ -68,4 +68,26 @@ export interface IUserManagement {
   userName: string;
   email: string;
   action: string;
+}
+
+export interface IFile {
+  id: number;
+  description: string;
+}
+
+export interface IUploadFile {
+  fileType?: number;
+  uploadFile: string;
+}
+
+export interface IProposalForm {
+  amount: string;
+  delieveryDate: string;
+  otherDetails: string;
+  proposalQuotationId: number;
+  proposalQuotationStatusId: number;
+  fileName?: string;
+  filePath: string;
+  purposalId: number;
+  userId: string;
 }

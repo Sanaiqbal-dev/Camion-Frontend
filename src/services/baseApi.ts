@@ -30,6 +30,7 @@ export const baseApi = createApi({
     "OrderVehicleTracking",
     "ProposalQuotation",
     "Proposal",
+    "FileUpload",
   ],
   reducerPath: "baseApi",
   endpoints: () => ({}),

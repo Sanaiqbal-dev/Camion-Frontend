@@ -1,8 +1,10 @@
 import useFileTypeValidation, {
-  useGetFileTypesQuery,
+  useAddNewProposalMutation,
+  useUploadFileMutation,
 } from "@/services/fileType";
+import { useAppSelector } from "@/state";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,17 +13,18 @@ interface IProposalForm {
   amount: string;
   EDD: string;
   otherDetails: string;
-  file?: File;
+  fileName?: File;
 }
 
 interface ProposalDetailsModalProps {
   show: boolean;
   handleClose: () => void;
+  fileType?: number;
   submitProposal: (proposal: IProposalForm) => void;
 }
 
 const schema = z.object({
-  amount: z.number().min(1, "Enter amount"),
+  amount: z.string().min(3, "Enter the ammount."),
   EDD: z.string().refine(
     (value) => {
       const date = Date.parse(value);
@@ -39,7 +42,7 @@ const schema = z.object({
 const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   show,
   handleClose,
-  submitProposal,
+  fileType,
 }) => {
   const {
     register,
@@ -48,22 +51,55 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   } = useForm<IProposalForm>({
     resolver: zodResolver(schema),
   });
+  const userId = useAppSelector((state) => state.session.user.userId);
+  const [uploadFile] = useUploadFileMutation();
+  const [addNewProposal] = useAddNewProposalMutation();
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
-    submitProposal(data);
+    try {
+      const proposalResponse = await addNewProposal({
+        amount: data.amount,
+        delieveryDate: data.EDD,
+        otherDetails: data.otherDetails,
+        fileName: selectedFile && selectedFile.name,
+        proposalQuotationId: 0,
+        proposalQuotationStatusId: 0,
+        filePath: "This has to be a path when The file upload Api is completed",
+        purposalId: 88,
+        userId: userId,
+      });
+      console.log("Proposal submitted successfully:", proposalResponse);
+      handleClose();
+    } catch (error) {
+      console.error("Error submitting proposal:", error);
+    }
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null); // Specify the element type for better type assertion
   const [selectedFile, setSeletedFile] = useState<File>();
+
   const fileError = useFileTypeValidation({
     extension: selectedFile ? `.${selectedFile.name.split(".").pop()}` : "",
   });
 
-  const fileTypes = useGetFileTypesQuery();
-  console.log("FileTypes", fileTypes);
+  useEffect(() => {
+    if (selectedFile) {
+      try {
+        const response = uploadFile({
+          fileType,
+          uploadFile: selectedFile.name,
+        });
+        console.log("File uploaded successfully:", response);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
+  }, [fileType, selectedFile, uploadFile]);
+
   const handleFileInputClick = () => {
     // Trigger the hidden file input click via ref
     fileInputRef.current?.click();
   };
+
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>

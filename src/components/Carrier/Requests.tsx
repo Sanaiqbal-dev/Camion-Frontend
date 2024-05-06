@@ -19,7 +19,10 @@ const Requests = () => {
     origin: `${item.originCityName}, ${item.originDistrictName}`,
     destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
     weight: item.weight ? item.weight : "-",
-    dimentions: `${item.length}x${item.width}x${item.height}`,
+    dimentions:
+      item.length && item.width && item.height
+        ? `${item.length}x${item.width}x${item.height}`
+        : "-",
     EDT: item.preferredDeliveryDate
       ? item.preferredDeliveryDate
       : "Time not assigned yet",
@@ -112,6 +115,7 @@ const Requests = () => {
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
         submitProposal={() => onSubmitProposal()}
+        fileType={4}
       />
     </div>
   );
