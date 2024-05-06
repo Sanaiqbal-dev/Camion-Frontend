@@ -41,10 +41,15 @@ const Requests = () => {
     setShowProposalForm(true);
     const selectedItem = mappedData.find((item) => item.id === proposalItemId);
     setSelectedProposalItem(selectedItem);
-    setSubmissionStatus((prevStatus) => ({
-      ...prevStatus,
-      [proposalItemId]: true,
-    }));
+  };
+
+  const handleProposalSubmissionSuccess = () => {
+    if (selectedProposalItem) {
+      setSubmissionStatus((prevStatus) => ({
+        ...prevStatus,
+        [selectedProposalItem.id]: true,
+      }));
+    }
   };
 
   const columns: ColumnDef<IRequest>[] = RequestColumns({
@@ -128,6 +133,7 @@ const Requests = () => {
         submitProposal={() => onSubmitProposal(selectedProposalItem.id)}
         fileType={4}
         proposalId={selectedProposalItem && selectedProposalItem?.id}
+        submitProposalSuccess={handleProposalSubmissionSuccess}
       />
     </div>
   );

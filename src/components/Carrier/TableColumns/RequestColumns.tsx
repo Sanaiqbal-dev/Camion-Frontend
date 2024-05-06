@@ -39,7 +39,7 @@ export const RequestColumns = ({
 
       return (
         <button
-          onClick={() => onSubmitProposal(row.original.id)}
+          onClick={() => !isSubmitted && onSubmitProposal(row.original.id)}
           className={
             isSubmitted
               ? "proposal-btn submitted-proposal"
