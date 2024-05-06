@@ -1,6 +1,6 @@
 import { CommonSelect, IAPIResponse } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';		
-import { IProposal, IProposalIndex,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
+import { IProposal, IProposalIndex,IProposalResponseData,IProposalResponseObject,IProposalSingle } from '@/interface/proposal';
 import baseApi from './baseApi';
 
 export const proposalApi = baseApi.injectEndpoints({
@@ -36,8 +36,8 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
 
     createNewProposal: builder.mutation<
-      IAPIResponse<IProposal>,
-      Partial<IProposal>
+      IAPIResponse<IProposalResponseObject>,
+      Partial<IProposalResponseObject>
     >({
       query: (body) => ({
         url: "api/Proposals/CreateNewProposal",
@@ -48,8 +48,8 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
 
     updateProposal: builder.mutation<
-      IAPIResponse<IProposal>,
-      Partial<IProposal>
+      IAPIResponse<IProposalResponseObject>,
+      Partial<IProposalResponseObject>
     >({
       query: ({ id, ...rest }) => ({
         url: `api/Proposals/UpdateProposal`,
@@ -61,7 +61,7 @@ export const proposalApi = baseApi.injectEndpoints({
 
     deleteProposal: builder.mutation<IAPIResponse<void>, Partial<IProposal>>({
       query: ({ id }) => ({
-        url: `proposal/${id}`,
+        url: `api/Proposals/DeleteProposal/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Proposal", "Order", "ProposalQuotation"],

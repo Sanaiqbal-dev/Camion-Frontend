@@ -3,26 +3,33 @@ import PalletIcon from "../../assets/icons/ic-pallet.svg";
 import BoxIcon from "../../assets/icons/ic-boxIcon.svg";
 import VehicleIcon from "../../assets/icons/ic-vehicle.svg";
 import OtherIcon from "../../assets/icons/ic-othersIcon.svg";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PalletForm from "./PalletForm";
 import BoxForm from "./BoxForm";
 import AddTruckForm from "./AddTruckForm";
 import OtherForm from "./OtherForm";
-import { IShipmentDetails } from "@/interface/proposal";
-
+import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
 
 interface CreateNewRequestModalProps {
   show: boolean;
   handleClose: () => void;
-  handleFormDataSubmission: (data: IShipmentDetails, shipmentType:string ) => void;
+  isEdit: boolean;
+  proposalObject?: IProposalResponseData;
+
+  handleFormDataSubmission: (
+    data: IShipmentDetails,
+    shipmentType: string
+  ) => void;
 }
 
 const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   show,
   handleClose,
   handleFormDataSubmission,
+  isEdit,
+  proposalObject,
 }) => {
-  const [showPalletForm, setShowPalletForm] = useState(true);
+  const [showPalletForm, setShowPalletForm] = useState(false);
   const [showBoxForm, setShowBoxForm] = useState(false);
   const [showTruckForm, setShowTruckForm] = useState(false);
   const [showOtherForm, setShowOtherForm] = useState(false);
@@ -57,6 +64,21 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
     setShowTruckForm(false);
     setShowOtherForm(true);
   };
+
+  useEffect(() => {
+    if (isEdit && proposalObject) {
+      let shipmenttype_ = proposalObject.shipmentTypes.shipmentTypeName;
+      shipmenttype_ == "Box"
+        ? boxFormClicked(1)
+        : shipmenttype_ == "Pallet"
+        ? palletFormClick(0)
+        : shipmenttype_ == "Truck"
+        ? truckFormClicked(2)
+        : otherFormClicked(3);
+    } else {
+      palletFormClick(0);
+    }
+  }, [isEdit]);
 
   return (
     <Modal show={show} onHide={handleClose} centered size={"sm"}>
@@ -145,7 +167,11 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
           <PalletForm onSubmitShipmentForm={handleFormDataSubmission} />
         )}
         {showBoxForm && (
-          <BoxForm onSubmitShipmentForm={handleFormDataSubmission} />
+          <BoxForm
+            isEdit={isEdit}
+            proposalObject={proposalObject}
+            onSubmitShipmentForm={handleFormDataSubmission}
+          />
         )}
         {showTruckForm && (
           <AddTruckForm onSubmitShipmentForm={handleFormDataSubmission} />

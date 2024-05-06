@@ -2,21 +2,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import React from "react";
+import React, { useEffect } from "react";
 import { INewRequest } from "@/interface/shipper";
-import { IProposal } from "@/interface/proposal";
+import { IProposalResponseData } from "@/interface/proposal";
 
 interface CreateRequestModalProps {
   show: boolean;
   handleClose: () => void;
   infoType?: string;
-  isEdit:boolean;
-  proposalObject?:IProposal;
-  handleNextStep: (requestObj:INewRequest, requestType:string) => void;
+  isEdit: boolean;
+  proposalObject?: IProposalResponseData;
+  handleNextStep: (requestObj: INewRequest, requestType: string) => void;
 }
 const schema = z.object({
   buildingNumber: z.string().min(1, "Building number is required"),
-  streetName: z.string().min(1,"Enter street name"),
+  streetName: z.string().min(1, "Enter street name"),
   districtName: z.string().min(1, "Please enter your district name"),
   cityName: z.string().min(1, "City name is required"),
   zipCode: z.string().min(1, "Zip code is required"),
@@ -29,23 +29,66 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   handleClose,
   handleNextStep,
   infoType = "origin",
+  isEdit,
+  proposalObject,
 }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm<INewRequest>({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (isEdit && proposalObject) {
+      let currentObj = {
+        buildingNumber:
+          infoType == "origin"
+            ? proposalObject.originBuildingNo
+            : proposalObject.destinationBuildingNo,
+        streetName:
+          infoType == "origin"
+            ? proposalObject.originStreetName
+            : proposalObject.destinationStreetName,
+        districtName:
+          infoType == "origin"
+            ? proposalObject.originDistrictName
+            : proposalObject.destinationDistrictName,
+        cityName:
+          infoType == "origin"
+            ? proposalObject.originCityName
+            : proposalObject.destinationCityName,
+        zipCode:
+          infoType == "origin"
+            ? proposalObject.originZipCode
+            : proposalObject.destinationZipCode,
+        additionalNumber:
+          infoType == "origin"
+            ? proposalObject.originAdditionalNo
+            : proposalObject.destinationAdditionalNo,
+        unitNo:
+          infoType == "origin"
+            ? proposalObject.originUnitNo
+            : proposalObject.destinationUnitNo,
+      };
+
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof INewRequest, value);
+      });
+    }
+  }, [isEdit, setValue]); 
+
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     handleNextStep(data, "");
     reset();
   };
 
-  const onError = (error:any)=> {
+  const onError = (error: any) => {
     console.error("Form errors", error);
-  }
+  };
   return (
     <Modal show={show} onHide={handleClose} centered size={"sm"}>
       <Modal.Header
@@ -75,7 +118,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="12345"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -95,7 +137,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Any street name"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -117,7 +158,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="any district name"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -137,7 +177,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Any city name"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -159,7 +198,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="15618"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -179,7 +217,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="121212"
-                  
                   style={{
                     width: "270px",
                     height: "50px",
@@ -201,7 +238,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Control
                 type="text"
                 placeholder="121212"
-                
                 style={{
                   width: "560px",
                   height: "59px",

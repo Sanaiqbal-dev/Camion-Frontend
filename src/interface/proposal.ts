@@ -21,7 +21,7 @@ export interface IProposal {
   width: number | null;
   height: number | null;
   isCargoItemsStackable: boolean;
-  isIncludingItemsADRGood: boolean;
+  isIncludingItemsARGood: boolean;
   weight: string | null;
   createdBy: string | null;
   createdDate?: Date | null;
@@ -64,7 +64,7 @@ export interface IShipmentDetails {
   shipmentTruckType?: IShipmentTruckType[] | undefined;
   otherType?: string | undefined;
   isCargoItemsStackable?: boolean | undefined;
-  isIncludingItemsADRGood?: boolean | undefined;
+  isIncludingItemsARGood?: boolean | undefined;
 }
 
 export interface IProposalIndex extends IProposal {
@@ -91,6 +91,7 @@ export interface IProposalResponseObject {
   statusCode: number;
   result: ProposalResult;
   message?: string;
+  data?: any;
 }
 export interface ProposalIndexQuery extends Pager {
   createdById: number;

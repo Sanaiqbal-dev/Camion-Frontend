@@ -125,7 +125,7 @@ const PalletForm: React.FC<IPalletForm> = ({ onSubmitShipmentForm }) => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckChecked"
-                  {...register("isIncludingItemsADRGood")}
+                  {...register("isIncludingItemsARGood")}
                 />
                 <label>Including ADR goods</label>
               </div>

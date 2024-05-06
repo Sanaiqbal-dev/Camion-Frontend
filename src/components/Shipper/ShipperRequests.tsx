@@ -20,7 +20,9 @@ import { INewRequest, IRequestTable } from "@/interface/shipper";
 import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
   useCreateNewProposalMutation,
+  useDeleteProposalMutation,
   useGetProposalsQuery,
+  useUpdateProposalMutation,
 } from "@/services/proposal";
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
@@ -29,7 +31,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
-  const [sendCreateNewRequest, setSendCreateNewRequest] = useState(false);
+  const [sendProposalRequest, setSendProposalRequest] = useState(false);
 
   const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
     useState(false);
@@ -38,8 +40,9 @@ const ShipperRequests = () => {
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
   const shipmentData = useGetShipmentTypesQuery();
-  const [createNewProposal, { isLoading, data, error }] =
-    useCreateNewProposalMutation();
+  const [createNewProposal] = useCreateNewProposalMutation();
+  const [updateProposal] = useUpdateProposalMutation();
+  const [deleteProposal] = useDeleteProposalMutation();
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -50,7 +53,11 @@ const ShipperRequests = () => {
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
-  const { data: currentData, isFetching } = useGetProposalsQuery({
+  const {
+    data: currentData,
+    isFetching,
+    error,
+  } = useGetProposalsQuery({
     page: pager.page - 1,
     pageSize: pager.pageSize,
     ...filterKeys,
@@ -58,6 +65,8 @@ const ShipperRequests = () => {
 
   const [requestData, setRequestData] = useState<IRequestTableData[]>([]);
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
+  const [selectedProposalItem, setSelecetdProposalItem] =
+    useState<IProposalResponseData>();
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -149,19 +158,19 @@ const ShipperRequests = () => {
       isCargoItemsStackable: data.isCargoItemsStackable
         ? data.isCargoItemsStackable
         : false,
-      isIncludingItemsADRGood: data.isIncludingItemsADRGood
-        ? data.isIncludingItemsADRGood
+      isIncludingItemsARGood: data.isIncludingItemsARGood
+        ? data.isIncludingItemsARGood
         : false,
       shipmentTruckType: shipmentTruckTypeDefault,
       userId: userData.user.userId,
       weight: itemWeight,
       otherName: otherItemName,
-      proposalId: 0,
+      proposalId: isEditProposal ? selectedProposalItem.id : 0,
       FileName: "",
       FilePath: "",
     }));
 
-    setSendCreateNewRequest(true);
+    setSendProposalRequest(true);
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
@@ -187,14 +196,21 @@ const ShipperRequests = () => {
   };
 
   const onEdit = (proposalItemId: number) => {
-    console.log("Edit is clicked on :", proposalItemId);
-
-    const selectedProposalItem = requestItems?.find(
-      (item: { proposalId: number }) => item.proposalId === proposalItemId
+    let tempItem = requestItems?.find(
+      (item: { id: number }) => item.id === proposalItemId
     );
-    console.log("Selected proposal Item:", selectedProposalItem);
+    setSelecetdProposalItem(tempItem);
+    setIsEditProposal(true);
+    SetShowCreateUserModalFirstStep(true);
   };
-  const onDelete = (proposalItemId: number) => {};
+  const onDelete = async (proposalItemId: number) => {
+    try {
+      const result = await deleteProposal({ proposalId:proposalItemId });
+      console.log("Proposal deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting proposal:", error);
+    }
+  };
   const onProposalList = (proposalItemId: number) => {};
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
     onEdit,
@@ -203,15 +219,21 @@ const ShipperRequests = () => {
   });
 
   useEffect(() => {
-    // setRequestItems(currentData?.result.result);
-
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
+      setRequestItems(currentData?.result.result);
     }
-  }, [currentData?.result.result]);
+  }, [currentData]);
 
-  const SendCreateNewRequest = async () => {
-    const response = await createNewProposal(proposalItem);
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+    }
+  }, [error]);
+  const ProposalCreateOrUpdateRequest = async () => {
+    const response = isEditProposal
+      ? await updateProposal(proposalItem)
+      : await createNewProposal(proposalItem);
     if (response) {
       console.log(
         "Create New Proposal response: ",
@@ -220,15 +242,14 @@ const ShipperRequests = () => {
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
       setProposalItem({} as IProposal);
-      setSendCreateNewRequest(false);
+      setSendProposalRequest(false);
     }
   };
   useEffect(() => {
-    if (sendCreateNewRequest) {
-      SendCreateNewRequest();
-      // console.log("after sending request  : ",proposalItem);
+    if (sendProposalRequest) {
+      ProposalCreateOrUpdateRequest();
     }
-  }, [sendCreateNewRequest]);
+  }, [sendProposalRequest]);
 
   return (
     <div className="table-container">
@@ -307,20 +328,45 @@ const ShipperRequests = () => {
       )}
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
-        isEdit
-        handleClose={() => SetShowCreateUserModalFirstStep(false)}
+        infoType={"origin"}
+        isEdit={isEditProposal}
+        proposalObject={selectedProposalItem ? selectedProposalItem : undefined}
+        handleClose={() => {
+          SetShowCreateUserModalFirstStep(false);
+          setIsEditProposal(false);
+          setSelecetdProposalItem({} as IProposalResponseData);
+        }}
         handleNextStep={CreateUserNextStep}
       />
       <CreateNewRequest
         show={showCreateUserModalSecondStep}
         infoType={"destination"}
-        handleClose={() => SetShowCreateUserModalSecondStep(false)}
+        isEdit={isEditProposal}
+        proposalObject={
+          isEditProposal && selectedProposalItem
+            ? selectedProposalItem
+            : undefined
+        }
+        handleClose={() => {
+          SetShowCreateUserModalSecondStep(false);
+          setIsEditProposal(false);
+          setSelecetdProposalItem({} as IProposalResponseData);
+        }}
         handleNextStep={goToShippementDetails}
-        isEdit={false}
       />
       <ShippementDetails
         show={showShippementDetailsModal}
-        handleClose={() => setShowShippementDetailsModal(false)}
+        isEdit={isEditProposal}
+        proposalObject={
+          isEditProposal && selectedProposalItem
+            ? selectedProposalItem
+            : undefined
+        }
+        handleClose={() => {
+          setShowShippementDetailsModal(false);
+          setIsEditProposal(false);
+          setSelecetdProposalItem({} as IProposalResponseData);
+        }}
         handleFormDataSubmission={setShipmentDetails}
       />
     </div>

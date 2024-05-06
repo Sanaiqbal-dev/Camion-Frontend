@@ -2,27 +2,49 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IShipmentDetails } from "@/interface/proposal";
+import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import { useEffect } from "react";
 
 const schema = z.object({
-  numberOfBoxes: z.string().min(1, "Please enter number of Boxes"),
+  numberOfBoxes: z.coerce.number().min(1, "Please enter number of Boxes"),
   weightPerItem: z.string().min(1, "Please enter weight per item"),
   isCargoItemsStackable: z.boolean().optional().default(false),
   isIncludingItemsARGood: z.boolean().optional().default(false),
 });
 
-
 interface IBoxForm {
+  isEdit: boolean;
+  proposalObject?: IProposalResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
-const BoxForm: React.FC<IBoxForm> = ({ onSubmitShipmentForm }) => {
+const BoxForm: React.FC<IBoxForm> = ({
+  isEdit,
+  proposalObject,
+  onSubmitShipmentForm,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (isEdit && proposalObject) {
+      let currentObj = {
+        numberOfBoxes: proposalObject.shipmentQuantity,
+        weightPerItem: proposalObject.weight,
+        isCargoItemsStackable: proposalObject.isCargoItemsStackable,
+        isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+      };
+
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof IShipmentDetails, value);
+      });
+    }
+  }, [isEdit, setValue]);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     onSubmitShipmentForm(data, "Box");
@@ -34,13 +56,13 @@ const BoxForm: React.FC<IBoxForm> = ({ onSubmitShipmentForm }) => {
           <Form.Group className="mb-3">
             <Form.Label>No. of Box</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
               placeholder="1"
               style={{
                 width: "560px",
                 height: "59px",
               }}
-              isInvalid={!!errors.numberOfPallets}
+              isInvalid={!!errors.numberOfBoxes}
               {...register("numberOfBoxes")}
             />
             <Form.Control.Feedback type="invalid">
@@ -86,7 +108,7 @@ const BoxForm: React.FC<IBoxForm> = ({ onSubmitShipmentForm }) => {
                   className="form-check-input"
                   type="checkbox"
                   id="flexSwitchCheckChecked"
-                  {...register("isIncludingItemsADRGood")}
+                  {...register("isIncludingItemsARGood")}
                 />
                 <label>Including ADR goods</label>
               </div>
