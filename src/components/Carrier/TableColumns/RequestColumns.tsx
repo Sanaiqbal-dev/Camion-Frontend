@@ -3,7 +3,7 @@ import IconSubmitted from "../../../assets/icons/ic-submitted.svg";
 import { IRequest } from "../../../interface/carrier";
 
 interface RequestActionProps {
-  onSubmitProposal: () => void;
+  onSubmitProposal: (id: number) => void;
 }
 
 export const RequestColumns = ({
@@ -37,7 +37,7 @@ export const RequestColumns = ({
 
       return (
         <button
-          onClick={() => isSubmitted && onSubmitProposal()}
+          onClick={() => isSubmitted && onSubmitProposal(row.original.id)}
           className={
             isSubmitted
               ? "proposal-btn submit-proposal"

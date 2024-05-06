@@ -21,6 +21,7 @@ interface ProposalDetailsModalProps {
   handleClose: () => void;
   fileType?: number;
   submitProposal: (proposal: IProposalForm) => void;
+  proposalId: number;
 }
 
 const schema = z.object({
@@ -43,6 +44,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   show,
   handleClose,
   fileType,
+  proposalId,
 }) => {
   const {
     register,
@@ -64,10 +66,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: "This has to be a path when The file upload Api is completed",
-        purposalId: 93,
+        purposalId: proposalId,
         userId: userId,
       });
-      console.log("Proposal submitted successfully:", proposalResponse);
+      console.log(proposalResponse);
       handleClose();
     } catch (error) {
       console.error("Error submitting proposal:", error);

@@ -13,8 +13,7 @@ import { useGetProposalsQuery } from "@/services/proposal";
 const Requests = () => {
   const data = useGetProposalsQuery("");
   const TableData = data.data?.result.result;
-  console.log("TableData", TableData);
-  const mappedData = TableData?.map((item) => ({
+  const mappedData: IRequest[] = TableData?.map((item: any) => ({
     id: item.id,
     origin: `${item.originCityName}, ${item.originDistrictName}`,
     destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
@@ -33,10 +32,14 @@ const Requests = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showProposalForm, setShowProposalForm] = useState(false);
+  const [selectedProposalItem, setSelectedProposalItem] = useState<IRequest>();
 
-  const onSubmitProposal = () => {
+  const onSubmitProposal = (proposalItemId: number) => {
+    const selectedItem = mappedData.find((item) => item.id === proposalItemId);
+    setSelectedProposalItem(selectedItem);
     setShowProposalForm(true);
   };
+
   const columns: ColumnDef<IRequest>[] = RequestColumns({
     onSubmitProposal,
   });
@@ -114,8 +117,9 @@ const Requests = () => {
       <ProposalDetailsForm
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
-        submitProposal={() => onSubmitProposal()}
+        submitProposal={() => onSubmitProposal(selectedProposalItem.id)}
         fileType={4}
+        proposalId={selectedProposalItem && selectedProposalItem?.id}
       />
     </div>
   );
