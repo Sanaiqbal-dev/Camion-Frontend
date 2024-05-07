@@ -7,6 +7,7 @@ import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
 import { IDriver } from "../../interface/carrier";
+import AddDriver from "../Modals/AddDriver";
 
 const DriverManagement = () => {
   const driversData: IDriver[] = [
@@ -116,6 +117,7 @@ const DriverManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
+  const [showAddDriverModal, setShowAddDriverModal] = useState(false);
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -136,7 +138,11 @@ const DriverManagement = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="add-driver-btn">
+          <button
+            className="add-item-btn"
+            id="add-driver-btn"
+            onClick={() => setShowAddDriverModal(true)}
+          >
             Add Driver
           </button>
         </div>
@@ -196,8 +202,18 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && (
-        <DataTable isAction={true} columns={DriverManagementColumns} data={driversData} />
+        <DataTable
+          isAction={true}
+          columns={DriverManagementColumns}
+          data={driversData}
+        />
       )}
+      <AddDriver
+        show={showAddDriverModal}
+        handleClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 };
