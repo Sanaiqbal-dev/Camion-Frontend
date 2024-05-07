@@ -6,6 +6,8 @@ import { Image } from "react-bootstrap";
 import PropfileImage from "../../assets/icons/ic-profile.svg";
 import React, { useRef, useState } from "react";
 import useFileTypeValidation from "@/services/fileType";
+import { useCreateCompanyProfileMutation } from "@/services/companyProfile";
+import { useAppSelector } from "@/state";
 interface IFileDownload {
   filePath: string;
   fileName: string;
@@ -19,7 +21,7 @@ interface IUser {
   password: string;
   confirmPassword: string;
   companyName: string;
-  fileDownLoad: IFileDownload[];
+  fileDownload: IFileDownload[];
   userId: string;
 }
 
@@ -33,9 +35,7 @@ const schema = z
     firstName: z.string().min(4, "Please enter your first name"),
     lastName: z.string().min(5, "Please enter your Second name"),
     email: z.string().email("Enter email address"),
-    contactNumber: z
-      .string()
-      .min(12, "Please enter your 12 digit phone number"),
+    phoneNumber: z.string().min(7, "Please enter your phone number"),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string().min(6, "Confirm your password."),
     companyName: z
@@ -55,16 +55,47 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
+  const userId = useAppSelector((state) => state.session.user.userId);
+  const [createCompanyProfile] = useCreateCompanyProfileMutation();
   const [vatFile, setVatFile] = useState<File>();
   const [crFile, setCrFile] = useState<File>();
   const vatFileInputRef = useRef<HTMLInputElement>(null);
   const crFileInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log("Data", data.companyName);
+    try {
+      const newProfileResponse = await createCompanyProfile({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        companyName: data.companyName,
+        fileDownload: [
+          {
+            filePath: "To be defined",
+            fileName: vatFile ? vatFile.name : "No file uploaded",
+            fileType: 2,
+          },
+          {
+            filePath: "To be defined",
+            fileName: crFile ? crFile.name : "No file uploaded",
+            fileType: 1,
+          },
+        ],
+        userId: userId,
+      });
+      console.log(newProfileResponse);
+      handleClose();
+      reset();
+    } catch (error) {
+      console.error("Error submitting proposal:", error);
+    }
   };
   const vatFileError = useFileTypeValidation({
     extension: vatFile ? `.${vatFile.name.split(".").pop()}` : "",
@@ -77,6 +108,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
     inputRef: React.RefObject<HTMLInputElement>
   ) => {
     inputRef.current?.click();
+  };
+  const onerror = (error: any) => {
+    console.log("error is: ", error);
   };
 
   return (
@@ -102,7 +136,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
         </div>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit, onerror)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <div style={{ display: "flex", gap: "18px" }}>
               <Form.Group className="mb-3">
@@ -210,12 +244,15 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                     variant="default"
                     onClick={() => handleFileInputClick(vatFileInputRef)}
                     className="custom-file-upload-button"
+                    style={{
+                      width: "270px",
+                      height: "50px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
                   >
-                    Upload the document
+                    {vatFile ? vatFile.name : "Upload the document"}
                   </Button>
-                  <p className="tw-mt-auto tw-mb-auto tw-ml-1">
-                    {vatFile?.name}
-                  </p>
                 </div>
                 <Form.Control
                   type="file"
@@ -241,10 +278,15 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                   variant="default"
                   onClick={() => handleFileInputClick(crFileInputRef)}
                   className="custom-file-upload-button"
+                  style={{
+                    width: "270px",
+                    height: "50px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
                 >
-                  Upload the document
+                  {crFile ? crFile.name : "Upload the document"}
                 </Button>
-                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{crFile?.name}</p>
               </div>
 
               <Form.Control

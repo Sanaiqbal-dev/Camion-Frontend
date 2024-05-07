@@ -91,3 +91,20 @@ export interface IProposalForm {
   purposalId: number;
   userId: string;
 }
+
+interface IFileDownload {
+  filePath: string;
+  fileName: string;
+  fileType: number;
+}
+export interface ICompanyProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+  companyName: string;
+  fileDownload: IFileDownload[];
+  userId: string;
+}
