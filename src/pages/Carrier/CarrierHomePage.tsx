@@ -12,8 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { setLogout } from "@/state/slice/sessionSlice";
-import { clearAuthSession } from "../../state/slice/authSlice";
-import ActivateProfile from "@/components/Modals/ActivatePropfile";
+import ActivateProfile from "@/components/Modals/ActivateProfile";
 import { useState } from "react";
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -152,9 +151,8 @@ const CarrierHomePage = () => {
           </div>
           <ActivateProfile
             show={showProfileModal}
-            handleClose={function (): void {
-              throw new Error("Function not implemented.");
-            }}
+            handleClose={() => setShowProfileModal(false)}
+            submitProfileInfo={() => setShowProfileModal(false)}
           />
         </header>
         <Outlet />

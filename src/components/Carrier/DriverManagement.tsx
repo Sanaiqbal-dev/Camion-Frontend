@@ -8,112 +8,22 @@ import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
 import { IDriver } from "../../interface/carrier";
 import AddDriver from "../Modals/AddDriver";
+import { useGetDriversListQuery } from "@/services/drivers";
 
 const DriverManagement = () => {
-  const driversData: IDriver[] = [
-    {
-      id: "728ed52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-  ];
+  const getDriversList = useGetDriversListQuery();
+  const tableData: IDriver = getDriversList.data?.result.result;
+  console.log("Drivers", tableData);
+  const driversData = tableData?.map((item) => ({
+    driverName: item.name,
+    driverId: item.iqamaId,
+    licenseNumber: item.licenseNumber,
+    DOB: item.dob,
+    nationality: item.nationalityId,
+    mobileNumber: item.phoneNumber,
+    viewIqama: item.iqamaId,
+    action: "",
+  }));
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
@@ -210,9 +120,7 @@ const DriverManagement = () => {
       )}
       <AddDriver
         show={showAddDriverModal}
-        handleClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        handleClose={() => setShowAddDriverModal(false)}
       />
     </div>
   );

@@ -108,3 +108,15 @@ export interface ICompanyProfile {
   fileDownload: IFileDownload[];
   userId: string;
 }
+
+export interface IDriver {
+  name: string;
+  iqamaId: string;
+  licenseNumber: string;
+  dob: string;
+  nationalityId: number;
+  mobileNo: string;
+  fileName: string;
+  filePath: string;
+  driverId: number;
+}

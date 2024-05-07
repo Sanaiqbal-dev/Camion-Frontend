@@ -2,15 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import React from "react";
+import React, { useState } from "react";
+import { useAddNewDriverMutation } from "@/services/drivers";
 
 interface IUser {
-  driverName: string;
-  driverIqama: string;
-  lisenceNumber: string;
-  DOB: string;
-  nationality: string;
-  phoneNumber: string;
+  name: string;
+  iqamaId: string;
+  licenseNumber: string;
+  dob: string;
+  nationalityId: number;
+  mobileNo: string;
+  fileName: string;
+  filePath: string;
+  driverId: number;
 }
 
 interface CreateUserModalProps {
@@ -18,23 +22,48 @@ interface CreateUserModalProps {
   handleClose: () => void;
 }
 const schema = z.object({
-  driverName: z.string().min(5, "Please enter driver name"),
-  driverIqama: z.string().min(5, "Please enter driver iqama number"),
-  lisenceNumber: z.string().min(5, "Please enter lisence number"),
-  DOB: z.string().min(4, "Please enter your date of birth"),
-  nationality: z.string().min(6, "Please enter nationality"),
-  phoneNumberNumber: z.string().min(6, "please enter phone number"),
+  name: z.string().min(3, "Please enter driver name"),
+  iqamaId: z.string().min(5, "Please enter driver iqama number"),
+  licenseNumber: z.string().min(5, "Please enter lisence number"),
+  dob: z.string().min(4, "Please enter your date of birth"),
+  nationalityId: z.string().min(1, "Enter the nationality Id."),
+  mobileNo: z.string().min(6, "please enter phone number"),
 });
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
   const {
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
+  const [addNewDriver] = useAddNewDriverMutation();
+  const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedFileName(file.name); // Set the uploaded file name to state
+    }
+  };
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
+    try {
+      const proposalResponse = await addNewDriver({
+        name: data.name,
+        iqamaId: data.iqamaId,
+        licenseNumber: data.licenseNumber,
+        dob: data.dob,
+        nationalityId: data.nationalityId,
+        mobileNo: data.mobileNo,
+        driverId: 0,
+        filePath: "Not Implemented yet",
+        fileName: uploadedFileName,
+      });
+      console.log("Proposal submitted successfully:", proposalResponse);
+      handleClose();
+    } catch (error) {
+      console.error("Error submitting proposal:", error);
+    }
   };
 
   return (
@@ -53,10 +82,11 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 type="text"
                 placeholder="Enter Driver's name"
                 style={{ width: "560px", height: "59px" }}
-                isInvalid={!!errors.driverName}
+                {...register("name")}
+                isInvalid={!!errors.name}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.driverName?.message}
+                {errors.name?.message}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
@@ -65,74 +95,76 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 type="text"
                 placeholder="Enter number"
                 style={{ width: "560px", height: "59px" }}
-                isInvalid={!!errors.driverIqama}
+                {...register("iqamaId")}
+                isInvalid={!!errors.iqamaId}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.driverIqama?.message}
+                {errors.iqamaId?.message}
               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Lisence number</Form.Label>
+              <Form.Label>License number</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter Lisence number"
+                type="string"
+                placeholder="Enter License number"
                 style={{ width: "560px", height: "59px" }}
-                isInvalid={!!errors.lisenceNumber}
+                {...register("licenseNumber")}
+                isInvalid={!!errors.licenseNumber}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.lisenceNumber?.message}
+                {errors.licenseNumber?.message}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
-                type="text"
+                type="date"
                 placeholder="DD/MM/YYYY"
                 style={{ width: "560px", height: "50px" }}
-                isInvalid={!!errors.DOB}
+                {...register("dob")}
+                isInvalid={!!errors.dob}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.DOB?.message}
+                {errors.dob?.message}
               </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Nationality</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter Nationality"
+                type="number"
+                placeholder="Select Nationality"
                 style={{ width: "560px", height: "50px" }}
-                isInvalid={!!errors.nationality}
+                {...register("nationalityId")}
+                isInvalid={!!errors.nationalityId}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.nationality?.message}
+                {errors.nationalityId?.message}
               </Form.Control.Feedback>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Group className="mb-3">
               <Form.Label>Mobile Number</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
-                isInvalid={!!errors.nationality}
+                {...register("mobileNo")}
+                isInvalid={!!errors.mobileNo}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.phoneNumber?.message}
+                {errors.mobileNo?.message}
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Group className="mb-3">
               <Form.Label>Upload document/Iqama</Form.Label>
               <Form.Control
                 type="file"
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
-                isInvalid={!!errors.phoneNumber}
+                onChange={handleFileUpload}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.phoneNumber?.message}
-              </Form.Control.Feedback>
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
