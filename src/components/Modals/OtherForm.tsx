@@ -1,5 +1,6 @@
-import { IShipmentDetails } from "@/interface/proposal";
+import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,13 +16,20 @@ const schema = z.object({
 });
 
 interface IOtherForm {
+  isEdit: boolean;
+  proposalObject?: IProposalResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
-const OtherForm: React.FC<IOtherForm> = ({ onSubmitShipmentForm }) => {
+const OtherForm: React.FC<IOtherForm> = ({
+  isEdit,
+  proposalObject,
+  onSubmitShipmentForm,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
@@ -31,6 +39,26 @@ const OtherForm: React.FC<IOtherForm> = ({ onSubmitShipmentForm }) => {
     onSubmitShipmentForm(data, "Other");
   };
 
+  
+  useEffect(() => {
+    if (isEdit && proposalObject) {
+      let currentObj = {
+        otherType: proposalObject.otherName,
+        length: proposalObject.length,
+        width: proposalObject.width,
+        weightPerItem: proposalObject.weight,
+        isCargoItemsStackable: proposalObject.isCargoItemsStackable,
+        isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+        height: proposalObject.height,
+      };
+
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof IShipmentDetails, value);
+      });
+    }
+  }, [isEdit, setValue]);
+
+  
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>

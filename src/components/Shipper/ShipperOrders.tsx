@@ -11,9 +11,34 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGetOrdersQuery } from "@/services/order";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
+import { useAppSelector } from "@/state";
+import { IOrder } from "@/interface/orderDetail";
 
 const ShipperOrders = () => {
+  
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+   const {
+     data: currentData,
+     isFetching,
+     error,
+   } = useGetOrdersQuery({
+     page: pager.page - 1,
+     pageCount: pager.pageSize,
+     ...filterKeys,
+   });
+
+   const [orderItems, setOrderItems] = useState<IOrder>();
   const data: Payment[] = [
     {
       id: "728ed52f",
@@ -119,6 +144,7 @@ const ShipperOrders = () => {
     },
   ];
 
+
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
@@ -133,6 +159,8 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  useEffect(()=>{console.log("Order Data is : ", currentData)},[currentData])
   return (
     <div className="table-container">
       <div className="search-and-entries-container">

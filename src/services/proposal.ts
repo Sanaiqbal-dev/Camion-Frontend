@@ -2,8 +2,6 @@ import { CommonSelect, IAPIResponse } from "@/interface/common";
 import { CreateQueryParams } from "@/util/PrepareQueryParams";
 import {
   IProposal,
-  IProposalIndex,
-  IProposalResponseData,
   IProposalResponseObject,
   IProposalSingle,
 } from "@/interface/proposal";
@@ -43,7 +41,7 @@ export const proposalApi = baseApi.injectEndpoints({
 
     createNewProposal: builder.mutation<
       IAPIResponse<IProposalResponseObject>,
-      Partial<IProposalResponseObject>
+      Partial<IProposal>
     >({
       query: (body) => ({
         url: "api/Proposals/CreateNewProposal",
@@ -55,7 +53,7 @@ export const proposalApi = baseApi.injectEndpoints({
 
     updateProposal: builder.mutation<
       IAPIResponse<IProposalResponseObject>,
-      Partial<IProposalResponseObject>
+      Partial<IProposal>
     >({
       query: ({ id, ...rest }) => ({
         url: `api/Proposals/UpdateProposal`,

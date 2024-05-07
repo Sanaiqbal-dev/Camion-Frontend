@@ -729,12 +729,15 @@ thead th:last-child {
   border-radius: 5px;
 }
 .modal-header {
+   display: flex; 
   justify-content: center;
+  flex-direction: column-reverse;
   border-bottom: 0 none;
   padding: 0%;
+  gap: 20px;
 }
 .modal-header .btn-close {
-  display: none;
+  display: flex;
 }
 .modal-header .modal-title {
   font-weight: 700;
