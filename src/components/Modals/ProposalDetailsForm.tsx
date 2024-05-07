@@ -21,6 +21,8 @@ interface ProposalDetailsModalProps {
   handleClose: () => void;
   fileType?: number;
   submitProposal: (proposal: IProposalForm) => void;
+  proposalId: number;
+  submitProposalSuccess: () => void;
 }
 
 const schema = z.object({
@@ -43,17 +45,22 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   show,
   handleClose,
   fileType,
+  proposalId,
+  submitProposalSuccess,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IProposalForm>({
     resolver: zodResolver(schema),
   });
   const userId = useAppSelector((state) => state.session.user.userId);
   const [uploadFile] = useUploadFileMutation();
   const [addNewProposal] = useAddNewProposalMutation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSeletedFile] = useState<File>();
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
     try {
       const proposalResponse = await addNewProposal({
@@ -64,18 +71,18 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: "This has to be a path when The file upload Api is completed",
-        purposalId: 93,
+        purposalId: proposalId,
         userId: userId,
       });
-      console.log("Proposal submitted successfully:", proposalResponse);
+      console.log(proposalResponse);
+      submitProposalSuccess();
       handleClose();
+      reset(); // Reset the form
+      setSeletedFile(undefined);
     } catch (error) {
       console.error("Error submitting proposal:", error);
     }
   };
-
-  const fileInputRef = useRef<HTMLInputElement>(null); // Specify the element type for better type assertion
-  const [selectedFile, setSeletedFile] = useState<File>();
 
   const fileError = useFileTypeValidation({
     extension: selectedFile ? `.${selectedFile.name.split(".").pop()}` : "",
