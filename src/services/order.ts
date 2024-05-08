@@ -51,10 +51,10 @@ export const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
     }),
 
-    deleteOrder: builder.mutation<IAPIResponse<void>, Partial<IOrder>>({
+    deleteOrder: builder.mutation<IAPIResponse<void>, any>({
       query: ({ id }) => ({
-        url: `order/${id}`,
-        method: "DELETE",
+        url: `api/Orders/DeleteOrder?orderId=${id}`,
+        method: "PUT",
       }),
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
     }),

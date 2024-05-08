@@ -20,7 +20,7 @@ export interface IRequestTable {
 };
 
 export type IOrderTable = {
-  id: string;
+  id: number;
   trackingId: string;
   origin: string;
   destination: string;

@@ -535,6 +535,12 @@ tr {
   overflow-x: hidden;
   overflow-y: scroll;
 }
+.trackingEnabled {
+  color: #0060b8;
+}
+.trackingDisabled {
+  color: #bdbdbd;
+}
 @media (max-width: 1024px) {
   .parent-row {
     padding-left: 0;
@@ -729,7 +735,7 @@ thead th:last-child {
   border-radius: 5px;
 }
 .modal-header {
-   display: flex; 
+  display: flex;
   justify-content: center;
   flex-direction: column-reverse;
   border-bottom: 0 none;
@@ -807,7 +813,7 @@ body {
 .menu-toggle::after {
   display: none;
 }
-.menu-dropdown{
+.menu-dropdown {
   z-index: 10;
 }
 .menu-dropdown .btn-primary {

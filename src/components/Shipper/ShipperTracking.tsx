@@ -1,9 +1,18 @@
 import { APIProvider, Map } from "@vis.gl/react-google-maps";
 import { MapMarker } from "../ui/MapMarker";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { IOrderDetail } from "@/interface/orderDetail";
+import { useLocation } from "react-router-dom";
 
-const ShipperTracking = () => {
+interface IShipperTracking {
+  orderObject: IOrderDetail;
+}
+const ShipperTracking: React.FC<IShipperTracking> = ({ orderObject }) => {
   const [mapApiKey, setMapApiKey] = useState("");
+  // const [selectedOrder, setSelectedOrder] = useState<IOrderDetail>();
+
+  const location = useLocation();
+  const { state } = location;
 
   useEffect(() => {
     setMapApiKey(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
@@ -44,7 +53,7 @@ const ShipperTracking = () => {
         style={{
           width: "430px",
           height: "285px",
-          borderRadius: "16px 0px 0px 0px",
+          borderRadius: "16px",
           position: "absolute",
           zIndex: "2",
           backgroundColor: "#FFF",
@@ -73,7 +82,7 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Order number</div>
-          <div>CA12M0998</div>
+          <div>{state.orderObject && state.orderObject.id}</div>
         </div>
         <div
           style={{
@@ -83,7 +92,7 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Origin:</div>
-          <div>Qatar</div>
+          <div>{state.orderObject && state.orderObject.originCityName}</div>
         </div>
         <div
           style={{
@@ -93,7 +102,9 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Distination:</div>
-          <div>Saudi Arabia</div>
+          <div>
+            {state.orderObject && state.orderObject.destinationCityName}
+          </div>
         </div>
         <div
           style={{
@@ -103,7 +114,7 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Weight</div>
-          <div>25.6kG</div>
+          <div>{state.orderObject && state.orderObject.weight}</div>
         </div>
         <div
           style={{
@@ -113,7 +124,14 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Dimensions:</div>
-          <div>25x30x25</div>
+          <div>
+            {state.orderObject &&
+              state.orderObject.length +
+                "x" +
+                state.orderObject.width +
+                "x" +
+                state.orderObject.height}
+          </div>
         </div>
         <div
           style={{
@@ -123,17 +141,9 @@ const ShipperTracking = () => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Estimated Delivery Date:</div>
-          <div>CA12M0998</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            fontSize: "16px",
-          }}
-        >
-          <div style={{ fontWeight: "600" }}>Order number</div>
-          <div>25-Sep-2024</div>
+          <div>
+            {state.orderObject && state.orderObject.preferredDeliveryDate ? state.orderObject.preferredDeliveryDate:"-"}
+          </div>
         </div>
       </div>
       <APIProvider apiKey={mapApiKey}>

@@ -6,12 +6,15 @@ import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useEffect, useState } from "react";
-import { useGetOrdersQuery } from "@/services/order";
+import { useDeleteOrderMutation, useGetOrdersQuery } from "@/services/order";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { IOrder } from "@/interface/orderDetail";
 import { IOrderTable } from "@/interface/shipper";
+import { ColumnDef } from "@tanstack/react-table";
+import ConfirmationModal from "../Modals/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
 const ShipperOrders = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -31,15 +34,19 @@ const ShipperOrders = () => {
     pageCount: pager.pageSize,
     ...filterKeys,
   });
+  const [deleteOrder] = useDeleteOrderMutation();
 
   const [orderItems, setOrderItems] = useState<IOrder>();
-  const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([])
- 
+  const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<number>();
+  const [isDeleteOrder, setIsDeleteOrder] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
 
+  const navigate = useNavigate();
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -50,25 +57,65 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-const FilterDataForTable = (orderItems: IOrder[]) => {
-  setOrderTableData([]);
-  if (orderItems) {
-    const updatedOrderData = orderItems.map((currentOrderObject) => ({
-      id: currentOrderObject.id,
-      trackingId: currentOrderObject.id,
-      origin: currentOrderObject.orderDetail.originCityName,
-      destination: currentOrderObject.orderDetail.destinationCityName,
-      weight: currentOrderObject.orderDetail.weight,
-      type: currentOrderObject.orderDetail.shipmentTypeId,
-      status: currentOrderObject.orderStatus ? currentOrderObject.orderStatus.description : "Not available",
-      ETA: currentOrderObject.orderDetail.preferredDeliveryDate,
-      action: "",
-    }));
+  const FilterDataForTable = (orderItems: IOrder[]) => {
+    setOrderTableData([]);
+    if (orderItems) {
+      const updatedOrderData = orderItems.map((currentOrderObject) => ({
+        id: currentOrderObject.id,
+        trackingId: currentOrderObject.id,
+        origin: currentOrderObject.orderDetail.originCityName,
+        destination: currentOrderObject.orderDetail.destinationCityName,
+        weight: currentOrderObject.orderDetail.weight,
+        type:
+          currentOrderObject.orderDetail.shipmentTypes != null
+            ? currentOrderObject.orderDetail.shipmentTypes.shipmentTypeName
+            : "not available",
+        status:
+          currentOrderObject.orderStatus != null
+            ? currentOrderObject.orderStatus
+            : "Driver Assigned",
 
-    setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
-    console.log("fetched requestItems : ", orderItems);
-  }
-};
+        ETA:
+          currentOrderObject.orderDetail.preferredDeliveryDate != null
+            ? currentOrderObject.orderDetail.preferredDeliveryDate
+            : "22/5/2024",
+        action: "",
+      }));
+
+      setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
+      console.log("fetched requestItems : ", orderItems);
+    }
+  };
+
+  const onDelete = (orderItemId: number) => {
+    console.log("Delete order Id:", orderItemId);
+
+    setSelectedOrderId(orderItemId);
+    setIsDeleteOrder(true);
+    setShowConfirmationModal(true);
+  };
+  const onTrackOrder = (orderItemId: number) => {
+    console.log("Tracking order Id:", orderItemId);
+    navigate("/shipper/shippertracking", {
+      replace: true,
+      state: {
+        orderObject: orderItems.find((item) => item.id === orderItemId).orderDetail,
+      },
+    });
+  };
+  const orderColumns: ColumnDef<IOrderTable>[] = OrderColumns({
+    onDelete,
+    onTrackOrder,
+  });
+
+  const DeleteOrder = async () => {
+    try {
+      const result = await deleteOrder({ id: selectedOrderId });
+      console.log("Proposal deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting proposal:", error);
+    }
+  };
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
@@ -139,8 +186,23 @@ const FilterDataForTable = (orderItems: IOrder[]) => {
         </Row>
       </div>
       {orderTableData && (
-        <DataTable isAction={false} columns={OrderColumns} data={orderTableData} />
+        <DataTable
+          isAction={false}
+          columns={orderColumns}
+          data={orderTableData}
+        />
       )}
+      <ConfirmationModal
+        promptMessage={
+          isDeleteOrder ? "Are you sure, you want to delete this order?" : ""
+        }
+        show={showConfirmationModal}
+        handleClose={() => setShowConfirmationModal(false)}
+        performOperation={() => {
+          setShowConfirmationModal(false);
+          isDeleteOrder && DeleteOrder();
+        }}
+      />
     </div>
   );
 };

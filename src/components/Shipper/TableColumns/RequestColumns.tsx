@@ -37,7 +37,7 @@ export const RequestColumns = ({
   {
     accessorKey: "action",
     header: "Action",
-    cell: ({row}) => {
+    cell: ({ row }) => {
       return (
         <div
           className="action-container"
@@ -51,19 +51,9 @@ export const RequestColumns = ({
             <img src={DeleteIcon} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div onClick={()=> onProposalList(row.original.id)}>
-            {/* <Link
-              to={"/shipper/proposalssecond"}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            > */}
+          <div onClick={() => onProposalList(row.original.id)}>
             <img src={ProposalIcon} />
             <span style={{ color: "#F2994A" }}>Proposals</span>
-            {/* </Link> */}
           </div>
         </div>
       );
