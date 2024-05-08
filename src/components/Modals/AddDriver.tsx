@@ -3,7 +3,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React, { useState } from "react";
-import { useAddNewDriverMutation } from "@/services/drivers";
+import {
+  useAddNewDriverMutation,
+  useGetNationalityListQuery,
+} from "@/services/drivers";
 
 interface IUser {
   name: string;
@@ -26,7 +29,7 @@ const schema = z.object({
   iqamaId: z.string().min(5, "Please enter driver iqama number"),
   licenseNumber: z.string().min(5, "Please enter lisence number"),
   dob: z.string().min(4, "Please enter your date of birth"),
-  nationalityId: z.string().min(1, "Enter the nationality Id."),
+  nationalityId: z.string().optional(),
   mobileNo: z.string().min(6, "please enter phone number"),
 });
 
@@ -40,6 +43,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
   });
   const [addNewDriver] = useAddNewDriverMutation();
   const [uploadedFileName, setUploadedFileName] = useState<string>("");
+  const [nationalityId, setNationalityId] = useState<number>();
+  const nationalityList = useGetNationalityListQuery();
+  console.log("Data", nationalityId);
+  const nationalityListData = nationalityList.data?.result || [];
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -49,11 +56,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     try {
       const proposalResponse = await addNewDriver({
+        id: data.driverId,
         name: data.name,
         iqamaId: data.iqamaId,
         licenseNumber: data.licenseNumber,
         dob: data.dob,
-        nationalityId: data.nationalityId,
+        nationalityId: nationalityId && nationalityId,
         mobileNo: data.mobileNo,
         driverId: 0,
         filePath: "Not Implemented yet",
@@ -133,12 +141,21 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
             <Form.Group className="mb-3">
               <Form.Label>Nationality</Form.Label>
               <Form.Control
-                type="number"
-                placeholder="Select Nationality"
+                as="select"
                 style={{ width: "560px", height: "50px" }}
-                {...register("nationalityId")}
+                onChange={(e) => setNationalityId(Number(e.target.value))}
+                defaultValue=""
                 isInvalid={!!errors.nationalityId}
-              />
+              >
+                <option value="" disabled>
+                  Select Nationality
+                </option>
+                {nationalityListData.map((nationality: any) => (
+                  <option key={nationality.id} value={nationality.id}>
+                    {nationality.name}
+                  </option>
+                ))}
+              </Form.Control>
               <Form.Control.Feedback type="invalid">
                 {errors.nationalityId?.message}
               </Form.Control.Feedback>

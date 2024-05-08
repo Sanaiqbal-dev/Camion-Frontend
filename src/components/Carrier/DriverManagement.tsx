@@ -25,7 +25,7 @@ const DriverManagement = () => {
     driverId: item.iqamaId,
     licenseNumber: item.licenseNumber,
     DOB: item.dob,
-    nationality: item.nationalityId,
+    nationality: item.driverNationality.name,
     mobileNumber: item.phoneNumber,
     viewIqama: item.iqamaId,
     action: "",

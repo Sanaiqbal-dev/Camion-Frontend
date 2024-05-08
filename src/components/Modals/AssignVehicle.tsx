@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
+import { useGetAllVehiclesQuery } from "@/services/order";
 
 interface IVehicleType {
   vehicleType: "Truck" | "Ship" | "plane";
@@ -29,6 +30,9 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
   } = useForm<IVehicleType>({
     resolver: zodResolver(schema),
   });
+
+  const getAllVehicles = useGetAllVehiclesQuery("");
+  console.log("Vehicles", getAllVehicles);
   const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
     console.log(data);
     onAssignVehicleToOrderItem(data.vehicleType);

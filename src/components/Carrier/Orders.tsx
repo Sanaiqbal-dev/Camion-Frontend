@@ -16,102 +16,26 @@ export interface StatusProps {
   id: string;
   statusValue: string;
 }
+
 const Orders = () => {
-  const ordersData: IOrder[] = [
-    {
-      id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-  ];
+  const orders = useGetOrdersQuery("");
+  const TableData = orders.data?.result.result;
+  console.log("ordersData", TableData);
+  const ordersData: IOrder[] = TableData?.map((item: any) => ({
+    id: item.id,
+    origin: `${item.originCityName}, ${item.originDistrictName}`,
+    destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
+    weight: item.weight ? item.weight : "-",
+    dimentions:
+      item.length && item.width && item.height
+        ? `${item.length}x${item.width}x${item.height}`
+        : "-",
+    ETA: item.preferredDeliveryDate
+      ? item.preferredDeliveryDate
+      : "Time not assigned yet",
+    status: item.status ? item.status : "pending",
+    action: "Submit Proposal",
+  }));
 
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showSaveForm, setShowSaveForm] = useState(false);
@@ -129,7 +53,7 @@ const Orders = () => {
 
     //Add API request to assign vehicle type here...
   };
-  const onSave = (orderId:string) => {
+  const onSave = (orderId: string) => {
     console.log("Save is clicked on :", orderId);
     setShowSaveForm(true);
   };

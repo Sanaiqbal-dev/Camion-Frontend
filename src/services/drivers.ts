@@ -15,6 +15,12 @@ export const Drivers = baseApi.injectEndpoints({
       query: () => `/api/Drivers/GetDriverList`,
       providesTags: ["Driver"],
     }),
+
+    getNationalityList: builder.query<IAPIResponse<IDriver[]>, void>({
+      query: () => `/api/Drivers/GetNationalityList`,
+      providesTags: ["Driver"],
+    }),
+
     deleteDriver: builder.mutation<IAPIResponse<IDriver[]>, Partial<IDriver>>({
       query: ({ id }) => ({
         url: `/api/Drivers/DeleteDriver?id=${id}`,
@@ -27,5 +33,6 @@ export const Drivers = baseApi.injectEndpoints({
 export const {
   useAddNewDriverMutation,
   useGetDriversListQuery,
+  useGetNationalityListQuery,
   useDeleteDriverMutation,
 } = Drivers;
