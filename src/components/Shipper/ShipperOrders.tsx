@@ -1,12 +1,6 @@
 import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
-import {
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
+import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -17,9 +11,9 @@ import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { IOrder } from "@/interface/orderDetail";
+import { IOrderTable } from "@/interface/shipper";
 
 const ShipperOrders = () => {
-  
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -28,122 +22,19 @@ const ShipperOrders = () => {
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
-   const {
-     data: currentData,
-     isFetching,
-     error,
-   } = useGetOrdersQuery({
-     page: pager.page - 1,
-     pageCount: pager.pageSize,
-     ...filterKeys,
-   });
+  const {
+    data: currentData,
+    isFetching,
+    error,
+  } = useGetOrdersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    ...filterKeys,
+  });
 
-   const [orderItems, setOrderItems] = useState<IOrder>();
-  const data: Payment[] = [
-    {
-      id: "728ed52f",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      trackingId: "-",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      trackingId: "EV-2017002346 ",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      status: "pending",
-      ETA: "9/20/2024",
-      action: "",
-    },
-  ];
-
+  const [orderItems, setOrderItems] = useState<IOrder>();
+  const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([])
+ 
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -159,8 +50,31 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+const FilterDataForTable = (orderItems: IOrder[]) => {
+  setOrderTableData([]);
+  if (orderItems) {
+    const updatedOrderData = orderItems.map((currentOrderObject) => ({
+      id: currentOrderObject.id,
+      trackingId: currentOrderObject.id,
+      origin: currentOrderObject.orderDetail.originCityName,
+      destination: currentOrderObject.orderDetail.destinationCityName,
+      weight: currentOrderObject.orderDetail.weight,
+      type: currentOrderObject.orderDetail.shipmentTypeId,
+      status: currentOrderObject.orderStatus ? currentOrderObject.orderStatus.description : "Not available",
+      ETA: currentOrderObject.orderDetail.preferredDeliveryDate,
+      action: "",
+    }));
 
-  useEffect(()=>{console.log("Order Data is : ", currentData)},[currentData])
+    setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
+    console.log("fetched requestItems : ", orderItems);
+  }
+};
+  useEffect(() => {
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
+      setOrderItems(currentData?.result.result);
+    }
+  }, [currentData]);
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
@@ -224,8 +138,8 @@ const ShipperOrders = () => {
           </Col>
         </Row>
       </div>
-      {data && (
-        <DataTable isAction={false} columns={OrderColumns} data={data} />
+      {orderTableData && (
+        <DataTable isAction={false} columns={OrderColumns} data={orderTableData} />
       )}
     </div>
   );

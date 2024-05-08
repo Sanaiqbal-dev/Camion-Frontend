@@ -4,10 +4,8 @@ import { IProposal, IShipmentType } from "./proposal";
 export interface IOrder {
   id: number;
   proposalId: number;
-  proposal?: IProposal | null;
   vehicleId: number | null;
   vehicleAssignedById: string | null;
-  appUser: IAppUser;
   orderStatusId: number | null;
   orderStatus: IOrderStatus;
   orderDetailId: number | null;
@@ -46,12 +44,10 @@ export interface IOrderDetail {
   otherName: string | null;
   preferredDeliveryDate: string | null;
   orderCreatedById: string | null;
-  orderCreatedBy: IAppUser;
   orderCreatedDate: string;
   orderUpdatedById: string | null;
-  orderUpdatedBy: IAppUser;
   orderUpdatedDate: string;
-  orderTruckShipmentdetail: string | null;
+  orderTruckShipmentdetail: ITruckShipmentDetails | null;
 }
 
 export interface IOrderDetailIndex extends IOrder {
@@ -60,6 +56,22 @@ export interface IOrderDetailIndex extends IOrder {
   orderLabel: any;
   aspNetUserLabel?: any;
 }
+
+
+
+export interface OrderResult {
+  total: number;
+  currentPage: number;
+  showCount: number;
+  result: IOrder[];
+}
+export interface IProposalResponseObject {
+  statusCode: number;
+  result: OrderResult;
+  message?: string;
+  data?: any;
+}
+
 
 export interface IOrderDetailSingle extends IOrder {
   orderLabel: any;
@@ -76,4 +88,12 @@ export interface OrderDetailIndexQuery extends Pager {
 export interface IOrderDetailSearch {
   id?: number;
   searchTerm?: string;
+}
+
+
+export interface ITruckShipmentDetails {
+  id: number;
+  noOfTrucks: number;
+  truckTypeId: number;
+  orderId: number;
 }

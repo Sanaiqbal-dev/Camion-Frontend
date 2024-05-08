@@ -67,7 +67,7 @@ const ShipperRequests = () => {
     ...filterKeys,
   });
 
-  const [requestData, setRequestData] = useState<IRequestTableData[]>([]);
+  const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>([]);
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] =
     useState<IProposalResponseData>();
@@ -179,7 +179,7 @@ const ShipperRequests = () => {
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
-    setRequestData([]);
+    setRequestTableData([]);
     if (requestItems) {
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
@@ -194,7 +194,7 @@ const ShipperRequests = () => {
         action: "",
       }));
 
-      setRequestData((prevData) => [...prevData, ...updatedRequestData]);
+      setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
       console.log("fetched requestItems : ", requestItems);
     }
   };
@@ -348,8 +348,8 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {requestData && (
-        <DataTable columns={columns} data={requestData} isAction={false} />
+      {requestTableData && (
+        <DataTable columns={columns} data={requestTableData} isAction={false} />
       )}
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
