@@ -60,11 +60,23 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
     resolver: zodResolver(schema),
   });
   const userId = useAppSelector((state) => state.session.user.userId);
+  const userRole = useAppSelector((state) => state.session.user.role);
+  const isShipper = userRole === "Shipper";
+  console.log("Role", userRole);
   const [createCompanyProfile] = useCreateCompanyProfileMutation();
   const [vatFile, setVatFile] = useState<File>();
   const [crFile, setCrFile] = useState<File>();
+  const [tlFile, setTlFile] = useState<File>();
+  const [cliFile, setCliFile] = useState<File>();
+  const [clFile, setClFile] = useState<File>();
+  const [brFile, setBrFile] = useState<File>();
+
   const vatFileInputRef = useRef<HTMLInputElement>(null);
   const crFileInputRef = useRef<HTMLInputElement>(null);
+  const tlFileInputRef = useRef<HTMLInputElement>(null);
+  const cliFileInputRef = useRef<HTMLInputElement>(null);
+  const clFileInputRef = useRef<HTMLInputElement>(null);
+  const brFileInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     try {
@@ -76,18 +88,41 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
         password: data.password,
         confirmPassword: data.confirmPassword,
         companyName: data.companyName,
-        fileDownload: [
-          {
-            filePath: "To be defined",
-            fileName: vatFile ? vatFile.name : "No file uploaded",
-            fileType: 2,
-          },
-          {
-            filePath: "To be defined",
-            fileName: crFile ? crFile.name : "No file uploaded",
-            fileType: 1,
-          },
-        ],
+        fileDownload: isShipper
+          ? [
+              {
+                filePath: "To be defined",
+                fileName: vatFile ? vatFile.name : "No file uploaded",
+                fileType: 5,
+              },
+              {
+                filePath: "To be defined",
+                fileName: crFile ? crFile.name : "No file uploaded",
+                fileType: 6,
+              },
+            ]
+          : [
+              {
+                filePath: "To be defined",
+                fileName: tlFile ? tlFile.name : "No file uploaded",
+                fileType: 1,
+              },
+              {
+                filePath: "To be defined",
+                fileName: cliFile ? cliFile.name : "No file uploaded",
+                fileType: 2,
+              },
+              {
+                filePath: "To be defined",
+                fileName: clFile ? clFile.name : "No file uploaded",
+                fileType: 3,
+              },
+              {
+                filePath: "To be defined",
+                fileName: brFile ? brFile.name : "No file uploaded",
+                fileType: 4,
+              },
+            ],
         userId: userId,
       });
       console.log(newProfileResponse);
@@ -97,12 +132,26 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
       console.error("Error submitting proposal:", error);
     }
   };
+
   const vatFileError = useFileTypeValidation({
     extension: vatFile ? `.${vatFile.name.split(".").pop()}` : "",
   });
 
   const crFileError = useFileTypeValidation({
     extension: crFile ? `.${crFile.name.split(".").pop()}` : "",
+  });
+
+  const tlFileError = useFileTypeValidation({
+    extension: tlFile ? `.${tlFile.name.split(".").pop()}` : "",
+  });
+  const cliFileError = useFileTypeValidation({
+    extension: cliFile ? `.${cliFile.name.split(".").pop()}` : "",
+  });
+  const clFileError = useFileTypeValidation({
+    extension: clFile ? `.${clFile.name.split(".").pop()}` : "",
+  });
+  const brFileError = useFileTypeValidation({
+    extension: brFile ? `.${brFile.name.split(".").pop()}` : "",
   });
   const handleFileInputClick = (
     inputRef: React.RefObject<HTMLInputElement>
@@ -229,7 +278,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Company Name"
-                  style={{ width: "270px", height: "50px" }}
+                  style={{ width: "560px", height: "50px" }}
                   {...register("companyName")}
                   isInvalid={!!errors.companyName}
                 />
@@ -237,74 +286,229 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                   {errors.companyName?.message}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="tw-flex tw-flex-col">
-                <Form.Label className="tw-text-sm">VAT certificate</Form.Label>
-                <div className="tw-flex">
-                  <Button
-                    variant="default"
-                    onClick={() => handleFileInputClick(vatFileInputRef)}
-                    className="custom-file-upload-button"
-                    style={{
-                      width: "270px",
-                      height: "50px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    {vatFile ? vatFile.name : "Upload the document"}
-                  </Button>
-                </div>
-                <Form.Control
-                  type="file"
-                  ref={vatFileInputRef}
-                  style={{ display: "none" }}
-                  onChange={(e) => {
-                    const files = (e.target as HTMLInputElement).files;
-                    if (files && files.length > 0) {
-                      const file = files[0];
-                      setVatFile(file);
-                    }
-                  }}
-                />
-                {vatFile && vatFileError && (
-                  <div className="tw-text-red-500">{vatFileError}</div>
-                )}
-              </Form.Group>
             </div>
-            <Form.Group className="tw-flex tw-flex-col">
-              <Form.Label className="tw-text-sm">CR Document</Form.Label>
-              <div className="tw-flex">
-                <Button
-                  variant="default"
-                  onClick={() => handleFileInputClick(crFileInputRef)}
-                  className="custom-file-upload-button"
-                  style={{
-                    width: "270px",
-                    height: "50px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  {crFile ? crFile.name : "Upload the document"}
-                </Button>
-              </div>
+            {isShipper ? (
+              <div style={{ display: "flex", gap: "18px" }}>
+                <Form.Group className="tw-flex tw-flex-col">
+                  <Form.Label className="tw-text-sm">
+                    VAT certificate
+                  </Form.Label>
+                  <div className="tw-flex">
+                    <Button
+                      variant="default"
+                      onClick={() => handleFileInputClick(vatFileInputRef)}
+                      className="custom-file-upload-button"
+                      style={{
+                        width: "270px",
+                        height: "50px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {vatFile ? vatFile.name : "Upload the document"}
+                    </Button>
+                  </div>
+                  <Form.Control
+                    type="file"
+                    ref={vatFileInputRef}
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      const files = (e.target as HTMLInputElement).files;
+                      if (files && files.length > 0) {
+                        const file = files[0];
+                        setVatFile(file);
+                      }
+                    }}
+                  />
+                  {vatFile && vatFileError && (
+                    <div className="tw-text-red-500">{vatFileError}</div>
+                  )}
+                </Form.Group>
+                <Form.Group className="tw-flex tw-flex-col">
+                  <Form.Label className="tw-text-sm">CR Document</Form.Label>
+                  <div className="tw-flex">
+                    <Button
+                      variant="default"
+                      onClick={() => handleFileInputClick(crFileInputRef)}
+                      className="custom-file-upload-button"
+                      style={{
+                        width: "270px",
+                        height: "50px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {crFile ? crFile.name : "Upload the document"}
+                    </Button>
+                  </div>
 
-              <Form.Control
-                type="file"
-                ref={crFileInputRef}
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const files = (e.target as HTMLInputElement).files;
-                  if (files && files.length > 0) {
-                    const file = files[0];
-                    setCrFile(file);
-                  }
-                }}
-              />
-              {crFile && crFileError && (
-                <div className="tw-text-red-500">{crFileError}</div>
-              )}
-            </Form.Group>
+                  <Form.Control
+                    type="file"
+                    ref={crFileInputRef}
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      const files = (e.target as HTMLInputElement).files;
+                      if (files && files.length > 0) {
+                        const file = files[0];
+                        setCrFile(file);
+                      }
+                    }}
+                  />
+                  {crFile && crFileError && (
+                    <div className="tw-text-red-500">{crFileError}</div>
+                  )}
+                </Form.Group>
+              </div>
+            ) : (
+              <>
+                <div style={{ display: "flex", gap: "18px" }}>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">
+                      Transport Licenses
+                    </Form.Label>
+                    <div className="tw-flex">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(tlFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: "270px",
+                          height: "50px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {tlFile ? tlFile.name : "Upload the document"}
+                      </Button>
+                    </div>
+                    <Form.Control
+                      type="file"
+                      ref={tlFileInputRef}
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setTlFile(file);
+                        }
+                      }}
+                    />
+                    {tlFile && tlFileError && (
+                      <div className="tw-text-red-500">{tlFileError}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">
+                      Carrier Liability Insurance
+                    </Form.Label>
+                    <div className="tw-flex">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(cliFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: "270px",
+                          height: "50px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {cliFile ? cliFile.name : "Upload the document"}
+                      </Button>
+                    </div>
+
+                    <Form.Control
+                      type="file"
+                      ref={cliFileInputRef}
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setCliFile(file);
+                        }
+                      }}
+                    />
+                    {cliFile && cliFileError && (
+                      <div className="tw-text-red-500">{cliFileError}</div>
+                    )}
+                  </Form.Group>
+                </div>
+                <div style={{ display: "flex", gap: "18px" }}>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">
+                      Company Letterhead
+                    </Form.Label>
+                    <div className="tw-flex">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(clFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: "270px",
+                          height: "50px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {clFile ? clFile.name : "Upload the document"}
+                      </Button>
+                    </div>
+                    <Form.Control
+                      type="file"
+                      ref={clFileInputRef}
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setClFile(file);
+                        }
+                      }}
+                    />
+                    {clFile && clFileError && (
+                      <div className="tw-text-red-500">{clFileError}</div>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">
+                      Business Registration
+                    </Form.Label>
+                    <div className="tw-flex">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(brFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: "270px",
+                          height: "50px",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {brFile ? brFile.name : "Upload the document"}
+                      </Button>
+                    </div>
+
+                    <Form.Control
+                      type="file"
+                      ref={brFileInputRef}
+                      style={{ display: "none" }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setBrFile(file);
+                        }
+                      }}
+                    />
+                    {brFile && brFileError && (
+                      <div className="tw-text-red-500">{brFileError}</div>
+                    )}
+                  </Form.Group>
+                </div>
+              </>
+            )}
           </div>
           <Button variant="primary" type="submit">
             Update profile

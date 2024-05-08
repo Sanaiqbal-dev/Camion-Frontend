@@ -7,7 +7,6 @@ import {
   IProposalForm,
   IUploadFile,
 } from "@/interface/common";
-import { IProposalResponseObject } from "@/interface/proposal";
 
 interface FileType {
   extension: string;

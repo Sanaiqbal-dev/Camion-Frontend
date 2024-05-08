@@ -115,7 +115,7 @@ const Requests = () => {
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
         submitProposal={() => onSubmitProposal()}
-        fileType={4}
+        fileType={7}
       />
     </div>
   );
