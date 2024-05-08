@@ -8,13 +8,19 @@ import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
 import { IDriver } from "../../interface/carrier";
 import AddDriver from "../Modals/AddDriver";
-import { useGetDriversListQuery } from "@/services/drivers";
+import {
+  useDeleteDriverMutation,
+  useGetDriversListQuery,
+} from "@/services/drivers";
+import { ColumnDef } from "@tanstack/react-table";
 
 const DriverManagement = () => {
   const getDriversList = useGetDriversListQuery();
+  const [deleteDriver] = useDeleteDriverMutation();
   const tableData: IDriver = getDriversList.data?.result.result;
   console.log("Drivers", tableData);
   const driversData = tableData?.map((item) => ({
+    id: item.id,
     driverName: item.name,
     driverId: item.iqamaId,
     licenseNumber: item.licenseNumber,
@@ -28,6 +34,18 @@ const DriverManagement = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
+
+  const onDeleteDriver = async (id: number) => {
+    try {
+      await deleteDriver({ id: id });
+      console.log("Driver deleted successfully");
+    } catch (error) {
+      console.error("Error deleting driver:", error);
+    }
+  };
+  const columns: ColumnDef<IDriver>[] = DriverManagementColumns({
+    onDeleteDriver,
+  });
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -112,11 +130,7 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && (
-        <DataTable
-          isAction={true}
-          columns={DriverManagementColumns}
-          data={driversData}
-        />
+        <DataTable isAction={true} columns={columns} data={driversData} />
       )}
       <AddDriver
         show={showAddDriverModal}

@@ -110,6 +110,7 @@ export interface ICompanyProfile {
 }
 
 export interface IDriver {
+  id: number;
   name: string;
   iqamaId: string;
   licenseNumber: string;
@@ -120,28 +121,28 @@ export interface IDriver {
   filePath: string;
   driverId: number;
 }
-export interface IAppUser{
-  id:string;
-userName:string;
-normalizedUserName:string;
-email:string;
-normalizedEmail:string;
-emailConfirmed:boolean;
-passwordHash:string;
-securityStamp:string;
-concurrencyStamp:string;
-phoneNumber:string;
-phoneNumberConfirmed:boolean;
-twoFactorEnabled:boolean;
-lockoutEnd:string;
-lockoutEnabled:boolean;
-accessFailedCount:number;
-firstName:string;
-lastName:string;
-isVerified:boolean;
-companyId:number;
-company :ICompany;
-isManager:boolean
+export interface IAppUser {
+  id: string;
+  userName: string;
+  normalizedUserName: string;
+  email: string;
+  normalizedEmail: string;
+  emailConfirmed: boolean;
+  passwordHash: string;
+  securityStamp: string;
+  concurrencyStamp: string;
+  phoneNumber: string;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
+  lockoutEnd: string;
+  lockoutEnabled: boolean;
+  accessFailedCount: number;
+  firstName: string;
+  lastName: string;
+  isVerified: boolean;
+  companyId: number;
+  company: ICompany;
+  isManager: boolean;
 }
 
 export interface ICompany {

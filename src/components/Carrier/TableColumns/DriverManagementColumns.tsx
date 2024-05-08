@@ -4,7 +4,13 @@ import IconDelete from "../../../assets/icons/ic-delete.svg";
 import { Link } from "react-router-dom";
 import { IDriver } from "../../../interface/carrier";
 
-export const DriverManagementColumns: ColumnDef<IDriver>[] = [
+interface DriverActionProps {
+  onDeleteDriver: (id: number) => void;
+}
+
+export const DriverManagementColumns = ({
+  onDeleteDriver,
+}: DriverActionProps): ColumnDef<IDriver>[] => [
   {
     accessorKey: "driverName",
     header: "Driver Name",
@@ -34,23 +40,21 @@ export const DriverManagementColumns: ColumnDef<IDriver>[] = [
   {
     accessorKey: "viewIqama",
     header: "Iqama/Id",
-    cell:()=>{
-        return(
-            <Link to={""}>View Iqama/ID</Link>
-        )
-    }
+    cell: () => {
+      return <Link to={""}>View Iqama/ID</Link>;
+    },
   },
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
           <div>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDeleteDriver(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
