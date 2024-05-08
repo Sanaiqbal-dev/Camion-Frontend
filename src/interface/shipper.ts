@@ -18,3 +18,15 @@ export interface IRequestTable {
   ETA: string;
   action: string;
 };
+
+export type IOrderTable = {
+  id: string;
+  trackingId: string;
+  origin: string;
+  destination: string;
+  weight: string;
+  type: string;
+  ETA: string;
+  status: string;
+  action: string;
+};

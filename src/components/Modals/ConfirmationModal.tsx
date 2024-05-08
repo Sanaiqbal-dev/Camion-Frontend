@@ -18,7 +18,7 @@ const ConfirmationModal: React.FC<IConfirmationModal> = ({
       show={show}
       onHide={handleClose}
       centered
-      style={{ minWidth: "500px" }}
+      style={{ minWidth: "500px", boxShadow: "0px 20px 50px 0px #dce0f980", border:"none"}}
     >
       <Modal.Header>
         <Modal.Title>Confirm the action</Modal.Title>

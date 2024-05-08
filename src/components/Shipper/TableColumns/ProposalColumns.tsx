@@ -1,6 +1,13 @@
+import { IProposalQuotation } from "@/interface/proposalQuotation";
 import CompanyLogo from "../../../assets/icons/companyLogo.svg";
 
-const ProposalColumns = () => {
+const ProposalColumns = ({
+  quotation,
+  onClick,
+}: {
+  quotation: IProposalQuotation;
+  onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void;
+}) => {
   return (
     <div style={{ marginBottom: "10px" }}>
       <div
@@ -41,7 +48,7 @@ const ProposalColumns = () => {
             zIndex: "3",
           }}
         >
-          SAR: 5670
+          SAR: {quotation.amount}
         </div>
       </div>
 
@@ -103,7 +110,7 @@ const ProposalColumns = () => {
                 textAlign: "left",
               }}
             >
-              Ready to ship
+              {quotation.proposalQuotationStatusId}
             </div>
           </div>
           <div className="col-sm">
@@ -128,7 +135,7 @@ const ProposalColumns = () => {
                 textAlign: "left",
               }}
             >
-              Saudi Arabia
+              {quotation.proposal.originCityName}
             </div>
           </div>
           <div className="col-sm">
@@ -153,7 +160,7 @@ const ProposalColumns = () => {
                 textAlign: "left",
               }}
             >
-              Qatar
+              {quotation.proposal.destinationCityName}
             </div>
           </div>
           <div className="col-sm">
@@ -178,7 +185,7 @@ const ProposalColumns = () => {
                 textAlign: "left",
               }}
             >
-              250KG
+              {quotation.proposal.weight}
             </div>
           </div>
           <div className="col-sm">
@@ -203,7 +210,8 @@ const ProposalColumns = () => {
                 textAlign: "left",
               }}
             >
-              25x20x25
+              {quotation.proposal.length}x{quotation.proposal.width}x
+              {quotation.proposal.height}
             </div>
           </div>
           <div className="col-sm">
@@ -217,6 +225,7 @@ const ProposalColumns = () => {
                   borderRadius: "5px",
                   fontWeight: "600px",
                 }}
+                onClick={() => onClick(quotation, true)}
               >
                 Accept
               </button>
@@ -229,6 +238,7 @@ const ProposalColumns = () => {
                   borderRadius: "5px",
                   fontWeight: "600px",
                 }}
+                onClick={() => onClick(quotation, false)}
               >
                 Reject
               </button>

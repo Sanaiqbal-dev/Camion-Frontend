@@ -35,7 +35,6 @@ const useFileTypeValidation = (props: FileType) => {
     } else {
       setError(null);
     }
-    console.log("Extension", extension);
   }, [extension]);
   useEffect(() => {});
 

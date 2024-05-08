@@ -40,7 +40,7 @@ const ShipperRequests = () => {
     useState(false);
   const [showShippementDetailsModal, setShowShippementDetailsModal] =
     useState(false);
-  const [showSaveForm, setShowSaveForm] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const shipmentData = useGetShipmentTypesQuery();
   const [createNewProposal] = useCreateNewProposalMutation();
@@ -52,23 +52,24 @@ const ShipperRequests = () => {
     pageSize: PAGER_SIZE,
   });
   const [isEditProposal, setIsEditProposal] = useState(false);
-
+  const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
+  const [deleteItemId, setDeleteItemId] = useState<number>();
   const {
     data: currentData,
     isFetching,
     error,
   } = useGetProposalsQuery({
     page: pager.page - 1,
-    pageSize: pager.pageSize,
+    pageCount: pager.pageSize,
     ...filterKeys,
   });
 
-  const [requestData, setRequestData] = useState<IRequestTableData[]>([]);
+  const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>([]);
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
-  const [selectedProposalItem, setSelecetdProposalItem] =
+  const [selectedProposalItem, setSelectedProposalItem] =
     useState<IProposalResponseData>();
 
   const values = [10, 20, 30, 40, 50];
@@ -174,11 +175,11 @@ const ShipperRequests = () => {
     }));
 
     // setSendProposalRequest(true);
-    setShowSaveForm(true);
+    setShowConfirmationModal(true);
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
-    setRequestData([]);
+    setRequestTableData([]);
     if (requestItems) {
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
@@ -193,7 +194,7 @@ const ShipperRequests = () => {
         action: "",
       }));
 
-      setRequestData((prevData) => [...prevData, ...updatedRequestData]);
+      setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
       console.log("fetched requestItems : ", requestItems);
     }
   };
@@ -202,18 +203,16 @@ const ShipperRequests = () => {
     let tempItem = requestItems?.find(
       (item: { id: number }) => item.id === proposalItemId
     );
-    setSelecetdProposalItem(tempItem);
+    setSelectedProposalItem(tempItem);
     setIsEditProposal(true);
     SetShowCreateUserModalFirstStep(true);
   };
-  const onDelete = async (proposalItemId: number) => {
-    try {
-      const result = await deleteProposal({ id: proposalItemId });
-      console.log("Proposal deleted successfully:", result);
-    } catch (error) {
-      console.error("Error deleting proposal:", error);
-    }
+  const onDelete = (proposalItemId: number) => {
+    setDeleteItemId(proposalItemId);
+    setIsDeleteProposal(true);
+    setShowConfirmationModal(true);
   };
+
   const onProposalList = (proposalItemId: number) => {};
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
     onEdit,
@@ -221,6 +220,14 @@ const ShipperRequests = () => {
     onProposalList,
   });
 
+  const DeleteProposal = async () => {
+    try {
+      const result = await deleteProposal({ id: deleteItemId });
+      console.log("Proposal deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting proposal:", error);
+    }
+  };
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
@@ -255,6 +262,20 @@ const ShipperRequests = () => {
     }
   }, [sendProposalRequest]);
 
+  useEffect(() => {
+    if (
+      showCreateUserModalFirstStep == false &&
+      showCreateUserModalSecondStep == false &&
+      showShippementDetailsModal == false
+    ) {
+      setIsEditProposal(false);
+      setSelectedProposalItem({} as IProposalResponseData);
+    }
+  }, [
+    showCreateUserModalFirstStep,
+    showCreateUserModalSecondStep,
+    showShippementDetailsModal,
+  ]);
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
@@ -327,8 +348,8 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {requestData && (
-        <DataTable columns={columns} data={requestData} isAction={false} />
+      {requestTableData && (
+        <DataTable columns={columns} data={requestTableData} isAction={false} />
       )}
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
@@ -338,7 +359,7 @@ const ShipperRequests = () => {
         handleClose={() => {
           SetShowCreateUserModalFirstStep(false);
           setIsEditProposal(false);
-          setSelecetdProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem({} as IProposalResponseData);
         }}
         handleNextStep={CreateUserNextStep}
       />
@@ -354,7 +375,7 @@ const ShipperRequests = () => {
         handleClose={() => {
           SetShowCreateUserModalSecondStep(false);
           setIsEditProposal(false);
-          setSelecetdProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem({} as IProposalResponseData);
         }}
         handleNextStep={goToShippementDetails}
       />
@@ -369,17 +390,23 @@ const ShipperRequests = () => {
         handleClose={() => {
           setShowShippementDetailsModal(false);
           setIsEditProposal(false);
-          setSelecetdProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem({} as IProposalResponseData);
         }}
         handleFormDataSubmission={setShipmentDetails}
       />
       <ConfirmationModal
-        promptMessage={"Are you sure, you want to update this request?"}
-        show={showSaveForm}
-        handleClose={() => setShowSaveForm(false)}
+        promptMessage={
+          isEditProposal
+            ? "Are you sure, you want to update this request?"
+            : isDeletePropoasl
+            ? "Are you sure, you want to delete this request?"
+            : "Are you sure, you want to create new request?"
+        }
+        show={showConfirmationModal}
+        handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {
-          setShowSaveForm(false);
-          setSendProposalRequest(true);
+          setShowConfirmationModal(false);
+          isDeletePropoasl ? DeleteProposal() : setSendProposalRequest(true);
         }}
       />
     </div>

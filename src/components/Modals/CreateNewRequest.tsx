@@ -79,21 +79,41 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
         setValue(key as keyof INewRequest, value);
       });
     }
+    else if(!isEdit){
+        let currentObj = {
+          buildingNumber:"",
+          streetName:"",
+          districtName:"",
+          cityName:"",
+          zipCode:"",
+          additionalNumber:"",
+          unitNo:"",
+        };
+        Object.entries(currentObj).forEach(([key, value]) => {
+          setValue(key as keyof INewRequest, value);
+        });
+    }
   }, [isEdit, setValue]); 
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     handleNextStep(data, "");
     reset();
   };
+  
 
   const onError = (error: any) => {
     console.error("Form errors", error);
   };
   return (
-    <Modal show={show} onHide={handleClose} centered size={"sm"}>
-      <Modal.Header
-        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-      >
+    <Modal
+      show={show}
+      onHide={handleClose}
+      centered
+      size={"sm"}
+      backdrop="static"
+      keyboard={false}
+    >
+      <Modal.Header closeButton>
         <Modal.Title>Fill in the {infoType} information</Modal.Title>
       </Modal.Header>
       <Modal.Body>

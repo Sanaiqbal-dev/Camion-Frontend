@@ -2,12 +2,13 @@ import { CommonSelect, IAPIResponse } from "@/interface/common";
 import { CreateQueryParams } from "@/util/PrepareQueryParams";
 import { IOrder, IOrderIndex, IOrderSingle } from "@/interface/order";
 import baseApi from "./baseApi";
+import { IProposalResponseObject } from "@/interface/proposal";
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getOrders: builder.query<IAPIResponse<IOrderIndex[]>, any>({
+    getOrders: builder.query<IAPIResponse<IProposalResponseObject[]>, any>({
       query: (queryParams) =>
-        `order/list${
+        `api/Orders/GetAllOrders${
           queryParams !== null ? "?" + CreateQueryParams(queryParams) : ""
         }`,
       providesTags: ["Order"],
