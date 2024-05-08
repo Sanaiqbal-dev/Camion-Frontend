@@ -1,11 +1,12 @@
+import { IProposalQuotation } from "@/interface/proposalQuotation";
 import CompanyLogo from "../../../assets/icons/companyLogo.svg";
 
 const ProposalColumns = ({
   quotation,
   onClick,
 }: {
-  quotation: any;
-  onClick: (quotation: any, isAccepted: boolean) => void;
+  quotation: IProposalQuotation;
+  onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void;
 }) => {
   return (
     <div style={{ marginBottom: "10px" }}>
