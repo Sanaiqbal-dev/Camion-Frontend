@@ -67,7 +67,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         amount: data.amount,
         delieveryDate: data.EDD,
         otherDetails: data.otherDetails,
-        fileName: selectedFile && selectedFile.name,
+        fileName: selectedFile ? selectedFile.name : "No file uploaded",
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: "This has to be a path when The file upload Api is completed",
