@@ -660,10 +660,18 @@ thead th:last-child {
 .img-next {
   padding: 5px 20px;
   cursor: pointer;
+  background-color: white;
 }
+.img-prev-disabled,
+.img-next-disabled {
+  svg {
+    fill: rgb(231, 230, 230);
+  }
+}
+
 .img-prev:hover,
 .img-next:hover {
-  background-color: #7a7a7a;
+  background-color: #a5a4a4;
 }
 .img-prev img,
 .img-next img {

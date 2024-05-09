@@ -3,8 +3,8 @@ export interface INewRequest {
   streetName: string;
   districtName: string;
   cityName: string;
-  zipCode: string;
-  additionalNumber: string;
+  zipCode: number;
+  additionalNumber: number;
   unitNo: string;
 }
 

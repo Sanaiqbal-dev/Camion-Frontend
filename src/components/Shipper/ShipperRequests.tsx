@@ -174,7 +174,7 @@ const ShipperRequests = () => {
       FilePath: "",
     }));
 
-    // setSendProposalRequest(true);
+    setSendProposalRequest(false);
     setShowConfirmationModal(true);
   };
 
@@ -190,7 +190,7 @@ const ShipperRequests = () => {
           currentRequestObject.shipmentTypes.shipmentTypeName === "Truck"
             ? "-"
             : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
-        ETA: "",
+        ETA: "not available",
         action: "",
       }));
 

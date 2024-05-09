@@ -19,8 +19,8 @@ const schema = z.object({
   streetName: z.string().min(1, "Enter street name"),
   districtName: z.string().min(1, "Please enter your district name"),
   cityName: z.string().min(1, "City name is required"),
-  zipCode: z.string().min(1, "Zip code is required"),
-  additionalNumber: z.string().min(1, "Additional number is required"),
+  zipCode: z.coerce.number().min(1, "Zip code is required"),
+  additionalNumber: z.coerce.number().min(1, "Additional number is required"),
   unitNo: z.string().min(1, "unit no is required"),
 });
 
@@ -78,28 +78,35 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
       Object.entries(currentObj).forEach(([key, value]) => {
         setValue(key as keyof INewRequest, value);
       });
+    } else if (!isEdit) {
+      let currentObj = {
+        buildingNumber: "",
+        streetName: "",
+        districtName: "",
+        cityName: "",
+        zipCode: "",
+        additionalNumber: "",
+        unitNo: "",
+      };
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof INewRequest, value);
+      });
     }
-    else if(!isEdit){
-        let currentObj = {
-          buildingNumber:"",
-          streetName:"",
-          districtName:"",
-          cityName:"",
-          zipCode:"",
-          additionalNumber:"",
-          unitNo:"",
-        };
-        Object.entries(currentObj).forEach(([key, value]) => {
-          setValue(key as keyof INewRequest, value);
-        });
-    }
-  }, [isEdit, setValue]); 
+  }, [isEdit, setValue]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    handleNextStep(data, "");
+    let updatedObject = {
+      buildingNumber: data.buildingNumber,
+      streetName: data.streetName,
+      districtName: data.districtName,
+      cityName: data.cityName,
+      zipCode: data.zipCode.toString(),
+      additionalNumber: data.additionalNumber.toString(),
+      unitNo: "",
+    };
+    handleNextStep(updatedObject, "");
     reset();
   };
-  
 
   const onError = (error: any) => {
     console.error("Form errors", error);
@@ -216,7 +223,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Group className="mb-3">
                 <Form.Label>Zip code</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="15618"
                   style={{
                     width: "270px",
@@ -235,7 +242,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Group className="mb-3">
                 <Form.Label>Additional number</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="121212"
                   style={{
                     width: "270px",
