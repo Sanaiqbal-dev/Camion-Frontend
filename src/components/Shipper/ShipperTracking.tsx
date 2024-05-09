@@ -92,7 +92,7 @@ const ShipperTracking: React.FC<IShipperTracking> = ({ orderObject }) => {
           }}
         >
           <div style={{ fontWeight: "600" }}>Origin:</div>
-          <div>{state.orderObject && state.orderObject.originCityName}</div>
+          <div>{state.orderObject && state.orderObject.originCity.name}</div>
         </div>
         <div
           style={{
@@ -103,7 +103,7 @@ const ShipperTracking: React.FC<IShipperTracking> = ({ orderObject }) => {
         >
           <div style={{ fontWeight: "600" }}>Distination:</div>
           <div>
-            {state.orderObject && state.orderObject.destinationCityName}
+            {state.orderObject && state.orderObject.destinationCity.name}
           </div>
         </div>
         <div

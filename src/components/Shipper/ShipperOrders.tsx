@@ -1,6 +1,6 @@
 import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import { Button, Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -21,6 +21,7 @@ const ShipperOrders = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [totalPageCount, setTotalPageCount] = useState(0);
 
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
@@ -59,31 +60,35 @@ const ShipperOrders = () => {
   }
   const FilterDataForTable = (orderItems: IOrder[]) => {
     setOrderTableData([]);
-    if (orderItems) {
-      const updatedOrderData = orderItems.map((currentOrderObject) => ({
-        id: currentOrderObject.id,
-        trackingId: currentOrderObject.id,
-        origin: currentOrderObject.orderDetail.originCityName,
-        destination: currentOrderObject.orderDetail.destinationCityName,
-        weight: currentOrderObject.orderDetail.weight,
-        type:
-          currentOrderObject.orderDetail.shipmentTypes != null
-            ? currentOrderObject.orderDetail.shipmentTypes.shipmentTypeName
-            : "not available",
-        status:
-          currentOrderObject.orderStatus != null
-            ? currentOrderObject.orderStatus
-            : "Driver Assigned",
+    try {
+      if (orderItems) {
+        const updatedOrderData = orderItems.map((currentOrderObject) => ({
+          id: currentOrderObject.id,
+          trackingId: currentOrderObject.id,
+          origin: currentOrderObject.orderDetail.originCity.name,
+          destination: currentOrderObject.orderDetail.destinationCity.name,
+          weight: currentOrderObject.orderDetail.weight,
+          type:
+            currentOrderObject.orderDetail.shipmentTypes != null
+              ? currentOrderObject.orderDetail.shipmentTypes.shipmentTypeName
+              : "not available",
+          status:
+            currentOrderObject.orderStatus != null
+              ? currentOrderObject.orderStatus
+              : "Driver Assigned",
 
-        ETA:
-          currentOrderObject.orderDetail.preferredDeliveryDate != null
-            ? currentOrderObject.orderDetail.preferredDeliveryDate
-            : "22/5/2024",
-        action: "",
-      }));
+          ETA:
+            currentOrderObject.orderDetail.preferredDeliveryDate != null
+              ? currentOrderObject.orderDetail.preferredDeliveryDate
+              : "22/5/2024",
+          action: "",
+        }));
 
-      setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
-      console.log("fetched requestItems : ", orderItems);
+        setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
+        console.log("fetched requestItems : ", orderItems);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -99,7 +104,8 @@ const ShipperOrders = () => {
     navigate("/shipper/shippertracking", {
       replace: true,
       state: {
-        orderObject: orderItems.find((item) => item.id === orderItemId).orderDetail,
+        orderObject: orderItems.find((item) => item.id === orderItemId)
+          .orderDetail,
       },
     });
   };
@@ -116,10 +122,23 @@ const ShipperOrders = () => {
       console.error("Error deleting proposal:", error);
     }
   };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
   useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
+  useEffect(() => {
+    console.log("shipper order:", currentData);
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
+      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      console.log("Total pages :", maxPageCount);
+      setTotalPageCount(maxPageCount);
     }
   }, [currentData]);
   return (
@@ -192,6 +211,26 @@ const ShipperOrders = () => {
           data={orderTableData}
         />
       )}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <Button
+          className="img-prev"
+          variant="outline"
+          size="sm"
+          disabled={pager.page < 2}
+          onClick={() => updatePage(-1)}
+        >
+          <img src={PreviousIcon} />
+        </Button>
+        <Button
+          className="img-next"
+          variant="outline"
+          size="sm"
+          onClick={() => updatePage(+1)}
+          disabled={pager.page >= Math.floor(totalPageCount)}
+        >
+          <img src={NextIcon} />
+        </Button>
+      </div>
       <ConfirmationModal
         promptMessage={
           isDeleteOrder ? "Are you sure, you want to delete this order?" : ""

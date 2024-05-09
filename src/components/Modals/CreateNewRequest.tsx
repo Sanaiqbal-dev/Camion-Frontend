@@ -2,9 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { INewRequest } from "@/interface/shipper";
-import { IProposalResponseData } from "@/interface/proposal";
+import { IPlaces, IProposalResponseData } from "@/interface/proposal";
+import {
+  useGetCityListQuery,
+  useGetDistrictListQuery,
+} from "@/services/proposal";
 
 interface CreateRequestModalProps {
   show: boolean;
@@ -42,6 +46,13 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     resolver: zodResolver(schema),
   });
 
+  const { data: cityData } = useGetCityListQuery();
+  const { data: districtData } = useGetDistrictListQuery();
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [cityList, setCityList] = useState<IPlaces[]>();
+  const [districtList, setDistrictList] = useState<IPlaces[]>();
+
   useEffect(() => {
     if (isEdit && proposalObject) {
       let currentObj = {
@@ -55,12 +66,12 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
             : proposalObject.destinationStreetName,
         districtName:
           infoType == "origin"
-            ? proposalObject.originDistrictName
-            : proposalObject.destinationDistrictName,
+            ? proposalObject.originDistrict.name
+            : proposalObject.destinationDistrict.name,
         cityName:
           infoType == "origin"
-            ? proposalObject.originCityName
-            : proposalObject.destinationCityName,
+            ? proposalObject.originCity.name
+            : proposalObject.destinationCity.name,
         zipCode:
           infoType == "origin"
             ? proposalObject.originZipCode
@@ -98,11 +109,14 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     let updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
-      districtName: data.districtName,
-      cityName: data.cityName,
+      districtId: districtList?.find(
+        (item) => item.name === data.districtName
+      )?.id,
+      cityId: districtList?.find((item) => item.name === data.districtName)
+        ?.id,
       zipCode: data.zipCode.toString(),
       additionalNumber: data.additionalNumber.toString(),
-      unitNo: "",
+      unitNo: data.unitNo,
     };
     handleNextStep(updatedObject, "");
     reset();
@@ -111,6 +125,17 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   const onError = (error: any) => {
     console.error("Form errors", error);
   };
+
+  useEffect(() => {
+    if (cityData) {
+      setCityList(cityData.result);
+      console.log(cityData.result);
+    }
+    if (districtData) {
+      setDistrictList(districtData.result);
+      console.log(districtData.result);
+    }
+  }, [cityData, districtData]);
   return (
     <Modal
       show={show}
@@ -183,8 +208,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Group className="mb-3">
                 <Form.Label>District name</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="any district name"
+                  as="select"
+                  placeholder="Select district"
                   style={{
                     width: "270px",
                     height: "50px",
@@ -192,9 +217,19 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
-                  {...register("districtName")}
+                  {...register("districtName", { required: true })}
                   isInvalid={!!errors.districtName}
-                />
+                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                  readOnly
+                >
+                  <option value="">Select District</option>
+                  {districtList &&
+                    districtList.map((district) => (
+                      <option key={district.id} value={district.name}>
+                        {district.name}
+                      </option>
+                    ))}
+                </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.districtName?.message}
                 </Form.Control.Feedback>
@@ -202,8 +237,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
               <Form.Group className="mb-3">
                 <Form.Label>City name</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Any city name"
+                  as="select"
+                  placeholder="Select city"
                   style={{
                     width: "270px",
                     height: "50px",
@@ -211,9 +246,19 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
                     borderRight: "none",
                     borderLeft: "none",
                   }}
-                  {...register("cityName")}
+                  {...register("cityName", { required: true })}
                   isInvalid={!!errors.cityName}
-                />
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  readOnly
+                >
+                  <option value="">Select City</option>
+                  {cityList &&
+                    cityList.map((city) => (
+                      <option key={city.id} value={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
+                </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.cityName?.message}
                 </Form.Control.Feedback>

@@ -48,29 +48,31 @@ const Login = () => {
     values: AspNetUserLoginRequest
   ) => {
     aspNetUserLogin(values).then((result: any) => {
-      if (result) {
-        console.log(result);
-        if (!error) {
-          dispatch(
-            setSession({
-              token: result.data.token,
-              user: {
-                email: values.email,
-                role: result.data.role,
-                userId: result.data.userId,
-              },
-              isLoggedIn: true,
-              dir: dir,
-              lang: lang,
-            })
-          );
-          let userRole = result.data.role;
+        if (result.error) {
+          console.log(result.error);
+        } else {
+          console.log(result);
+          if (!error) {
+            dispatch(
+              setSession({
+                token: result.data.token,
+                user: {
+                  email: values.email,
+                  role: result.data.role,
+                  userId: result.data.userId,
+                },
+                isLoggedIn: true,
+                dir: dir,
+                lang: lang,
+              })
+            );
+            let userRole = result.data.role;
 
-          userRole == "Shipper"
-            ? navigate("/shipper/shipperdashboard")
-            : navigate("/carrier/dashboard");
+            userRole == "Shipper"
+              ? navigate("/shipper/shipperdashboard")
+              : navigate("/carrier/dashboard");
+          }
         }
-      }
     });
   };
 
@@ -155,7 +157,7 @@ const Login = () => {
                         </Row>
                       </div>
                       {isLoading && <p>Loading...</p>}
-                      {isError && <p>Error while Login: {error}</p>}
+                      {!isLoading && error && <p>Error: User not found</p>}
                       <div
                         className="register-container"
                         style={{ flexDirection: "column", width: "100%" }}

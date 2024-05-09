@@ -1,8 +1,8 @@
 export interface INewRequest {
   buildingNumber: string;
   streetName: string;
-  districtName: string;
-  cityName: string;
+  districtId: number;
+  cityId: number;
   zipCode: number;
   additionalNumber: number;
   unitNo: string;

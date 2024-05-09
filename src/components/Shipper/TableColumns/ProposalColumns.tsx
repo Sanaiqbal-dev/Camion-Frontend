@@ -135,7 +135,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.originCityName}
+              {quotation.proposal.originCity.name}
             </div>
           </div>
           <div className="col-sm">
@@ -160,7 +160,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.destinationCityName}
+              {quotation.proposal.destinationCity.name}
             </div>
           </div>
           <div className="col-sm">

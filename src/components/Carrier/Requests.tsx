@@ -15,11 +15,12 @@ import { useEffect, useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import { useGetProposalsQuery } from "@/services/proposal";
+import {
+  useGetProposalsQuery,
+} from "@/services/proposal";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
 import { useAppSelector } from "@/state";
-import pagesize from "../pagesize";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { IProposalResponseData } from "@/interface/proposal";
@@ -42,7 +43,6 @@ const Requests = () => {
     pageCount: pager.pageSize,
     ...filterKeys,
   });
-
   const [requestTableData, setRequestTableData] = useState<IRequest[]>([]);
   const [orderItems, setOrderItems] = useState<IRequest>();
 
@@ -95,10 +95,12 @@ const Requests = () => {
     setRequestTableData([]);
 
     if (requestItems) {
-      const updatedRequestData = requestItems.map((item: any) => ({
+      const updatedRequestData = requestItems.map((item: any) =>{
+        // const isCorrect
+        return {
         id: item.id,
-        origin: `${item.originCityName}, ${item.originDistrictName}`,
-        destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
+        origin: `${item.originCity.name}, ${item.originDistrict.name}`,
+        destination: `${item.destinationCity.name}, ${item.destinationS}`,
         weight: item.weight ? item.weight : "-",
         dimentions:
           item.length && item.width && item.height
@@ -108,7 +110,8 @@ const Requests = () => {
           ? item.preferredDeliveryDate
           : "Time not assigned yet",
         action: "Submit Proposal",
-      }));
+      };
+      } );
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
       console.log("fetched requestItems : ", requestItems);
@@ -126,15 +129,8 @@ const Requests = () => {
     }
   }, [currentData]);
   useEffect(() => {
-    console.log("Entries value is :", entriesValue);
-
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
-
-  useEffect(() => {
-    console.log("page number is :", pager.page);
-    console.log("page size is :", pager.pageSize);
-  }, [pager]);
 
   return (
     <div className="table-container">
@@ -219,7 +215,9 @@ const Requests = () => {
       <ProposalDetailsForm
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
-        submitProposal={() => selectedProposalItem && onSubmitProposal(selectedProposalItem.id)}
+        submitProposal={() =>
+          selectedProposalItem && onSubmitProposal(selectedProposalItem.id)
+        }
         fileType={4}
         proposalId={selectedProposalItem && selectedProposalItem?.id}
         submitProposalSuccess={handleProposalSubmissionSuccess}
