@@ -6,17 +6,19 @@ import { IDriver } from "../../../interface/carrier";
 
 interface DriverActionProps {
   onDeleteDriver: (id: number) => void;
+  onUpdateDriver: (id: number) => void;
 }
 
 export const DriverManagementColumns = ({
   onDeleteDriver,
+  onUpdateDriver,
 }: DriverActionProps): ColumnDef<IDriver>[] => [
   {
     accessorKey: "driverName",
     header: "Driver Name",
   },
   {
-    accessorKey: "driverId",
+    accessorKey: "iqamaId",
     header: "Driver ID/Iqama",
   },
   {
@@ -50,7 +52,7 @@ export const DriverManagementColumns = ({
     cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div onClick={() => onUpdateDriver(row.original.id)}>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>

@@ -2,13 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useAddNewDriverMutation,
   useGetNationalityListQuery,
+  useUpdateDriverMutation,
 } from "@/services/drivers";
 
-interface IUser {
+interface IDriver {
   name: string;
   iqamaId: string;
   licenseNumber: string;
@@ -23,29 +24,38 @@ interface IUser {
 interface CreateUserModalProps {
   show: boolean;
   handleClose: () => void;
+  driverExistingData?: IDriver;
 }
 const schema = z.object({
   name: z.string().min(3, "Please enter driver name"),
-  iqamaId: z.string().min(5, "Please enter driver iqama number"),
+  iqamaId: z.string().min(1, "Please enter driver iqama number"),
   licenseNumber: z.string().min(5, "Please enter lisence number"),
   dob: z.string().min(4, "Please enter your date of birth"),
   nationalityId: z.string().optional(),
   mobileNo: z.string().min(6, "please enter phone number"),
 });
 
-const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
+const AddDriver: React.FC<CreateUserModalProps> = ({
+  show,
+  handleClose,
+  driverExistingData,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUser>({
+    reset,
+  } = useForm<IDriver>({
     resolver: zodResolver(schema),
+    defaultValues: driverExistingData,
   });
   const [addNewDriver] = useAddNewDriverMutation();
+  const [updateDriver] = useUpdateDriverMutation();
   const [uploadedFileName, setUploadedFileName] = useState<string>("");
   const [nationalityId, setNationalityId] = useState<number>();
+  const [formData, setFormData] = useState<IDriver>({});
   const nationalityList = useGetNationalityListQuery();
-  console.log("Data", nationalityId);
+  console.log("ExistingData", driverExistingData);
   const nationalityListData = nationalityList.data?.result || [];
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -53,33 +63,83 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
       setUploadedFileName(file.name); // Set the uploaded file name to state
     }
   };
-  const onSubmit: SubmitHandler<IUser> = async (data) => {
+  useEffect(() => {
+    if (driverExistingData) {
+      setFormData(driverExistingData);
+    }
+  }, [driverExistingData]);
+
+  // const onSubmit: SubmitHandler<IDriver> = async (data) => {
+  //   try {
+  //     const proposalResponse = await addNewDriver({
+  //       id: data.driverId,
+  //       name: data.name,
+  //       iqamaId: data.iqamaId,
+  //       licenseNumber: data.licenseNumber,
+  //       dob: data.dob,
+  //       nationalityId: nationalityId && nationalityId,
+  //       mobileNo: data.mobileNo,
+  //       driverId: 0,
+  //       filePath: "Not Implemented yet",
+  //       fileName: uploadedFileName,
+  //     });
+  //     console.log("Proposal submitted successfully:", proposalResponse);
+  //     handleClose();
+  //     reset();
+  //   } catch (error) {
+  //     console.error("Error submitting proposal:", error);
+  //   }
+  // };
+  const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
-      const proposalResponse = await addNewDriver({
-        id: data.driverId,
-        name: data.name,
-        iqamaId: data.iqamaId,
-        licenseNumber: data.licenseNumber,
-        dob: data.dob,
-        nationalityId: nationalityId && nationalityId,
-        mobileNo: data.mobileNo,
-        driverId: 0,
-        filePath: "Not Implemented yet",
-        fileName: uploadedFileName,
-      });
-      console.log("Proposal submitted successfully:", proposalResponse);
+      if (driverExistingData) {
+        // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
+        console.log("id", data);
+        console.log("driverID", data.driverId);
+        await updateDriver({
+          name: data.name,
+          licenseNumber: data.licenseNumber,
+          dob: data.dob,
+          nationalityId: 2,
+          mobileNo: data.mobileNo,
+          iqamaId: data.iqamaId,
+          id: driverExistingData.id,
+          filePath: "Not Implemented yet",
+          fileName: "To be implemented yet",
+        });
+      } else {
+        // If driverExistingData is not present, it's an add operation, so use addNewDriver mutation
+        await addNewDriver({
+          name: data.name,
+          licenseNumber: data.licenseNumber,
+          dob: data.dob,
+          nationalityId: nationalityId && nationalityId,
+          mobileNo: data.mobileNo,
+          iqamaId: data.iqamaId,
+          driverId: 0,
+          filePath: "Not Implemented yet",
+          fileName: "To be implemented Yet",
+        });
+      }
       handleClose();
+      reset();
     } catch (error) {
-      console.error("Error submitting proposal:", error);
+      console.error("Error:", error);
     }
   };
 
+  const handleCloseModal = () => {
+    reset();
+    handleClose();
+  };
   return (
-    <Modal show={show} onHide={handleClose} centered size={"sm"}>
+    <Modal show={show} onHide={handleCloseModal} centered size={"sm"}>
       <Modal.Header
         style={{ display: "flex", flexDirection: "column", gap: "10px" }}
       >
-        <Modal.Title>Add A New Driver</Modal.Title>
+        <Modal.Title>
+          {driverExistingData ? "Update" : "Add A New"} Driver
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -91,6 +151,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 placeholder="Enter Driver's name"
                 style={{ width: "560px", height: "59px" }}
                 {...register("name")}
+                defaultValue={driverExistingData?.driverName}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 isInvalid={!!errors.name}
               />
               <Form.Control.Feedback type="invalid">
@@ -104,6 +168,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 placeholder="Enter number"
                 style={{ width: "560px", height: "59px" }}
                 {...register("iqamaId")}
+                defaultValue={driverExistingData?.iqamaId}
                 isInvalid={!!errors.iqamaId}
               />
               <Form.Control.Feedback type="invalid">
@@ -118,6 +183,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 placeholder="Enter License number"
                 style={{ width: "560px", height: "59px" }}
                 {...register("licenseNumber")}
+                defaultValue={driverExistingData?.licenseNumber}
                 isInvalid={!!errors.licenseNumber}
               />
               <Form.Control.Feedback type="invalid">
@@ -131,6 +197,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 placeholder="DD/MM/YYYY"
                 style={{ width: "560px", height: "50px" }}
                 {...register("dob")}
+                defaultValue={driverExistingData?.DOB}
                 isInvalid={!!errors.dob}
               />
               <Form.Control.Feedback type="invalid">
@@ -144,7 +211,9 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 as="select"
                 style={{ width: "560px", height: "50px" }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                defaultValue=""
+                defaultValue={
+                  driverExistingData ? driverExistingData?.nationality : ""
+                }
                 isInvalid={!!errors.nationalityId}
               >
                 <option value="" disabled>
@@ -167,6 +236,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
                 {...register("mobileNo")}
+                defaultValue={driverExistingData?.mobileNumber}
                 isInvalid={!!errors.mobileNo}
               />
               <Form.Control.Feedback type="invalid">
@@ -180,12 +250,13 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
                 type="file"
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
+                defaultValue={""}
                 onChange={handleFileUpload}
               />
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            Add Driver
+            {driverExistingData ? "Update Driver" : "Add Driver"}
           </Button>
         </Form>
       </Modal.Body>

@@ -13,16 +13,19 @@ import {
   useGetDriversListQuery,
 } from "@/services/drivers";
 import { ColumnDef } from "@tanstack/react-table";
+import { useAppSelector } from "@/state";
 
 const DriverManagement = () => {
   const getDriversList = useGetDriversListQuery();
   const [deleteDriver] = useDeleteDriverMutation();
+  const Email = useAppSelector((state) => state.session.user.token);
+  console.log("EMail", Email);
   const tableData: IDriver = getDriversList.data?.result.result;
   console.log("Drivers", tableData);
   const driversData = tableData?.map((item) => ({
     id: item.id,
     driverName: item.name,
-    driverId: item.iqamaId,
+    iqamaId: item.iqamaId,
     licenseNumber: item.licenseNumber,
     DOB: item.dob,
     nationality: item.driverNationality.name,
@@ -34,6 +37,7 @@ const DriverManagement = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
+  const [editDriverData, setEditDriverData] = useState<IDriver>();
 
   const onDeleteDriver = async (id: number) => {
     try {
@@ -43,9 +47,24 @@ const DriverManagement = () => {
       console.error("Error deleting driver:", error);
     }
   };
+
+  const onUpdateDriver = async (id: number) => {
+    const selectedDriver = driversData.find(
+      (driver: IDriver) => driver.id === id
+    );
+    setShowAddDriverModal(true);
+    setEditDriverData(selectedDriver);
+    console.log("DataToEdit", selectedDriver);
+  };
+
   const columns: ColumnDef<IDriver>[] = DriverManagementColumns({
     onDeleteDriver,
+    onUpdateDriver,
   });
+  const handleCloseModal = () => {
+    setEditDriverData(undefined);
+    setShowAddDriverModal(false);
+  };
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -134,7 +153,8 @@ const DriverManagement = () => {
       )}
       <AddDriver
         show={showAddDriverModal}
-        handleClose={() => setShowAddDriverModal(false)}
+        handleClose={handleCloseModal}
+        driverExistingData={editDriverData}
       />
     </div>
   );

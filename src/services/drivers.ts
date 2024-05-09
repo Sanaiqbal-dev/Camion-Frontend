@@ -28,6 +28,14 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Driver"],
     }),
+    updateDriver: builder.mutation<IAPIResponse<IDriver>, Partial<IDriver>>({
+      query: ({ id, ...rest }) => ({
+        url: `/api/Drivers/UpdateDriver`,
+        method: "PUT",
+        body: { id, ...rest },
+      }),
+      invalidatesTags: ["Driver"],
+    }),
   }),
 });
 export const {
@@ -35,4 +43,5 @@ export const {
   useGetDriversListQuery,
   useGetNationalityListQuery,
   useDeleteDriverMutation,
+  useUpdateDriverMutation,
 } = Drivers;
