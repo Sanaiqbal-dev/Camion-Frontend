@@ -10,12 +10,13 @@ import {
 } from "@/services/drivers";
 
 interface IDriver {
+  id?: number;
   name: string;
   iqamaId: string;
   licenseNumber: string;
   dob: string;
   nationalityId: number;
-  mobileNo: string;
+  phoneNumber: string;
   fileName: string;
   filePath: string;
   driverId: number;
@@ -26,13 +27,18 @@ interface CreateUserModalProps {
   handleClose: () => void;
   driverExistingData?: IDriver;
 }
+
+interface INationality {
+  id: number;
+  name: string;
+}
 const schema = z.object({
   name: z.string().min(3, "Please enter driver name"),
   iqamaId: z.string().min(1, "Please enter driver iqama number"),
   licenseNumber: z.string().min(5, "Please enter lisence number"),
   dob: z.string().min(4, "Please enter your date of birth"),
   nationalityId: z.string().optional(),
-  mobileNo: z.string().min(6, "please enter phone number"),
+  phoneNumber: z.string().min(6, "please enter phone number"),
 });
 
 const AddDriver: React.FC<CreateUserModalProps> = ({
@@ -51,7 +57,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
   });
   const [addNewDriver] = useAddNewDriverMutation();
   const [updateDriver] = useUpdateDriverMutation();
-  const [uploadedFileName, setUploadedFileName] = useState<string>("");
   const [nationalityId, setNationalityId] = useState<number>();
   const [formData, setFormData] = useState<IDriver>({});
   const nationalityList = useGetNationalityListQuery();
@@ -60,7 +65,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setUploadedFileName(file.name); // Set the uploaded file name to state
+      console.log(file.name, "To be use for file upload");
     }
   };
   useEffect(() => {
@@ -69,42 +74,17 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
     }
   }, [driverExistingData]);
 
-  // const onSubmit: SubmitHandler<IDriver> = async (data) => {
-  //   try {
-  //     const proposalResponse = await addNewDriver({
-  //       id: data.driverId,
-  //       name: data.name,
-  //       iqamaId: data.iqamaId,
-  //       licenseNumber: data.licenseNumber,
-  //       dob: data.dob,
-  //       nationalityId: nationalityId && nationalityId,
-  //       mobileNo: data.mobileNo,
-  //       driverId: 0,
-  //       filePath: "Not Implemented yet",
-  //       fileName: uploadedFileName,
-  //     });
-  //     console.log("Proposal submitted successfully:", proposalResponse);
-  //     handleClose();
-  //     reset();
-  //   } catch (error) {
-  //     console.error("Error submitting proposal:", error);
-  //   }
-  // };
   const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
       if (driverExistingData) {
         // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
         console.log("FormData", formData);
-        console.log("Existing", driverExistingData);
         await updateDriver({
-          name:
-            formData?.name !== undefined
-              ? formData?.name
-              : driverExistingData?.driverName,
+          name: formData.name,
           licenseNumber: formData.licenseNumber,
-          dob: formData.DOB,
-          nationalityId: formData.nationalityId ? formData.nationalityId : 1,
-          mobileNo: formData.mobileNumber,
+          dob: formData.dob,
+          nationalityId: nationalityId,
+          mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
           filePath: "Not Implemented yet",
@@ -115,8 +95,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
           name: data.name,
           licenseNumber: data.licenseNumber,
           dob: data.dob,
-          nationalityId: nationalityId && nationalityId,
-          mobileNo: data.mobileNo,
+          nationalityId: nationalityId,
+          mobileNo: data.phoneNumber,
           iqamaId: data.iqamaId,
           driverId: 0,
           filePath: "Not Implemented yet",
@@ -129,7 +109,15 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
       console.error("Error:", error);
     }
   };
-
+  const getNationalityIdByName = (
+    nationalityName: string,
+    nationalityListData: INationality[]
+  ) => {
+    const nationality = nationalityListData.find(
+      (nat) => nat.name === nationalityName
+    );
+    return nationality ? nationality.id : ""; // Return the ID if found, otherwise return an empty string
+  };
   const handleCloseModal = () => {
     reset();
     handleClose();
@@ -153,7 +141,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter Driver's name"
                 style={{ width: "560px", height: "59px" }}
                 {...register("name")}
-                defaultValue={driverExistingData?.driverName}
+                defaultValue={driverExistingData?.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
@@ -205,7 +193,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="DD/MM/YYYY"
                 style={{ width: "560px", height: "50px" }}
                 {...register("dob")}
-                defaultValue={driverExistingData?.DOB}
+                defaultValue={driverExistingData?.dob}
                 onChange={(e) =>
                   setFormData({ ...formData, dob: e.target.value })
                 }
@@ -222,16 +210,23 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 as="select"
                 style={{ width: "560px", height: "50px" }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                defaultValue={
-                  driverExistingData ? driverExistingData?.nationalityId : ""
-                }
+                defaultValue={getNationalityIdByName(
+                  driverExistingData?.nationality,
+                  nationalityListData
+                )}
                 isInvalid={!!errors.nationalityId}
               >
                 <option value="" disabled>
                   Select Nationality
                 </option>
-                {nationalityListData.map((nationality: any) => (
-                  <option key={nationality.id} value={nationality.id}>
+                {nationalityListData.map((nationality: INationality) => (
+                  <option
+                    key={nationality.id}
+                    value={nationality.id}
+                    selected={
+                      nationality.id === driverExistingData?.nationalityId
+                    }
+                  >
                     {nationality.name}
                   </option>
                 ))}
@@ -246,15 +241,15 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 type="text"
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
-                {...register("mobileNo")}
-                defaultValue={driverExistingData?.mobileNumber}
+                {...register("phoneNumber")}
+                defaultValue={driverExistingData?.phoneNumber}
                 onChange={(e) =>
-                  setFormData({ ...formData, mobileNo: e.target.value })
+                  setFormData({ ...formData, phoneNumber: e.target.value })
                 }
-                isInvalid={!!errors.mobileNo}
+                isInvalid={!!errors.phoneNumber}
               />
               <Form.Control.Feedback type="invalid">
-                {errors.mobileNo?.message}
+                {errors.phoneNumber?.message}
               </Form.Control.Feedback>
             </Form.Group>
 

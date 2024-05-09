@@ -110,13 +110,13 @@ export interface ICompanyProfile {
 }
 
 export interface IDriver {
-  id: number;
+  id?: number;
   name: string;
   iqamaId: string;
   licenseNumber: string;
   dob: string;
   nationalityId: number;
-  mobileNo: string;
+  phoneNumber: string;
   fileName: string;
   filePath: string;
   driverId: number;

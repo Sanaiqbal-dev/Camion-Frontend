@@ -14,7 +14,7 @@ export const DriverManagementColumns = ({
   onUpdateDriver,
 }: DriverActionProps): ColumnDef<IDriver>[] => [
   {
-    accessorKey: "driverName",
+    accessorKey: "name",
     header: "Driver Name",
   },
   {
@@ -26,7 +26,7 @@ export const DriverManagementColumns = ({
     header: "License Number",
   },
   {
-    accessorKey: "DOB",
+    accessorKey: "dob",
     header: "Date Of Birth",
   },
   {
@@ -35,7 +35,7 @@ export const DriverManagementColumns = ({
   },
 
   {
-    accessorKey: "mobileNumber",
+    accessorKey: "phoneNumber",
     header: "Mobile Number",
   },
 

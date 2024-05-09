@@ -8,12 +8,11 @@ export type IBayanItem = {
   action: string;
 };
 export type IDriver = {
-  driverName: string;
-  driverId: number;
+  name: string;
   licenseNumber: string;
   DOB: string;
   nationality: string;
-  mobileNumber: string;
+  phoneNumber: string;
   viewIqama: string;
   action: string;
 };

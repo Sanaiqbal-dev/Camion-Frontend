@@ -13,23 +13,20 @@ import {
   useGetDriversListQuery,
 } from "@/services/drivers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useAppSelector } from "@/state";
-
 const DriverManagement = () => {
   const getDriversList = useGetDriversListQuery();
   const [deleteDriver] = useDeleteDriverMutation();
-  const Email = useAppSelector((state) => state.session.user.token);
-  console.log("EMail", Email);
+
   const tableData: IDriver = getDriversList.data?.result.result;
   console.log("Drivers", tableData);
   const driversData = tableData?.map((item) => ({
     id: item.id,
-    driverName: item.name,
+    name: item.name,
     iqamaId: item.iqamaId,
     licenseNumber: item.licenseNumber,
-    DOB: item.dob,
+    dob: item.dob,
     nationality: item.driverNationality.name,
-    mobileNumber: item.phoneNumber,
+    phoneNumber: item.phoneNumber,
     viewIqama: item.iqamaId,
     action: "",
   }));
