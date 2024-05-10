@@ -3,12 +3,14 @@ import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import { IUserManagement } from "../../../interface/common";
 
-interface UserActionsProps{
-  onEdit : () => void;
+interface UserActionsProps {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const UsersColumn = ({
   onEdit,
+  onDelete,
 }: UserActionsProps): ColumnDef<IUserManagement>[] => [
   {
     accessorKey: "userName",
@@ -21,14 +23,14 @@ export const UsersColumn = ({
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div onClick={() => onEdit()}>
+          <div onClick={() => onEdit(row.original.id)}>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>

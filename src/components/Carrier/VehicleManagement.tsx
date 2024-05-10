@@ -4,129 +4,117 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import IconFilter from "../../assets/icons/ic-filter.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
-import { IVehicle } from "../../interface/carrier";
-import AddVehicle from "../Modals/AddVehicle";
+import { IDriver, IVehicle } from "../../interface/carrier";
+import {
+  useAssignDriverMutation,
+  useCreateVehicleMutation,
+  useEditVehicleMutation,
+  useDeleteVehicleMutation,
+  useGetVehiclesQuery,
+  useGetVehicleTypesQuery,
+} from "@/services/vahicles";
+import { useGetDriversQuery } from "@/services/driver";
+import AssignDriverModal from "../Modals/AssignDriver";
+import CreateVehicleModal from "../Modals/CreateVehicle";
+import EditVehicleModal from "../Modals/EditVehicle";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const VehicleManagement = () => {
-  const vehiclesData: IVehicle[] = [
-    {
-      id: "728ed52f",
-      driverName: "Driver Not Assign",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      driverName: "Ali Abbasi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
+  const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+  const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
+  const [drivers, setDrivers] = useState<IDriver[]>([]);
+  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(
+    null
+  );
 
-    {
-      id: "489e1e742",
-      driverName: "Driver Not Assign",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
+  const [showDriverModal, setShowDriverModal] = useState(false);
+  const [showCreateVehicle, setShowCreateVehicle] = useState(false);
+  const [showEditVehicle, setShowEditVehicle] = useState(false);
 
-    {
-      id: "9e19od42",
-      driverName: "mohammadreza ghasemi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
+  const { data, isLoading } = useGetVehiclesQuery({});
+  const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
+    useGetVehicleTypesQuery({});
+  const { data: driverData, isLoading: driverIsLoading } = useGetDriversQuery(
+    {}
+  );
+  const [assignDriver] = useAssignDriverMutation();
+  const [deleteVehicle] = useDeleteVehicleMutation();
+  const [createVehicle] = useCreateVehicleMutation();
+  const [editVehicle] = useEditVehicleMutation();
+  useEffect(() => {
+    if (!isLoading) {
+      data.result.total > 0 && setVehicles(data.result.result);
+    }
+  }, [isLoading]);
+  useEffect(() => {
+    if (!isLoadingVehicleTypes) {
+      setVehicleTypes(vehicleTypesData.result);
+    }
+  }, [isLoadingVehicleTypes]);
+  useEffect(() => {
+    if (!driverIsLoading) {
+      setDrivers(driverData.result.result);
+    }
+  }, [driverIsLoading]);
+  const assignDriverHandler = async (id: number) => {
+    setShowDriverModal(false);
+    const res = await assignDriver({
+      vehicleId: vehicleIdfordriver,
+      driverId: id,
+    }).unwrap();
+    const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
+    const selectedDriver = drivers.find((d) => d.id === id);
+    if (index !== -1 && selectedDriver) {
+      const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
+      newvehicles[index].driver = selectedDriver.name;
+      setVehicles(newvehicles);
+    }
+    setVehicleIdfordriver(null);
+  };
+  const assignDriverClickHandler = (id: number) => {
+    setVehicleIdfordriver(id);
+    setShowDriverModal(true);
+  };
+  const editVehicleHandler = (id) => {
+    const veh = vehicles.find((v) => v.id === id);
+    seteditedVehicle(veh);
+    setShowEditVehicle(true);
+  };
+  const submitCreateVehicleHandler = async (data: any) => {
+    setShowCreateVehicle(false);
+    const resp = await createVehicle(data).unwrap();
+  };
+  const submitEditVehicleHandler = async (data: any) => {
+    setShowEditVehicle(false);
+    const resp = await editVehicle(data).unwrap();
+  };
+  const deleteVehicleHandler = async (id: number) => {
+    const veh = vehicles.find((v) => v.id === id);
+    seteditedVehicle(veh);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
 
-    {
-      id: "56te1d42",
-      driverName: "Saeed Salim",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      driverName: "Ali Abbasi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      driverName: "Ali Abbasi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      driverName: "Ali Abbasi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      driverName: "Ali Abbasi",
-      vehicleType: "Volvo Truck",
-      modelYear: "2019",
-      vehicleNumber: "SNF 87 Z",
-      color: "White",
-      registrationNumber: "IRZ2 9876",
-      IMEINumber: "1234567890",
-      vehicleRegistration: "View Document",
-      action: "",
-    },
-  ];
+    const res = await deleteVehicle({ id: editedVehicle.id });
+
+    const filteredvehicle = vehicles.filter((v) => v.id !== editedVehicle.id);
+    setVehicles(filteredvehicle);
+  };
+  const closeCreateModal = () => {
+    setShowCreateVehicle(false);
+  };
+  const closeEditModal = () => {
+    setShowEditVehicle(false);
+  };
+
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -138,92 +126,119 @@ const VehicleManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+  const columns = VehicleManagementColumns({
+    assignDriver: assignDriverClickHandler,
+    editVehicle: editVehicleHandler,
+    deleteVehicle: deleteVehicleHandler,
+  });
+
   return (
-    <div className="table-container">
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={IconFilter} /> Filter
-          </button>
+    <>
+      <div className="table-container">
+        <div className="search-and-entries-container">
+          <div>
+            <button className="filter-btn">
+              <img src={IconFilter} /> Filter
+            </button>
+          </div>
+          <div>
+            <button
+              className="add-item-btn"
+              id="add-vehicle-btn"
+              onClick={() => {
+                setShowCreateVehicle(true);
+              }}
+            >
+              Add Vehicle
+            </button>
+          </div>
         </div>
-        <div>
-          <button
-            className="add-item-btn"
-            id="add-vehicle-btn"
-            onClick={() => setShowAddVehicleModal(true)}
-          >
-            Add Vehicle
-          </button>
-        </div>
-      </div>
-      <div className="tw-flex tw-justify-between tw-items-center">
-        <Row className="tw-items-center">
-          <Col xs="auto" className="tw-text-secondary">
-            Show
-          </Col>
-          <Col xs="auto">
-            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
-              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
-                </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
-                </button>
+        <div className="tw-flex tw-justify-between tw-items-center">
+          <Row className="tw-items-center">
+            <Col xs="auto" className="tw-text-secondary">
+              Show
+            </Col>
+            <Col xs="auto">
+              <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+                <input
+                  className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
+                  type="text"
+                  readOnly
+                  value={entriesValue}
+                />
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                  <button
+                    className="tw-border-none"
+                    onClick={() => handleChangeValue(1)}
+                  >
+                    <Image
+                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                      src={PreviousIcon}
+                    />
+                  </button>
+                  <button
+                    className="tw-border-none"
+                    onClick={() => handleChangeValue(-1)}
+                  >
+                    <Image
+                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                      src={NextIcon}
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col xs="auto" className="tw-text-secondary">
-            entries
-          </Col>
-        </Row>
-        <Row className="tw-mt-3">
-          <Col>
-            <InputGroup>
-              <InputGroup.Text>
-                <Image src={SearchIcon} />
-              </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-              ></FormControl>
-            </InputGroup>
-          </Col>
-        </Row>
+            </Col>
+            <Col xs="auto" className="tw-text-secondary">
+              entries
+            </Col>
+          </Row>
+          <Row className="tw-mt-3">
+            <Col>
+              <InputGroup>
+                <InputGroup.Text>
+                  <Image src={SearchIcon} />
+                </InputGroup.Text>
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  className="form-control"
+                ></FormControl>
+              </InputGroup>
+            </Col>
+          </Row>
+        </div>
+        {vehicles.length ? (
+          <DataTable isAction={true} columns={columns} data={vehicles} />
+        ) : (
+          <></>
+        )}
       </div>
-      {vehiclesData && (
-        <DataTable
-          isAction={true}
-          columns={VehicleManagementColumns}
-          data={vehiclesData}
-        />
-      )}
-      <AddVehicle
-        show={showAddVehicleModal}
-        handleClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+      <AssignDriverModal
+        show={showDriverModal}
+        drivers={drivers}
+        handleClose={() => setShowDriverModal(false)}
+        onAssignDriver={assignDriverHandler}
       />
-    </div>
+      <CreateVehicleModal
+        show={showCreateVehicle}
+        vehicleTypes={vehicleTypes}
+        handleClose={closeCreateModal}
+        onSubmitForm={submitCreateVehicleHandler}
+      />
+      <EditVehicleModal
+        vehicle={editedVehicle}
+        vehicleTypes={vehicleTypes}
+        handleClose={closeEditModal}
+        show={showEditVehicle}
+        onSubmitForm={submitEditVehicleHandler}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
+    </>
   );
 };
 

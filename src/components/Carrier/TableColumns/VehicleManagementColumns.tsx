@@ -6,7 +6,15 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { IVehicle } from "../../../interface/carrier";
 
-export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
+export const VehicleManagementColumns = ({
+  assignDriver,
+  editVehicle,
+  deleteVehicle,
+}: {
+  assignDriver: (id: number) => void;
+  editVehicle: (id: number) => void;
+  deleteVehicle: (id: number) => void;
+}): ColumnDef<IVehicle>[] => [
   {
     accessorKey: "driverName",
     header: "Driver Name",
@@ -14,11 +22,10 @@ export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
       return (
         <div
           className={clsx({
-            "tw-text-red-600":
-              row.getValue("driverName") === "Driver Not Assign",
+            "tw-text-red-600": !row.original.driver,
           })}
         >
-          {row.getValue("driverName")}
+          {row.original.driver ?? "Driver Not Assign"}
         </div>
       );
     },
@@ -26,14 +33,20 @@ export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
   {
     accessorKey: "vehicleType",
     header: "Vehicle Type",
+    cell: ({ row }) => {
+      return <div>{row.original.vehicleType.typeName}</div>;
+    },
   },
   {
     accessorKey: "modelYear",
     header: "Model Year",
   },
   {
-    accessorKey: "vehicleNumber",
+    accessorKey: "numberPlate",
     header: "Vehihcle Number",
+    cell: ({ row }) => {
+      return <div>{row.original.numberPlate}</div>;
+    },
   },
   {
     accessorKey: "color",
@@ -46,8 +59,11 @@ export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
   },
 
   {
-    accessorKey: "IMEINumber",
+    accessorKey: "imeiNumber",
     header: "IMEI Number",
+    cell: ({ row }) => {
+      return <div>{row.original.imeiNumber}</div>;
+    },
   },
 
   {
@@ -60,18 +76,27 @@ export const VehicleManagementColumns: ColumnDef<IVehicle>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div
+            onClick={() => {
+              editVehicle(row.original.id);
+            }}
+          >
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => deleteVehicle(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div id="assign-driver">
+          <div
+            id="assign-driver"
+            onClick={() => {
+              assignDriver(row.original.id);
+            }}
+          >
             <img src={IconDriver} />
             <span style={{ color: "#0060B8" }}>Assign Driver</span>
           </div>

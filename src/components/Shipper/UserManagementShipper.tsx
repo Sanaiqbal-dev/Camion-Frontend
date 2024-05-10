@@ -4,73 +4,34 @@ import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateUser from "../Modals/CreateUser";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { IUserManagement } from "../../interface/common";
 import { ColumnDef } from "@tanstack/react-table";
+import {
+  useGetCompanyUsersQuery,
+  useCreateSubUserMutation,
+  useUpdateSubUserMutation,
+  useUpdateSubUserPasswordMutation,
+} from "@/services/user";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const UserManagementShipper = () => {
-  const data: IUserManagement[] = [
-    {
-      id: "728ed52f",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
+  const [edituser, setEditUser] = useState<IUserManagement | undefined>();
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-    {
-      id: "489e1e742",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
+  const [users, setUsers] = useState<IUserManagement[]>([]);
 
-    {
-      id: "9e19od42",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      userName: "hossein_rezaei",
-      email: "pkplex@optonline.net",
-      action: "",
-    },
-  ];
-
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});
+  const [createSubUser] = useCreateSubUserMutation();
+  const [updateSubUser] = useUpdateSubUserMutation();
+  const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
+  useEffect(() => {
+    if (!isLoading) {
+      setUsers(companyUserData.result);
+    }
+  }, [isLoading]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -88,12 +49,45 @@ const UserManagementShipper = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-
-  const onEdit = () => {
+  const onEdit = (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
     setshowUpdatePasswordModal(true);
+  };
+  const onDelete = async (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
+    const resp = await updateSubUser({
+      userId: edituser?.id,
+      isDeleted: true,
+    });
+    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    setUsers(newUsers);
+  };
+  const submitCreateFormHandler = async (data: any) => {
+    setshowCreateUserModal(false);
+    console.log("submitCreateFormHandler", data);
+    const resp = await createSubUser(data);
+  };
+  const submitEditFormHandler = async (data: any) => {
+    setshowUpdatePasswordModal(false);
+    console.log("submitCreateFormHandler", {
+      ...data,
+      email: edituser?.email,
+    });
+    const resp = await updateSubUserPassword({
+      password: data.newPassword,
+      confirmPassword: data.confirmPassword,
+      email: edituser?.email,
+    });
   };
   const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,
+    onDelete,
   });
   return (
     <div className="table-container">
@@ -163,15 +157,27 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {data && <DataTable columns={columns} data={data} isAction={false} />}
+      {users.length > 0 ? (
+        <DataTable columns={columns} data={users} isAction={false} />
+      ) : (
+        <span>No Users Found!</span>
+      )}
 
       <CreateUser
         show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
       />
       <UpdatePassword
+        onSubmitForm={submitEditFormHandler}
         show={showUpdatePasswordModal}
         handleClose={() => setshowUpdatePasswordModal(false)}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
       />
     </div>
   );

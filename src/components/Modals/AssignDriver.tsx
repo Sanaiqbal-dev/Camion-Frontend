@@ -1,43 +1,47 @@
+/* eslint-disable react-refresh/only-export-components */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
+import { IDriver } from "@/interface/carrier";
 
-interface IDriverType {
-  driverType: "Lisenced" | "Professional" | "Experienced";
-}
-
-interface AssignDriverModalProps {
+interface AssignVehicleModalProps {
   show: boolean;
+  drivers: IDriver[];
   handleClose: () => void;
-  onAssignVehicleToOrderItem: (driverType: string) => void;
+  onAssignDriver: (id: number) => void;
+}
+interface IdriverForm {
+  driver: string;
 }
 export const schema = z.object({
-  vehicleType: z.enum(["Lisenced", "Professional", "Experienced"]),
+  driver: z.string().min(1, "Select Driver"),
 });
 
-const AssignDriver: React.FC<AssignDriverModalProps> = ({
+const AssignDriver: React.FC<AssignVehicleModalProps> = ({
   show,
+  drivers,
   handleClose,
-  onAssignVehicleToOrderItem,
+  onAssignDriver,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IDriverType>({
+    reset,
+  } = useForm<IdriverForm>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<IDriverType> = async (data) => {
-    console.log(data);
-    onAssignVehicleToOrderItem(data.driverType);
+  const onSubmit: SubmitHandler<IdriverForm> = async (data) => {
+    onAssignDriver(parseInt(data.driver));
+    reset();
   };
 
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>
-        <Modal.Title>Assign Driver</Modal.Title>
+        <Modal.Title>Assign Vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -49,22 +53,26 @@ const AssignDriver: React.FC<AssignDriverModalProps> = ({
             <Form.Label>Drivers</Form.Label>
             <Form.Control
               as="select"
-              {...register("driverType", {
-                required: "driver type is required",
+              {...register("driver", {
+                required: "driver is required",
               })}
             >
-              <option value="">Select Driver</option>
-              <option value="Lisenced">Lisenced Driver</option>
-              <option value="Experienced">Experienced driver</option>
-              <option value="professional">Proffesional</option>
+              <option value="">Select a driver</option>
+              {drivers.map((d, index) => {
+                return (
+                  <option key={"driverOption_" + index} value={d.id}>
+                    {d.name}
+                  </option>
+                );
+              })}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {errors.driverType?.message}
+              {errors.driver?.message}
             </Form.Control.Feedback>
           </Form.Group>
 
           <Button variant="primary" type="submit">
-            Assign Vehicle
+            Assign Driver
           </Button>
         </Form>
       </Modal.Body>

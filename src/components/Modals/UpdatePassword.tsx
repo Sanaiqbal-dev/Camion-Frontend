@@ -12,12 +12,20 @@ interface IPassword {
 
 interface UpdatePasswordModalProps {
   show: boolean;
+  onSubmitForm: (data: IPassword) => void;
+
   handleClose: () => void;
 }
 const schema = z
   .object({
     currentPassword: z.string().min(1, "Enter your current password"),
-    newPassword: z.string().min(6, "Password must be at least 6 characters."),
+    newPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters.")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+      ),
     confirmPassword: z.string().min(6, "Confirm your password."),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -27,6 +35,7 @@ const schema = z
 
 const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
   show,
+  onSubmitForm,
   handleClose,
 }) => {
   const {
@@ -37,7 +46,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
-        console.log(data);
+    onSubmitForm(data);
 
     //    try {
     //      const loginResponse = await login(data).unwrap();
@@ -88,7 +97,10 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
                 {...register("newPassword")}
                 isInvalid={!!errors.newPassword}
               />
-              <Form.Control.Feedback type="invalid">
+              <Form.Control.Feedback
+                type="invalid"
+                style={{ maxWidth: "270px" }}
+              >
                 {errors.newPassword?.message}
               </Form.Control.Feedback>
             </Form.Group>
