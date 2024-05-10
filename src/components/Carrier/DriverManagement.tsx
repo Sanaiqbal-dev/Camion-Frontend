@@ -36,6 +36,11 @@ const DriverManagement = () => {
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
   const [editDriverData, setEditDriverData] = useState<IDriver>();
 
+  const cleanUp = () => {
+    console.log("cleanup called!");
+    setEditDriverData(undefined);
+  };
+
   const onDeleteDriver = async (id: number) => {
     try {
       await deleteDriver({ id: id });
@@ -45,12 +50,12 @@ const DriverManagement = () => {
     }
   };
 
-  const onUpdateDriver = async (id: number) => {
+  const onUpdateDriver = (id: number) => {
     const selectedDriver = driversData.find(
       (driver: IDriver) => driver.id === id
     );
-    setShowAddDriverModal(true);
     setEditDriverData(selectedDriver);
+    setShowAddDriverModal(true);
     console.log("DataToEdit", selectedDriver);
   };
 
@@ -59,8 +64,9 @@ const DriverManagement = () => {
     onUpdateDriver,
   });
   const handleCloseModal = () => {
-    setEditDriverData(undefined);
+    setEditDriverData(null);
     setShowAddDriverModal(false);
+    console.log("Func called");
   };
 
   function handleChangeValue(direction: number) {
@@ -152,6 +158,7 @@ const DriverManagement = () => {
         show={showAddDriverModal}
         handleClose={handleCloseModal}
         driverExistingData={editDriverData}
+        cleanUp={cleanUp}
       />
     </div>
   );

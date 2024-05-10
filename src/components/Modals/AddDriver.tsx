@@ -62,6 +62,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
   const nationalityList = useGetNationalityListQuery();
   console.log("ExistingData", driverExistingData);
   const nationalityListData = nationalityList.data?.result || [];
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -69,16 +70,18 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
     }
   };
   useEffect(() => {
-    if (driverExistingData) {
-      setFormData(driverExistingData);
-    }
-  }, [driverExistingData]);
+    setFormData(driverExistingData);
+
+    return () => {
+      reset();
+    };
+  }, [driverExistingData, reset]);
 
   const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
       if (driverExistingData) {
         // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
-        console.log("FormData", formData);
+        console.log("FormData", driverExistingData);
         await updateDriver({
           name: formData.name,
           licenseNumber: formData.licenseNumber,
@@ -116,7 +119,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
     const nationality = nationalityListData.find(
       (nat) => nat.name === nationalityName
     );
-    return nationality ? nationality.id : ""; // Return the ID if found, otherwise return an empty string
+    return nationality ? nationality.id : nationalityId; // Return the ID if found, otherwise return an empty string
   };
   const handleCloseModal = () => {
     reset();
@@ -141,7 +144,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter Driver's name"
                 style={{ width: "560px", height: "59px" }}
                 {...register("name")}
-                defaultValue={driverExistingData?.name}
+                // defaultValue={driverExistingData?.name}
+                defaultValue={formData?.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
@@ -158,7 +162,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter number"
                 style={{ width: "560px", height: "59px" }}
                 {...register("iqamaId")}
-                defaultValue={driverExistingData?.iqamaId}
+                defaultValue={formData?.iqamaId}
                 onChange={(e) =>
                   setFormData({ ...formData, iqamaId: e.target.value })
                 }
@@ -176,7 +180,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter License number"
                 style={{ width: "560px", height: "59px" }}
                 {...register("licenseNumber")}
-                defaultValue={driverExistingData?.licenseNumber}
+                defaultValue={formData?.licenseNumber}
                 onChange={(e) =>
                   setFormData({ ...formData, licenseNumber: e.target.value })
                 }
@@ -193,7 +197,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="DD/MM/YYYY"
                 style={{ width: "560px", height: "50px" }}
                 {...register("dob")}
-                defaultValue={driverExistingData?.dob}
+                defaultValue={formData?.dob}
                 onChange={(e) =>
                   setFormData({ ...formData, dob: e.target.value })
                 }
@@ -242,7 +246,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter mobile number"
                 style={{ width: "560px", height: "50px" }}
                 {...register("phoneNumber")}
-                defaultValue={driverExistingData?.phoneNumber}
+                defaultValue={formData?.phoneNumber}
                 onChange={(e) =>
                   setFormData({ ...formData, phoneNumber: e.target.value })
                 }
