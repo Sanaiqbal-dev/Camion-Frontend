@@ -92,28 +92,57 @@ export interface IProposalForm {
   userId: string;
 }
 
-export interface IAppUser{
-  id:string;
-userName:string;
-normalizedUserName:string;
-email:string;
-normalizedEmail:string;
-emailConfirmed:boolean;
-passwordHash:string;
-securityStamp:string;
-concurrencyStamp:string;
-phoneNumber:string;
-phoneNumberConfirmed:boolean;
-twoFactorEnabled:boolean;
-lockoutEnd:string;
-lockoutEnabled:boolean;
-accessFailedCount:number;
-firstName:string;
-lastName:string;
-isVerified:boolean;
-companyId:number;
-company	:ICompany;
-isManager:boolean
+interface IFileDownload {
+  filePath: string;
+  fileName: string;
+  fileType: number;
+}
+export interface ICompanyProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  confirmPassword: string;
+  companyName: string;
+  fileDownload: IFileDownload[];
+  userId: string;
+}
+
+export interface IDriver {
+  id?: number;
+  name: string;
+  iqamaId: string;
+  licenseNumber: string;
+  dob: string;
+  nationalityId: number;
+  phoneNumber: string;
+  fileName: string;
+  filePath: string;
+  driverId: number;
+}
+export interface IAppUser {
+  id: string;
+  userName: string;
+  normalizedUserName: string;
+  email: string;
+  normalizedEmail: string;
+  emailConfirmed: boolean;
+  passwordHash: string;
+  securityStamp: string;
+  concurrencyStamp: string;
+  phoneNumber: string;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
+  lockoutEnd: string;
+  lockoutEnabled: boolean;
+  accessFailedCount: number;
+  firstName: string;
+  lastName: string;
+  isVerified: boolean;
+  companyId: number;
+  company: ICompany;
+  isManager: boolean;
 }
 
 export interface ICompany {

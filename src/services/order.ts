@@ -21,7 +21,12 @@ export const orderApi = baseApi.injectEndpoints({
         }`,
       providesTags: ["Order"],
     }),
-
+    getAllVehicles: builder.query<IAPIResponse<IProposalResponseObject[]>, any>(
+      {
+        query: () => "/api/Vehicles/GetVehicleList",
+        providesTags: ["Vehicle"],
+      }
+    ),
     getOrder: builder.query<IAPIResponse<IOrderSingle>, Partial<IOrder>>({
       query: ({ id }) => `/order/detail/${id}`,
       providesTags: (result, error, arg) => {
@@ -68,4 +73,5 @@ export const {
   useAddOrderMutation,
   useUpdateOrderMutation,
   useDeleteOrderMutation,
+  useGetAllVehiclesQuery,
 } = orderApi;

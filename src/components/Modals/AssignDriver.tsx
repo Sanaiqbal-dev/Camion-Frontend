@@ -3,22 +3,21 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
-import { useGetAllVehiclesQuery } from "@/services/order";
 
-interface IVehicleType {
-  vehicleType: "Truck" | "Ship" | "plane";
+interface IDriverType {
+  driverType: "Lisenced" | "Professional" | "Experienced";
 }
 
-interface AssignVehicleModalProps {
+interface AssignDriverModalProps {
   show: boolean;
   handleClose: () => void;
-  onAssignVehicleToOrderItem: (vehicleType: string) => void;
+  onAssignVehicleToOrderItem: (driverType: string) => void;
 }
 export const schema = z.object({
-  vehicleType: z.enum(["Truck", "Ship", "plane"]),
+  vehicleType: z.enum(["Lisenced", "Professional", "Experienced"]),
 });
 
-const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
+const AssignDriver: React.FC<AssignDriverModalProps> = ({
   show,
   handleClose,
   onAssignVehicleToOrderItem,
@@ -27,21 +26,18 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IVehicleType>({
+  } = useForm<IDriverType>({
     resolver: zodResolver(schema),
   });
-
-  const getAllVehicles = useGetAllVehiclesQuery("");
-  console.log("Vehicles", getAllVehicles);
-  const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
+  const onSubmit: SubmitHandler<IDriverType> = async (data) => {
     console.log(data);
-    onAssignVehicleToOrderItem(data.vehicleType);
+    onAssignVehicleToOrderItem(data.driverType);
   };
 
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>
-        <Modal.Title>Assign Vehicle</Modal.Title>
+        <Modal.Title>Assign Driver</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -50,20 +46,20 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
             style={{ minWidth: "436px" }}
             controlId="formBasicEmail"
           >
-            <Form.Label>Vehicles</Form.Label>
+            <Form.Label>Drivers</Form.Label>
             <Form.Control
               as="select"
-              {...register("vehicleType", {
-                required: "Vehicle type is required",
+              {...register("driverType", {
+                required: "driver type is required",
               })}
             >
-              <option value="">Select a Vehicle</option>
-              <option value="Truck">Truck</option>
-              <option value="Ship">Ship</option>
-              <option value="Plane">Plane</option>
+              <option value="">Select Driver</option>
+              <option value="Lisenced">Lisenced Driver</option>
+              <option value="Experienced">Experienced driver</option>
+              <option value="professional">Proffesional</option>
             </Form.Control>
             <Form.Control.Feedback type="invalid">
-              {errors.vehicleType?.message}
+              {errors.driverType?.message}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -76,4 +72,4 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
   );
 };
 
-export default AssignVehicle;
+export default AssignDriver;

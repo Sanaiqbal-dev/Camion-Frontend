@@ -6,121 +6,24 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
 import { Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
+import { useGetCompanyProfilesListQuery } from "@/services/companyProfile";
 
 const Profiles = () => {
-  const profilesData: Iprofiles[] = [
-    {
-      id: "9e19od42",
-      profileType: "Shipper",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Not Approved",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      profileType: "Carrier",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Not Approved",
-      action: "",
-    },
-
-    {
-      id: "7tf5d52f",
-      profileType: "Shipper",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Deactivated",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      profileType: "Carrier",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Deactivated",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      profileType: "Shipper",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Active",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      profileType: "Carrier",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Active",
-      action: "",
-    },
-    {
-      id: "728ed52f",
-      profileType: "Carrier",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Not Approved",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      profileType: "Shipper",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Not Approved",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      profileType: "Carrier",
-      firstName: "Ali",
-      lastName: "Abbasi",
-      email: "aliabbasi@mail.com",
-      contact: "+96 987 9876",
-      company: "Jaguar Group",
-      CRDocument: "",
-      status: "Not Approved",
-      action: "",
-    },
-  ];
+  const companyProfiles = useGetCompanyProfilesListQuery();
+  const ProfilesTableData: Iprofiles = companyProfiles.data?.result;
+  const profilesData = ProfilesTableData?.map((item) => ({
+    id: item.id,
+    profileType: "shipper",
+    firstName: item.firstName,
+    lastName: item.lastName,
+    email: item.email,
+    contact: item.phoneNumber ? item.phoneNumber : "2233445566",
+    company: item.companyName,
+    crDocument: "",
+    status: item.companyAccountStatus
+      ? item.companyAccountStatus
+      : "Not Approved",
+  }));
 
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -193,7 +96,11 @@ const Profiles = () => {
         </Row>
       </div>
       {profilesData && (
-        <DataTable isAction={false} columns={ProfileColumns} data={profilesData} />
+        <DataTable
+          isAction={false}
+          columns={ProfileColumns}
+          data={profilesData}
+        />
       )}
     </div>
   );

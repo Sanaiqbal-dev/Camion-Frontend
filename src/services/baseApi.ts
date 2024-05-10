@@ -31,6 +31,7 @@ export const baseApi = createApi({
     "ProposalQuotation",
     "Proposal",
     "FileUpload",
+    "CreateProfile",
   ],
   reducerPath: "baseApi",
   endpoints: () => ({}),

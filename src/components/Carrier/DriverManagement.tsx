@@ -7,115 +7,63 @@ import FilterIcon from "../../assets/icons/ic-filter.svg";
 import { useState } from "react";
 import { DriverManagementColumns } from "./TableColumns/DriverManagementColumns";
 import { IDriver } from "../../interface/carrier";
-
+import AddDriver from "../Modals/AddDriver";
+import {
+  useDeleteDriverMutation,
+  useGetDriversListQuery,
+} from "@/services/drivers";
+import { ColumnDef } from "@tanstack/react-table";
 const DriverManagement = () => {
-  const driversData: IDriver[] = [
-    {
-      id: "728ed52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
+  const getDriversList = useGetDriversListQuery();
+  const [deleteDriver] = useDeleteDriverMutation();
 
-    {
-      id: "489e1e742",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      driverName: "Ali Abbasi",
-      driverId: "09876543212345678",
-      licenseNumber: "1234567890",
-      DOB: "11/14/2024",
-      nationality: "Saudi Arabia",
-      mobileNumber: "+96 999 8876",
-      viewIqama: "View Iqama/ID",
-      action: "",
-    },
-  ];
+  const tableData: IDriver = getDriversList.data?.result.result;
+  const driversData = tableData?.map((item) => ({
+    id: item.id,
+    name: item.name,
+    iqamaId: item.iqamaId,
+    licenseNumber: item.licenseNumber,
+    dob: item.dob,
+    nationality: item.driverNationality.name,
+    phoneNumber: item.phoneNumber,
+    viewIqama: item.iqamaId,
+    action: "",
+  }));
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
+  const [showAddDriverModal, setShowAddDriverModal] = useState(false);
+  const [editDriverData, setEditDriverData] = useState<IDriver>();
+
+  const cleanUp = () => {
+    setEditDriverData(undefined);
+  };
+
+  const onDeleteDriver = async (id: number) => {
+    try {
+      await deleteDriver({ id: id });
+      console.log("Driver deleted successfully");
+    } catch (error) {
+      console.error("Error deleting driver:", error);
+    }
+  };
+
+  const onUpdateDriver = (id: number) => {
+    const selectedDriver = driversData.find(
+      (driver: IDriver) => driver.id === id
+    );
+    setEditDriverData(selectedDriver);
+    setShowAddDriverModal(true);
+  };
+
+  const columns: ColumnDef<IDriver>[] = DriverManagementColumns({
+    onDeleteDriver,
+    onUpdateDriver,
+  });
+  const handleCloseModal = () => {
+    setEditDriverData(null);
+    setShowAddDriverModal(false);
+  };
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -136,7 +84,11 @@ const DriverManagement = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="add-driver-btn">
+          <button
+            className="add-item-btn"
+            id="add-driver-btn"
+            onClick={() => setShowAddDriverModal(true)}
+          >
             Add Driver
           </button>
         </div>
@@ -196,8 +148,14 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && (
-        <DataTable isAction={true} columns={DriverManagementColumns} data={driversData} />
+        <DataTable isAction={true} columns={columns} data={driversData} />
       )}
+      <AddDriver
+        show={showAddDriverModal}
+        handleClose={handleCloseModal}
+        driverExistingData={editDriverData}
+        cleanUp={cleanUp}
+      />
     </div>
   );
 };

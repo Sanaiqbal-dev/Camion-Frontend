@@ -4,7 +4,7 @@ import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Image } from "react-bootstrap";
 import ShipperSider from "../../components/Shipper/ShipperSider";
-import ActivateProfile from "../../components/Modals/ActivatePropfile";
+import ActivateProfile from "../../components/Modals/ActivateProfile";
 import { useState } from "react";
 
 const HomePage = () => {
