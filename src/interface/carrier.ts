@@ -9,7 +9,7 @@ export type IBayanItem = {
 };
 export type IDriver = {
   id: string;
-  driverName: string;
+  name: string;
   driverId: string;
   licenseNumber: string;
   DOB: string;
@@ -29,8 +29,8 @@ export type IRequest = {
 };
 
 export type IVehicle = {
-  id: string;
-  driverName: string;
+  id: number;
+  driver: string;
   vehicleType: string;
   modelYear: string;
   vehicleNumber: string;
