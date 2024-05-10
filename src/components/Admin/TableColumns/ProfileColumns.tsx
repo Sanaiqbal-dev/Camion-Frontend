@@ -6,7 +6,19 @@ import { Iprofiles } from "../../../interface/admin";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 
-export const ProfileColumns: ColumnDef<Iprofiles>[] = [
+interface ProfileActionProps {
+  onAcceptButtonClick: (id: number) => void;
+  onRejectButtonClick: (id: number) => void;
+  onDeactivateButtonClick: (id: number) => void;
+  onDeleteButtonClick: (id: number) => void;
+}
+
+export const ProfileColumns = ({
+  onAcceptButtonClick,
+  onRejectButtonClick,
+  onDeactivateButtonClick,
+  onDeleteButtonClick,
+}: ProfileActionProps): ColumnDef<Iprofiles>[] => [
   {
     accessorKey: "profileType",
     header: "ProfileType",
@@ -55,6 +67,7 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
+      const id: number = row.original.id;
       const status = row.getValue("status");
 
       return status === "Not Approved" ? (
@@ -65,6 +78,7 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
               color: "#0EBC93",
               backgroundColor: "#0EBC931A",
             }}
+            onClick={() => onAcceptButtonClick(id)}
           >
             <img src={IconTick} />
             Accept
@@ -75,6 +89,7 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
               color: "#EB5757",
               backgroundColor: "#EB57571A",
             }}
+            onClick={() => onRejectButtonClick(id)}
           >
             <img src={IconRejectProfile} />
             Reject
@@ -85,6 +100,7 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
           <button
             className="table-action-btn"
             style={{ color: "#F48031", backgroundColor: "#F480311A" }}
+            onClick={() => onDeactivateButtonClick(id)}
           >
             Deactivate
           </button>
@@ -97,6 +113,7 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
               color: "#EB5757",
               backgroundColor: "#EB57571A",
             }}
+            onClick={() => onDeleteButtonClick(id)}
           >
             <img src={IconDeleteProfile} />
             Delete

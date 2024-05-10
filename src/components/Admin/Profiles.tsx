@@ -6,25 +6,99 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
 import { Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
-import { useGetCompanyProfilesListQuery } from "@/services/companyProfile";
+import {
+  useGetCompanyProfilesListQuery,
+  useUpdateCompanyAccountMutation,
+} from "@/services/companyProfile";
+import { ColumnDef } from "@tanstack/react-table";
 
 const Profiles = () => {
   const companyProfiles = useGetCompanyProfilesListQuery();
+  const [updateCompanyAccount] = useUpdateCompanyAccountMutation();
   const ProfilesTableData: Iprofiles = companyProfiles.data?.result;
+  const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
+    if (accountStatus === null) {
+      return "Not Approved";
+    } else if (accountStatus == 1 && isActive) {
+      return "Active";
+    } else if (accountStatus == 1 && !isActive) {
+      return "Deactivated";
+    }
+  };
+
   const profilesData = ProfilesTableData?.map((item) => ({
     id: item.id,
-    profileType: "shipper",
+    profileType: item.roleName ? item.roleName : "carrier",
     firstName: item.firstName,
     lastName: item.lastName,
     email: item.email,
     contact: item.phoneNumber ? item.phoneNumber : "2233445566",
-    company: item.companyName,
+    company: item.companyName ? item.companyName : "-",
     crDocument: "",
-    status: item.companyAccountStatus
-      ? item.companyAccountStatus
-      : "Not Approved",
+    status: getStatusColumn(
+      item.companyAccountStatus,
+      item.isCompanyAccountActive
+    ),
   }));
-
+  const onAcceptButtonClick = async (id: number) => {
+    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    console.log("SelectedItem", selectedItem);
+    if (selectedItem) {
+      await updateCompanyAccount({
+        userId: selectedItem.id,
+        companyAccountStatus: 1,
+        isCompanyAccountActive: true,
+        companyId: selectedItem.companyId,
+        deleteCompanyAccount: false,
+      });
+    }
+  };
+  const onDeactivateButtonClick = async (id: number) => {
+    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    console.log("SelectedItem", selectedItem);
+    if (selectedItem) {
+      await updateCompanyAccount({
+        userId: selectedItem.id,
+        companyAccountStatus: 1,
+        isCompanyAccountActive: false,
+        companyId: selectedItem.companyId,
+        deleteCompanyAccount: false,
+      });
+    }
+  };
+  const onDeleteButtonClick = async (id: number) => {
+    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    console.log("SelectedItem", selectedItem);
+    if (selectedItem) {
+      await updateCompanyAccount({
+        userId: selectedItem.id,
+        companyAccountStatus: 0,
+        isCompanyAccountActive: false,
+        companyId: selectedItem.companyId,
+        deleteCompanyAccount: true,
+      });
+    }
+  };
+  const onRejectButtonClick = async (id: number) => {
+    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    console.log("SelectedItem", selectedItem);
+    if (selectedItem) {
+      await updateCompanyAccount({
+        userId: selectedItem.id,
+        companyAccountStatus: 0,
+        isCompanyAccountActive: false,
+        companyId: selectedItem.companyId,
+        deleteCompanyAccount: true,
+      });
+      console.log("Delete is clicked");
+    }
+  };
+  const columns: ColumnDef<Iprofiles>[] = ProfileColumns({
+    onAcceptButtonClick,
+    onDeactivateButtonClick,
+    onDeleteButtonClick,
+    onRejectButtonClick,
+  });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
@@ -96,11 +170,7 @@ const Profiles = () => {
         </Row>
       </div>
       {profilesData && (
-        <DataTable
-          isAction={false}
-          columns={ProfileColumns}
-          data={profilesData}
-        />
+        <DataTable isAction={false} columns={columns} data={profilesData} />
       )}
     </div>
   );

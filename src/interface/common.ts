@@ -102,9 +102,13 @@ export interface ICompanyProfile {
   lastName: string;
   email: string;
   phoneNumber: string;
+  companyAccountStatus: number | null;
+  isCompanyAccountActive: boolean;
   password: string;
   confirmPassword: string;
   companyName: string;
+  companyId: number;
+  deleteCompanyAccount: boolean;
   fileDownload: IFileDownload[];
   userId: string;
 }
