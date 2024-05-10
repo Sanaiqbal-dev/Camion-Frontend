@@ -5,6 +5,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
 
 interface IUser {
+  firstName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -12,10 +13,12 @@ interface IUser {
 
 interface CreateUserModalProps {
   show: boolean;
+  onSubmitForm: (data: IUser) => void;
   handleClose: () => void;
 }
 const schema = z
   .object({
+    firstName: z.string().min(2, "First Name must be at least 2 characters."),
     email: z.string().email("Enter email address"),
     password: z.string().min(6, "Password must be at least 6 characters."),
     confirmPassword: z.string().min(6, "Confirm your password."),
@@ -25,16 +28,23 @@ const schema = z
     path: ["confirmPassword"],
   });
 
-const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
+const CreateUser: React.FC<CreateUserModalProps> = ({
+  show,
+  handleClose,
+  onSubmitForm,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     console.log(data);
+    onSubmitForm(data);
+    reset();
   };
 
   return (
@@ -44,48 +54,64 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email address"
-                style={{ width: "270px", height: "50px" }}
-                {...register("email")}
-                isInvalid={!!errors.email}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.email?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
+          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
+            <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter First Name"
+                  style={{ width: "270px", height: "50px" }}
+                  {...register("firstName")}
+                  isInvalid={!!errors.firstName}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.firstName?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email address"
+                  style={{ width: "270px", height: "50px" }}
+                  {...register("email")}
+                  isInvalid={!!errors.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </div>
+            <div className="tw-flex tw-flex-row tw-gap-5">
+              <Form.Group className="" controlId="formBasicPassword">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  style={{ width: "270px", height: "50px" }}
+                  {...register("password")}
+                  isInvalid={!!errors.password}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.password?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                style={{ width: "270px", height: "50px" }}
-                {...register("password")}
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.password?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm Password"
-                style={{ width: "270px", height: "50px" }}
-                {...register("confirmPassword")}
-                isInvalid={!!errors.confirmPassword}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.confirmPassword?.message}
-              </Form.Control.Feedback>
-            </Form.Group>
+              <Form.Group controlId="formBasicConfirmPassword">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm Password"
+                  style={{ width: "270px", height: "50px" }}
+                  {...register("confirmPassword")}
+                  isInvalid={!!errors.confirmPassword}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.confirmPassword?.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </div>
           </div>
           <Button variant="primary" type="submit">
             Add new user

@@ -1,77 +1,37 @@
 import { DataTable } from "../ui/DataTable";
 import { UsersColumn } from "./TableColumns/UsersColumn";
 import CreateUser from "../Modals/CreateUser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { ColumnDef } from "@tanstack/react-table";
 import { IUserManagement } from "../../interface/common";
-import { Col, FormControl, InputGroup,Image, Row } from "react-bootstrap";
+import { Col, FormControl, InputGroup, Image, Row } from "react-bootstrap";
 
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
+import {
+  useCreateSubUserMutation,
+  useGetCompanyUsersQuery,
+  useUpdateSubUserMutation,
+  useUpdateSubUserPasswordMutation,
+} from "@/services/user";
 
 const UserManagement = () => {
-  const userData: IUserManagement[] = [
-    {
-      id: "9e19od42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
+  const [edituser, setEditUser] = useState<IUserManagement | undefined>(null);
 
-    {
-      id: "56te1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
+  const [users, setUsers] = useState<IUserManagement[]>([]);
 
-    {
-      id: "7tf5d52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "728ed52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});
+  const [createSubUser] = useCreateSubUserMutation();
+  const [updateSubUser] = useUpdateSubUserMutation();
+  const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
-    {
-      id: "489e1e742",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-  ];
-
+  useEffect(() => {
+    if (!isLoading) {
+      setUsers(companyUserData.result);
+    }
+  }, [isLoading]);
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
@@ -90,12 +50,39 @@ const UserManagement = () => {
     setEntriesValue(values[currentIndex]);
   }
 
-  const onEdit = () => {
-    console.log(" Show password clicked");
+  const onEdit = (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
     setshowUpdatePasswordModal(true);
+  };
+  const onDelete = async (id: string) => {
+    const resp = await updateSubUser({
+      userId: id,
+      isDeleted: true,
+    });
+    const newUsers = users.filter((u) => u.id !== id);
+    setUsers(newUsers);
+  };
+  const submitCreateFormHandler = async (data: any) => {
+    setshowCreateUserModal(false);
+    console.log("submitCreateFormHandler", data);
+    const resp = await createSubUser(data);
+  };
+  const submitEditFormHandler = async (data: any) => {
+    setshowUpdatePasswordModal(false);
+    console.log("submitCreateFormHandler", {
+      ...data,
+      email: edituser?.email,
+    });
+    const resp = await updateSubUserPassword({
+      password: data.newPassword,
+      confirmPassword: data.confirmPassword,
+      email: edituser?.email,
+    });
   };
   const columns: ColumnDef<IUserManagement>[] = UsersColumn({
     onEdit,
+    onDelete,
   });
 
   return (
@@ -166,14 +153,18 @@ const UserManagement = () => {
           </Col>
         </Row>
       </div>
-      {userData && (
-        <DataTable isAction={false} columns={columns} data={userData} />
+      {users.length > 0 ? (
+        <DataTable isAction={false} columns={columns} data={users} />
+      ) : (
+        <span>No Users Found!</span>
       )}
       <CreateUser
         show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
       />
       <UpdatePassword
+        onSubmitForm={submitEditFormHandler}
         show={showUpdatePasswordModal}
         handleClose={() => setshowUpdatePasswordModal(false)}
       />

@@ -12,6 +12,8 @@ interface IPassword {
 
 interface UpdatePasswordModalProps {
   show: boolean;
+  onSubmitForm: (data: IPassword) => void;
+
   handleClose: () => void;
 }
 const schema = z
@@ -27,6 +29,7 @@ const schema = z
 
 const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
   show,
+  onSubmitForm,
   handleClose,
 }) => {
   const {
@@ -37,7 +40,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
-        console.log(data);
+    onSubmitForm(data);
 
     //    try {
     //      const loginResponse = await login(data).unwrap();

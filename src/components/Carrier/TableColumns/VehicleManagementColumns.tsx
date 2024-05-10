@@ -79,36 +79,26 @@ export const VehicleManagementColumns = ({
     cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div
+            onClick={() => {
+              editVehicle(row.original.id);
+            }}
+          >
             <img src={IconEdit} />
-            <span
-              style={{ color: "#27AE60" }}
-              onClick={() => {
-                editVehicle(row.original.id);
-              }}
-            >
-              Edit
-            </span>
+            <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => deleteVehicle(row.original.id)}>
             <img src={IconDelete} />
-            <span
-              style={{ color: "#EB5757" }}
-              onClick={() => deleteVehicle(row.original.id)}
-            >
-              Delete
-            </span>
+            <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div id="assign-driver">
+          <div
+            id="assign-driver"
+            onClick={() => {
+              assignDriver(row.original.id);
+            }}
+          >
             <img src={IconDriver} />
-            <span
-              style={{ color: "#0060B8" }}
-              onClick={() => {
-                assignDriver(row.original.id);
-              }}
-            >
-              Assign Driver
-            </span>
+            <span style={{ color: "#0060B8" }}>Assign Driver</span>
           </div>
         </div>
       );
