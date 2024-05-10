@@ -80,7 +80,7 @@ const ShipperOrders = () => {
           ETA:
             currentOrderObject.orderDetail.preferredDeliveryDate != null
               ? currentOrderObject.orderDetail.preferredDeliveryDate
-              : "22/5/2024",
+              : "not availablle",
           action: "",
         }));
 

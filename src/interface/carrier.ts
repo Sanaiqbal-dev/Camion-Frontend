@@ -41,8 +41,8 @@ export type IVehicle = {
   action: string;
 };
 
-export type IOrder = {
-  id: string;
+export type IOrderTable = {
+  id: number;
   origin: string;
   destination: string;
   weight: string;

@@ -41,7 +41,6 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
     }),
-
     updateOrder: builder.mutation<IAPIResponse<IOrder>, Partial<IOrder>>({
       query: ({ id, ...rest }) => ({
         url: `order/${id}`,

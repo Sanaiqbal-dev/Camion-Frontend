@@ -53,7 +53,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
                 required: "Vehicle type is required",
               })}
             >
-              <option value="">Select Vehicle Type</option>
+              <option value="">Select a Vehicle</option>
               <option value="Truck">Truck</option>
               <option value="Ship">Ship</option>
               <option value="Plane">Plane</option>

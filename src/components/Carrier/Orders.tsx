@@ -1,124 +1,67 @@
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { OrderColumns } from "./TableColumns/OrdersColumn";
-import { useState } from "react";
-import { IOrder } from "../../interface/carrier";
+import { useEffect, useState } from "react";
+import { IOrderTable } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import AssignVehicle from "../Modals/AssignVehicle";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../Modals/ConfirmationModal";
-import { useGetOrdersQuery } from "@/services/order";
+import {
+  useDeleteOrderMutation,
+  useGetOrderStatusListQuery,
+  useGetOrdersQuery,
+} from "@/services/order";
+import { QueryPager } from "@/interface/common";
+import { useAppSelector } from "@/state";
+import { PAGER_SIZE } from "@/config/constant";
+import { IOrder } from "@/interface/orderDetail";
 
 export interface StatusProps {
   id: string;
   statusValue: string;
 }
 const Orders = () => {
-  const ordersData: IOrder[] = [
-    {
-      id: "728ed52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
 
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+  const {
+    data: currentData,
+    isFetching,
+    error,
+  } = useGetOrdersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    ...filterKeys,
+  });
 
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
+  const [deleteOrder] = useDeleteOrderMutation();
 
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      status: "enroute",
-      action: "",
-    },
-  ];
+  const [orderItems, setOrderItems] = useState<IOrder>();
+  const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
+  const [selectedOrderId, setSelectedOrderId] = useState<number>();
 
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
-  const [showSaveForm, setShowSaveForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [selectedOrderItemId, setSelectedOrderItemId] = useState<string>();
+  const [selectedOrderItemId, setSelectedOrderItemId] = useState<number>();
   const navigate = useNavigate();
-  const onAssignVehicle = (orderItemId: string) => {
+  const onAssignVehicle = (orderItemId: number) => {
     setShowAssignVehicleForm(true);
     setSelectedOrderItemId(orderItemId);
   };
@@ -126,29 +69,22 @@ const Orders = () => {
   const onAssignVehicleToOrderItem = (vehicleType: string) => {
     console.log("vehicle type is :", vehicleType);
     console.log("Seleted order is : ", selectedOrderItemId);
-
-    //Add API request to assign vehicle type here...
   };
-  const onSave = (orderId:string) => {
-    console.log("Save is clicked on :", orderId);
-    setShowSaveForm(true);
-  };
-  const onDelete = (orderId: string) => {
+  const onDelete = (orderId: number) => {
     console.log("Delete is clicked on :", orderId);
+        setSelectedOrderId(orderId);
+
     setShowDeleteForm(true);
   };
-  const onPrintBill = (orderItemId: string) => {
+  const onPrintBill = (orderItemId: number) => {
     console.log("Print Bayan Bill is clicked on order: ", orderItemId);
     navigate("/carrier/bayanBill");
   };
-  const onUpdateStatus = (id: string, statusVal: string) => {
+  const onUpdateStatus = (id: number, statusId: number) => {
     console.log("status id : ", id);
-    console.log("status value : ", statusVal);
-
-    //add API call to update order status here...
+    console.log("status id : ", statusId);
   };
-  const columns: ColumnDef<IOrder>[] = OrderColumns({
-    onSave,
+  const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onAssignVehicle,
     onPrintBill,
@@ -169,15 +105,75 @@ const Orders = () => {
     setEntriesValue(values[currentIndex]);
   }
 
-  const saveOrder = () => {
-    setShowSaveForm(false);
-    // Add save order request here...
+  const DeleteOrder = async() => {
+    setShowDeleteForm(false);
+    try {
+      const result = await deleteOrder({ id: selectedOrderId });
+      console.log("Proposal deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting proposal:", error);
+    }
+  };
+  const FilterDataForTable = (orderItems: IOrder[]) => {
+    setOrderTableData([]);
+    try {
+      if (orderItems) {
+        const updatedOrderData = orderItems.map((currentOrderObject) => {
+          const orderDetailItem = currentOrderObject.orderDetail;
+          const shipment = orderDetailItem.shipmentTypes.shipmentTypeName;
+          let dimension =
+            shipment == "Box"
+              ? "-"
+              : shipment == "Pallet"
+              ? orderDetailItem.length + "x" + orderDetailItem.width
+              : shipment == "Truck"
+              ? "-"
+              : orderDetailItem.length +
+                "x" +
+                orderDetailItem.width +
+                "x" +
+                orderDetailItem.height;
+          return {
+            id: currentOrderObject.id,
+            origin: currentOrderObject.orderDetail.originCity.name,
+            destination: currentOrderObject.orderDetail.destinationCity.name,
+            weight: currentOrderObject.orderDetail.weight,
+            dimentions: dimension,
+            ETA: currentOrderObject.orderDetail.preferredDeliveryDate,
+            status:
+              currentOrderObject.orderStatus != null &&
+              currentOrderObject.orderStatus,
+            action: "",
+          };
+        });
+
+        setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
+        console.log("fetched requestItems : ", orderItems);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteOrder = () => {
-    setShowDeleteForm(false);
-    // Add delete order request here...
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
   };
+
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
+  useEffect(() => {
+    console.log("carrier order:", currentData);
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
+      setOrderItems(currentData?.result.result);
+      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      console.log("Total pages :", maxPageCount);
+      setTotalPageCount(maxPageCount);
+    }
+  }, [currentData]);
+
   return (
     <div className="table-container orders-table">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -234,25 +230,39 @@ const Orders = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && (
-        <DataTable isAction={false} columns={columns} data={ordersData} />
+      {orderTableData && (
+        <DataTable isAction={false} columns={columns} data={orderTableData} />
       )}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <Button
+          className="img-prev"
+          variant="outline"
+          size="sm"
+          disabled={pager.page < 2}
+          onClick={() => updatePage(-1)}
+        >
+          <img src={PreviousIcon} />
+        </Button>
+        <Button
+          className="img-next"
+          variant="outline"
+          size="sm"
+          onClick={() => updatePage(+1)}
+          disabled={pager.page >= Math.floor(totalPageCount)}
+        >
+          <img src={NextIcon} />
+        </Button>
+      </div>
       <AssignVehicle
         show={showAssignVehicleForm}
         handleClose={() => setShowAssignVehicleForm(false)}
         onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
       />
       <ConfirmationModal
-        promptMessage={"Are you sure, you want to save this order?"}
-        show={showSaveForm}
-        handleClose={() => setShowSaveForm(false)}
-        performOperation={() => saveOrder()}
-      />
-      <ConfirmationModal
         promptMessage={"Are you sure, you want to delete this order?"}
         show={showDeleteForm}
         handleClose={() => setShowDeleteForm(false)}
-        performOperation={() => deleteOrder()}
+        performOperation={() => DeleteOrder()}
       />
     </div>
   );
