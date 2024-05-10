@@ -18,9 +18,11 @@ import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from "../Modals/AssignDriver";
 import CreateVehicleModal from "../Modals/CreateVehicle";
 import EditVehicleModal from "../Modals/EditVehicle";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const VehicleManagement = () => {
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
   const [drivers, setDrivers] = useState<IDriver[]>([]);
   const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(
@@ -82,9 +84,16 @@ const VehicleManagement = () => {
     const resp = await editVehicle(data).unwrap();
   };
   const deleteVehicleHandler = async (id: number) => {
-    const res = await deleteVehicle({ id });
+    const veh = vehicles.find((v) => v.id === id);
+    seteditedVehicle(veh);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
 
-    const filteredvehicle = vehicles.filter((v) => v.id !== id);
+    const res = await deleteVehicle({ id: editedVehicle.id });
+
+    const filteredvehicle = vehicles.filter((v) => v.id !== editedVehicle.id);
     setVehicles(filteredvehicle);
   };
   const closeCreateModal = () => {
@@ -198,6 +207,7 @@ const VehicleManagement = () => {
       <AssignDriverModal
         show={showDriverModal}
         drivers={drivers}
+        handleClose={() => setShowDriverModal(false)}
         onAssignDriver={assignDriverHandler}
       />
       <CreateVehicleModal
@@ -210,6 +220,12 @@ const VehicleManagement = () => {
         handleClose={closeEditModal}
         show={showEditVehicle}
         onSubmitForm={submitEditVehicleHandler}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
       />
     </>
   );

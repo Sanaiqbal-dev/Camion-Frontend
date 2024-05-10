@@ -16,9 +16,11 @@ import {
   useUpdateSubUserMutation,
   useUpdateSubUserPasswordMutation,
 } from "@/services/user";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const UserManagement = () => {
-  const [edituser, setEditUser] = useState<IUserManagement | undefined>(null);
+  const [edituser, setEditUser] = useState<IUserManagement | undefined>();
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
@@ -56,24 +58,27 @@ const UserManagement = () => {
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
+
     const resp = await updateSubUser({
-      userId: id,
+      userId: edituser?.id,
       isDeleted: true,
     });
-    const newUsers = users.filter((u) => u.id !== id);
+    const newUsers = users.filter((u) => u.id !== edituser?.id);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: any) => {
     setshowCreateUserModal(false);
-    console.log("submitCreateFormHandler", data);
     const resp = await createSubUser(data);
   };
   const submitEditFormHandler = async (data: any) => {
     setshowUpdatePasswordModal(false);
-    console.log("submitCreateFormHandler", {
-      ...data,
-      email: edituser?.email,
-    });
+
     const resp = await updateSubUserPassword({
       password: data.newPassword,
       confirmPassword: data.confirmPassword,
@@ -167,6 +172,12 @@ const UserManagement = () => {
         onSubmitForm={submitEditFormHandler}
         show={showUpdatePasswordModal}
         handleClose={() => setshowUpdatePasswordModal(false)}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
       />
     </div>
   );

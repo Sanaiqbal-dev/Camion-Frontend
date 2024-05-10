@@ -9,6 +9,7 @@ import { IDriver } from "@/interface/carrier";
 interface AssignVehicleModalProps {
   show: boolean;
   drivers: IDriver[];
+  handleClose: () => void;
   onAssignDriver: (id: number) => void;
 }
 interface IdriverForm {
@@ -21,6 +22,7 @@ export const schema = z.object({
 const AssignDriver: React.FC<AssignVehicleModalProps> = ({
   show,
   drivers,
+  handleClose,
   onAssignDriver,
 }) => {
   const {
@@ -37,7 +39,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({
   };
 
   return (
-    <Modal show={show} centered>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header>
         <Modal.Title>Assign Vehicle</Modal.Title>
       </Modal.Header>

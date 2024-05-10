@@ -15,9 +15,11 @@ import {
   useUpdateSubUserMutation,
   useUpdateSubUserPasswordMutation,
 } from "@/services/user";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const UserManagementShipper = () => {
-  const [edituser, setEditUser] = useState<IUserManagement | undefined>(null);
+  const [edituser, setEditUser] = useState<IUserManagement | undefined>();
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
@@ -53,11 +55,17 @@ const UserManagementShipper = () => {
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
     const resp = await updateSubUser({
-      userId: id,
+      userId: edituser?.id,
       isDeleted: true,
     });
-    const newUsers = users.filter((u) => u.id !== id);
+    const newUsers = users.filter((u) => u.id !== edituser?.id);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: any) => {
@@ -164,6 +172,12 @@ const UserManagementShipper = () => {
         onSubmitForm={submitEditFormHandler}
         show={showUpdatePasswordModal}
         handleClose={() => setshowUpdatePasswordModal(false)}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
       />
     </div>
   );
