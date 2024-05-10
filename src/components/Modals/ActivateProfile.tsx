@@ -62,7 +62,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   const userId = useAppSelector((state) => state.session.user.userId);
   const userRole = useAppSelector((state) => state.session.user.role);
   const isShipper = userRole === "Shipper";
-  console.log("Role", userRole);
   const [createCompanyProfile] = useCreateCompanyProfileMutation();
   const [vatFile, setVatFile] = useState<File>();
   const [crFile, setCrFile] = useState<File>();
@@ -158,6 +157,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   ) => {
     inputRef.current?.click();
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onerror = (error: any) => {
     console.log("error is: ", error);
   };

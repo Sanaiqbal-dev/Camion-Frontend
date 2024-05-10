@@ -57,8 +57,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
     resolver: zodResolver(schema),
   });
   const userId = useAppSelector((state) => state.session.user.userId);
-  const userRole = useAppSelector((state) => state.session.user.role);
-  console.log("Role", userRole);
   const [uploadFile] = useUploadFileMutation();
   const [addNewProposal] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);

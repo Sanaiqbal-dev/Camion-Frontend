@@ -18,7 +18,6 @@ const DriverManagement = () => {
   const [deleteDriver] = useDeleteDriverMutation();
 
   const tableData: IDriver = getDriversList.data?.result.result;
-  console.log("Drivers", tableData);
   const driversData = tableData?.map((item) => ({
     id: item.id,
     name: item.name,
@@ -37,7 +36,6 @@ const DriverManagement = () => {
   const [editDriverData, setEditDriverData] = useState<IDriver>();
 
   const cleanUp = () => {
-    console.log("cleanup called!");
     setEditDriverData(undefined);
   };
 
@@ -56,7 +54,6 @@ const DriverManagement = () => {
     );
     setEditDriverData(selectedDriver);
     setShowAddDriverModal(true);
-    console.log("DataToEdit", selectedDriver);
   };
 
   const columns: ColumnDef<IDriver>[] = DriverManagementColumns({
@@ -66,7 +63,6 @@ const DriverManagement = () => {
   const handleCloseModal = () => {
     setEditDriverData(null);
     setShowAddDriverModal(false);
-    console.log("Func called");
   };
 
   function handleChangeValue(direction: number) {

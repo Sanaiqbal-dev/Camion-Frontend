@@ -60,7 +60,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
   const [nationalityId, setNationalityId] = useState<number>();
   const [formData, setFormData] = useState<IDriver>({});
   const nationalityList = useGetNationalityListQuery();
-  console.log("ExistingData", driverExistingData);
   const nationalityListData = nationalityList.data?.result || [];
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,12 +80,16 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
     try {
       if (driverExistingData) {
         // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
-        console.log("FormData", driverExistingData);
         await updateDriver({
           name: formData.name,
           licenseNumber: formData.licenseNumber,
           dob: formData.dob,
-          nationalityId: nationalityId,
+          nationalityId: nationalityId
+            ? nationalityId
+            : getNationalityIdByName(
+                driverExistingData?.nationality,
+                nationalityListData
+              ),
           mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
@@ -214,7 +217,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 as="select"
                 style={{ width: "560px", height: "50px" }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                value={getNationalityIdByName(
+                defaultValue={getNationalityIdByName(
                   driverExistingData?.nationality,
                   nationalityListData
                 )}
