@@ -119,7 +119,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
     const nationality = nationalityListData.find(
       (nat) => nat.name === nationalityName
     );
-    return nationality ? nationality.id : nationalityId; // Return the ID if found, otherwise return an empty string
+    return nationality ? nationality.id : ""; // Return the ID if found, otherwise return an empty string
   };
   const handleCloseModal = () => {
     reset();
@@ -214,7 +214,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 as="select"
                 style={{ width: "560px", height: "50px" }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                defaultValue={getNationalityIdByName(
+                value={getNationalityIdByName(
                   driverExistingData?.nationality,
                   nationalityListData
                 )}
