@@ -14,6 +14,16 @@ export const companyProfile = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["CreateProfile"],
     }),
+    getCompanyProfilesList: builder.query<
+      IAPIResponse<ICompanyProfile[]>,
+      void
+    >({
+      query: () => `/Account/GetCompanyVerificationUsers`,
+      providesTags: ["Company"],
+    }),
   }),
 });
-export const { useCreateCompanyProfileMutation } = companyProfile;
+export const {
+  useCreateCompanyProfileMutation,
+  useGetCompanyProfilesListQuery,
+} = companyProfile;
