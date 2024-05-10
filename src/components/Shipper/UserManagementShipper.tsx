@@ -18,65 +18,7 @@ import {
 
 const UserManagementShipper = () => {
   const [edituser, setEditUser] = useState<IUserManagement | undefined>(null);
-  const userData: IUserManagement[] = [
-    {
-      id: "9e19od42",
-      userName: "Ali Abbasi1",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
 
-    {
-      id: "56te1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-
-    {
-      id: "7tf5d52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "728ed52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      action: "",
-    },
-  ];
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});

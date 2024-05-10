@@ -20,7 +20,13 @@ const schema = z
   .object({
     firstName: z.string().min(2, "First Name must be at least 2 characters."),
     email: z.string().email("Enter email address"),
-    password: z.string().min(6, "Password must be at least 6 characters."),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters.")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+      ),
     confirmPassword: z.string().min(6, "Confirm your password."),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -42,7 +48,6 @@ const CreateUser: React.FC<CreateUserModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    console.log(data);
     onSubmitForm(data);
     reset();
   };
@@ -93,7 +98,10 @@ const CreateUser: React.FC<CreateUserModalProps> = ({
                   {...register("password")}
                   isInvalid={!!errors.password}
                 />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback
+                  type="invalid"
+                  style={{ maxWidth: "270px" }}
+                >
                   {errors.password?.message}
                 </Form.Control.Feedback>
               </Form.Group>

@@ -24,6 +24,7 @@ interface EditUserModalProps {
   vehicle: any;
   onSubmitForm: (requestData: any) => void;
 }
+
 const schema = z.object({
   color: z.string().min(1, "Enter Color"),
   imeiNumber: z.string().min(1, "Enter imeiNumber"),
@@ -47,6 +48,9 @@ const EditVehicle: React.FC<EditUserModalProps> = ({
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
+  useEffect(() => {
+    reset();
+  }, [vehicle]);
   const fileType = 4;
   const [uploadFile] = useUploadFileMutation();
   const [selectedFile, setSeletedFile] = useState<File>();
