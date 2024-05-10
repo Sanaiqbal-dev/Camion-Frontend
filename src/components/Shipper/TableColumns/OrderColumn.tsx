@@ -1,10 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteIcon from "../../../assets/icons/ic-delete.svg";
-import EditIcon from "../../../assets/icons/ic-edit.svg";
-import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
+import IconTrackOrder from "../../../assets/icons/ic-vehicle.svg";
+import IconTrackOrderDisabled from "../../../assets/icons/ic-vehicle-disabled.svg";
 import { IOrderTable } from "@/interface/shipper";
 
-export const OrderColumns: ColumnDef<IOrderTable>[] = [
+interface OrderActionsProps {
+  onDelete: (orderItemId: number) => void;
+  onTrackOrder: (orderItemId: number) => void;
+}
+export const OrderColumns = ({
+  onDelete,
+  onTrackOrder,
+}: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {
     accessorKey: "trackingId",
     header: "Tracking",
@@ -36,20 +43,21 @@ export const OrderColumns: ColumnDef<IOrderTable>[] = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
+      let isEnabled = row.original.status === "Driver Assigned";
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
-            <img src={EditIcon} />
-            <span style={{ color: "#27AE60" }}>Edit</span>
-          </div>
-          <div>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={DeleteIcon} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>
-          <div>
-            <img src={IconAssignVehicle} />
-            <span style={{ color: "#0060B8" }}>Assign Vehicle</span>
+          <div onClick={() => isEnabled && onTrackOrder(row.original.id)}>
+            <img src={isEnabled ? IconTrackOrder : IconTrackOrderDisabled} />
+            <span
+              className={isEnabled ? "trackingEnabled" : "trackingDisabled"}
+            >
+              Track
+            </span>
           </div>
         </div>
       );

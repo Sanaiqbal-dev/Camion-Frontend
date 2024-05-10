@@ -3,18 +3,22 @@ export interface IProposal {
   id: number;
   originBuildingNo: string;
   originStreetName: string;
-  originCityName: string;
+  originCityId: number;
+  originCity: IPlaces;
   originZipCode: string;
   originAdditionalNo: string;
   originUnitNo: string;
-  originDistrictName: string;
+  originDistrictId: number;
+  originDistrict:IPlaces
   destinationBuildingNo: string;
   destinationStreetName: string;
-  destinationCityName: string;
+  destinationCityId: number;
+  destinationCity:IPlaces;
   destinationZipCode: string;
   destinationAdditionalNo: string;
   destinationUnitNo: string;
-  destinationDistrictName: string;
+  destinationDistrictId: number;
+  destinationDistrict:IPlaces;
   shipmentTypeId: number;
   shipmentQuantity: number;
   length: number | null;
@@ -107,4 +111,13 @@ export interface ITruckShipmentDetails {
   noOfTrucks: number;
   truckTypeId: number;
   proposalId: number;
+}
+
+export interface IPlacesResponseObject {
+  statusCode: number;
+  result: IPlaces[];
+}
+export interface IPlaces{
+  id:number;
+  name:string;
 }

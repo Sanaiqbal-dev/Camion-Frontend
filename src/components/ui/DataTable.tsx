@@ -3,7 +3,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -14,10 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "../../../@/components/ui/table";
+
 import clsx from "clsx";
-import IconPrevious from "../../assets/icons/ic-previous.svg";
-import IconNext from "../../assets/icons/ic-next.svg";
-import { Button } from "react-bootstrap";
+import { useEffect } from "react";
 
 interface DataTableProps<TData, TValue> {
   isAction: boolean;
@@ -34,96 +32,74 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const tableColumnStyle = clsx({
     "data-table equal-columns": columns.length <= 6,
     "data-table auto-width-columns": columns.length > 6,
   });
+
+  useEffect(() => {
+    console.log("Data in data table file is :", data);
+  }, [data]);
   return (
-    <>
-      <div
-        className="table-contents"
-        style={
-          isAction
-            ? { height: `calc(100vh - 250px)` }
-            : { height: `calc(100vh - 200px)` }
-        }
-      >
-        <Table className={tableColumnStyle}>
-          <TableHeader className="tw-border-none">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      className="tw-border-none tw-font-bold tw-py-3 tw-bg-transparent"
-                      key={header.id}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+    <div
+      className="table-contents"
+      style={
+        isAction
+          ? { height: `calc(100vh - 250px)` }
+          : { height: `calc(100vh - 200px)` }
+      }
+    >
+      <Table className={tableColumnStyle}>
+        <TableHeader className="tw-border-none">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead
+                    className="tw-border-none tw-font-bold tw-py-3 tw-bg-transparent"
+                    key={header.id}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody className="gap-10">
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm hover:tw-cursor-pointer"
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell className="tw-border-none" key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody className="gap-10">
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm hover:tw-cursor-pointer"
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell className="tw-border-none" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow className="rounded-lg">
-                <TableCell
-                  colSpan={columns.length}
-                  className="tw-h-24 tw-text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <img src={IconPrevious} />
-        </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <img src={IconNext} />
-        </Button>
-      </div>
-    </>
+            ))
+          ) : (
+            <TableRow className="rounded-lg">
+              <TableCell
+                colSpan={columns.length}
+                className="tw-h-24 tw-text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

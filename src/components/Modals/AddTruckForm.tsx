@@ -110,7 +110,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({
             <Form.Control
               type="number"
               placeholder="1"
-              value={truck.noOfTruck}
+              defaultValue={truck && truck.noOfTruck}
               style={{ width: "229px", height: "59px" }}
               isInvalid={!!errors[index]?.noOfTruck}
               {...register(`${index}.noOfTruck` as const)}
@@ -122,9 +122,9 @@ const AddTruckForm: React.FC<IPalletForm> = ({
           <Form.Group className="mb-3">
             <Form.Label>Type of truck</Form.Label>
             <Form.Select
-              aria-label="Select truck type"
+              aria-label="Select t7ruck type"
               style={{ width: "229px", height: "59px" }}
-              defaultValue={truck.truckTypeId}
+              defaultValue={truck && truck.truckTypeId}
               {...register(`${index}.truckTypeId` as const)}
             >
               <option value="">Select Truck Type</option>

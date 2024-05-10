@@ -14,7 +14,7 @@ export type IDriver = {
   licenseNumber: string;
   DOB: string;
   nationality: string;
-  mobileNumber: string;
+  phoneNumber: string;
   viewIqama: string;
   action: string;
 };
@@ -41,8 +41,8 @@ export type IVehicle = {
   action: string;
 };
 
-export type IOrder = {
-  id: string;
+export type IOrderTable = {
+  id: number;
   origin: string;
   destination: string;
   weight: string;

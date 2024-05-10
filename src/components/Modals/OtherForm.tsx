@@ -80,7 +80,7 @@ const OtherForm: React.FC<IOtherForm> = ({
         </Form.Group>
         <Form.Group className="mb-3 d-flex">
           <Form.Control
-            type="text"
+            type="number"
             placeholder="Length"
             style={{
               width: "164px",
@@ -93,7 +93,7 @@ const OtherForm: React.FC<IOtherForm> = ({
             {errors.length?.message}
           </Form.Control.Feedback> */}
           <Form.Control
-            type="text"
+            type="number"
             placeholder="Width"
             style={{
               width: "164px",
@@ -107,7 +107,7 @@ const OtherForm: React.FC<IOtherForm> = ({
             {errors.width?.message}
           </Form.Control.Feedback>{" "} */}
           <Form.Control
-            type="text"
+            type="number"
             placeholder="Height"
             style={{
               width: "164px",

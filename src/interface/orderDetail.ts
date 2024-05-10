@@ -1,6 +1,6 @@
 import { IAppUser, Pager } from "./common";
 import { IOrderStatus } from "./orderStatus";
-import { IProposal, IShipmentType } from "./proposal";
+import { IPlaces, IProposal, IShipmentType } from "./proposal";
 export interface IOrder {
   id: number;
   proposalId: number;
@@ -20,17 +20,21 @@ export interface IOrderDetail {
   orderId: number;
   originBuildingNo: string | null;
   originStreetName: string | null;
-  originCityName: string | null;
+  originCityId: number | null;
+  originCity:IPlaces;
   originZipCode: string | null;
   originAdditionalNo: string | null;
   originUnitNo: string | null;
-  originDistrictName: string | null;
+  originDistrictId: number | null;
+  originDistrict:IPlaces;
   destinationBuildingNo: string | null;
   destinationStreetName: string | null;
-  destinationCityName: string | null;
+  destinationCityId: number | null;
+  destinationCity:IPlaces;
   destinationZipCode: string | null;
   destinationAdditionalNo: string | null;
-  destinationDistrictName: string | null;
+  destinationDistrictId: number | null;
+  destinationDistrict:IPlaces;
   destinationUnitNo: string | null;
   shipmentTypeId: number | null;
   shipmentTypes: IShipmentType;

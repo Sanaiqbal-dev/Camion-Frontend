@@ -3,7 +3,14 @@ import {
   RequestColumns,
 } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -29,6 +36,7 @@ import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { ColumnDef } from "@tanstack/react-table";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
@@ -46,11 +54,13 @@ const ShipperRequests = () => {
   const [createNewProposal] = useCreateNewProposalMutation();
   const [updateProposal] = useUpdateProposalMutation();
   const [deleteProposal] = useDeleteProposalMutation();
-
+  const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
@@ -67,7 +77,9 @@ const ShipperRequests = () => {
     ...filterKeys,
   });
 
-  const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>([]);
+  const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>(
+    []
+  );
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] =
     useState<IProposalResponseData>();
@@ -96,11 +108,11 @@ const ShipperRequests = () => {
       ...prevItem,
       originBuildingNo: requestObj.buildingNumber,
       originStreetName: requestObj.streetName,
-      originCityName: requestObj.cityName,
+      originCityId: requestObj.cityId,
       originZipCode: requestObj.zipCode,
       originAdditionalNo: requestObj.additionalNumber,
       originUnitNo: requestObj.unitNo,
-      originDistrictName: requestObj.districtName,
+      originDistrictId: requestObj.districtId,
     }));
 
     console.log("userId: ", userData);
@@ -113,11 +125,11 @@ const ShipperRequests = () => {
       ...prevItem,
       destinationBuildingNo: requestObj.buildingNumber,
       destinationStreetName: requestObj.streetName,
-      destinationCityName: requestObj.cityName,
+      destinationCityId: requestObj.cityId,
       destinationZipCode: requestObj.zipCode,
       destinationAdditionalNo: requestObj.additionalNumber,
       destinationUnitNo: requestObj.unitNo,
-      destinationDistrictName: requestObj.districtName,
+      destinationDistrictId: requestObj.districtId,
     }));
 
     SetShowCreateUserModalSecondStep(false);
@@ -174,7 +186,7 @@ const ShipperRequests = () => {
       FilePath: "",
     }));
 
-    // setSendProposalRequest(true);
+    setSendProposalRequest(false);
     setShowConfirmationModal(true);
   };
 
@@ -183,14 +195,20 @@ const ShipperRequests = () => {
     if (requestItems) {
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
-        origin: currentRequestObject.originCityName,
-        destination: currentRequestObject.destinationCityName,
+        origin:
+          currentRequestObject.originCity.name +
+          ", " +
+          currentRequestObject.originDistrict.name,
+        destination:
+          currentRequestObject.destinationCity.name +
+          ", " +
+          currentRequestObject.destinationDistrict.name,
         weight: currentRequestObject.weight,
         dimentions:
           currentRequestObject.shipmentTypes.shipmentTypeName === "Truck"
             ? "-"
             : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
-        ETA: "",
+        ETA: "not available",
         action: "",
       }));
 
@@ -213,7 +231,9 @@ const ShipperRequests = () => {
     setShowConfirmationModal(true);
   };
 
-  const onProposalList = (proposalItemId: number) => {};
+  const onProposalList = (proposalItemId: number) => {
+    navigate("/shipper/proposals");
+  };
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
     onEdit,
     onDelete,
@@ -228,12 +248,23 @@ const ShipperRequests = () => {
       console.error("Error deleting proposal:", error);
     }
   };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
       setRequestItems(currentData?.result.result);
+      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      console.log("Total pages :", maxPageCount);
+      setTotalPageCount(maxPageCount);
     }
   }, [currentData]);
+
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
 
   useEffect(() => {
     if (error) {
@@ -276,6 +307,7 @@ const ShipperRequests = () => {
     showCreateUserModalSecondStep,
     showShippementDetailsModal,
   ]);
+
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
@@ -351,6 +383,26 @@ const ShipperRequests = () => {
       {requestTableData && (
         <DataTable columns={columns} data={requestTableData} isAction={false} />
       )}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <Button
+          className="img-prev"
+          variant="outline"
+          size="sm"
+          disabled={pager.page < 2}
+          onClick={() => updatePage(-1)}
+        >
+          <img src={PreviousIcon} />
+        </Button>
+        <Button
+          className="img-next"
+          variant="outline"
+          size="sm"
+          onClick={() => updatePage(+1)}
+          disabled={pager.page >= Math.floor(totalPageCount)}
+        >
+          <img src={NextIcon} />
+        </Button>
+      </div>
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
         infoType={"origin"}

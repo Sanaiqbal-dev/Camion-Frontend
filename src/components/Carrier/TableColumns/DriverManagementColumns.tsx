@@ -4,13 +4,21 @@ import IconDelete from "../../../assets/icons/ic-delete.svg";
 import { Link } from "react-router-dom";
 import { IDriver } from "../../../interface/carrier";
 
-export const DriverManagementColumns: ColumnDef<IDriver>[] = [
+interface DriverActionProps {
+  onDeleteDriver: (id: number) => void;
+  onUpdateDriver: (id: number) => void;
+}
+
+export const DriverManagementColumns = ({
+  onDeleteDriver,
+  onUpdateDriver,
+}: DriverActionProps): ColumnDef<IDriver>[] => [
   {
-    accessorKey: "driverName",
+    accessorKey: "name",
     header: "Driver Name",
   },
   {
-    accessorKey: "driverId",
+    accessorKey: "iqamaId",
     header: "Driver ID/Iqama",
   },
   {
@@ -18,7 +26,7 @@ export const DriverManagementColumns: ColumnDef<IDriver>[] = [
     header: "License Number",
   },
   {
-    accessorKey: "DOB",
+    accessorKey: "dob",
     header: "Date Of Birth",
   },
   {
@@ -27,30 +35,28 @@ export const DriverManagementColumns: ColumnDef<IDriver>[] = [
   },
 
   {
-    accessorKey: "mobileNumber",
+    accessorKey: "phoneNumber",
     header: "Mobile Number",
   },
 
   {
     accessorKey: "viewIqama",
     header: "Iqama/Id",
-    cell:()=>{
-        return(
-            <Link to={""}>View Iqama/ID</Link>
-        )
-    }
+    cell: () => {
+      return <Link to={""}>View Iqama/ID</Link>;
+    },
   },
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+          <div onClick={() => onUpdateDriver(row.original.id)}>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDeleteDriver(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>

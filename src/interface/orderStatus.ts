@@ -29,3 +29,8 @@ export interface IOrderStatusSearch {
 
 
 }
+
+export interface IOrderStatusResponseObject {
+  statusCode: number;
+  result: IOrderStatus[];
+}

@@ -1,32 +1,50 @@
 import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import { useGetProposalsQuery } from "@/services/proposal";
+import {
+  useGetProposalsQuery,
+} from "@/services/proposal";
+import IconPrevious from "../../assets/icons/ic-previous.svg";
+import IconNext from "../../assets/icons/ic-next.svg";
+import { useAppSelector } from "@/state";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
+import { IProposalResponseData } from "@/interface/proposal";
 
 const Requests = () => {
-  const data = useGetProposalsQuery("");
-  const TableData = data.data?.result.result;
-  const mappedData: IRequest[] = TableData?.map((item: any) => ({
-    id: item.id,
-    origin: `${item.originCityName}, ${item.originDistrictName}`,
-    destination: `${item.destinationCityName}, ${item.destinationStreetName}`,
-    weight: item.weight ? item.weight : "-",
-    dimentions:
-      item.length && item.width && item.height
-        ? `${item.length}x${item.width}x${item.height}`
-        : "-",
-    EDT: item.preferredDeliveryDate
-      ? item.preferredDeliveryDate
-      : "Time not assigned yet",
-    action: "Submit Proposal",
-  }));
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+  const {
+    data: currentData,
+    isFetching,
+    error,
+  } = useGetProposalsQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    ...filterKeys,
+  });
+  const [requestTableData, setRequestTableData] = useState<IRequest[]>([]);
+  const [orderItems, setOrderItems] = useState<IRequest>();
 
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,7 +57,9 @@ const Requests = () => {
 
   const onSubmitProposal = (proposalItemId: number) => {
     setShowProposalForm(true);
-    const selectedItem = mappedData.find((item) => item.id === proposalItemId);
+    const selectedItem = requestTableData.find(
+      (item) => item.id === proposalItemId
+    );
     setSelectedProposalItem(selectedItem);
   };
 
@@ -67,6 +87,51 @@ const Requests = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+  const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
+    setRequestTableData([]);
+
+    if (requestItems) {
+      const updatedRequestData = requestItems.map((item: any) =>{
+        // const isCorrect
+        return {
+        id: item.id,
+        origin: `${item.originCity.name}, ${item.originDistrict.name}`,
+        destination: `${item.destinationCity.name}, ${item.destinationS}`,
+        weight: item.weight ? item.weight : "-",
+        dimentions:
+          item.length && item.width && item.height
+            ? `${item.length}x${item.width}x${item.height}`
+            : "-",
+        EDT: item.preferredDeliveryDate
+          ? item.preferredDeliveryDate
+          : "Time not assigned yet",
+        action: "Submit Proposal",
+      };
+      } );
+
+      setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
+      console.log("fetched requestItems : ", requestItems);
+    }
+  };
+
+  useEffect(() => {
+    if (currentData?.result.result) {
+      console.log(currentData.result);
+      FilterDataForTable(currentData?.result.result);
+      setOrderItems(currentData?.result.result);
+      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      console.log("Total pages :", maxPageCount);
+      setTotalPageCount(maxPageCount);
+    }
+  }, [currentData]);
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
   return (
     <div className="table-container">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -123,14 +188,36 @@ const Requests = () => {
           </Col>
         </Row>
       </div>
-      {mappedData && (
-        <DataTable isAction={false} columns={columns} data={mappedData} />
+      {requestTableData && (
+        <DataTable isAction={false} columns={columns} data={requestTableData} />
       )}
 
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4">
+        <Button
+          className="img-prev"
+          variant="outline"
+          size="sm"
+          disabled={pager.page < 2}
+          onClick={() => updatePage(-1)}
+        >
+          <img src={IconPrevious} />
+        </Button>
+        <Button
+          className="img-next"
+          variant="outline"
+          size="sm"
+          onClick={() => updatePage(+1)}
+          disabled={pager.page >= Math.floor(totalPageCount)}
+        >
+          <img src={IconNext} />
+        </Button>
+      </div>
       <ProposalDetailsForm
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
-        submitProposal={() => onSubmitProposal(selectedProposalItem.id)}
+        submitProposal={() =>
+          selectedProposalItem && onSubmitProposal(selectedProposalItem.id)
+        }
         fileType={4}
         proposalId={selectedProposalItem && selectedProposalItem?.id}
         submitProposalSuccess={handleProposalSubmissionSuccess}

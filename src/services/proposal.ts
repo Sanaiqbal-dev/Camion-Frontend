@@ -1,6 +1,8 @@
 import { CommonSelect, IAPIResponse } from "@/interface/common";
 import { CreateQueryParams } from "@/util/PrepareQueryParams";
 import {
+  IPlaces,
+  IPlacesResponseObject,
   IProposal,
   IProposalResponseObject,
   IProposalSingle,
@@ -70,6 +72,19 @@ export const proposalApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Proposal", "Order", "ProposalQuotation"],
     }),
+
+    getCityList: builder.query<IAPIResponse<IPlacesResponseObject[]>, any>({
+      query: () => `api/Proposals/GetNationalityList`,
+      providesTags: ["Proposal"],
+    }),
+
+    getDistrictList: builder.query<
+      IAPIResponse<IProposalResponseObject[]>,
+      any
+    >({
+      query: () => `api/Proposals/GetDistrictList`,
+      providesTags: ["Proposal"],
+    }),
   }),
 });
 
@@ -81,4 +96,6 @@ export const {
   useCreateNewProposalMutation,
   useUpdateProposalMutation,
   useDeleteProposalMutation,
+  useGetCityListQuery,
+  useGetDistrictListQuery,
 } = proposalApi;

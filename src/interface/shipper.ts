@@ -1,10 +1,10 @@
 export interface INewRequest {
   buildingNumber: string;
   streetName: string;
-  districtName: string;
-  cityName: string;
-  zipCode: string;
-  additionalNumber: string;
+  districtId: number;
+  cityId: number;
+  zipCode: number;
+  additionalNumber: number;
   unitNo: string;
 }
 
@@ -20,7 +20,7 @@ export interface IRequestTable {
 };
 
 export type IOrderTable = {
-  id: string;
+  id: number;
   trackingId: string;
   origin: string;
   destination: string;

@@ -4,7 +4,7 @@ import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Image } from "react-bootstrap";
 import ShipperSider from "../../components/Shipper/ShipperSider";
-import ActivateProfile from "../../components/Modals/ActivatePropfile";
+import ActivateProfile from "../../components/Modals/ActivateProfile";
 import { useState } from "react";
 
 const HomePage = () => {
@@ -34,8 +34,7 @@ const HomePage = () => {
     <div className="wrapper" style={{ backgroundColor: "#F3F3F3" }}>
       <ShipperSider />
       <div
-        className="content-container col m-1 m-sm-2 m-md-3 m-xl-5 gap-1 gap-sm-2 gap-md-3 gap-lg-5 gap-xl-5"
-        style={{ width: "93%" }}
+        className="content-container col px-1 pt-4 px-sm-2 px-md-3 px-xl-5"
       >
         <div className="burger-menu">
           <span onClick={toggleSidebar}>
