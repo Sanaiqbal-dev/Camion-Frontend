@@ -7,21 +7,21 @@ import useFileTypeValidation, {
   useUploadFileMutation,
 } from "@/services/fileType";
 
-const vehicleTypes = ["Truck", "Ship", "plane"];
-
 interface IVehicle {
   color: string;
   numberPlate: string;
   imeiNumber: string;
   registrationNumber: string;
   modelYear: number;
-  vehicleType: "Truck" | "Ship" | "plane";
+  vehicleType: number;
 }
 
 interface EditUserModalProps {
   show: boolean;
   handleClose: () => void;
   vehicle: any;
+  vehicleTypes: any;
+
   onSubmitForm: (requestData: any) => void;
 }
 
@@ -31,13 +31,14 @@ const schema = z.object({
   registrationNumber: z.string().min(1, "Enter registrationNumber"),
   numberPlate: z.string().min(1, "Enter Number plate"),
   modelYear: z.string().min(1, "Enter Model Year"),
-  vehicleType: z.enum(["Truck", "Ship", "plane"]),
+  vehicleType: z.string().min(1, "Select Vehicle Type"),
 });
 
 const EditVehicle: React.FC<EditUserModalProps> = ({
   show,
   handleClose,
   vehicle,
+  vehicleTypes,
   onSubmitForm,
 }) => {
   const {
@@ -78,7 +79,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({
       modelYear: modelYear,
       fileName: selectedFile ? selectedFile.name : null,
       filePath: "This has to be a path when The file upload Api is completed",
-      vehicleTypeId: vehicleTypes.indexOf(vehicleType) + 1,
+      vehicleTypeId: vehicleType,
       vehicleId: vehicle?.id,
     };
     onSubmitForm(requestData);
@@ -94,24 +95,22 @@ const EditVehicle: React.FC<EditUserModalProps> = ({
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-col  tw-mb-10">
             <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group
-                className="mb-3"
-                // style={{ minWidth: "436px" }}
-                controlId="formBasicEmail"
-              >
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Vehicle Type</Form.Label>
                 <Form.Control
-                  defaultValue={vehicleTypes[vehicle?.vehicleType.id - 1]}
+                  defaultValue={vehicle?.vehicleType.id}
                   style={{ width: "270px", height: "50px" }}
                   as="select"
                   {...register("vehicleType", {
-                    required: "Vehicle type is required",
+                    // required: "Vehicle type is required",
                   })}
                 >
                   <option value="">Select Vehicle Type</option>
-                  <option value="Truck">Truck</option>
-                  <option value="Ship">Ship</option>
-                  <option value="Plane">Plane</option>
+                  {vehicleTypes?.map((vType, index) => (
+                    <option key={"type_" + index} value={vType.id}>
+                      {vType.typeName}
+                    </option>
+                  ))}
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.vehicleType?.message}

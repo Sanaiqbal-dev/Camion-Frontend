@@ -13,6 +13,7 @@ import {
   useEditVehicleMutation,
   useDeleteVehicleMutation,
   useGetVehiclesQuery,
+  useGetVehicleTypesQuery,
 } from "@/services/vahicles";
 import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from "../Modals/AssignDriver";
@@ -22,6 +23,7 @@ import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const VehicleManagement = () => {
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+  const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
   const [drivers, setDrivers] = useState<IDriver[]>([]);
@@ -34,6 +36,8 @@ const VehicleManagement = () => {
   const [showEditVehicle, setShowEditVehicle] = useState(false);
 
   const { data, isLoading } = useGetVehiclesQuery({});
+  const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
+    useGetVehicleTypesQuery({});
   const { data: driverData, isLoading: driverIsLoading } = useGetDriversQuery(
     {}
   );
@@ -46,6 +50,11 @@ const VehicleManagement = () => {
       data.result.total > 0 && setVehicles(data.result.result);
     }
   }, [isLoading]);
+  useEffect(() => {
+    if (!isLoadingVehicleTypes) {
+      setVehicleTypes(vehicleTypesData.result);
+    }
+  }, [isLoadingVehicleTypes]);
   useEffect(() => {
     if (!driverIsLoading) {
       setDrivers(driverData.result.result);
@@ -212,11 +221,13 @@ const VehicleManagement = () => {
       />
       <CreateVehicleModal
         show={showCreateVehicle}
+        vehicleTypes={vehicleTypes}
         handleClose={closeCreateModal}
         onSubmitForm={submitCreateVehicleHandler}
       />
       <EditVehicleModal
         vehicle={editedVehicle}
+        vehicleTypes={vehicleTypes}
         handleClose={closeEditModal}
         show={showEditVehicle}
         onSubmitForm={submitEditVehicleHandler}

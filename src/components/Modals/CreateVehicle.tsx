@@ -7,19 +7,18 @@ import useFileTypeValidation, {
   useUploadFileMutation,
 } from "@/services/fileType";
 
-const vehicleTypes = ["Truck", "Ship", "plane"];
-
 interface IVehicle {
   color: string;
   numberPlate: string;
   imeiNumber: string;
   registrationNumber: string;
   modelYear: number;
-  vehicleType: "Truck" | "Ship" | "plane";
+  vehicleType: number;
 }
 
 interface CreateUserModalProps {
   show: boolean;
+  vehicleTypes: any;
   handleClose: () => void;
   onSubmitForm: (requestData: any) => void;
 }
@@ -29,11 +28,12 @@ const schema = z.object({
   registrationNumber: z.string().min(1, "Enter registrationNumber"),
   numberPlate: z.string().min(1, "Enter Number plate"),
   modelYear: z.string().min(1, "Enter Model Year"),
-  vehicleType: z.enum(["Truck", "Ship", "plane"]),
+  vehicleType: z.string().min(1, "Select Vehicle Type"),
 });
 
 const CreteVehicle: React.FC<CreateUserModalProps> = ({
   show,
+  vehicleTypes,
   handleClose,
   onSubmitForm,
 }) => {
@@ -46,7 +46,6 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
     resolver: zodResolver(schema),
   });
   const fileType = 4;
-
   const [uploadFile] = useUploadFileMutation();
   const [selectedFile, setSeletedFile] = useState<File>();
 
@@ -73,7 +72,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
       modelYear: modelYear,
       fileName: selectedFile ? selectedFile.name : "no file selected",
       filePath: "This has to be a path when The file upload Api is completed",
-      vehicleTypeId: vehicleTypes.indexOf(vehicleType) + 1,
+      vehicleTypeId: vehicleType,
     };
     onSubmitForm(requestData);
     reset();
@@ -102,9 +101,11 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
                   })}
                 >
                   <option value="">Select Vehicle Type</option>
-                  <option value="Truck">Truck</option>
-                  <option value="Ship">Ship</option>
-                  <option value="Plane">Plane</option>
+                  {vehicleTypes?.map((vType, index) => (
+                    <option key={"type_" + index} value={vType.id}>
+                      {vType.typeName}
+                    </option>
+                  ))}
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">
                   {errors.vehicleType?.message}
