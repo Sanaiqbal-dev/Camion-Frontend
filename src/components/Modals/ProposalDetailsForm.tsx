@@ -22,7 +22,6 @@ interface ProposalDetailsModalProps {
   fileType?: number;
   submitProposal: (proposal: IProposalForm) => void;
   proposalId: number;
-  submitProposalSuccess: () => void;
 }
 
 const schema = z.object({
@@ -46,7 +45,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   handleClose,
   fileType,
   proposalId,
-  submitProposalSuccess,
 }) => {
   const {
     register,
@@ -75,7 +73,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         userId: userId,
       });
       console.log(proposalResponse);
-      submitProposalSuccess();
       handleClose();
       reset(); // Reset the form
       setSeletedFile(undefined);

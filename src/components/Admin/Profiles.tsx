@@ -43,7 +43,6 @@ const Profiles = () => {
   }));
   const onAcceptButtonClick = async (id: number) => {
     const selectedItem = ProfilesTableData.find((item) => item.id === id);
-    console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -56,7 +55,6 @@ const Profiles = () => {
   };
   const onDeactivateButtonClick = async (id: number) => {
     const selectedItem = ProfilesTableData.find((item) => item.id === id);
-    console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -69,7 +67,6 @@ const Profiles = () => {
   };
   const onDeleteButtonClick = async (id: number) => {
     const selectedItem = ProfilesTableData.find((item) => item.id === id);
-    console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -82,7 +79,6 @@ const Profiles = () => {
   };
   const onRejectButtonClick = async (id: number) => {
     const selectedItem = ProfilesTableData.find((item) => item.id === id);
-    console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -91,7 +87,6 @@ const Profiles = () => {
         companyId: selectedItem.companyId,
         deleteCompanyAccount: true,
       });
-      console.log("Delete is clicked");
     }
   };
   const columns: ColumnDef<Iprofiles>[] = ProfileColumns({

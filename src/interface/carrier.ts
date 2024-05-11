@@ -26,6 +26,7 @@ export type IRequest = {
   dimentions: string;
   EDT: string;
   action: string;
+  isProposalSubmitted: boolean;
 };
 
 export type IVehicle = {
