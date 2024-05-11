@@ -15,9 +15,7 @@ import { useEffect, useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import {
-  useGetProposalsQuery,
-} from "@/services/proposal";
+import { useGetProposalsQuery } from "@/services/proposal";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
 import { useAppSelector } from "@/state";
@@ -95,23 +93,20 @@ const Requests = () => {
     setRequestTableData([]);
 
     if (requestItems) {
-      const updatedRequestData = requestItems.map((item: any) =>{
+      const updatedRequestData = requestItems.map((item: any) => {
         // const isCorrect
         return {
-        id: item.id,
-        origin: `${item.originCity.name}, ${item.originDistrict.name}`,
-        destination: `${item.destinationCity.name}, ${item.destinationS}`,
-        weight: item.weight ? item.weight : "-",
-        dimentions:
-          item.length && item.width && item.height
-            ? `${item.length}x${item.width}x${item.height}`
-            : "-",
-        EDT: item.preferredDeliveryDate
-          ? item.preferredDeliveryDate
-          : "Time not assigned yet",
-        action: "Submit Proposal",
-      };
-      } );
+          id: item.id,
+          origin: item.origin,
+          destination: item.destination,
+          weight: item.weight ? item.weight : "-",
+          dimentions: item.dimentions,
+          EDT: item.eestimatedDeliveryTime
+            ? item.eestimatedDeliveryTime
+            : "Time not assigned yet",
+          action: "Submit Proposal",
+        };
+      });
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
       console.log("fetched requestItems : ", requestItems);
@@ -120,7 +115,7 @@ const Requests = () => {
 
   useEffect(() => {
     if (currentData?.result.result) {
-      console.log(currentData.result);
+      console.log("TableData", currentData.result);
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;

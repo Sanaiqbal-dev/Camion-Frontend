@@ -14,8 +14,9 @@ import { ColumnDef } from "@tanstack/react-table";
 
 const Profiles = () => {
   const companyProfiles = useGetCompanyProfilesListQuery();
+  console.log("Data", companyProfiles);
   const [updateCompanyAccount] = useUpdateCompanyAccountMutation();
-  const ProfilesTableData: Iprofiles = companyProfiles.data?.result;
+  const ProfilesTableData: Iprofiles = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
       return "Not Approved";
@@ -31,7 +32,7 @@ const Profiles = () => {
     profileType: item.roleName ? item.roleName : "carrier",
     firstName: item.firstName,
     lastName: item.lastName,
-    email: item.email,
+    email: item.emailAddress,
     contact: item.phoneNumber ? item.phoneNumber : "2233445566",
     company: item.companyName ? item.companyName : "-",
     crDocument: "",
@@ -45,7 +46,7 @@ const Profiles = () => {
     console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
-        userId: selectedItem.id,
+        userId: selectedItem.userId,
         companyAccountStatus: 1,
         isCompanyAccountActive: true,
         companyId: selectedItem.companyId,
@@ -58,7 +59,7 @@ const Profiles = () => {
     console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
-        userId: selectedItem.id,
+        userId: selectedItem.userId,
         companyAccountStatus: 1,
         isCompanyAccountActive: false,
         companyId: selectedItem.companyId,
@@ -71,7 +72,7 @@ const Profiles = () => {
     console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
-        userId: selectedItem.id,
+        userId: selectedItem.userId,
         companyAccountStatus: 0,
         isCompanyAccountActive: false,
         companyId: selectedItem.companyId,
@@ -84,7 +85,7 @@ const Profiles = () => {
     console.log("SelectedItem", selectedItem);
     if (selectedItem) {
       await updateCompanyAccount({
-        userId: selectedItem.id,
+        userId: selectedItem.userId,
         companyAccountStatus: 0,
         isCompanyAccountActive: false,
         companyId: selectedItem.companyId,
