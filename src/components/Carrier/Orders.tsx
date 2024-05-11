@@ -20,6 +20,7 @@ import ConfirmationModal from "../Modals/ConfirmationModal";
 import {
   useDeleteOrderMutation,
   useGetOrdersQuery,
+  useUpdateOrderMutation,
 } from "@/services/order";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
@@ -52,6 +53,7 @@ const Orders = () => {
   });
 
   const [deleteOrder] = useDeleteOrderMutation();
+  const [updateStatus] = useUpdateOrderMutation();
 
   const [orderItems, setOrderItems] = useState<IOrder>();
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
@@ -81,8 +83,6 @@ const Orders = () => {
     navigate("/carrier/bayanBill");
   };
   const onUpdateStatus = (id: number, statusId: number) => {
-    console.log("status id : ", id);
-    console.log("status id : ", statusId);
   };
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
