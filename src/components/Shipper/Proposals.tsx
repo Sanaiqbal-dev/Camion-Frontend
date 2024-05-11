@@ -71,17 +71,18 @@ const Proposals = () => {
     quotation: IProposalQuotation,
     isAccepted: boolean
   ) => {
-    const response = await updateQuotation({
-      amount: quotation.amount,
-      delieveryDate: quotation.expectedDeliveryDate,
-      otherDetails: quotation.extraDetails,
-      proposalQuotationId: quotation.id,
+    const updatedQuotation = {
+      id: quotation.id,
+      trackingId: quotation.trackingId,
+      status: quotation.status,
+      origin: quotation.origin,
+      destination: quotation.destination,
+      weight: quotation.weight,
+      dimentions: quotation.dimentions,
       proposalQuotationStatusId: isAccepted ? 1 : 0,
-      fileName: quotation.fileName,
-      filePath: "string",
-      purposalId: quotation.proposal.id,
-      userId: userData.user.userId,
-    }).unwrap();
+      amount: quotation.amount,
+    };
+    const response = await updateQuotation(updatedQuotation).unwrap();
     if (response.statusCode === 200) {
       const updatedQuotations = quotationProposals.filter(
         (q: IProposalQuotation) => q.id !== quotation.id

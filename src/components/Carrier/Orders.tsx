@@ -19,13 +19,12 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import {
   useDeleteOrderMutation,
-  useGetOrderStatusListQuery,
   useGetOrdersQuery,
 } from "@/services/order";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
-import { IOrder } from "@/interface/orderDetail";
+import { IOrder, IOrderResponseData } from "@/interface/orderDetail";
 
 export interface StatusProps {
   id: string;
@@ -115,35 +114,33 @@ const Orders = () => {
       console.error("Error deleting proposal:", error);
     }
   };
-  const FilterDataForTable = (orderItems: IOrder[]) => {
+  const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
       if (orderItems) {
         const updatedOrderData = orderItems.map((currentOrderObject) => {
-          const orderDetailItem = currentOrderObject.orderDetail;
-          const shipment = orderDetailItem.shipmentTypes.shipmentTypeName;
-          let dimension =
-            shipment == "Box"
-              ? "-"
-              : shipment == "Pallet"
-              ? orderDetailItem.length + "x" + orderDetailItem.width
-              : shipment == "Truck"
-              ? "-"
-              : orderDetailItem.length +
-                "x" +
-                orderDetailItem.width +
-                "x" +
-                orderDetailItem.height;
+          
+          // const shipment = orderDetailItem.shipmentTypes.shipmentTypeName;
+          // let dimension =
+          //   shipment == "Box"
+          //     ? "-"
+          //     : shipment == "Pallet"
+          //     ? orderDetailItem.length + "x" + orderDetailItem.width
+          //     : shipment == "Truck"
+          //     ? "-"
+          //     : orderDetailItem.length +
+          //       "x" +
+          //       orderDetailItem.width +
+          //       "x" +
+          //       orderDetailItem.height;
           return {
             id: currentOrderObject.id,
-            origin: currentOrderObject.orderDetail.originCity.name,
-            destination: currentOrderObject.orderDetail.destinationCity.name,
-            weight: currentOrderObject.orderDetail.weight,
-            dimentions: dimension,
-            ETA: currentOrderObject.orderDetail.preferredDeliveryDate,
-            status:
-              currentOrderObject.orderStatus != null &&
-              currentOrderObject.orderStatus,
+            origin: currentOrderObject.origin,
+            destination: currentOrderObject.destination,
+            weight: currentOrderObject.weight,
+            dimentions: "-",
+            ETA: currentOrderObject.estimatedDeliveryTime,
+            status:currentOrderObject.status,
             action: "",
           };
         });

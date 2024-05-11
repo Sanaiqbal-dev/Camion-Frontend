@@ -28,6 +28,7 @@ import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
   useCreateNewProposalMutation,
   useDeleteProposalMutation,
+  useGetProposalQuery,
   useGetProposalsQuery,
   useUpdateProposalMutation,
 } from "@/services/proposal";
@@ -54,6 +55,12 @@ const ShipperRequests = () => {
   const [createNewProposal] = useCreateNewProposalMutation();
   const [updateProposal] = useUpdateProposalMutation();
   const [deleteProposal] = useDeleteProposalMutation();
+  		// const {
+      //   currentData: single,
+      //   isFetching: isSingleLoading,
+      //   error: singleError,
+      // } = useGetProposalQuery({ ...primaryKeys });
+
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -82,7 +89,7 @@ const ShipperRequests = () => {
   );
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] =
-    useState<IProposalResponseData>();
+    useState<number>();
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -101,7 +108,9 @@ const ShipperRequests = () => {
   }
 
   //Create New Proposal implementation...
-  const [proposalItem, setProposalItem] = useState<IProposal>({} as IProposal);
+  const [proposalItem, setProposalItem] = useState<IProposalResponseData>(
+    {} as IProposalResponseData
+  );
 
   const CreateUserNextStep = (requestObj: INewRequest) => {
     setProposalItem((prevItem) => ({
@@ -195,20 +204,13 @@ const ShipperRequests = () => {
     if (requestItems) {
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
-        origin:
-          currentRequestObject.originCity.name +
-          ", " +
-          currentRequestObject.originDistrict.name,
-        destination:
-          currentRequestObject.destinationCity.name +
-          ", " +
-          currentRequestObject.destinationDistrict.name,
+        origin: currentRequestObject.origin,
+        destination: currentRequestObject.destination,
         weight: currentRequestObject.weight,
-        dimentions:
-          currentRequestObject.shipmentTypes.shipmentTypeName === "Truck"
-            ? "-"
-            : `${currentRequestObject.length}x${currentRequestObject.width}x${currentRequestObject.height}`,
-        ETA: "not available",
+        dimentions: currentRequestObject.dimentions,
+        ETA: currentRequestObject.estimatedDeliveryTime
+          ? currentRequestObject.estimatedDeliveryTime
+          : "-",
         action: "",
       }));
 
@@ -217,13 +219,20 @@ const ShipperRequests = () => {
     }
   };
 
-  const onEdit = (proposalItemId: number) => {
-    let tempItem = requestItems?.find(
-      (item: { id: number }) => item.id === proposalItemId
-    );
-    setSelectedProposalItem(tempItem);
-    setIsEditProposal(true);
-    SetShowCreateUserModalFirstStep(true);
+  const onEdit = async (proposalItemId: number) => {
+    // try {
+    //   const response = await useGetProposalQuery({ id: proposalItemId }).unwrap();
+    //   console.log("OnEdit response:", response);
+       setSelectedProposalItem(proposalItemId);
+       setIsEditProposal(true);
+       SetShowCreateUserModalFirstStep(true);
+    // } catch (error) {
+    //   console.log("Edit error response:", error);
+    // }
+    // let tempItem = requestItems?.find(
+    //   (item: { id: number }) => item.id === proposalItemId
+    // );
+   
   };
   const onDelete = (proposalItemId: number) => {
     setDeleteItemId(proposalItemId);

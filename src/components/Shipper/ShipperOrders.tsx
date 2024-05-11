@@ -10,7 +10,7 @@ import { useDeleteOrderMutation, useGetOrdersQuery } from "@/services/order";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
-import { IOrder } from "@/interface/orderDetail";
+import { IOrder, IOrderResponseData } from "@/interface/orderDetail";
 import { IOrderTable } from "@/interface/shipper";
 import { ColumnDef } from "@tanstack/react-table";
 import ConfirmationModal from "../Modals/ConfirmationModal";
@@ -58,29 +58,19 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
-  const FilterDataForTable = (orderItems: IOrder[]) => {
+  const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
       if (orderItems) {
         const updatedOrderData = orderItems.map((currentOrderObject) => ({
           id: currentOrderObject.id,
-          trackingId: currentOrderObject.id,
-          origin: currentOrderObject.orderDetail.originCity.name,
-          destination: currentOrderObject.orderDetail.destinationCity.name,
-          weight: currentOrderObject.orderDetail.weight,
-          type:
-            currentOrderObject.orderDetail.shipmentTypes != null
-              ? currentOrderObject.orderDetail.shipmentTypes.shipmentTypeName
-              : "not available",
-          status:
-            currentOrderObject.orderStatus != null
-              ? currentOrderObject.orderStatus
-              : "Driver Assigned",
-
-          ETA:
-            currentOrderObject.orderDetail.preferredDeliveryDate != null
-              ? currentOrderObject.orderDetail.preferredDeliveryDate
-              : "not availablle",
+          trackingId: currentOrderObject.trackingId,
+          origin: currentOrderObject.origin,
+          destination: currentOrderObject.destination,
+          weight: currentOrderObject.weight,
+          type: currentOrderObject.type,
+          status:currentOrderObject.status,
+          ETA:currentOrderObject.estimatedDeliveryTime,
           action: "",
         }));
 

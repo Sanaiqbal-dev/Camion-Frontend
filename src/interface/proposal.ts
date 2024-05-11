@@ -39,7 +39,7 @@ export interface IProposal {
   proposalId: number;
 }
 
-export interface IProposalResponseData extends IProposal {
+export interface IProposalDetailResponseData extends IProposal {
   shipmentTypes: IShipmentType;
   createdById: string;
   updatedById: string | null;
@@ -84,18 +84,32 @@ export interface ProposalPager extends Pager {
   results: IProposalIndex[];
 }
 
+
+export interface IProposalResponseData{
+  id: number;
+  origin:string;
+  destination:string;
+  weight: string;
+  dimentions:string;
+  estimatedDeliveryTime: string|null;
+  hasSubmitedByMe: boolean;
+}
 export interface ProposalResult {
   total: number;
   currentPage: number;
   showCount: number;
   pageCount: number;
-  result: IProposalResponseData[];
+  result: IProposalResponseData[] ;
 }
 export interface IProposalResponseObject {
   statusCode: number;
   result: ProposalResult;
   message?: string;
   data?: any;
+}
+export interface IProposalDetailResponse {
+  statusCode: number;
+  result: IProposalDetailResponseData;
 }
 export interface ProposalIndexQuery extends Pager {
   createdById: number;
