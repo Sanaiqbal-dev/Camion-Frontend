@@ -95,20 +95,20 @@ export interface IProposalForm {
 interface IFileDownload {
   filePath: string;
   fileName: string;
-  fileType: number;
+  fileType?: number;
 }
 export interface ICompanyProfile {
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
-  companyAccountStatus: number | null;
-  isCompanyAccountActive: boolean;
+  companyAccountStatus?: number | null;
+  isCompanyAccountActive?: boolean;
   password: string;
   confirmPassword: string;
   companyName: string;
-  companyId: number;
-  deleteCompanyAccount: boolean;
+  companyId?: number;
+  deleteCompanyAccount?: boolean;
   fileDownload: IFileDownload[];
   userId: string;
 }

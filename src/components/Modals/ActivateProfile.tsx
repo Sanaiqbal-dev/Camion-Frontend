@@ -4,14 +4,14 @@ import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import PropfileImage from "../../assets/icons/ic-profile.svg";
-import React, { useRef, useState } from "react";
-import useFileTypeValidation from "@/services/fileType";
+import React, { useEffect, useRef, useState } from "react";
 import { useCreateCompanyProfileMutation } from "@/services/companyProfile";
 import { useAppSelector } from "@/state";
+import { useUploadFileMutation } from "@/services/fileHandling";
 interface IFileDownload {
   filePath: string;
   fileName: string;
-  fileType: number;
+  fileType?: number;
 }
 interface IUser {
   firstName: string;
@@ -63,12 +63,24 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   const userRole = useAppSelector((state) => state.session.user.role);
   const isShipper = userRole === "Shipper";
   const [createCompanyProfile] = useCreateCompanyProfileMutation();
+  const [uploadFile] = useUploadFileMutation();
   const [vatFile, setVatFile] = useState<File>();
+  const [vatFilePath, setVatFilePath] = useState("");
+
   const [crFile, setCrFile] = useState<File>();
+  const [crFilePath, setCrFilePath] = useState("");
+
   const [tlFile, setTlFile] = useState<File>();
+  const [tlFilePath, setTlFilePath] = useState("");
+
   const [cliFile, setCliFile] = useState<File>();
+  const [cliFilePath, setcliFilePath] = useState("");
+
   const [clFile, setClFile] = useState<File>();
+  const [clFilePath, setClFilePath] = useState("");
+
   const [brFile, setBrFile] = useState<File>();
+  const [brFilePath, setBrFilePath] = useState("");
 
   const vatFileInputRef = useRef<HTMLInputElement>(null);
   const crFileInputRef = useRef<HTMLInputElement>(null);
@@ -76,6 +88,114 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   const cliFileInputRef = useRef<HTMLInputElement>(null);
   const clFileInputRef = useRef<HTMLInputElement>(null);
   const brFileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (vatFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", vatFile);
+          const response = await uploadFile(formData);
+          setVatFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [vatFile]);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (crFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", crFile);
+          const response = await uploadFile(formData);
+          setCrFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [crFile]);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (tlFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", tlFile);
+          const response = await uploadFile(formData);
+          setTlFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [tlFile]);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (cliFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", cliFile);
+          const response = await uploadFile(formData);
+          setcliFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [cliFile]);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (clFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", clFile);
+          const response = await uploadFile(formData);
+          setClFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [clFile]);
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (brFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", brFile);
+          const response = await uploadFile(formData);
+          setBrFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [brFile]);
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     try {
@@ -90,36 +210,30 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
         fileDownload: isShipper
           ? [
               {
-                filePath: "To be defined",
-                fileName: vatFile ? vatFile.name : "No file uploaded",
-                fileType: 5,
+                filePath: vatFilePath,
+                fileName: vatFile ? vatFile.name : "No path uplaod",
               },
               {
-                filePath: "To be defined",
+                filePath: crFilePath,
                 fileName: crFile ? crFile.name : "No file uploaded",
-                fileType: 6,
               },
             ]
           : [
               {
-                filePath: "To be defined",
+                filePath: tlFilePath,
                 fileName: tlFile ? tlFile.name : "No file uploaded",
-                fileType: 1,
               },
               {
-                filePath: "To be defined",
+                filePath: cliFilePath,
                 fileName: cliFile ? cliFile.name : "No file uploaded",
-                fileType: 2,
               },
               {
-                filePath: "To be defined",
+                filePath: clFilePath,
                 fileName: clFile ? clFile.name : "No file uploaded",
-                fileType: 3,
               },
               {
-                filePath: "To be defined",
+                filePath: brFilePath,
                 fileName: brFile ? brFile.name : "No file uploaded",
-                fileType: 4,
               },
             ],
         userId: userId,
@@ -132,26 +246,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
     }
   };
 
-  const vatFileError = useFileTypeValidation({
-    extension: vatFile ? `.${vatFile.name.split(".").pop()}` : "",
-  });
-
-  const crFileError = useFileTypeValidation({
-    extension: crFile ? `.${crFile.name.split(".").pop()}` : "",
-  });
-
-  const tlFileError = useFileTypeValidation({
-    extension: tlFile ? `.${tlFile.name.split(".").pop()}` : "",
-  });
-  const cliFileError = useFileTypeValidation({
-    extension: cliFile ? `.${cliFile.name.split(".").pop()}` : "",
-  });
-  const clFileError = useFileTypeValidation({
-    extension: clFile ? `.${clFile.name.split(".").pop()}` : "",
-  });
-  const brFileError = useFileTypeValidation({
-    extension: brFile ? `.${brFile.name.split(".").pop()}` : "",
-  });
   const handleFileInputClick = (
     inputRef: React.RefObject<HTMLInputElement>
   ) => {
@@ -320,9 +414,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                       }
                     }}
                   />
-                  {vatFile && vatFileError && (
-                    <div className="tw-text-red-500">{vatFileError}</div>
-                  )}
                 </Form.Group>
                 <Form.Group className="tw-flex tw-flex-col">
                   <Form.Label className="tw-text-sm">CR Document</Form.Label>
@@ -354,9 +445,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                       }
                     }}
                   />
-                  {crFile && crFileError && (
-                    <div className="tw-text-red-500">{crFileError}</div>
-                  )}
                 </Form.Group>
               </div>
             ) : (
@@ -393,9 +481,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                         }
                       }}
                     />
-                    {tlFile && tlFileError && (
-                      <div className="tw-text-red-500">{tlFileError}</div>
-                    )}
                   </Form.Group>
                   <Form.Group className="tw-flex tw-flex-col">
                     <Form.Label className="tw-text-sm">
@@ -429,9 +514,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                         }
                       }}
                     />
-                    {cliFile && cliFileError && (
-                      <div className="tw-text-red-500">{cliFileError}</div>
-                    )}
                   </Form.Group>
                 </div>
                 <div style={{ display: "flex", gap: "18px" }}>
@@ -466,9 +548,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                         }
                       }}
                     />
-                    {clFile && clFileError && (
-                      <div className="tw-text-red-500">{clFileError}</div>
-                    )}
                   </Form.Group>
                   <Form.Group className="tw-flex tw-flex-col">
                     <Form.Label className="tw-text-sm">
@@ -502,9 +581,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
                         }
                       }}
                     />
-                    {brFile && brFileError && (
-                      <div className="tw-text-red-500">{brFileError}</div>
-                    )}
                   </Form.Group>
                 </div>
               </>

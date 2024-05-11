@@ -1,7 +1,7 @@
-import useFileTypeValidation, {
+import {
   useAddNewProposalMutation,
   useUploadFileMutation,
-} from "@/services/fileType";
+} from "@/services/fileHandling";
 import { useAppSelector } from "@/state";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
@@ -59,6 +59,26 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   const [addNewProposal] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSeletedFile] = useState<File>();
+  const [filePath, setFilePath] = useState("");
+
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (selectedFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", selectedFile);
+          const response = await uploadFile(formData);
+          setFilePath(response.data.message);
+          console.log("File uploaded successfully:", response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [selectedFile]);
+
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
     try {
       const proposalResponse = await addNewProposal({
@@ -68,7 +88,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         fileName: selectedFile ? selectedFile.name : "No file uploaded",
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
-        filePath: "This has to be a path when The file upload Api is completed",
+        filePath: filePath,
         purposalId: proposalId,
         userId: userId,
       });
@@ -80,24 +100,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
       console.error("Error submitting proposal:", error);
     }
   };
-
-  const fileError = useFileTypeValidation({
-    extension: selectedFile ? `.${selectedFile.name.split(".").pop()}` : "",
-  });
-
-  useEffect(() => {
-    if (selectedFile) {
-      try {
-        const response = uploadFile({
-          fileType,
-          uploadFile: selectedFile.name,
-        });
-        console.log("File uploaded successfully:", response);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-    }
-  }, [fileType, selectedFile, uploadFile]);
 
   const handleFileInputClick = () => {
     // Trigger the hidden file input click via ref
@@ -196,9 +198,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
                   }
                 }}
               />
-              {selectedFile && fileError && (
-                <div className="tw-text-red-500">{fileError}</div>
-              )}
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">

@@ -2,12 +2,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   useAddNewDriverMutation,
   useGetNationalityListQuery,
   useUpdateDriverMutation,
 } from "@/services/drivers";
+import { useUploadFileMutation } from "@/services/fileHandling";
 
 interface IDriver {
   id?: number;
@@ -57,16 +58,19 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
   });
   const [addNewDriver] = useAddNewDriverMutation();
   const [updateDriver] = useUpdateDriverMutation();
+  const [uploadFile] = useUploadFileMutation();
   const [nationalityId, setNationalityId] = useState<number>();
   const [formData, setFormData] = useState<IDriver>({});
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
+  const [file, setFile] = useState<File>();
+  const [filePath, setFilePath] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      console.log(file.name, "To be use for file upload");
-    }
+  const handleFileInputClick = (
+    inputRef: React.RefObject<HTMLInputElement>
+  ) => {
+    inputRef.current?.click();
   };
   useEffect(() => {
     setFormData(driverExistingData);
@@ -75,6 +79,23 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
       reset();
     };
   }, [driverExistingData, reset]);
+  useEffect(() => {
+    const uploadFiles = async () => {
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", file);
+          const response = await uploadFile(formData);
+          setFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
+      }
+    };
+
+    uploadFiles();
+  }, [file]);
 
   const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
@@ -93,8 +114,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
           mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
-          filePath: "Not Implemented yet",
-          fileName: "To be implemented yet",
+          filePath: filePath,
+          fileName: file ? file.name : "no file uploaded.",
         });
       } else {
         await addNewDriver({
@@ -147,7 +168,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 placeholder="Enter Driver's name"
                 style={{ width: "560px", height: "59px" }}
                 {...register("name")}
-                // defaultValue={driverExistingData?.name}
                 defaultValue={formData?.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -259,15 +279,36 @@ const AddDriver: React.FC<CreateUserModalProps> = ({
                 {errors.phoneNumber?.message}
               </Form.Control.Feedback>
             </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Upload document/Iqama</Form.Label>
+            <Form.Group className="tw-flex tw-flex-col">
+              <Form.Label className="tw-text-sm">
+                Upload Document Iqama/ID
+              </Form.Label>
+              <div className="tw-flex">
+                <Button
+                  variant="default"
+                  onClick={() => handleFileInputClick(fileInputRef)}
+                  className="custom-file-upload-button"
+                  style={{
+                    width: "270px",
+                    height: "50px",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {file ? file.name : "Upload the document"}
+                </Button>
+              </div>
               <Form.Control
                 type="file"
-                placeholder="Enter mobile number"
-                style={{ width: "560px", height: "50px" }}
-                defaultValue={""}
-                onChange={handleFileUpload}
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const files = (e.target as HTMLInputElement).files;
+                  if (files && files.length > 0) {
+                    const file = files[0];
+                    setFile(file);
+                  }
+                }}
               />
             </Form.Group>
           </div>

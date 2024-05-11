@@ -13,9 +13,6 @@ export const fileHandling = baseApi.injectEndpoints({
         url: "/Account/FileUpload",
         method: "POST",
         body,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
       }),
       invalidatesTags: ["FileUpload"],
     }),
