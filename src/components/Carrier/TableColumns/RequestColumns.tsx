@@ -34,8 +34,6 @@ export const RequestColumns = ({
     header: "Action",
     cell: ({ row }) => {
       const isProposalSubmitted = row.original.isProposalSubmitted;
-      console.log("id", row.original.id),
-        console.log("ISSubmitted", isProposalSubmitted);
 
       return (
         <button
