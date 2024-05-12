@@ -109,7 +109,6 @@ const Requests = () => {
       }));
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
-      console.log("fetched requestItems : ", requestItems);
     }
   };
 
@@ -119,7 +118,6 @@ const Requests = () => {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

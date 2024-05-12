@@ -19,7 +19,7 @@ interface CreateNewRequestModalProps {
   show: boolean;
   handleClose: () => void;
   isEdit: boolean;
-  proposalObject?: number;
+  proposalId?: number;
 
   handleFormDataSubmission: (
     data: IShipmentDetails,
@@ -31,10 +31,10 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   handleClose,
   handleFormDataSubmission,
   isEdit,
-  proposalObject,
+  proposalId,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
+  const { data: proposalItem } = useGetProposalQuery({ id: proposalId });
 
   const forms = [
     { icon: PalletIcon, label: "Pallet", component: PalletForm },
@@ -49,13 +49,14 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
 
   useEffect(() => {
     if (proposalItem) {
-      const shipmentTypeName = proposalItem.shipmentTypes.shipmentTypeName;
+      console.log(proposalItem);
+      const shipmentTypeName = proposalItem.result.shipmentTypes.shipmentTypeName;
       const index = forms.findIndex((form) => form.label === shipmentTypeName);
       if (index !== -1) {
         setActiveIndex(index);
       }
     }
-  }, [isEdit, proposalObject]);
+  }, [isEdit, proposalId, proposalItem]);
 
   return (
     <Modal
@@ -104,12 +105,12 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
       <Modal.Body>
         {React.createElement(forms[activeIndex].component, {
           isEdit:
-            proposalItem?.shipmentTypes?.shipmentTypeName ===
+            proposalItem?.result.shipmentTypes.shipmentTypeName ===
             forms[activeIndex].label,
           proposalObject:
-            proposalItem?.shipmentTypes?.shipmentTypeName ===
+            proposalItem?.result.shipmentTypes.shipmentTypeName ===
             forms[activeIndex].label
-              ? proposalObject
+              ? proposalItem
               : undefined,
           onSubmitShipmentForm: handleFormDataSubmission,
         })}

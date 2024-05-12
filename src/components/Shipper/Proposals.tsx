@@ -62,7 +62,6 @@ const Proposals = () => {
           : [];
       setQuotationProposals(quotations);
       let maxPageCount = data.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [isLoading]);

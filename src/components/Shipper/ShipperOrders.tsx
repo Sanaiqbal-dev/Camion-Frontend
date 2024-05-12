@@ -75,7 +75,6 @@ const ShipperOrders = () => {
         }));
 
         setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
-        console.log("fetched requestItems : ", orderItems);
       }
     } catch (error) {
       console.log(error);
@@ -127,7 +126,6 @@ const ShipperOrders = () => {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

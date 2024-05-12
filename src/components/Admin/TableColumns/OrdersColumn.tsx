@@ -1,11 +1,23 @@
 import { ColumnDef } from "@tanstack/react-table";
-import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { Collapse, Card } from "react-bootstrap";
-import { useState } from "react";
+import IconDown from "../../../assets/icons/ic-down.svg";
 import { IOrder } from "../../../interface/admin";
+import { useGetOrderStatusesQuery } from "@/services/orderStatus";
+import {
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu, Button } from "react-bootstrap";
 
-export const OrderColumns: ColumnDef<IOrder>[] = [
+interface OrderActionsProps {
+  onDelete: (orderItemId: number) => void;
+  onUpdateStatus: (id: number, statusId: number) => void;
+}
+export const OrderColumns = ({
+  onDelete,
+  onUpdateStatus,
+}: OrderActionsProps): ColumnDef<IOrder>[] => [
   {
     accessorKey: "assignedCarrier",
     header: "Assigned Carrier",
@@ -34,53 +46,52 @@ export const OrderColumns: ColumnDef<IOrder>[] = [
   {
     accessorKey: "status",
     header: "status",
-    cell: () => {
-      const [open, setOpen] = useState(false);
+    cell: ({ row }) => {
+      const item = row.original;
+      const noItemSeleted = (
+        <>
+          Select Status <img src={IconDown} />
+        </>
+      );
+      const { data: orderStatuses } = useGetOrderStatusesQuery();
 
       return (
-        <div>
-          <p>
-            <div
-              onClick={() => setOpen(!open)}
-              aria-controls="example-collapse-text"
-              aria-expanded={open}
-              style={{ cursor: "pointer" }}
-            >
-              Select Status{" "}
-              <img src="assets/ic-down.svg" alt="Toggle Dropdown" />
-            </div>
-          </p>
-          <Collapse in={open}>
-            <div
-              id="example-collapse-text"
-              style={{ position: "fixed", zIndex: 1000 }}
-            >
-              <Card>
-                <Card.Body>
-                  <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                  </ul>
-                </Card.Body>
-              </Card>
-            </div>
-          </Collapse>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only tw-flex tw-gap-1">
+                {item.status ? item.status : noItemSeleted}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
+            className="tw-flex tw-flex-col tw-gap-2 tw-p-2"
+            align="end"
+          >
+            {orderStatuses &&
+              orderStatuses.result.map((statusItem: any) => {
+                return (
+                  <DropdownMenuItem
+                    className="hover:tw-bg-black hover:tw-text-white"
+                    onClick={() => onUpdateStatus(item.id, statusItem.id)}
+                  >
+                    {statusItem.description}
+                  </DropdownMenuItem>
+                );
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
-            <img src={IconSaveFile} />
-            <span style={{ color: "#27AE60" }}>Save</span>
-          </div>
-          <div>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>

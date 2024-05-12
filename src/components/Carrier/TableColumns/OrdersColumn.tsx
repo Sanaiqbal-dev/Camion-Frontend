@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconPrintBill from "../../../assets/icons/ic-printer.svg";
@@ -13,7 +12,6 @@ import {
 } from "../../../../@/components/ui/dropdown-menu";
 import { Button } from "../../../../@/components/ui/button";
 import { useGetOrderStatusesQuery } from "@/services/orderStatus";
-import { useEffect } from "react";
 
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
@@ -59,10 +57,7 @@ export const OrderColumns = ({
         </>
       );
       const { data: orderStatuses } = useGetOrderStatusesQuery();
-      useEffect(() => {
-        orderStatuses && console.log("order status list is :", orderStatuses);
-      }, [orderStatuses]);
-
+     
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -66,6 +66,8 @@ export interface IOrderResponseData {
   destination: string;
   estimatedDeliveryTime: string;
   id: number;
+  assignedCarrier?: string;
+  dimentions:string;
   origin: string;
   status: string;
   trackingId: string;

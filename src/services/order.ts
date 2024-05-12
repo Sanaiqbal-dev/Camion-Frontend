@@ -21,12 +21,6 @@ export const orderApi = baseApi.injectEndpoints({
         }`,
       providesTags: ["Order"],
     }),
-    getAllVehicles: builder.query<IAPIResponse<IProposalResponseObject[]>, any>(
-      {
-        query: () => "/api/Vehicles/GetVehicleList",
-        providesTags: ["Vehicle"],
-      }
-    ),
     getOrder: builder.query<IAPIResponse<IOrderSingle>, Partial<IOrder>>({
       query: ({ id }) => `/order/detail/${id}`,
       providesTags: (result, error, arg) => {
@@ -46,11 +40,11 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
     }),
-    updateOrder: builder.mutation<IAPIResponse<IOrder>, Partial<IOrder>>({
-      query: ({ id, ...rest }) => ({
-        url: `order/${id}`,
+    updateOrder: builder.mutation<IAPIResponse<IOrder>, any>({
+      query: ({ orderId, ...rest }) => ({
+        url: `api/Orders/UpdateOrderStatus`,
         method: "PUT",
-        body: { id, ...rest },
+        body: { orderId, ...rest },
       }),
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
     }),
@@ -61,6 +55,14 @@ export const orderApi = baseApi.injectEndpoints({
         method: "PUT",
       }),
       invalidatesTags: ["Order", "OrderDetail", "OrderVehicleTracking"],
+    }),
+
+    assignVehicleToOrder: builder.mutation<IAPIResponse<any>, any>({
+      query: ({ orderId, vehicleId }) => ({
+        url: `api/Orders/AssignVehicleToOrder`,
+        method: "PUT",
+        body: { orderId, vehicleId },
+      }),
     }),
   }),
 });
@@ -73,5 +75,5 @@ export const {
   useAddOrderMutation,
   useUpdateOrderMutation,
   useDeleteOrderMutation,
-  useGetAllVehiclesQuery,
+  useAssignVehicleToOrderMutation,
 } = orderApi;

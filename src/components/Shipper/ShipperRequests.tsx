@@ -215,7 +215,6 @@ const ShipperRequests = () => {
       }));
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
-      console.log("fetched requestItems : ", requestItems);
     }
   };
 
@@ -266,7 +265,6 @@ const ShipperRequests = () => {
       FilterDataForTable(currentData?.result.result);
       setRequestItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);
@@ -443,7 +441,7 @@ const ShipperRequests = () => {
       <ShippementDetails
         show={showShippementDetailsModal}
         isEdit={isEditProposal}
-        proposalObject={
+        proposalId={
           isEditProposal && selectedProposalItem
             ? selectedProposalItem
             : undefined
