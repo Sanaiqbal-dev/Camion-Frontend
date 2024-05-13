@@ -38,6 +38,7 @@ import { QueryPager } from "@/interface/common";
 import { ColumnDef } from "@tanstack/react-table";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "@/util/debounce";
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
@@ -55,11 +56,11 @@ const ShipperRequests = () => {
   const [createNewProposal] = useCreateNewProposalMutation();
   const [updateProposal] = useUpdateProposalMutation();
   const [deleteProposal] = useDeleteProposalMutation();
-  		// const {
-      //   currentData: single,
-      //   isFetching: isSingleLoading,
-      //   error: singleError,
-      // } = useGetProposalQuery({ ...primaryKeys });
+  // const {
+  //   currentData: single,
+  //   isFetching: isSingleLoading,
+  //   error: singleError,
+  // } = useGetProposalQuery({ ...primaryKeys });
 
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
@@ -67,6 +68,7 @@ const ShipperRequests = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
@@ -81,6 +83,7 @@ const ShipperRequests = () => {
   } = useGetProposalsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
+    term: searchTerm,
     ...filterKeys,
   });
 
@@ -88,8 +91,7 @@ const ShipperRequests = () => {
     []
   );
   const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
-  const [selectedProposalItem, setSelectedProposalItem] =
-    useState<number>();
+  const [selectedProposalItem, setSelectedProposalItem] = useState<number>();
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -222,16 +224,15 @@ const ShipperRequests = () => {
     // try {
     //   const response = await useGetProposalQuery({ id: proposalItemId }).unwrap();
     //   console.log("OnEdit response:", response);
-       setSelectedProposalItem(proposalItemId);
-       setIsEditProposal(true);
-       SetShowCreateUserModalFirstStep(true);
+    setSelectedProposalItem(proposalItemId);
+    setIsEditProposal(true);
+    SetShowCreateUserModalFirstStep(true);
     // } catch (error) {
     //   console.log("Edit error response:", error);
     // }
     // let tempItem = requestItems?.find(
     //   (item: { id: number }) => item.id === proposalItemId
     // );
-   
   };
   const onDelete = (proposalItemId: number) => {
     setDeleteItemId(proposalItemId);
@@ -293,6 +294,16 @@ const ShipperRequests = () => {
       setProposalItem({} as IProposal);
       setSendProposalRequest(false);
     }
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
   useEffect(() => {
     if (sendProposalRequest) {
@@ -382,6 +393,7 @@ const ShipperRequests = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

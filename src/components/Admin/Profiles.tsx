@@ -7,10 +7,13 @@ import { useState } from "react";
 import { Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
 import { useGetCompanyProfilesListQuery } from "@/services/companyProfile";
+import { debounce } from "@/util/debounce";
 
 const Profiles = () => {
-  const companyProfiles = useGetCompanyProfilesListQuery();
-  const ProfilesTableData: Iprofiles = companyProfiles.data?.result;
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  console.log(searchTerm, "searchTerm");
+  const companyProfiles = useGetCompanyProfilesListQuery({ term: searchTerm });
+  const ProfilesTableData: Iprofiles[] = companyProfiles.data?.result.result;
   const profilesData = ProfilesTableData?.map((item) => ({
     id: item.id,
     profileType: "shipper",
@@ -28,7 +31,15 @@ const Profiles = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -90,6 +101,7 @@ const Profiles = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

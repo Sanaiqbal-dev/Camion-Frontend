@@ -30,7 +30,7 @@ const UserManagementShipper = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
-    page: pager.page,
+    page: pager.page - 1,
     pageCount: pager.pageSize,
   });
   const [createSubUser] = useCreateSubUserMutation();
@@ -38,7 +38,7 @@ const UserManagementShipper = () => {
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   useEffect(() => {
     if (!isLoading) {
-      setUsers(companyUserData.result);
+      setUsers(companyUserData.result.result);
     }
   }, [isLoading]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);

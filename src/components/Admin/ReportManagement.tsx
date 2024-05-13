@@ -3,11 +3,20 @@ import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IReport } from "../../interface/admin";
 import { ReportsColumn } from "./TableColumns/ReportColumns";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
+import { debounce } from "@/util/debounce";
 
 const ReportManagement = () => {
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  //use pager and search in query params
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const reportsData: IReport[] = [
     {
       id: "728ed52f",
@@ -98,7 +107,9 @@ const ReportManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -109,6 +120,15 @@ const ReportManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   return (
     <div className="table-container">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -160,12 +180,19 @@ const ReportManagement = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {reportsData && <DataTable isAction={false} columns={ReportsColumn} data={reportsData} />}
+      {reportsData && (
+        <DataTable
+          isAction={false}
+          columns={ReportsColumn}
+          data={reportsData}
+        />
+      )}
     </div>
   );
 };

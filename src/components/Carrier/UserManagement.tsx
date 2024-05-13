@@ -4,7 +4,12 @@ import CreateUser from "../Modals/CreateUser";
 import { useEffect, useState } from "react";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { ColumnDef } from "@tanstack/react-table";
-import { IUserManagement, QueryPager } from "../../interface/common";
+import {
+  IPassword,
+  IUser,
+  IUserManagement,
+  QueryPager,
+} from "../../interface/common";
 import { Col, FormControl, InputGroup, Image, Row } from "react-bootstrap";
 
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -33,7 +38,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
-    page: pager.page,
+    page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
@@ -43,7 +48,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      setUsers(companyUserData.result);
+      setUsers(companyUserData.result.result);
     }
   }, [isLoading]);
   const values = [10, 20, 30, 40, 50];
@@ -86,11 +91,11 @@ const UserManagement = () => {
     const newUsers = users.filter((u) => u.id !== edituser?.id);
     setUsers(newUsers);
   };
-  const submitCreateFormHandler = async (data: any) => {
+  const submitCreateFormHandler = async (data: IUser) => {
     setshowCreateUserModal(false);
     const resp = await createSubUser(data);
   };
-  const submitEditFormHandler = async (data: any) => {
+  const submitEditFormHandler = async (data: IPassword) => {
     setshowUpdatePasswordModal(false);
 
     const resp = await updateSubUserPassword({

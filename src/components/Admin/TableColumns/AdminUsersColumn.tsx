@@ -1,13 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
 import IconEdit from "../../../assets/icons/ic-edit.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { IAdminUser } from "../../../interface/admin";
+import { IUserManagement } from "@/interface/common";
 
-interface AdminUserActionsProps{
-  onEdit : () => void;
+interface AdminUserActionsProps {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<IAdminUser>[] => [
+export const AdminUsersColumn = ({
+  onEdit,
+  onDelete,
+}: AdminUserActionsProps): ColumnDef<IUserManagement>[] => [
   {
     accessorKey: "userName",
     header: "User Name",
@@ -17,24 +21,16 @@ export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<I
     header: "Email Address",
   },
   {
-    accessorKey: "password",
-    header: "Password",
-    cell: ({ row }) => {
-      const count: string = row.getValue("password");
-      return <span>{"*".repeat(count.length)}</span>;
-    },
-  },
-  {
     accessorKey: "action",
     header: "Action",
-    cell: () => {
+    cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          <div onClick={() => onEdit()}>
+          <div onClick={() => onEdit(row.original.id)}>
             <img src={IconEdit} />
             <span style={{ color: "#27AE60" }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
           </div>

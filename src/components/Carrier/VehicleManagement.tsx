@@ -15,7 +15,7 @@ import {
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
 } from "@/services/vahicles";
-import { useGetDriversQuery } from "@/services/driver";
+// import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from "../Modals/AssignDriver";
 import CreateVehicleModal from "../Modals/CreateVehicle";
 import EditVehicleModal from "../Modals/EditVehicle";
@@ -23,6 +23,7 @@ import ConfirmationModal from "../Modals/ConfirmationModal";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { debounce } from "@/util/debounce";
+import { useGetDriversListQuery } from "@/services/drivers";
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -45,15 +46,15 @@ const VehicleManagement = () => {
   const [showEditVehicle, setShowEditVehicle] = useState(false);
 
   const { data, isLoading } = useGetVehiclesQuery({
-    page: pager.page,
+    page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
     useGetVehicleTypesQuery({});
-  const { data: driverData, isLoading: driverIsLoading } = useGetDriversQuery(
-    {}
-  );
+
+  const { data: driverData, isLoading: driverIsLoading } =
+    useGetDriversListQuery();
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
@@ -70,7 +71,7 @@ const VehicleManagement = () => {
   }, [isLoadingVehicleTypes]);
   useEffect(() => {
     if (!driverIsLoading) {
-      setDrivers(driverData.result.result);
+      setDrivers(driverData?.result.result);
     }
   }, [driverIsLoading]);
   const assignDriverHandler = async (id: number) => {

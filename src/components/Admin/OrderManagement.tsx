@@ -25,12 +25,15 @@ import { useAppSelector } from "@/state";
 import { IOrderResponseData } from "@/interface/orderDetail";
 import AssignVehicle from "../Modals/AssignVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { debounce } from "@/util/debounce";
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [totalPageCount, setTotalPageCount] = useState(0);
 
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
@@ -43,6 +46,7 @@ const OrderManagement = () => {
   } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
+    term: searchTerm,
     ...filterKeys,
   });
 
@@ -191,6 +195,16 @@ const OrderManagement = () => {
       console.log("status update error: ", error);
     }
   };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,
@@ -212,11 +226,15 @@ const OrderManagement = () => {
         const updatedOrderData = orderItems.map((currentOrderObject) => {
           return {
             id: currentOrderObject.id,
-            assignedCarrier:currentOrderObject.assignedCarrier? currentOrderObject.assignedCarrier:"-",
+            assignedCarrier: currentOrderObject.assignedCarrier
+              ? currentOrderObject.assignedCarrier
+              : "-",
             origin: currentOrderObject.origin,
             destination: currentOrderObject.destination,
             weight: currentOrderObject.weight,
-            dimentions: currentOrderObject.dimentions? currentOrderObject.dimentions:"-",
+            dimentions: currentOrderObject.dimentions
+              ? currentOrderObject.dimentions
+              : "-",
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
             action: "",
@@ -297,6 +315,7 @@ const OrderManagement = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

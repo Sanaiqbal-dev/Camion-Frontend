@@ -1,5 +1,3 @@
-import { IProposal } from "./proposal";
-
 export interface IProposalQuotationUpdateBody {
   id: number;
   trackingId: string;

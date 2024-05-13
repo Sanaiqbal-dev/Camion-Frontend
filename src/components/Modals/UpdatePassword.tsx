@@ -3,12 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React from "react";
-
-interface IPassword {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+import { IPassword } from "@/interface/common";
 
 interface UpdatePasswordModalProps {
   show: boolean;

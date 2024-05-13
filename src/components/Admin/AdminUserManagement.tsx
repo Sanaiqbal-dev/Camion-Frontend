@@ -1,89 +1,121 @@
 import { DataTable } from "../ui/DataTable";
 import { AdminUsersColumn } from "./TableColumns/AdminUsersColumn";
-import { IAdminUser } from "../../interface/admin";
 import CreateUser from "../Modals/CreateUser";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { ColumnDef } from "@tanstack/react-table";
+import { PAGER_SIZE } from "@/config/constant";
+import {
+  QueryPager,
+  IUserManagement,
+  IPassword,
+  IUser,
+} from "@/interface/common";
+import {
+  useGetCompanyUsersQuery,
+  useCreateSubUserMutation,
+  useUpdateSubUserMutation,
+  useUpdateSubUserPasswordMutation,
+} from "@/services/user";
+import { debounce } from "@/util/debounce";
+import PreviousIcon from "../../assets/icons/ic-previous.svg";
+import NextIcon from "../../assets/icons/ic-next.svg";
+import SearchIcon from "../../assets/icons/ic-search.svg";
+import { Row, Col, InputGroup, Image, FormControl } from "react-bootstrap";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const AdminUserManagement = () => {
-  const userData: IAdminUser[] = [
-    {
-      id: "9e19od42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234567823",
-      action: "",
-    },
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-    {
-      id: "56te1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234567823",
-      action: "",
-    },
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [edituser, setEditUser] = useState<IUserManagement | undefined>();
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
-    {
-      id: "7tf5d52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "123",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234567823",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234567823",
-      action: "",
-    },
-    {
-      id: "728ed52f",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "12345",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "1234567823",
-      action: "",
-    },
+  const [users, setUsers] = useState<IUserManagement[]>([]);
+  console.log(users, "users");
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    term: searchTerm,
+  });
+  const [createSubUser] = useCreateSubUserMutation();
+  const [updateSubUser] = useUpdateSubUserMutation();
+  const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
-    {
-      id: "489e1e742",
-      userName: "Ali Abbasi",
-      email: "ali_abbasi@mail.com",
-      password: "",
-      action: "",
-    },
-  ];
+  useEffect(() => {
+    if (!isLoading) {
+      setUsers(companyUserData.result.result);
+    }
+  }, [isLoading]);
+  const values = [10, 20, 30, 40, 50];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [entriesValue, setEntriesValue] = useState(10);
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
-  const onEdit = () => {
-    console.log(" Show password clicked");
+  function handleChangeValue(direction: number) {
+    setCurrentIndex(currentIndex + direction);
+
+    if (currentIndex >= values.length) {
+      setCurrentIndex(values.length - 1);
+    } else if (currentIndex < 0) {
+      setCurrentIndex(0);
+    }
+    setEntriesValue(values[currentIndex]);
+  }
+
+  const onEdit = (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
-  const columns: ColumnDef<IAdminUser>[] = AdminUsersColumn({
+  const onDelete = async (id: string) => {
+    const euser = users.find((u) => u.id === id);
+    setEditUser(euser);
+    setIsConfirmationModalOpen(true);
+  };
+  const onDeleteHandler = async () => {
+    setIsConfirmationModalOpen(false);
+
+    const resp = await updateSubUser({
+      userId: edituser?.id,
+      isDeleted: true,
+    });
+    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    setUsers(newUsers);
+  };
+  const submitCreateFormHandler = async (data: IUser) => {
+    setshowCreateUserModal(false);
+    const resp = await createSubUser(data);
+  };
+  const submitEditFormHandler = async (data: IPassword) => {
+    setshowUpdatePasswordModal(false);
+
+    const resp = await updateSubUserPassword({
+      password: data.newPassword,
+      confirmPassword: data.confirmPassword,
+      email: edituser?.email,
+    });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
+  const columns: ColumnDef<IUserManagement>[] = AdminUsersColumn({
     onEdit,
+    onDelete,
   });
 
   return (
@@ -100,16 +132,81 @@ const AdminUserManagement = () => {
           Create New User
         </button>
       </div>
-      {userData && (
-        <DataTable isAction={false} columns={columns} data={userData} />
+      <div className="tw-flex tw-justify-between tw-items-center">
+        <Row className="tw-items-center">
+          <Col xs="auto" className="tw-text-secondary">
+            Show
+          </Col>
+          <Col xs="auto">
+            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+              <input
+                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
+                type="text"
+                readOnly
+                value={entriesValue}
+              />
+              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                <button
+                  className="tw-border-none"
+                  onClick={() => handleChangeValue(1)}
+                >
+                  <Image
+                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                    src={PreviousIcon}
+                  />
+                </button>
+                <button
+                  className="tw-border-none"
+                  onClick={() => handleChangeValue(-1)}
+                >
+                  <Image
+                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
+                    src={NextIcon}
+                  />
+                </button>
+              </div>
+            </div>
+          </Col>
+          <Col xs="auto" className="tw-text-secondary">
+            entries
+          </Col>
+        </Row>
+        <Row className="tw-mt-3">
+          <Col>
+            <InputGroup>
+              <InputGroup.Text>
+                <Image src={SearchIcon} />
+              </InputGroup.Text>
+              <FormControl
+                type="text"
+                placeholder="Search"
+                className="form-control"
+                onChange={handleInputChange}
+              ></FormControl>
+            </InputGroup>
+          </Col>
+        </Row>
+      </div>
+      {users.length > 0 ? (
+        <DataTable isAction={false} columns={columns} data={users} />
+      ) : (
+        <span>No Users Found!</span>
       )}
       <CreateUser
         show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
       />
       <UpdatePassword
+        onSubmitForm={submitEditFormHandler}
         show={showUpdatePasswordModal}
         handleClose={() => setshowUpdatePasswordModal(false)}
+      />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage="Are you sure?"
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
       />
     </div>
   );

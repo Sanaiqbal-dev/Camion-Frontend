@@ -153,3 +153,15 @@ export interface ICompany {
   createdById: string;
   appUser: any;
 }
+export interface IUser {
+  firstName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface IPassword {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
