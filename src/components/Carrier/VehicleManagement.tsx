@@ -22,12 +22,15 @@ import EditVehicleModal from "../Modals/EditVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
+import { debounce } from "@/util/debounce";
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -44,6 +47,7 @@ const VehicleManagement = () => {
   const { data, isLoading } = useGetVehiclesQuery({
     page: pager.page,
     pageCount: pager.pageSize,
+    term: searchTerm,
   });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
     useGetVehicleTypesQuery({});
@@ -137,6 +141,18 @@ const VehicleManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      // Perform your search operation here
+      setSearchTerm(search);
+    }
+  }, 3000); // Adjust the delay time as needed
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
+
   const columns = VehicleManagementColumns({
     assignDriver: assignDriverClickHandler,
     editVehicle: editVehicleHandler,
@@ -213,6 +229,7 @@ const VehicleManagement = () => {
                   type="text"
                   placeholder="Search"
                   className="form-control"
+                  onChange={handleInputChange}
                 ></FormControl>
               </InputGroup>
             </Col>

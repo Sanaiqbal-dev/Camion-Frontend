@@ -18,8 +18,11 @@ import {
 } from "@/services/user";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { PAGER_SIZE } from "@/config/constant";
+import { debounce } from "@/util/debounce";
 
 const UserManagement = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -32,6 +35,7 @@ const UserManagement = () => {
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
     page: pager.page,
     pageCount: pager.pageSize,
+    term: searchTerm,
   });
   const [createSubUser] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
@@ -94,6 +98,16 @@ const UserManagement = () => {
       confirmPassword: data.confirmPassword,
       email: edituser?.email,
     });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
   const columns: ColumnDef<IUserManagement>[] = UsersColumn({
     onEdit,
@@ -163,6 +177,7 @@ const UserManagement = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

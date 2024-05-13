@@ -17,6 +17,7 @@ import {
 } from "@/services/user";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { PAGER_SIZE } from "@/config/constant";
+import { debounce } from "@/util/debounce";
 
 const UserManagementShipper = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -95,6 +96,19 @@ const UserManagementShipper = () => {
       email: edituser?.email,
     });
   };
+  const debouncedSearch = debounce((searchTerm: string) => {
+    if (searchTerm.length >= 3) {
+      // Perform your search operation here
+      console.log("Searching for:", searchTerm);
+    } else {
+      // Clear previous search results or perform other actions
+      console.log("Please enter at least 3 characters.");
+    }
+  }, 500); // Adjust the delay time as needed
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,
     onDelete,
@@ -162,6 +176,7 @@ const UserManagementShipper = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>
