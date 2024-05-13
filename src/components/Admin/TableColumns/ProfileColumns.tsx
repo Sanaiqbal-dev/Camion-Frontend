@@ -7,10 +7,10 @@ import clsx from "clsx";
 
 interface ProfileActionProps {
   onSelectFile: (file: any) => void;
-  onAcceptButtonClick: (id: number) => void;
-  onRejectButtonClick: (id: number) => void;
-  onDeactivateButtonClick: (id: number) => void;
-  onDeleteButtonClick: (id: number) => void;
+  onAcceptButtonClick: (id: string) => void;
+  onRejectButtonClick: (id: string) => void;
+  onDeactivateButtonClick: (id: string) => void;
+  onDeleteButtonClick: (id: string) => void;
 }
 
 export const ProfileColumns = ({
@@ -90,7 +90,7 @@ export const ProfileColumns = ({
     accessorKey: "action",
     header: "Action",
     cell: ({ row }) => {
-      const id: number = row.original.id;
+      const id: string = row.original.id;
       const status = row.getValue("status");
 
       return status === "Not Approved" ? (

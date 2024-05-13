@@ -21,13 +21,11 @@ const ReportManagement = () => {
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+  const { } = useAppSelector(
     (state) => state.childObj
   );
   const {
     data: currentData,
-    isFetching,
-    error,
   } = useGetReportsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,

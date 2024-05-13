@@ -4,7 +4,7 @@ import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useState } from "react";
-import { Iprofiles } from "../../interface/admin";
+import { IProfileResponseData, Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
 import {
   useGetCompanyProfilesListQuery,
@@ -23,7 +23,7 @@ const Profiles = () => {
   const companyProfiles = useGetCompanyProfilesListQuery({ term: searchTerm });
   const [selectedFile, setSelectedFile] = useState<any>();
   const downloadFile = useDownloadFileQuery(selectedFile?.fileName);
-  const ProfilesTableData: Iprofiles = companyProfiles.data?.result.result;
+  const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
       return "Not Approved";
@@ -36,11 +36,11 @@ const Profiles = () => {
 
   const profilesData = ProfilesTableData?.map((item) => ({
     id: item.userId,
-    profileType: item.roleName ? item.roleName : "carrier",
+    profileType: item.profiletype ? item.profiletype : "-",
     firstName: item.firstName,
     lastName: item.lastName,
     email: item.emailAddress,
-    contact: item.phoneNumber ? item.phoneNumber : "2233445566",
+    contact: item.contactNumber ? item.contactNumber : "-",
     company: item.companyName ? item.companyName : "-",
     crDocument: item.files,
     status: getStatusColumn(
@@ -48,7 +48,7 @@ const Profiles = () => {
       item.isCompanyAccountActive
     ),
   }));
-  const onAcceptButtonClick = async (id: number) => {
+  const onAcceptButtonClick = async (id: string) => {
     const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
@@ -60,7 +60,7 @@ const Profiles = () => {
       });
     }
   };
-  const onDeactivateButtonClick = async (id: number) => {
+  const onDeactivateButtonClick = async (id: string) => {
     const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
@@ -72,7 +72,7 @@ const Profiles = () => {
       });
     }
   };
-  const onDeleteButtonClick = async (id: number) => {
+  const onDeleteButtonClick = async (id: string) => {
     const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
@@ -84,7 +84,7 @@ const Profiles = () => {
       });
     }
   };
-  const onRejectButtonClick = async (id: number) => {
+  const onRejectButtonClick = async (id: string) => {
     const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({

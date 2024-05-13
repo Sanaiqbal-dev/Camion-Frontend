@@ -6,7 +6,7 @@ export interface Iprofiles {
   email: string;
   contact: string;
   company: string;
-  crDocument: string;
+  crDocument: IFileResponseData[];
   status: string;
   action: string;
 }
@@ -39,4 +39,26 @@ export interface IAdminUser {
   email: string;
   password: string;
   action: string;
+}
+
+export interface IFileResponseData {
+  absolutePath: string;
+  createdById: string;
+  fileName: string;
+  fileTypeId: number;
+  id: number;
+  relativePath: string;
+}
+export interface IProfileResponseData {
+  companyAccountStatus: number;
+  companyId: number;
+  companyName: string;
+  contactNumber: string | null;
+  emailAddress: string;
+  files: IFileResponseData[];
+  firstName: string;
+  isCompanyAccountActive: boolean;
+  lastName: string;
+  profiletype: string | null;
+  userId: string;
 }
