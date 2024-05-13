@@ -26,15 +26,12 @@ import { IOrderResponseData } from "@/interface/orderDetail";
 import AssignVehicle from "../Modals/AssignVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { debounce } from "@/util/debounce";
-import { debounce } from "@/util/debounce";
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -92,12 +89,6 @@ const OrderManagement = () => {
       console.log("status update error: ", error);
     }
   };
-
-  const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     debouncedSearch(value);
@@ -154,10 +145,6 @@ const OrderManagement = () => {
       setSearchTerm(search);
     }
   }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
-  };
 
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
