@@ -59,8 +59,8 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
-  const userId = useAppSelector((state) => state.session.user.userId);
-  const userRole = useAppSelector((state) => state.session.user.role);
+  const userId = useAppSelector((state) => state.session?.user?.userId);
+  const userRole = useAppSelector((state) => state.session?.user?.role);
   const isShipper = userRole === "Shipper";
   const [createCompanyProfile] = useCreateCompanyProfileMutation();
   const [vatFile, setVatFile] = useState<File>();

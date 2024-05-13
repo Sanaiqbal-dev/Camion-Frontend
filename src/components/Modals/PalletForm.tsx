@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import { IProposalDetailResponseData, IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
 import { useEffect } from "react";
 
 const schema = z.object({
@@ -16,7 +16,7 @@ const schema = z.object({
 
 interface IPalletForm {
   isEdit: boolean;
-  proposalObject?: IProposalResponseData;
+  proposalObject?: IProposalDetailResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
 const PalletForm: React.FC<IPalletForm> = ({
