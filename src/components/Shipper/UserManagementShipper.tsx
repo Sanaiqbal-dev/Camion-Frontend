@@ -22,8 +22,13 @@ const UserManagementShipper = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+    page: pager.page,
+    pageCount: pager.pageSize,
+    term: searchTerm,
+  });
   const [createSubUser] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
@@ -84,6 +89,16 @@ const UserManagementShipper = () => {
       confirmPassword: data.confirmPassword,
       email: edituser?.email,
     });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
   const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,

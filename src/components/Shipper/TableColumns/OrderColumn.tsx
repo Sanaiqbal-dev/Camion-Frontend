@@ -39,6 +39,26 @@ export const OrderColumns = ({
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      const statusVal = row.original.status;
+      return (
+        <span
+          className={
+            statusVal == "Pending"
+              ? "tw-text-red-600"
+              : statusVal == "In Progress"
+              ? "tw-text-orange-400"
+              : statusVal == "Ready To Load"
+              ? "tw-text-green-700"
+              : statusVal == "Driver Assigned"
+              ? "tw-text-blue-600"
+              : "tw-text-black"
+          }
+        >
+          {statusVal}
+        </span>
+      );
+    },
   },
   {
     accessorKey: "action",

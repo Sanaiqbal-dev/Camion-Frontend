@@ -15,21 +15,21 @@ import { useEffect, useState } from "react";
 import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import {
-  useGetProposalsQuery,
-} from "@/services/proposal";
+import { useGetProposalsQuery } from "@/services/proposal";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { IProposalResponseData } from "@/interface/proposal";
+import { debounce } from "@/util/debounce";
 
 const Requests = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [totalPageCount, setTotalPageCount] = useState(0);
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
@@ -41,7 +41,7 @@ const Requests = () => {
   } = useGetProposalsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
-    ...filterKeys,
+    term: searchTerm,
   });
   const [requestTableData, setRequestTableData] = useState<IRequest[]>([]);
   const [orderItems, setOrderItems] = useState<IRequest>();
@@ -91,11 +91,21 @@ const Requests = () => {
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
+
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
     setRequestTableData([]);
 
     if (requestItems) {
-      
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
         origin: currentRequestObject.origin,
@@ -176,6 +186,7 @@ const Requests = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

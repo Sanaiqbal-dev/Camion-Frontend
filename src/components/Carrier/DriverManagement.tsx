@@ -14,6 +14,7 @@ import {
 } from "@/services/drivers";
 import { ColumnDef } from "@tanstack/react-table";
 const DriverManagement = () => {
+
   const getDriversList = useGetDriversListQuery();
   const [deleteDriver] = useDeleteDriverMutation();
 

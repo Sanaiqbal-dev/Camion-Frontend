@@ -26,7 +26,7 @@ import {
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
-import { IOrder, IOrderResponseData } from "@/interface/orderDetail";
+import { IOrderResponseData } from "@/interface/orderDetail";
 
 export interface StatusProps {
   id: string;
@@ -39,6 +39,7 @@ const Orders = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
@@ -50,7 +51,7 @@ const Orders = () => {
   } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
-    ...filterKeys,
+    term: searchTerm,
   });
 
   const [deleteOrder] = useDeleteOrderMutation();
@@ -160,6 +161,15 @@ const Orders = () => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };
 
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
@@ -223,6 +233,7 @@ const Orders = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>
