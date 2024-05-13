@@ -3,7 +3,7 @@ import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Iprofiles } from "../../interface/admin";
 import { ProfileColumns } from "./TableColumns/ProfileColumns";
 import {
@@ -11,11 +11,14 @@ import {
   useUpdateCompanyAccountMutation,
 } from "@/services/companyProfile";
 import { ColumnDef } from "@tanstack/react-table";
+import { useDownloadFileQuery } from "@/services/fileHandling";
 
 const Profiles = () => {
-  const companyProfiles = useGetCompanyProfilesListQuery();
-  console.log("Data", companyProfiles);
   const [updateCompanyAccount] = useUpdateCompanyAccountMutation();
+
+  const companyProfiles = useGetCompanyProfilesListQuery();
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const downloadFile = useDownloadFileQuery(selectedFile?.fileName);
   const ProfilesTableData: Iprofiles = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
@@ -28,21 +31,21 @@ const Profiles = () => {
   };
 
   const profilesData = ProfilesTableData?.map((item) => ({
-    id: item.id,
+    id: item.userId,
     profileType: item.roleName ? item.roleName : "carrier",
     firstName: item.firstName,
     lastName: item.lastName,
     email: item.emailAddress,
     contact: item.phoneNumber ? item.phoneNumber : "2233445566",
     company: item.companyName ? item.companyName : "-",
-    crDocument: "",
+    crDocument: item.files,
     status: getStatusColumn(
       item.companyAccountStatus,
       item.isCompanyAccountActive
     ),
   }));
   const onAcceptButtonClick = async (id: number) => {
-    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -54,7 +57,7 @@ const Profiles = () => {
     }
   };
   const onDeactivateButtonClick = async (id: number) => {
-    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -66,7 +69,7 @@ const Profiles = () => {
     }
   };
   const onDeleteButtonClick = async (id: number) => {
-    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -78,7 +81,7 @@ const Profiles = () => {
     }
   };
   const onRejectButtonClick = async (id: number) => {
-    const selectedItem = ProfilesTableData.find((item) => item.id === id);
+    const selectedItem = ProfilesTableData.find((item) => item.userId === id);
     if (selectedItem) {
       await updateCompanyAccount({
         userId: selectedItem.userId,
@@ -89,7 +92,26 @@ const Profiles = () => {
       });
     }
   };
+  const downloadSelectedFile = async (file: any) => {
+    console.log("Downloading file:", file);
+    try {
+      if (file) {
+        await downloadFile(file.fileName);
+        console.log("Download successful!");
+      } else {
+        console.log("No file selected!");
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+  const onSelectFile = (file: any) => {
+    setSelectedFile(file);
+    downloadSelectedFile(file);
+  };
+
   const columns: ColumnDef<Iprofiles>[] = ProfileColumns({
+    onSelectFile,
     onAcceptButtonClick,
     onDeactivateButtonClick,
     onDeleteButtonClick,

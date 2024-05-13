@@ -3,10 +3,10 @@ import IconTick from "../../../assets/icons/ic-submitted.svg";
 import IconDeleteProfile from "../../../assets/icons/ic-delete-profile.svg";
 import IconRejectProfile from "../../../assets/icons/ic-reject-profile.svg";
 import { Iprofiles } from "../../../interface/admin";
-import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 interface ProfileActionProps {
+  onSelectFile: (file: any) => void;
   onAcceptButtonClick: (id: number) => void;
   onRejectButtonClick: (id: number) => void;
   onDeactivateButtonClick: (id: number) => void;
@@ -14,6 +14,7 @@ interface ProfileActionProps {
 }
 
 export const ProfileColumns = ({
+  onSelectFile,
   onAcceptButtonClick,
   onRejectButtonClick,
   onDeactivateButtonClick,
@@ -46,8 +47,30 @@ export const ProfileColumns = ({
   {
     accessorKey: "CRDocument",
     header: "CR Document",
-    cell: () => {
-      return <Link to={""}>View Document</Link>;
+    cell: ({ row }) => {
+      const files = row.original.crDocument || [];
+      const renderOptions = () => {
+        return files.map((file) => (
+          <option key={file.id} value={file.id}>
+            {file.fileName}
+          </option>
+        ));
+      };
+
+      const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedIndex = event.target.selectedIndex;
+        const selectedFile = files[selectedIndex - 1];
+        if (selectedFile) {
+          onSelectFile(selectedFile);
+        }
+      };
+
+      return (
+        <select onChange={handleChange}>
+          <option value="">Select Document</option>
+          {renderOptions()}
+        </select>
+      );
     },
   },
   {
@@ -80,7 +103,7 @@ export const ProfileColumns = ({
             }}
             onClick={() => onAcceptButtonClick(id)}
           >
-            <img src={IconTick} />
+            <img src={IconTick} alt="Accept" />
             Accept
           </button>
           <button
@@ -91,7 +114,7 @@ export const ProfileColumns = ({
             }}
             onClick={() => onRejectButtonClick(id)}
           >
-            <img src={IconRejectProfile} />
+            <img src={IconRejectProfile} alt="Reject" />
             Reject
           </button>
         </div>
@@ -115,7 +138,7 @@ export const ProfileColumns = ({
             }}
             onClick={() => onDeleteButtonClick(id)}
           >
-            <img src={IconDeleteProfile} />
+            <img src={IconDeleteProfile} alt="Delete" />
             Delete
           </button>
         </div>
@@ -123,3 +146,5 @@ export const ProfileColumns = ({
     },
   },
 ];
+
+export default ProfileColumns;
