@@ -28,7 +28,6 @@ import { useGetShipmentTypesQuery } from "@/services/shipmentType";
 import {
   useCreateNewProposalMutation,
   useDeleteProposalMutation,
-  useGetProposalQuery,
   useGetProposalsQuery,
   useUpdateProposalMutation,
 } from "@/services/proposal";
@@ -56,12 +55,6 @@ const ShipperRequests = () => {
   const [createNewProposal] = useCreateNewProposalMutation();
   const [updateProposal] = useUpdateProposalMutation();
   const [deleteProposal] = useDeleteProposalMutation();
-  // const {
-  //   currentData: single,
-  //   isFetching: isSingleLoading,
-  //   error: singleError,
-  // } = useGetProposalQuery({ ...primaryKeys });
-
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -84,7 +77,6 @@ const ShipperRequests = () => {
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
-    ...filterKeys,
   });
 
   const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>(
@@ -180,7 +172,7 @@ const ShipperRequests = () => {
       shipmentTypeId: shipmentTypeId,
       shipmentQuantity: shipmentQuantityVal,
       length: data.length ? data.length : 0,
-      width: data.width ? data.length : 0,
+      width: data.width ? data.width : 0,
       height: itemHeight,
       isCargoItemsStackable: data.isCargoItemsStackable
         ? data.isCargoItemsStackable
@@ -192,7 +184,7 @@ const ShipperRequests = () => {
       userId: userData.user.userId,
       weight: itemWeight,
       otherName: otherItemName,
-      proposalId: isEditProposal ? selectedProposalItem.id : 0,
+      proposalId: isEditProposal ? selectedProposalItem : 0,
       FileName: "",
       FilePath: "",
     }));
@@ -221,18 +213,9 @@ const ShipperRequests = () => {
   };
 
   const onEdit = async (proposalItemId: number) => {
-    // try {
-    //   const response = await useGetProposalQuery({ id: proposalItemId }).unwrap();
-    //   console.log("OnEdit response:", response);
     setSelectedProposalItem(proposalItemId);
     setIsEditProposal(true);
     SetShowCreateUserModalFirstStep(true);
-    // } catch (error) {
-    //   console.log("Edit error response:", error);
-    // }
-    // let tempItem = requestItems?.find(
-    //   (item: { id: number }) => item.id === proposalItemId
-    // );
   };
   const onDelete = (proposalItemId: number) => {
     setDeleteItemId(proposalItemId);
@@ -261,6 +244,7 @@ const ShipperRequests = () => {
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };
+
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
@@ -291,6 +275,7 @@ const ShipperRequests = () => {
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
+
       setProposalItem({} as IProposal);
       setSendProposalRequest(false);
     }

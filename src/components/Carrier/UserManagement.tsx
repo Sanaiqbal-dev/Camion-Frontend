@@ -48,7 +48,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      setUsers(companyUserData.result.result);
+      setUsers(companyUserData.result?.result);
     }
   }, [isLoading]);
   const values = [10, 20, 30, 40, 50];

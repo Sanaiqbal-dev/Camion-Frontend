@@ -29,13 +29,14 @@ const ShipperOrders = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const {
     data: currentData,
     isFetching,
@@ -44,7 +45,6 @@ const ShipperOrders = () => {
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
-    ...filterKeys,
   });
   const [deleteOrder] = useDeleteOrderMutation();
 
@@ -80,7 +80,7 @@ const ShipperOrders = () => {
           destination: currentOrderObject.destination,
           weight: currentOrderObject.weight,
           type: currentOrderObject.type,
-          status: currentOrderObject.status,
+          status: currentOrderObject.status ? currentOrderObject.status : "-",
           ETA: currentOrderObject.estimatedDeliveryTime,
           action: "",
         }));
@@ -110,16 +110,6 @@ const ShipperOrders = () => {
     });
   };
 
-  const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
-  };
-
   const orderColumns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onTrackOrder,
@@ -136,6 +126,16 @@ const ShipperOrders = () => {
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
 
   useEffect(() => {

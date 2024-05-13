@@ -3,9 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import useFileTypeValidation, {
-  useUploadFileMutation,
-} from "@/services/fileType";
+import { useUploadFileMutation } from "@/services/fileHandling";
 
 interface IVehicle {
   color: string;
@@ -62,9 +60,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
       }
     }
   }, [fileType, selectedFile, uploadFile]);
-  const fileError = useFileTypeValidation({
-    extension: selectedFile ? `.${selectedFile.name.split(".").pop()}` : "",
-  });
+
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
     const { vehicleType, modelYear, ...rest } = data;
     const requestData = {
@@ -201,9 +197,6 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
                     }
                   }}
                 />
-                {selectedFile && fileError && (
-                  <div className="tw-text-red-500">{fileError}</div>
-                )}
               </Form.Group>
             </div>
           </div>
