@@ -2,7 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IProposalDetailResponseData, IShipmentDetails } from "@/interface/proposal";
+import {
+  IProposalDetailResponseData,
+  IShipmentDetails,
+} from "@/interface/proposal";
 import { useEffect } from "react";
 
 const schema = z.object({
@@ -33,7 +36,7 @@ const BoxForm: React.FC<IBoxForm> = ({
 
   useEffect(() => {
     if (isEdit && proposalObject) {
-      let currentObj = {
+      const currentObj = {
         numberOfBoxes: proposalObject.shipmentQuantity,
         weightPerItem: proposalObject.weight,
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,

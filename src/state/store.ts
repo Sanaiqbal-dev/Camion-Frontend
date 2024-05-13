@@ -5,8 +5,7 @@ import storage from "redux-persist/lib/storage";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { baseApi } from "@/services/baseApi";
 
-import {thunk} from "redux-thunk";
-
+import { thunk } from "redux-thunk";
 
 import { ENVIRONMENT, PERSIST_STORE_NAME } from "@/config/app";
 import reducer from "./reducer";
@@ -30,4 +29,4 @@ const store = configureStore({
 setupListeners(store.dispatch);
 
 const persistor = persistStore(store);
-export { persistor, store };
+export default { persistor, store };

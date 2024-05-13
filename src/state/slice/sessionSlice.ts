@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ISessionUser, ILanguage } from "@/interface/common";
-import { AVAILABLE_LANGUAGES } from "@/config/app";
 
 // export type Languages = AVAILABLE_LANGUAGES;
 export interface SessionState {

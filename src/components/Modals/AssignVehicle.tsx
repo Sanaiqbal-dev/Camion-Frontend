@@ -7,7 +7,7 @@ import { useGetVehiclesQuery } from "@/services/vahicles";
 import { IVehicle } from "@/interface/carrier";
 
 interface IVehicleType {
-  vehicleTypeId: number ;
+  vehicleTypeId: number;
 }
 
 interface AssignVehicleModalProps {
@@ -15,8 +15,9 @@ interface AssignVehicleModalProps {
   handleClose: () => void;
   onAssignVehicleToOrderItem: (vehicleTypeId: number) => void;
 }
+// eslint-disable-next-line react-refresh/only-export-components
 export const schema = z.object({
-  vehicleTypeId: z.coerce.number().min(1,"select a vehicle"),
+  vehicleTypeId: z.coerce.number().min(1, "select a vehicle"),
 });
 
 const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
@@ -77,7 +78,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
               {vehicleList &&
                 vehicleList.map((vehicle: IVehicle) => (
                   <option key={vehicle.id} value={vehicle.id}>
-                    {vehicle.imeiNumber}
+                    {vehicle.IMEINumber}
                   </option>
                 ))}
             </Form.Control>

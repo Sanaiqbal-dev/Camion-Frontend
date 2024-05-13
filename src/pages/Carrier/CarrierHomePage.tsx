@@ -4,21 +4,19 @@ import ProfileIcon from "../../assets/icons/ic-profile.svg";
 import NotificationIcon from "../../assets/icons/ic-notification.svg";
 import MenuIcon from "../../assets/icons/ic-menu.svg";
 import { Button, Image } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { setLogout } from "@/state/slice/sessionSlice";
 import ActivateProfile from "@/components/Modals/ActivateProfile";
 import { useState } from "react";
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useSelector((state: any) => state.session.token);
   const currentRouteLocation = useLocation();
-  const dispatch = useDispatch();
+
   const pageTitleMap = [
     { pathname: "/carrier/dashboard", title: "Dashboard" },
     { pathname: "/carrier/tracking", title: "Tracking" },
@@ -128,7 +126,6 @@ const CarrierHomePage = () => {
                 </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
-          
           </div>
           <ActivateProfile
             show={showProfileModal}

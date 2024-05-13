@@ -21,9 +21,8 @@ import {
 } from "@/services/order";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
-import { useAppSelector } from "@/state";
 import { IOrderResponseData } from "@/interface/orderDetail";
-import AssignVehicle from "../Modals/AssignVehicle";
+
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { debounce } from "@/util/debounce";
 
@@ -36,14 +35,7 @@ const OrderManagement = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetOrdersQuery({
+  const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -153,7 +145,7 @@ const OrderManagement = () => {
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

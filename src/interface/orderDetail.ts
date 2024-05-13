@@ -1,6 +1,6 @@
-import { IAppUser, Pager } from "./common";
+import { Pager } from "./common";
 import { IOrderStatus } from "./orderStatus";
-import { IPlaces, IProposal, IShipmentType } from "./proposal";
+import { IPlaces, IShipmentType } from "./proposal";
 export interface IOrder {
   id: number;
   proposalId: number;
@@ -21,20 +21,20 @@ export interface IOrderDetail {
   originBuildingNo: string | null;
   originStreetName: string | null;
   originCityId: number | null;
-  originCity:IPlaces;
+  originCity: IPlaces;
   originZipCode: string | null;
   originAdditionalNo: string | null;
   originUnitNo: string | null;
   originDistrictId: number | null;
-  originDistrict:IPlaces;
+  originDistrict: IPlaces;
   destinationBuildingNo: string | null;
   destinationStreetName: string | null;
   destinationCityId: number | null;
-  destinationCity:IPlaces;
+  destinationCity: IPlaces;
   destinationZipCode: string | null;
   destinationAdditionalNo: string | null;
   destinationDistrictId: number | null;
-  destinationDistrict:IPlaces;
+  destinationDistrict: IPlaces;
   destinationUnitNo: string | null;
   shipmentTypeId: number | null;
   shipmentTypes: IShipmentType;
@@ -61,13 +61,12 @@ export interface IOrderDetailIndex extends IOrder {
   aspNetUserLabel?: any;
 }
 
-
 export interface IOrderResponseData {
   destination: string;
   estimatedDeliveryTime: string;
   id: number;
   assignedCarrier?: string;
-  dimentions:string;
+  dimentions: string;
   origin: string;
   status: string;
   trackingId: string;
@@ -87,7 +86,6 @@ export interface IProposalResponseObject {
   data?: any;
 }
 
-
 export interface IOrderDetailSingle extends IOrder {
   orderLabel: any;
   aspNetUserLabel?: any;
@@ -104,7 +102,6 @@ export interface IOrderDetailSearch {
   id?: number;
   searchTerm?: string;
 }
-
 
 export interface ITruckShipmentDetails {
   id: number;
