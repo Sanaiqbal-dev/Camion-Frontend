@@ -18,14 +18,15 @@ import AssignVehicle from "../Modals/AssignVehicle";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import {
+  useAssignVehicleToOrderMutation,
   useDeleteOrderMutation,
-  useGetOrderStatusListQuery,
   useGetOrdersQuery,
+  useUpdateOrderMutation,
 } from "@/services/order";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
-import { IOrder } from "@/interface/orderDetail";
+import { IOrder, IOrderResponseData } from "@/interface/orderDetail";
 
 export interface StatusProps {
   id: string;
@@ -53,8 +54,9 @@ const Orders = () => {
   });
 
   const [deleteOrder] = useDeleteOrderMutation();
+  const [updateOrderStatus] = useUpdateOrderMutation();
+  const [assignVehicle] = useAssignVehicleToOrderMutation();
 
-  const [orderItems, setOrderItems] = useState<IOrder>();
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
 
@@ -67,13 +69,21 @@ const Orders = () => {
     setSelectedOrderItemId(orderItemId);
   };
 
-  const onAssignVehicleToOrderItem = (vehicleType: string) => {
-    console.log("vehicle type is :", vehicleType);
-    console.log("Seleted order is : ", selectedOrderItemId);
+  const onAssignVehicleToOrderItem = async (vehicleTypeId: number) => {
+    try {
+      const response = await assignVehicle({
+        orderId: selectedOrderItemId,
+        vehicleId: vehicleTypeId,
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    setShowAssignVehicleForm(false);
   };
   const onDelete = (orderId: number) => {
     console.log("Delete is clicked on :", orderId);
-        setSelectedOrderId(orderId);
+    setSelectedOrderId(orderId);
 
     setShowDeleteForm(true);
   };
@@ -81,9 +91,16 @@ const Orders = () => {
     console.log("Print Bayan Bill is clicked on order: ", orderItemId);
     navigate("/carrier/bayanBill");
   };
-  const onUpdateStatus = (id: number, statusId: number) => {
-    console.log("status id : ", id);
-    console.log("status id : ", statusId);
+  const onUpdateStatus = async (id: number, statusId: number) => {
+    try {
+      const response = await updateOrderStatus({
+        orderId: id,
+        orderStatusId: statusId,
+      });
+      console.log("status update:", response);
+    } catch (error) {
+      console.log("status update error: ", error);
+    }
   };
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
@@ -106,7 +123,7 @@ const Orders = () => {
     setEntriesValue(values[currentIndex]);
   }
 
-  const DeleteOrder = async() => {
+  const DeleteOrder = async () => {
     setShowDeleteForm(false);
     try {
       const result = await deleteOrder({ id: selectedOrderId });
@@ -115,41 +132,24 @@ const Orders = () => {
       console.error("Error deleting proposal:", error);
     }
   };
-  const FilterDataForTable = (orderItems: IOrder[]) => {
+  const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
       if (orderItems) {
         const updatedOrderData = orderItems.map((currentOrderObject) => {
-          const orderDetailItem = currentOrderObject.orderDetail;
-          const shipment = orderDetailItem.shipmentTypes.shipmentTypeName;
-          let dimension =
-            shipment == "Box"
-              ? "-"
-              : shipment == "Pallet"
-              ? orderDetailItem.length + "x" + orderDetailItem.width
-              : shipment == "Truck"
-              ? "-"
-              : orderDetailItem.length +
-                "x" +
-                orderDetailItem.width +
-                "x" +
-                orderDetailItem.height;
           return {
             id: currentOrderObject.id,
-            origin: currentOrderObject.orderDetail.originCity.name,
-            destination: currentOrderObject.orderDetail.destinationCity.name,
-            weight: currentOrderObject.orderDetail.weight,
-            dimentions: dimension,
-            ETA: currentOrderObject.orderDetail.preferredDeliveryDate,
-            status:
-              currentOrderObject.orderStatus != null &&
-              currentOrderObject.orderStatus,
+            origin: currentOrderObject.origin,
+            destination: currentOrderObject.destination,
+            weight: currentOrderObject.weight,
+            dimentions: currentOrderObject.dimentions? currentOrderObject.dimentions:"-",
+            ETA: currentOrderObject.estimatedDeliveryTime,
+            status: currentOrderObject.status,
             action: "",
           };
         });
 
         setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
-        console.log("fetched requestItems : ", orderItems);
       }
     } catch (error) {
       console.log(error);
@@ -165,12 +165,9 @@ const Orders = () => {
   }, [entriesValue]);
 
   useEffect(() => {
-    console.log("carrier order:", currentData);
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
-      setOrderItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

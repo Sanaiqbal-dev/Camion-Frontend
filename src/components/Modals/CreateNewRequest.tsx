@@ -8,6 +8,7 @@ import { IPlaces, IProposalResponseData } from "@/interface/proposal";
 import {
   useGetCityListQuery,
   useGetDistrictListQuery,
+  useGetProposalQuery,
 } from "@/services/proposal";
 
 interface CreateRequestModalProps {
@@ -15,7 +16,7 @@ interface CreateRequestModalProps {
   handleClose: () => void;
   infoType?: string;
   isEdit: boolean;
-  proposalObject?: IProposalResponseData;
+  proposalObject?: number;
   handleNextStep: (requestObj: INewRequest, requestType: string) => void;
 }
 const schema = z.object({
@@ -48,42 +49,44 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
 
   const { data: cityData } = useGetCityListQuery();
   const { data: districtData } = useGetDistrictListQuery();
+  const { data: proposalItem} = useGetProposalQuery({id:proposalObject});
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
 
   useEffect(() => {
-    if (isEdit && proposalObject) {
+    if (proposalItem) {
+      let object=proposalItem.result;
       let currentObj = {
         buildingNumber:
           infoType == "origin"
-            ? proposalObject.originBuildingNo
-            : proposalObject.destinationBuildingNo,
+            ?object.originBuildingNo
+            : object.destinationBuildingNo,
         streetName:
           infoType == "origin"
-            ? proposalObject.originStreetName
-            : proposalObject.destinationStreetName,
+            ? object.originStreetName
+            : object.destinationStreetName,
         districtName:
           infoType == "origin"
-            ? proposalObject.originDistrict.name
-            : proposalObject.destinationDistrict.name,
+            ? object.originDistrict.name
+            : object.destinationDistrict.name,
         cityName:
           infoType == "origin"
-            ? proposalObject.originCity.name
-            : proposalObject.destinationCity.name,
+            ? object.originCity.name
+            : object.destinationCity.name,
         zipCode:
           infoType == "origin"
-            ? proposalObject.originZipCode
-            : proposalObject.destinationZipCode,
+            ? object.originZipCode
+            : object.destinationZipCode,
         additionalNumber:
           infoType == "origin"
-            ? proposalObject.originAdditionalNo
-            : proposalObject.destinationAdditionalNo,
+            ? object.originAdditionalNo
+            : object.destinationAdditionalNo,
         unitNo:
           infoType == "origin"
-            ? proposalObject.originUnitNo
-            : proposalObject.destinationUnitNo,
+            ? object.originUnitNo
+            : object.destinationUnitNo,
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
@@ -103,7 +106,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
         setValue(key as keyof INewRequest, value);
       });
     }
-  }, [isEdit, setValue]);
+  }, [isEdit, setValue, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     let updatedObject = {
@@ -112,7 +115,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
       districtId: districtList?.find(
         (item) => item.name === data.districtName
       )?.id,
-      cityId: districtList?.find((item) => item.name === data.districtName)
+      cityId: cityList?.find((item) => item.name === data.cityName)
         ?.id,
       zipCode: data.zipCode.toString(),
       additionalNumber: data.additionalNumber.toString(),

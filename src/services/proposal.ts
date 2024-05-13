@@ -4,6 +4,8 @@ import {
   IPlaces,
   IPlacesResponseObject,
   IProposal,
+  IProposalDetailResponse,
+  IProposalDetailResponseData,
   IProposalResponseObject,
   IProposalSingle,
 } from "@/interface/proposal";
@@ -28,10 +30,10 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
 
     getProposal: builder.query<
-      IAPIResponse<IProposalSingle>,
-      Partial<IProposal>
+      IAPIResponse<IProposalDetailResponse>,
+      any
     >({
-      query: ({ id }) => `/proposal/detail/${id}`,
+      query: ({ id }) => `api/Proposals/GetProposal?id=${id}`,
       providesTags: (result, error, arg) => {
         const { id } = arg || {};
         if (id) {

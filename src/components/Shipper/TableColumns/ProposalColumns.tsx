@@ -85,7 +85,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              9-859859859
+              {quotation.trackingId}
             </div>
           </div>
           <div className="col-sm">
@@ -110,7 +110,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposalQuotationStatusId}
+              {quotation.status}
             </div>
           </div>
           <div className="col-sm">
@@ -135,7 +135,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.originCity.name}
+              {quotation.origin}
             </div>
           </div>
           <div className="col-sm">
@@ -160,7 +160,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.destinationCity.name}
+              {quotation.destination}
             </div>
           </div>
           <div className="col-sm">
@@ -185,7 +185,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.weight}
+              {quotation.weight}
             </div>
           </div>
           <div className="col-sm">
@@ -210,8 +210,7 @@ const ProposalColumns = ({
                 textAlign: "left",
               }}
             >
-              {quotation.proposal.length}x{quotation.proposal.width}x
-              {quotation.proposal.height}
+              {quotation.dimentions}
             </div>
           </div>
           <div className="col-sm">

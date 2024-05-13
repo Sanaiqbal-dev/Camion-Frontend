@@ -1,32 +1,26 @@
 import { IProposal } from "./proposal";
 
 export interface IProposalQuotationUpdateBody {
-  amount: string;
-  delieveryDate: string;
-  otherDetails: string;
-  proposalQuotationId: number;
+  id: number;
+  trackingId: string;
+  status: string;
+  origin: string;
+  destination: string;
+  weight: string;
+  dimentions: string;
   proposalQuotationStatusId: number;
-  fileName: string;
-  filePath: string;
-  purposalId: number;
-  userId: string;
+  amount: string;
 }
 
 export interface IProposalQuotation {
   id: number;
   amount: string;
-  expectedDeliveryDate: string;
-  proposalId: number;
-  proposal: IProposal;
-  extraDetails: string;
-  absolutePath: string;
-  relativePath: string;
-  fileName: string;
-  proposalQuotationStatusId: number;
-  createdById: string;
-  appUser: any;
-  createdDateTime: string;
-  proposalStatusChangeById: number;
-  appUsers: any;
-  proposalStatusChangeDateTime: string;
+  destination: string;
+  origin: string;
+  dimentions: string;
+  status: string;
+  trackingId: string;
+  weight: string;
+  expectedDeliveryDate?: string;
+  proposalQuotationStatusId: number | null;
 }

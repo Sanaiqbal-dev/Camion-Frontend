@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
 import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
 import IconDelete from "../../../assets/icons/ic-delete.svg";
 import IconPrintBill from "../../../assets/icons/ic-printer.svg";
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../../@/components/ui/dropdown-menu";
 import { Button } from "../../../../@/components/ui/button";
+import { useGetOrderStatusesQuery } from "@/services/orderStatus";
 
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
@@ -20,7 +20,6 @@ interface OrderActionsProps {
   onUpdateStatus: (id: number, statusId: number) => void;
 }
 export const OrderColumns = ({
-  // statusList,
   onDelete,
   onAssignVehicle,
   onPrintBill,
@@ -57,14 +56,8 @@ export const OrderColumns = ({
           Select Status <img src={IconDown} />
         </>
       );
-      // const [data] = useGetOrderStatusesQuery();
-      // const data = useGetOrderStatusListQuery();
-
-      // useEffect(() => {
-      //   orderStatusData &&
-      //     console.log("order status list is :", orderStatusData);
-      // }, [orderStatusData]);
-
+      const { data: orderStatuses } = useGetOrderStatusesQuery();
+     
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -79,35 +72,17 @@ export const OrderColumns = ({
             className="tw-flex tw-flex-col tw-gap-2 tw-p-2"
             align="end"
           >
-            {/* {data && console.log("status data: ", data)} */}
-            {/* {data && data.map((statusItem: any) => {
-              return (
-                <DropdownMenuItem
-                  className="hover:tw-bg-black hover:tw-text-white"
-                  onClick={() => onUpdateStatus(item.id, statusItem.id)}
-                >
-                  {statusItem.description}
-                </DropdownMenuItem>
-              );
-            })} */}
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, item.id)}
-            >
-              Waiting
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, item.id)}
-            >
-              Enroute
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, item.id)}
-            >
-              Delivered
-            </DropdownMenuItem>
+            {orderStatuses &&
+              orderStatuses.result.map((statusItem: any) => {
+                return (
+                  <DropdownMenuItem
+                    className="hover:tw-bg-black hover:tw-text-white"
+                    onClick={() => onUpdateStatus(item.id, statusItem.id)}
+                  >
+                    {statusItem.description}
+                  </DropdownMenuItem>
+                );
+              })}
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -119,10 +94,6 @@ export const OrderColumns = ({
     cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: "start" }}>
-          {/* <div onClick={() => onSave(row.original.id)}>
-            <img src={IconSaveFile} />
-            <span style={{ color: "#27AE60" }}>Save</span>
-          </div> */}
           <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
             <span style={{ color: "#EB5757" }}>Delete</span>
