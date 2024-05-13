@@ -33,7 +33,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
-    page: pager.page,
+    page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
@@ -43,7 +43,7 @@ const UserManagement = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      setUsers(companyUserData.result);
+      setUsers(companyUserData.result?.result);
     }
   }, [isLoading]);
   const values = [10, 20, 30, 40, 50];

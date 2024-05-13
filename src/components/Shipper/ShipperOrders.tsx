@@ -1,6 +1,13 @@
 import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
-import { Button, Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
@@ -15,6 +22,7 @@ import { IOrderTable } from "@/interface/shipper";
 import { ColumnDef } from "@tanstack/react-table";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "@/util/debounce";
 
 const ShipperOrders = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -26,6 +34,8 @@ const ShipperOrders = () => {
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
     (state) => state.childObj
   );
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const {
     data: currentData,
     isFetching,
@@ -33,7 +43,7 @@ const ShipperOrders = () => {
   } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
-    ...filterKeys,
+    term: searchTerm,
   });
   const [deleteOrder] = useDeleteOrderMutation();
 
@@ -69,8 +79,8 @@ const ShipperOrders = () => {
           destination: currentOrderObject.destination,
           weight: currentOrderObject.weight,
           type: currentOrderObject.type,
-          status:currentOrderObject.status,
-          ETA:currentOrderObject.estimatedDeliveryTime,
+          status: currentOrderObject.status ? currentOrderObject.status : "-",
+          ETA: currentOrderObject.estimatedDeliveryTime,
           action: "",
         }));
 
@@ -114,6 +124,16 @@ const ShipperOrders = () => {
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
 
   useEffect(() => {
@@ -187,6 +207,7 @@ const ShipperOrders = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>
