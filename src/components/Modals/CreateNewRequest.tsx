@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { INewRequest } from "@/interface/shipper";
-import { IPlaces, IProposalResponseData } from "@/interface/proposal";
+import { IPlaces } from "@/interface/proposal";
 import {
   useGetCityListQuery,
   useGetDistrictListQuery,
@@ -47,8 +47,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
     resolver: zodResolver(schema),
   });
 
-  const { data: cityData } = useGetCityListQuery();
-  const { data: districtData } = useGetDistrictListQuery();
+  const { data: cityData } = useGetCityListQuery("");
+  const { data: districtData } = useGetDistrictListQuery("");
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -58,8 +58,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   useEffect(() => {
     if (isEdit) {
       if (proposalItem) {
-        let object = proposalItem.result;
-        let currentObj = {
+        const object = proposalItem.result;
+        const currentObj = {
           buildingNumber:
             infoType == "origin"
               ? object.originBuildingNo
@@ -93,9 +93,9 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
         Object.entries(currentObj).forEach(([key, value]) => {
           setValue(key as keyof INewRequest, value);
         });
-      } 
+      }
     } else if (!isEdit) {
-      let currentObj = {
+      const currentObj = {
         buildingNumber: "",
         streetName: "",
         districtName: "",
@@ -111,7 +111,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
   }, [isEdit, setValue, proposalObject, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    let updatedObject = {
+    const updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
       districtId: districtList?.find((item) => item.name === data.districtName)

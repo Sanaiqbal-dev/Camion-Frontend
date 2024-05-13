@@ -8,7 +8,6 @@ export interface INewRequest {
   unitNo: string;
 }
 
-
 export interface IRequestTable {
   id: number;
   origin: string;
@@ -17,7 +16,7 @@ export interface IRequestTable {
   dimentions: string;
   ETA: string;
   action: string;
-};
+}
 
 export type IOrderTable = {
   id: number;

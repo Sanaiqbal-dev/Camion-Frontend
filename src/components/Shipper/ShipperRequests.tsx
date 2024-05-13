@@ -1,7 +1,4 @@
-import {
-  IRequestTableData,
-  RequestColumns,
-} from "./TableColumns/RequestColumns";
+import { RequestColumns } from "./TableColumns/RequestColumns";
 import { DataTable } from "../ui/DataTable";
 import {
   Button,
@@ -65,24 +62,15 @@ const ShipperRequests = () => {
 
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
+
   const [deleteItemId, setDeleteItemId] = useState<number>();
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetProposalsQuery({
+  const { data: currentData, error } = useGetProposalsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
 
-  const [requestTableData, setRequestTableData] = useState<IRequestTableData[]>(
-    []
-  );
-  const [requestItems, setRequestItems] = useState<IProposalResponseData[]>([]);
+  const [requestTableData, setRequestTableData] = useState<IRequestTable[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] = useState<number>();
 
   const values = [10, 20, 30, 40, 50];
@@ -223,7 +211,7 @@ const ShipperRequests = () => {
     setShowConfirmationModal(true);
   };
 
-  const onProposalList = (proposalItemId: number) => {
+  const onProposalList = () => {
     navigate("/shipper/proposals");
   };
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
@@ -248,8 +236,7 @@ const ShipperRequests = () => {
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
-      setRequestItems(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

@@ -24,7 +24,6 @@ import {
   useUpdateOrderMutation,
 } from "@/services/order";
 import { QueryPager } from "@/interface/common";
-import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
 import { IOrderResponseData } from "@/interface/orderDetail";
 import { debounce } from "@/util/debounce";
@@ -41,15 +40,7 @@ const Orders = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetOrdersQuery({
+  const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -144,7 +135,9 @@ const Orders = () => {
             origin: currentOrderObject.origin,
             destination: currentOrderObject.destination,
             weight: currentOrderObject.weight,
-            dimentions: currentOrderObject.dimentions? currentOrderObject.dimentions:"-",
+            dimentions: currentOrderObject.dimentions
+              ? currentOrderObject.dimentions
+              : "-",
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
             action: "",
@@ -178,7 +171,7 @@ const Orders = () => {
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

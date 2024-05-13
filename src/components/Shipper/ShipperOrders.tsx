@@ -1,4 +1,4 @@
-import { Payment, OrderColumns } from "./TableColumns/OrderColumn";
+import { OrderColumns } from "./TableColumns/OrderColumn";
 import { DataTable } from "../ui/DataTable";
 import {
   Button,
@@ -32,16 +32,9 @@ const ShipperOrders = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetOrdersQuery({
+  const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -147,7 +140,7 @@ const ShipperOrders = () => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

@@ -88,12 +88,14 @@ const UserManagement = () => {
       userId: edituser?.id,
       isDeleted: true,
     });
+    console.log(resp);
     const newUsers = users.filter((u) => u.id !== edituser?.id);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: IUser) => {
     setshowCreateUserModal(false);
     const resp = await createSubUser(data);
+    console.log(resp);
   };
   const submitEditFormHandler = async (data: IPassword) => {
     setshowUpdatePasswordModal(false);
@@ -103,6 +105,7 @@ const UserManagement = () => {
       confirmPassword: data.confirmPassword,
       email: edituser?.email,
     });
+    console.log(resp);
   };
 
   const debouncedSearch = debounce((search: string) => {

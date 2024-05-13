@@ -18,7 +18,6 @@ import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
 import { useGetProposalsQuery } from "@/services/proposal";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
-import { useAppSelector } from "@/state";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { IProposalResponseData } from "@/interface/proposal";
@@ -31,20 +30,12 @@ const Requests = () => {
   });
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetProposalsQuery({
+  const { data: currentData } = useGetProposalsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
   const [requestTableData, setRequestTableData] = useState<IRequest[]>([]);
-  const [orderItems, setOrderItems] = useState<IRequest>();
 
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -113,8 +104,7 @@ const Requests = () => {
     if (currentData?.result.result) {
       console.log("TableData", currentData.result);
       FilterDataForTable(currentData?.result.result);
-      setOrderItems(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);
@@ -209,7 +199,6 @@ const Requests = () => {
         submitProposal={() =>
           selectedProposalItem && onSubmitProposal(selectedProposalItem.id)
         }
-        fileType={4}
         proposalId={selectedProposalItem && selectedProposalItem?.id}
       />
     </div>

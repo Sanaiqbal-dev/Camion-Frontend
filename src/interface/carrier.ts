@@ -26,7 +26,7 @@ export type IRequest = {
   dimentions: string;
   EDT: string;
   action: string;
-  isProposalSubmitted: boolean;
+  isProposalSubmitted?: boolean;
 };
 
 export type IVehicle = {
@@ -40,6 +40,7 @@ export type IVehicle = {
   IMEINumber: string;
   vehicleRegistration: string;
   action: string;
+  fileName?: string;
 };
 
 export type IOrderTable = {

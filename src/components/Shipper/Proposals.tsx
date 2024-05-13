@@ -23,7 +23,6 @@ const Proposals = () => {
     (state) => state.childObj
   );
 
-  const userData = useAppSelector((state) => state.session);
   const [quotationProposals, setQuotationProposals] = useState<
     IProposalQuotation[]
   >([]);
@@ -61,7 +60,7 @@ const Proposals = () => {
           ? data?.result?.result
           : [];
       setQuotationProposals(quotations);
-      let maxPageCount = data.result.total / entriesValue + 1;
+      const maxPageCount = data.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [isLoading]);

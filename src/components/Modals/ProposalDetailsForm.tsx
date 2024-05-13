@@ -19,7 +19,6 @@ interface IProposalForm {
 interface ProposalDetailsModalProps {
   show: boolean;
   handleClose: () => void;
-  fileType?: number;
   submitProposal: (proposal: IProposalForm) => void;
   proposalId: number;
 }

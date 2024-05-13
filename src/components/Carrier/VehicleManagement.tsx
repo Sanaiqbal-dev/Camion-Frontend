@@ -23,7 +23,6 @@ import ConfirmationModal from "../Modals/ConfirmationModal";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { debounce } from "@/util/debounce";
-import { useGetDriversListQuery } from "@/services/drivers";
 import { useDownloadFileQuery } from "@/services/fileHandling";
 
 const VehicleManagement = () => {
@@ -37,7 +36,8 @@ const VehicleManagement = () => {
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
-  const [drivers, setDrivers] = useState<IDriver[]>([]);
+  // const [drivers, setDrivers] = useState<IDriver[]>([]);
+  const drivers: IDriver[] = [];
   const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(
     null
   );
@@ -76,6 +76,7 @@ const VehicleManagement = () => {
       vehicleId: vehicleIdfordriver,
       driverId: id,
     }).unwrap();
+    console.log(res);
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
     const selectedDriver = drivers.find((d) => d.id === id);
     if (index !== -1 && selectedDriver) {
@@ -97,10 +98,12 @@ const VehicleManagement = () => {
   const submitCreateVehicleHandler = async (data: any) => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
+    console.log(resp);
   };
   const submitEditVehicleHandler = async (data: any) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
+    console.log(resp);
   };
   const deleteVehicleHandler = async (id: number) => {
     const veh = vehicles.find((v) => v.id === id);
@@ -110,7 +113,8 @@ const VehicleManagement = () => {
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const res = await deleteVehicle({ id: editedVehicle.id });
+    const res = await deleteVehicle({ id: editedVehicle?.id });
+    console.log(res);
 
     const filteredvehicle = vehicles.filter((v) => v.id !== editedVehicle.id);
     setVehicles(filteredvehicle);
@@ -121,7 +125,7 @@ const VehicleManagement = () => {
   const closeEditModal = () => {
     setShowEditVehicle(false);
   };
-  const downloadSelectedFile = async (fileName: string) => {
+  const downloadSelectedFile = async (fileName?: string) => {
     console.log("Downloading file:", fileName);
     try {
       if (fileName) {
@@ -138,8 +142,8 @@ const VehicleManagement = () => {
     const selectedVehicle = vehicles?.find(
       (vehicle: IVehicle) => vehicle.id === id
     );
-    setSelectedFile(selectedVehicle.fileName);
-    downloadSelectedFile(selectedVehicle.fileName);
+    setSelectedFile(selectedVehicle?.fileName);
+    downloadSelectedFile(selectedVehicle?.fileName);
   };
 
   const values = [10, 20, 30, 40, 50];
