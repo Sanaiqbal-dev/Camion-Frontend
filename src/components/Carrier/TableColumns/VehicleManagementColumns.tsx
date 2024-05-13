@@ -10,10 +10,12 @@ export const VehicleManagementColumns = ({
   assignDriver,
   editVehicle,
   deleteVehicle,
+  onViewDocumentClick,
 }: {
   assignDriver: (id: number) => void;
   editVehicle: (id: number) => void;
   deleteVehicle: (id: number) => void;
+  onViewDocumentClick: (id: number) => void;
 }): ColumnDef<IVehicle>[] => [
   {
     accessorKey: "driverName",
@@ -69,8 +71,14 @@ export const VehicleManagementColumns = ({
   {
     accessorKey: "vehicleRegistration",
     header: "Vehicle Registration",
-    cell: () => {
-      return <Link to={""}>View Document</Link>;
+    cell: ({ row }) => {
+      const vehicleId = row.original.id;
+
+      return (
+        <div onClick={() => onViewDocumentClick(vehicleId)}>
+          <Link to={""}>View Document</Link>
+        </div>
+      );
     },
   },
   {

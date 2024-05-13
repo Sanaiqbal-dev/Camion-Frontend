@@ -24,6 +24,7 @@ import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { debounce } from "@/util/debounce";
 import { useGetDriversListQuery } from "@/services/drivers";
+import { useDownloadFileQuery } from "@/services/fileHandling";
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -44,6 +45,8 @@ const VehicleManagement = () => {
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const downloadFile = useDownloadFileQuery(selectedFile);
 
   const { data, isLoading } = useGetVehiclesQuery({
     page: pager.page - 1,
@@ -52,9 +55,6 @@ const VehicleManagement = () => {
   });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
     useGetVehicleTypesQuery({});
-
-  const { data: driverData, isLoading: driverIsLoading } =
-    useGetDriversListQuery();
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
@@ -69,11 +69,7 @@ const VehicleManagement = () => {
       setVehicleTypes(vehicleTypesData.result);
     }
   }, [isLoadingVehicleTypes]);
-  useEffect(() => {
-    if (!driverIsLoading) {
-      setDrivers(driverData?.result.result);
-    }
-  }, [driverIsLoading]);
+
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
     const res = await assignDriver({
@@ -125,6 +121,26 @@ const VehicleManagement = () => {
   const closeEditModal = () => {
     setShowEditVehicle(false);
   };
+  const downloadSelectedFile = async (fileName: string) => {
+    console.log("Downloading file:", fileName);
+    try {
+      if (fileName) {
+        await downloadFile(fileName);
+        console.log("Download successful!");
+      } else {
+        console.log("No file selected!");
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+  const onVeiwDocumentClick = (id: number) => {
+    const selectedVehicle = vehicles?.find(
+      (vehicle: IVehicle) => vehicle.id === id
+    );
+    setSelectedFile(selectedVehicle.fileName);
+    downloadSelectedFile(selectedVehicle.fileName);
+  };
 
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -158,6 +174,7 @@ const VehicleManagement = () => {
     assignDriver: assignDriverClickHandler,
     editVehicle: editVehicleHandler,
     deleteVehicle: deleteVehicleHandler,
+    onViewDocumentClick: onVeiwDocumentClick,
   });
 
   return (
