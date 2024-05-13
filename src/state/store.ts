@@ -29,4 +29,4 @@ const store = configureStore({
 setupListeners(store.dispatch);
 
 const persistor = persistStore(store);
-export default { persistor, store };
+export { persistor, store };

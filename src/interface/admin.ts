@@ -34,8 +34,8 @@ export interface IOrder {
 
 // }
 export interface IAdminUser {
-  id: String;
-  userName: String;
+  id: string;
+  userName: string;
   email: string;
   password: string;
   action: string;
