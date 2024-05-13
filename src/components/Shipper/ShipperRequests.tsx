@@ -178,7 +178,7 @@ const ShipperRequests = () => {
       shipmentTypeId: shipmentTypeId,
       shipmentQuantity: shipmentQuantityVal,
       length: data.length ? data.length : 0,
-      width: data.width ? data.length : 0,
+      width: data.width ? data.width : 0,
       height: itemHeight,
       isCargoItemsStackable: data.isCargoItemsStackable
         ? data.isCargoItemsStackable
@@ -190,7 +190,7 @@ const ShipperRequests = () => {
       userId: userData.user.userId,
       weight: itemWeight,
       otherName: otherItemName,
-      proposalId: isEditProposal ? selectedProposalItem.id : 0,
+      proposalId: isEditProposal ? selectedProposalItem : 0,
       FileName: "",
       FilePath: "",
     }));
