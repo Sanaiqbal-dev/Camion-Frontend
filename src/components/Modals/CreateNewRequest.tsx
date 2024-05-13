@@ -49,49 +49,51 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
 
   const { data: cityData } = useGetCityListQuery();
   const { data: districtData } = useGetDistrictListQuery();
-  const { data: proposalItem} = useGetProposalQuery({id:proposalObject});
+  const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
 
   useEffect(() => {
-    if (proposalItem) {
-      let object=proposalItem.result;
-      let currentObj = {
-        buildingNumber:
-          infoType == "origin"
-            ?object.originBuildingNo
-            : object.destinationBuildingNo,
-        streetName:
-          infoType == "origin"
-            ? object.originStreetName
-            : object.destinationStreetName,
-        districtName:
-          infoType == "origin"
-            ? object.originDistrict.name
-            : object.destinationDistrict.name,
-        cityName:
-          infoType == "origin"
-            ? object.originCity.name
-            : object.destinationCity.name,
-        zipCode:
-          infoType == "origin"
-            ? object.originZipCode
-            : object.destinationZipCode,
-        additionalNumber:
-          infoType == "origin"
-            ? object.originAdditionalNo
-            : object.destinationAdditionalNo,
-        unitNo:
-          infoType == "origin"
-            ? object.originUnitNo
-            : object.destinationUnitNo,
-      };
+    if (isEdit) {
+      if (proposalItem) {
+        let object = proposalItem.result;
+        let currentObj = {
+          buildingNumber:
+            infoType == "origin"
+              ? object.originBuildingNo
+              : object.destinationBuildingNo,
+          streetName:
+            infoType == "origin"
+              ? object.originStreetName
+              : object.destinationStreetName,
+          districtName:
+            infoType == "origin"
+              ? object.originDistrict.name
+              : object.destinationDistrict.name,
+          cityName:
+            infoType == "origin"
+              ? object.originCity.name
+              : object.destinationCity.name,
+          zipCode:
+            infoType == "origin"
+              ? object.originZipCode
+              : object.destinationZipCode,
+          additionalNumber:
+            infoType == "origin"
+              ? object.originAdditionalNo
+              : object.destinationAdditionalNo,
+          unitNo:
+            infoType == "origin"
+              ? object.originUnitNo
+              : object.destinationUnitNo,
+        };
 
-      Object.entries(currentObj).forEach(([key, value]) => {
-        setValue(key as keyof INewRequest, value);
-      });
+        Object.entries(currentObj).forEach(([key, value]) => {
+          setValue(key as keyof INewRequest, value);
+        });
+      } 
     } else if (!isEdit) {
       let currentObj = {
         buildingNumber: "",
@@ -106,17 +108,15 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({
         setValue(key as keyof INewRequest, value);
       });
     }
-  }, [isEdit, setValue, proposalItem]);
+  }, [isEdit, setValue, proposalObject, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     let updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
-      districtId: districtList?.find(
-        (item) => item.name === data.districtName
-      )?.id,
-      cityId: cityList?.find((item) => item.name === data.cityName)
+      districtId: districtList?.find((item) => item.name === data.districtName)
         ?.id,
+      cityId: cityList?.find((item) => item.name === data.cityName)?.id,
       zipCode: data.zipCode.toString(),
       additionalNumber: data.additionalNumber.toString(),
       unitNo: data.unitNo,

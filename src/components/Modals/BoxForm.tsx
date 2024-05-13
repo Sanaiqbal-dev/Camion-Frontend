@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import { IProposalDetailResponseData, IShipmentDetails } from "@/interface/proposal";
 import { useEffect } from "react";
 
 const schema = z.object({
@@ -14,7 +14,7 @@ const schema = z.object({
 
 interface IBoxForm {
   isEdit: boolean;
-  proposalObject?: IProposalResponseData;
+  proposalObject?: IProposalDetailResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
 const BoxForm: React.FC<IBoxForm> = ({
@@ -34,17 +34,17 @@ const BoxForm: React.FC<IBoxForm> = ({
   useEffect(() => {
     if (isEdit && proposalObject) {
       let currentObj = {
-        numberOfBoxes: proposalObject.shipmentQuantity,
-        weightPerItem: proposalObject.weight,
-        isCargoItemsStackable: proposalObject.isCargoItemsStackable,
-        isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+        numberOfBoxes: proposalObject.result.shipmentQuantity,
+        weightPerItem: proposalObject.result.weight,
+        isCargoItemsStackable: proposalObject.result.isCargoItemsStackable,
+        isIncludingItemsARGood: proposalObject.result.isIncludingItemsARGood,
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
         setValue(key as keyof IShipmentDetails, value);
       });
     }
-  }, [isEdit, setValue]);
+  }, [isEdit, setValue, proposalObject]);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     onSubmitShipmentForm(data, "Box");
