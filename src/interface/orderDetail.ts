@@ -62,12 +62,23 @@ export interface IOrderDetailIndex extends IOrder {
 }
 
 
-
+export interface IOrderResponseData {
+  destination: string;
+  estimatedDeliveryTime: string;
+  id: number;
+  assignedCarrier?: string;
+  dimentions:string;
+  origin: string;
+  status: string;
+  trackingId: string;
+  type: string;
+  weight: string;
+}
 export interface OrderResult {
   total: number;
   currentPage: number;
   showCount: number;
-  result: IOrder[];
+  result: IOrderResponseData[];
 }
 export interface IProposalResponseObject {
   statusCode: number;

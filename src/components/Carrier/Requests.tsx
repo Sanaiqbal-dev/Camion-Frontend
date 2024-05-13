@@ -95,26 +95,20 @@ const Requests = () => {
     setRequestTableData([]);
 
     if (requestItems) {
-      const updatedRequestData = requestItems.map((item: any) =>{
-        // const isCorrect
-        return {
-        id: item.id,
-        origin: `${item.originCity.name}, ${item.originDistrict.name}`,
-        destination: `${item.destinationCity.name}, ${item.destinationS}`,
-        weight: item.weight ? item.weight : "-",
-        dimentions:
-          item.length && item.width && item.height
-            ? `${item.length}x${item.width}x${item.height}`
-            : "-",
-        EDT: item.preferredDeliveryDate
-          ? item.preferredDeliveryDate
-          : "Time not assigned yet",
-        action: "Submit Proposal",
-      };
-      } );
+      
+      const updatedRequestData = requestItems.map((currentRequestObject) => ({
+        id: currentRequestObject.id,
+        origin: currentRequestObject.origin,
+        destination: currentRequestObject.destination,
+        weight: currentRequestObject.weight,
+        dimentions: currentRequestObject.dimentions,
+        EDT: currentRequestObject.estimatedDeliveryTime
+          ? currentRequestObject.estimatedDeliveryTime
+          : "-",
+        action: "",
+      }));
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
-      console.log("fetched requestItems : ", requestItems);
     }
   };
 
@@ -124,7 +118,6 @@ const Requests = () => {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
       let maxPageCount = currentData?.result.total / entriesValue + 1;
-      console.log("Total pages :", maxPageCount);
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

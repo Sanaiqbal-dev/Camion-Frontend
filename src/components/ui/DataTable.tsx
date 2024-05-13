@@ -39,9 +39,6 @@ export function DataTable<TData, TValue>({
     "data-table auto-width-columns": columns.length > 6,
   });
 
-  useEffect(() => {
-    console.log("Data in data table file is :", data);
-  }, [data]);
   return (
     <div
       className="table-contents"

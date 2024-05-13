@@ -1,13 +1,51 @@
 import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  FormControl,
+  Image,
+  InputGroup,
+  Row,
+} from "react-bootstrap";
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
 import NextIcon from "../../assets/icons/ic-next.svg";
 import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IOrder } from "../../interface/admin";
 import { OrderColumns } from "./TableColumns/OrdersColumn";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  useDeleteOrderMutation,
+  useGetOrdersQuery,
+  useUpdateOrderMutation,
+} from "@/services/order";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
+import { useAppSelector } from "@/state";
+import { IOrderResponseData } from "@/interface/orderDetail";
+import AssignVehicle from "../Modals/AssignVehicle";
+import ConfirmationModal from "../Modals/ConfirmationModal";
 
 const OrderManagement = () => {
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
+    (state) => state.childObj
+  );
+  const {
+    data: currentData,
+    isFetching,
+    error,
+  } = useGetOrdersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    ...filterKeys,
+  });
+
   const ordersData: IOrder[] = [
     {
       id: "728ed52f",
@@ -113,6 +151,14 @@ const OrderManagement = () => {
     },
   ];
 
+  const [selectedOrderId, setSelectedOrderId] = useState<number>();
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+
+  const [deleteOrder] = useDeleteOrderMutation();
+  const [updateOrderStatus] = useUpdateOrderMutation();
+
+  const [orderTableData, setOrderTableData] = useState<IOrder[]>([]);
+
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
@@ -127,6 +173,79 @@ const OrderManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const onDelete = (orderId: number) => {
+    console.log("Delete is clicked on :", orderId);
+    setSelectedOrderId(orderId);
+
+    setShowDeleteForm(true);
+  };
+  const onUpdateStatus = async (id: number, statusId: number) => {
+    try {
+      const response = await updateOrderStatus({
+        orderId: id,
+        orderStatusId: statusId,
+      });
+      console.log("status update:", response);
+    } catch (error) {
+      console.log("status update error: ", error);
+    }
+  };
+  const columns: ColumnDef<IOrder>[] = OrderColumns({
+    onDelete,
+    onUpdateStatus,
+  });
+
+  const DeleteOrder = async () => {
+    setShowDeleteForm(false);
+    try {
+      const result = await deleteOrder({ id: selectedOrderId });
+      console.log("order deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  };
+  const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
+    setOrderTableData([]);
+    try {
+      if (orderItems) {
+        const updatedOrderData = orderItems.map((currentOrderObject) => {
+          return {
+            id: currentOrderObject.id,
+            assignedCarrier:currentOrderObject.assignedCarrier? currentOrderObject.assignedCarrier:"-",
+            origin: currentOrderObject.origin,
+            destination: currentOrderObject.destination,
+            weight: currentOrderObject.weight,
+            dimentions: currentOrderObject.dimentions? currentOrderObject.dimentions:"-",
+            ETA: currentOrderObject.estimatedDeliveryTime,
+            status: currentOrderObject.status,
+            action: "",
+          };
+        });
+
+        setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
+  useEffect(() => {
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
+      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
+    }
+  }, [currentData]);
+
   return (
     <div className="table-container">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -183,7 +302,35 @@ const OrderManagement = () => {
           </Col>
         </Row>
       </div>
-      {ordersData && <DataTable isAction={false} columns={OrderColumns} data={ordersData} />}
+      {orderTableData && (
+        <DataTable isAction={false} columns={columns} data={orderTableData} />
+      )}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <Button
+          className="img-prev"
+          variant="outline"
+          size="sm"
+          disabled={pager.page < 2}
+          onClick={() => updatePage(-1)}
+        >
+          <img src={PreviousIcon} />
+        </Button>
+        <Button
+          className="img-next"
+          variant="outline"
+          size="sm"
+          onClick={() => updatePage(+1)}
+          disabled={pager.page >= Math.floor(totalPageCount)}
+        >
+          <img src={NextIcon} />
+        </Button>
+      </div>
+      <ConfirmationModal
+        promptMessage={"Are you sure, you want to delete this order?"}
+        show={showDeleteForm}
+        handleClose={() => setShowDeleteForm(false)}
+        performOperation={() => DeleteOrder()}
+      />
     </div>
   );
 };

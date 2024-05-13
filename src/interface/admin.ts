@@ -12,14 +12,14 @@ export interface Iprofiles {
 }
 
 export interface IOrder{
-  id:string;
+  id:number;
   assignedCarrier:string;
   origin:string;
   destination:string;
   weight:string;
   dimentions:string;
   ETA:string;
-  orderStatus:string;
+  status:string;
   action:string;
 }
 

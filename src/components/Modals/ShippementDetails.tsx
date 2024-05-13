@@ -8,13 +8,18 @@ import PalletForm from "./PalletForm";
 import BoxForm from "./BoxForm";
 import AddTruckForm from "./AddTruckForm";
 import OtherForm from "./OtherForm";
-import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import {
+  IProposalDetailResponseData,
+  IProposalResponseData,
+  IShipmentDetails,
+} from "@/interface/proposal";
+import { useGetProposalQuery } from "@/services/proposal";
 
 interface CreateNewRequestModalProps {
   show: boolean;
   handleClose: () => void;
   isEdit: boolean;
-  proposalObject?: IProposalResponseData;
+  proposalId?: number;
 
   handleFormDataSubmission: (
     data: IShipmentDetails,
@@ -26,9 +31,10 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   handleClose,
   handleFormDataSubmission,
   isEdit,
-  proposalObject,
+  proposalId,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { data: proposalItem } = useGetProposalQuery({ id: proposalId });
 
   const forms = [
     { icon: PalletIcon, label: "Pallet", component: PalletForm },
@@ -42,14 +48,15 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
   };
 
   useEffect(() => {
-    if (isEdit && proposalObject) {
-      const shipmentTypeName = proposalObject.shipmentTypes.shipmentTypeName;
+    if (proposalItem) {
+      console.log(proposalItem);
+      const shipmentTypeName = proposalItem.result.shipmentTypes.shipmentTypeName;
       const index = forms.findIndex((form) => form.label === shipmentTypeName);
       if (index !== -1) {
         setActiveIndex(index);
       }
     }
-  }, [isEdit, proposalObject]);
+  }, [isEdit, proposalId, proposalItem]);
 
   return (
     <Modal
@@ -98,12 +105,12 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
       <Modal.Body>
         {React.createElement(forms[activeIndex].component, {
           isEdit:
-            proposalObject?.shipmentTypes.shipmentTypeName ===
+            proposalItem?.result.shipmentTypes.shipmentTypeName ===
             forms[activeIndex].label,
           proposalObject:
-            proposalObject?.shipmentTypes.shipmentTypeName ===
+            proposalItem?.result.shipmentTypes.shipmentTypeName ===
             forms[activeIndex].label
-              ? proposalObject
+              ? proposalItem
               : undefined,
           onSubmitShipmentForm: handleFormDataSubmission,
         })}
