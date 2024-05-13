@@ -4,7 +4,7 @@ import CreateUser from "../Modals/CreateUser";
 import { useEffect, useState } from "react";
 import UpdatePassword from "../Modals/UpdatePassword";
 import { ColumnDef } from "@tanstack/react-table";
-import { IUserManagement } from "../../interface/common";
+import { IUserManagement, QueryPager } from "../../interface/common";
 import { Col, FormControl, InputGroup, Image, Row } from "react-bootstrap";
 
 import PreviousIcon from "../../assets/icons/ic-previous.svg";
@@ -17,14 +17,22 @@ import {
   useUpdateSubUserPasswordMutation,
 } from "@/services/user";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { PAGER_SIZE } from "@/config/constant";
 
 const UserManagement = () => {
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+    page: pager.page,
+    pageCount: pager.pageSize,
+  });
   const [createSubUser] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
@@ -37,7 +45,9 @@ const UserManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 

@@ -20,8 +20,14 @@ import AssignDriverModal from "../Modals/AssignDriver";
 import CreateVehicleModal from "../Modals/CreateVehicle";
 import EditVehicleModal from "../Modals/EditVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { PAGER_SIZE } from "@/config/constant";
+import { QueryPager } from "@/interface/common";
 
 const VehicleManagement = () => {
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
@@ -35,7 +41,10 @@ const VehicleManagement = () => {
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
 
-  const { data, isLoading } = useGetVehiclesQuery({});
+  const { data, isLoading } = useGetVehiclesQuery({
+    page: pager.page,
+    pageCount: pager.pageSize,
+  });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
     useGetVehicleTypesQuery({});
   const { data: driverData, isLoading: driverIsLoading } = useGetDriversQuery(
@@ -115,7 +124,9 @@ const VehicleManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 

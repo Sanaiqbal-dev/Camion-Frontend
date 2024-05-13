@@ -7,7 +7,7 @@ import SearchIcon from "../../assets/icons/ic-search.svg";
 import { useEffect, useState } from "react";
 import CreateUser from "../Modals/CreateUser";
 import UpdatePassword from "../Modals/UpdatePassword";
-import { IUserManagement } from "../../interface/common";
+import { IUserManagement, QueryPager } from "../../interface/common";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   useGetCompanyUsersQuery,
@@ -16,14 +16,22 @@ import {
   useUpdateSubUserPasswordMutation,
 } from "@/services/user";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { PAGER_SIZE } from "@/config/constant";
 
 const UserManagementShipper = () => {
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({});
+  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+    page: pager.page,
+    pageCount: pager.pageSize,
+  });
   const [createSubUser] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
@@ -38,7 +46,9 @@ const UserManagementShipper = () => {
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
   const [entriesValue, setEntriesValue] = useState(10);
-
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 

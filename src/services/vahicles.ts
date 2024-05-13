@@ -1,9 +1,13 @@
+import { CreateQueryParams } from "@/util/PrepareQueryParams";
 import baseApi from "./baseApi";
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getVehicles: builder.query<any, any>({
-      query: () => `/api/Vehicles/GetVehicleList`,
+      query: (queryParams) =>
+        `/api/Vehicles/GetVehicleList${
+          queryParams !== null ? "?" + CreateQueryParams(queryParams) : ""
+        }`,
     }),
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
