@@ -16,7 +16,6 @@ import { IRequest } from "../../interface/carrier";
 import { ColumnDef } from "@tanstack/react-table";
 import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
 import { useGetProposalsQuery } from "@/services/proposal";
-import { useGetProposalsQuery } from "@/services/proposal";
 import IconPrevious from "../../assets/icons/ic-previous.svg";
 import IconNext from "../../assets/icons/ic-next.svg";
 import { useAppSelector } from "@/state";

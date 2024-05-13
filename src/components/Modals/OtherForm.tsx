@@ -17,7 +17,7 @@ const schema = z.object({
 
 interface IOtherForm {
   isEdit: boolean;
-  proposalObject?: IProposalResponseData;
+  proposalObject?: IProposalDetailResponseData;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
 const OtherForm: React.FC<IOtherForm> = ({

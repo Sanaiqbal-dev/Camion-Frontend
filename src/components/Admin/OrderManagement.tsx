@@ -25,12 +25,15 @@ import { useAppSelector } from "@/state";
 import { IOrderResponseData } from "@/interface/orderDetail";
 import AssignVehicle from "../Modals/AssignVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
+import { debounce } from "@/util/debounce";
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [totalPageCount, setTotalPageCount] = useState(0);
 
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
@@ -43,113 +46,8 @@ const OrderManagement = () => {
   } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
-    ...filterKeys,
+    term: searchTerm,
   });
-
-  const ordersData: IOrder[] = [
-    {
-      id: "728ed52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-  ];
 
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [showDeleteForm, setShowDeleteForm] = useState(false);
@@ -212,11 +110,15 @@ const OrderManagement = () => {
         const updatedOrderData = orderItems.map((currentOrderObject) => {
           return {
             id: currentOrderObject.id,
-            assignedCarrier:currentOrderObject.assignedCarrier? currentOrderObject.assignedCarrier:"-",
+            assignedCarrier: currentOrderObject.assignedCarrier
+              ? currentOrderObject.assignedCarrier
+              : "-",
             origin: currentOrderObject.origin,
             destination: currentOrderObject.destination,
             weight: currentOrderObject.weight,
-            dimentions: currentOrderObject.dimentions? currentOrderObject.dimentions:"-",
+            dimentions: currentOrderObject.dimentions
+              ? currentOrderObject.dimentions
+              : "-",
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
             action: "",
@@ -232,6 +134,16 @@ const OrderManagement = () => {
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
 
   useEffect(() => {
@@ -297,6 +209,7 @@ const OrderManagement = () => {
                 type="text"
                 placeholder="Search"
                 className="form-control"
+                onChange={handleInputChange}
               ></FormControl>
             </InputGroup>
           </Col>

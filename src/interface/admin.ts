@@ -23,16 +23,16 @@ export interface IOrder{
   action:string;
 }
 
-export interface IReport{
-  id:String;
-  userType:string;
-  shipperName:string;
-  contact: string;
-  email:string;
-  activeOrders:string;
-  report:string;
+// export interface IReport{
+//   id:number;
+//   userType:string;
+//   shipperName:string;
+//   contact: string;
+//   email:string;
+//   activeOrders:number;
+//   report:string;
 
-}
+// }
 export interface IAdminUser{
   id:String;
   userName:String;
