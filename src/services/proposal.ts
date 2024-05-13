@@ -26,12 +26,9 @@ export const proposalApi = baseApi.injectEndpoints({
       providesTags: ["Proposal"],
     }),
 
-    getProposal: builder.query<
-      IAPIResponse<IProposalDetailResponse>,
-      any
-    >({
+    getProposal: builder.query<IAPIResponse<IProposalDetailResponse>, any>({
       query: ({ id }) => `api/Proposals/GetProposal?id=${id}`,
-      providesTags: (result, error, arg) => {
+      providesTags: (_result, _error, arg) => {
         const { id } = arg || {};
         if (id) {
           return [{ type: "Proposal", id }];

@@ -5,9 +5,9 @@ import { IOrderDetail } from "@/interface/orderDetail";
 import { useLocation } from "react-router-dom";
 
 interface IShipperTracking {
-  orderObject: IOrderDetail;
+  orderObject?: IOrderDetail;
 }
-const ShipperTracking: React.FC<IShipperTracking> = ({ orderObject }) => {
+const ShipperTracking: React.FC<IShipperTracking> = () => {
   const [mapApiKey, setMapApiKey] = useState("");
   // const [selectedOrder, setSelectedOrder] = useState<IOrderDetail>();
 
@@ -142,7 +142,9 @@ const ShipperTracking: React.FC<IShipperTracking> = ({ orderObject }) => {
         >
           <div style={{ fontWeight: "600" }}>Estimated Delivery Date:</div>
           <div>
-            {state.orderObject && state.orderObject.preferredDeliveryDate ? state.orderObject.preferredDeliveryDate:"-"}
+            {state.orderObject && state.orderObject.preferredDeliveryDate
+              ? state.orderObject.preferredDeliveryDate
+              : "-"}
           </div>
         </div>
       </div>

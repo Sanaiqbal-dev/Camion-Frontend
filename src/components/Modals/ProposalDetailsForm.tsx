@@ -43,7 +43,6 @@ const schema = z.object({
 const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   show,
   handleClose,
-  fileType,
   proposalId,
 }) => {
   const {
@@ -77,7 +76,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
     };
 
     uploadFiles();
-  }, [selectedFile]);
+  }, [selectedFile, uploadFile]);
 
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
     try {

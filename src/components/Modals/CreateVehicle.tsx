@@ -43,23 +43,27 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
-  const fileType = 4;
   const [uploadFile] = useUploadFileMutation();
   const [selectedFile, setSeletedFile] = useState<File>();
+  const [selectedFilePath, setSelectedFilePath] = useState("");
 
   useEffect(() => {
-    if (selectedFile) {
-      try {
-        const response = uploadFile({
-          fileType,
-          uploadFile: selectedFile.name,
-        });
-        console.log("File uploaded successfully:", response);
-      } catch (error) {
-        console.error("Error uploading file:", error);
+    const uploadFiles = async () => {
+      if (selectedFile) {
+        try {
+          const formData = new FormData();
+          formData.append("UploadFile", selectedFile);
+          const response = await uploadFile(formData);
+          setSelectedFilePath(response.data.message);
+          console.log(response);
+        } catch (error) {
+          console.error("Error uploading file:", error);
+        }
       }
-    }
-  }, [fileType, selectedFile, uploadFile]);
+    };
+
+    uploadFiles();
+  }, [selectedFile]);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
     const { vehicleType, modelYear, ...rest } = data;
@@ -67,7 +71,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({
       ...rest,
       modelYear: modelYear,
       fileName: selectedFile ? selectedFile.name : "no file selected",
-      filePath: "This has to be a path when The file upload Api is completed",
+      filePath: selectedFilePath,
       vehicleTypeId: vehicleType,
     };
     onSubmitForm(requestData);

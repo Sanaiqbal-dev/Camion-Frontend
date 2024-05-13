@@ -21,7 +21,6 @@ import {
 } from "@/services/order";
 import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
-import { useAppSelector } from "@/state";
 import { IOrderResponseData } from "@/interface/orderDetail";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { debounce } from "@/util/debounce";
@@ -36,14 +35,7 @@ const OrderManagement = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
-  const {
-    data: currentData,
-    isFetching,
-    error,
-  } = useGetOrdersQuery({
+  const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -89,7 +81,10 @@ const OrderManagement = () => {
       console.log("status update error: ", error);
     }
   };
-
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,
@@ -142,10 +137,6 @@ const OrderManagement = () => {
       setSearchTerm(search);
     }
   }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
-  };
 
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
@@ -154,7 +145,7 @@ const OrderManagement = () => {
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
-      let maxPageCount = currentData?.result.total / entriesValue + 1;
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);

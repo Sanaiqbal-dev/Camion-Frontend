@@ -6,7 +6,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAspNetUserLoginMutation } from "@/services/aspNetUserAuth";
 import { AspNetUserLoginRequest } from "@/interface/aspNetUser";
 import { setSession } from "@/state/slice/sessionSlice";
@@ -33,16 +33,11 @@ const Login = () => {
   //   session: { user },
   // } = useAppSelector((state) => state);
 
-  const [aspNetUserLogin, { isLoading, isError, error }] =
-    useAspNetUserLoginMutation();
+  const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-
-  const location = useLocation;
-
-  const from = location.state?.from?.pathname || "/";
 
   const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (
     values: AspNetUserLoginRequest
@@ -66,7 +61,7 @@ const Login = () => {
               lang: lang,
             })
           );
-          let userRole = result.data.role;
+          const userRole = result.data.role;
 
           userRole == "Shipper"
             ? navigate("/shipper/shipperdashboard")

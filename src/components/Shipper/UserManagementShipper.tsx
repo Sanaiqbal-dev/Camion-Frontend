@@ -78,6 +78,7 @@ const UserManagementShipper = () => {
       userId: edituser?.id,
       isDeleted: true,
     });
+    console.log(resp);
     const newUsers = users.filter((u) => u.id !== edituser?.id);
     setUsers(newUsers);
   };
@@ -85,6 +86,7 @@ const UserManagementShipper = () => {
     setshowCreateUserModal(false);
     console.log("submitCreateFormHandler", data);
     const resp = await createSubUser(data);
+    console.log(resp);
   };
   const submitEditFormHandler = async (data: any) => {
     setshowUpdatePasswordModal(false);
@@ -97,6 +99,7 @@ const UserManagementShipper = () => {
       confirmPassword: data.confirmPassword,
       email: edituser?.email,
     });
+    console.log(resp);
   };
 
   const debouncedSearch = debounce((search: string) => {

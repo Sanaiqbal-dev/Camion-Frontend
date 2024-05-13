@@ -1,4 +1,7 @@
-import { IProposalResponseData, IShipmentDetails } from "@/interface/proposal";
+import {
+  IProposalDetailResponseData,
+  IShipmentDetails,
+} from "@/interface/proposal";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
@@ -39,10 +42,9 @@ const OtherForm: React.FC<IOtherForm> = ({
     onSubmitShipmentForm(data, "Other");
   };
 
-  
   useEffect(() => {
     if (isEdit && proposalObject) {
-      let currentObj = {
+      const currentObj = {
         otherType: proposalObject.otherName,
         length: proposalObject.length,
         width: proposalObject.width,
@@ -53,12 +55,12 @@ const OtherForm: React.FC<IOtherForm> = ({
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
-        setValue(key as keyof IShipmentDetails, value);
+        return setValue(key as keyof IShipmentDetails, value);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, setValue]);
 
-  
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>

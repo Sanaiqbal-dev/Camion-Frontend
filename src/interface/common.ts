@@ -56,6 +56,7 @@ export interface ILanguage {
 }
 
 export interface IAPIResponse<T> {
+  result: any;
   success: boolean;
   content: T;
   message: string;
@@ -155,7 +156,7 @@ export interface ICompany {
   nameAr: string;
   createdDate: string;
   createdById: string;
-  appUser: any;
+  appUser: IAppUser;
 }
 export interface IUser {
   firstName: string;

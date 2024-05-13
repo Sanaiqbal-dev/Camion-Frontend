@@ -6,21 +6,21 @@ export interface Iprofiles {
   email: string;
   contact: string;
   company: string;
-  CRDocument: string;
+  crDocument: string;
   status: string;
   action: string;
 }
 
-export interface IOrder{
-  id:number;
-  assignedCarrier:string;
-  origin:string;
-  destination:string;
-  weight:string;
-  dimentions:string;
-  ETA:string;
-  status:string;
-  action:string;
+export interface IOrder {
+  id: number;
+  assignedCarrier: string;
+  origin: string;
+  destination: string;
+  weight: string;
+  dimentions: string;
+  ETA: string;
+  status: string;
+  action: string;
 }
 
 // export interface IReport{
@@ -33,10 +33,10 @@ export interface IOrder{
 //   report:string;
 
 // }
-export interface IAdminUser{
-  id:String;
-  userName:String;
-  email:string;
-  password:string;
-  action:string;
+export interface IAdminUser {
+  id: string;
+  userName: string;
+  email: string;
+  password: string;
+  action: string;
 }

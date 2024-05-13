@@ -1,6 +1,6 @@
 import { CommonSelect, IAPIResponse } from "@/interface/common";
 import { CreateQueryParams } from "@/util/PrepareQueryParams";
-import { IOrder, IOrderIndex, IOrderSingle } from "@/interface/order";
+import { IOrder, IOrderSingle } from "@/interface/order";
 import baseApi from "./baseApi";
 import { IProposalResponseObject } from "@/interface/proposal";
 

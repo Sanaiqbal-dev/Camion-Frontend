@@ -16,6 +16,4 @@ export const reportsApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const {
-  useGetReportsQuery,
-} = reportsApi;
+export const { useGetReportsQuery } = reportsApi;

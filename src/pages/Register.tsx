@@ -10,10 +10,7 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/state";
 import { useAspNetUserRegisterMutation } from "@/services/aspNetUserAuth";
-import { useDispatch } from "react-redux";
-import { setSession } from "@/state/slice/sessionSlice";
 
 interface IRegisterFormInput {
   role: string;
@@ -59,9 +56,8 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const dispatch = useDispatch();
-  const [aspNetUserRegister,{isLoading, isError}] = useAspNetUserRegisterMutation();
-  const { dir, lang } = useAppSelector((state) => state.session);
+  const [aspNetUserRegister, { isLoading }] = useAspNetUserRegisterMutation();
+  // const { dir, lang } = useAppSelector((state) => state.session);
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (
     values: IRegisterFormInput
   ) => {
@@ -69,7 +65,7 @@ const Register = () => {
     aspNetUserRegister(values).then((result: any) => {
       if (result) {
         console.log("Values are: ", values);
-        navigate('/Login');
+        navigate("/Login");
       }
     });
   };

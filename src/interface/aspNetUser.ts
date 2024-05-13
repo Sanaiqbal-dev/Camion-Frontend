@@ -1,4 +1,4 @@
-import { CommonSelect, Pager, IFile } from "./common";
+import { Pager } from "./common";
 export interface IAspNetUser {
   id: number;
   firstName: string;
