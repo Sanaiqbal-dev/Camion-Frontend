@@ -21,9 +21,22 @@ export const companyProfile = baseApi.injectEndpoints({
       query: () => `/Account/GetCompanyVerificationUsers`,
       providesTags: ["Company"],
     }),
+
+    updateCompanyAccount: builder.mutation<
+      IAPIResponse<ICompanyProfile>,
+      Partial<ICompanyProfile>
+    >({
+      query: (body) => ({
+        url: "/Account/UpdateCompanyAccount",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Company"],
+    }),
   }),
 });
 export const {
   useCreateCompanyProfileMutation,
   useGetCompanyProfilesListQuery,
+  useUpdateCompanyAccountMutation,
 } = companyProfile;

@@ -13,9 +13,12 @@ import {
   useGetDriversListQuery,
 } from "@/services/drivers";
 import { ColumnDef } from "@tanstack/react-table";
+import { useDownloadFileQuery } from "@/services/fileHandling";
 const DriverManagement = () => {
   const getDriversList = useGetDriversListQuery();
   const [deleteDriver] = useDeleteDriverMutation();
+  const [selectedFile, setSelectedFile] = useState<any>();
+  const downloadFile = useDownloadFileQuery(selectedFile);
 
   const tableData: IDriver = getDriversList.data?.result.result;
   const driversData = tableData?.map((item) => ({
@@ -26,6 +29,7 @@ const DriverManagement = () => {
     dob: item.dob,
     nationality: item.driverNationality.name,
     phoneNumber: item.phoneNumber,
+    fileName: item.fileName,
     viewIqama: item.iqamaId,
     action: "",
   }));
@@ -56,9 +60,32 @@ const DriverManagement = () => {
     setShowAddDriverModal(true);
   };
 
+  const downloadSelectedFile = async (fileName: string) => {
+    console.log("Downloading file:", fileName);
+    try {
+      if (fileName) {
+        await downloadFile(fileName);
+        console.log("Download successful!");
+      } else {
+        console.log("No file selected!");
+      }
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
+  const onIqamaDownloadClick = (id: number) => {
+    const selectedDriver = driversData.find(
+      (driver: IDriver) => driver.id === id
+    );
+    setSelectedFile(selectedDriver.fileName);
+    downloadSelectedFile(selectedDriver.fileName);
+  };
+
   const columns: ColumnDef<IDriver>[] = DriverManagementColumns({
     onDeleteDriver,
     onUpdateDriver,
+    onIqamaDownloadClick,
   });
   const handleCloseModal = () => {
     setEditDriverData(null);
