@@ -8,10 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { setLogout } from "@/state/slice/sessionSlice";
 import ActivateProfile from "@/components/Modals/ActivateProfile";
 import { useState } from "react";
 const CarrierHomePage = () => {

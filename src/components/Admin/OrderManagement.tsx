@@ -23,9 +23,7 @@ import { PAGER_SIZE } from "@/config/constant";
 import { QueryPager } from "@/interface/common";
 import { useAppSelector } from "@/state";
 import { IOrderResponseData } from "@/interface/orderDetail";
-import AssignVehicle from "../Modals/AssignVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
-import { debounce } from "@/util/debounce";
 import { debounce } from "@/util/debounce";
 
 const OrderManagement = () => {
@@ -33,7 +31,6 @@ const OrderManagement = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -93,15 +90,6 @@ const OrderManagement = () => {
     }
   };
 
-  const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
-  };
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,

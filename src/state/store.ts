@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-// import { combineReducers } from "redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { baseApi } from "@/services/baseApi";
 
