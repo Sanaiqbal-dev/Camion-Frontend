@@ -110,7 +110,7 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({
           proposalObject:
             proposalItem?.result.shipmentTypes.shipmentTypeName ===
             forms[activeIndex].label
-              ? proposalItem
+              ? proposalItem.result
               : undefined,
           onSubmitShipmentForm: handleFormDataSubmission,
         })}

@@ -26,12 +26,15 @@ import { IOrderResponseData } from "@/interface/orderDetail";
 import AssignVehicle from "../Modals/AssignVehicle";
 import ConfirmationModal from "../Modals/ConfirmationModal";
 import { debounce } from "@/util/debounce";
+import { debounce } from "@/util/debounce";
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -47,113 +50,7 @@ const OrderManagement = () => {
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
-    ...filterKeys,
   });
-
-  const ordersData: IOrder[] = [
-    {
-      id: "728ed52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "9e19od42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-
-    {
-      id: "56te1d42",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      assignedCarrier: "Binford Ltd",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      dimentions: "30x45x15",
-      ETA: "9/20/2024",
-      orderStatus: "enroute",
-      action: "",
-    },
-  ];
 
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [showDeleteForm, setShowDeleteForm] = useState(false);
@@ -250,6 +147,16 @@ const OrderManagement = () => {
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    if (search.length >= 3) {
+      setSearchTerm(search);
+    }
+  }, 3000);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    debouncedSearch(value);
   };
 
   useEffect(() => {

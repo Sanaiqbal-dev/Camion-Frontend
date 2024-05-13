@@ -143,6 +143,7 @@ const Profiles = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+  
   return (
     <div className="table-container">
       <div className="tw-flex tw-justify-between tw-items-center">

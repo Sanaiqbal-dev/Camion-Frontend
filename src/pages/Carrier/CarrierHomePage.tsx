@@ -49,11 +49,6 @@ const CarrierHomePage = () => {
     );
   }
 
-  function onLogoutClick(): void {
-    //Add implementation to logout...
-    dispatch(setLogout());
-  }
-
   return (
     <div className="wrapper">
       <CarrierSider />
@@ -128,26 +123,12 @@ const CarrierHomePage = () => {
               )}
 
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onLogoutClick()}>
+                {/* <DropdownMenuItem onClick={() => onLogoutClick()}>
                   <Button variant="primary">Logout</Button>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Dropdown className="menu-dropdown">
-              <Dropdown.Toggle className="menu-toggle">
-                <Image
-                  className="menu-icon"
-                  src={MenuIcon}
-                  alt="Menu"
-                  width="22"
-                  height="22"
-                />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="#/action">Logout</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
+          
           </div>
           <ActivateProfile
             show={showProfileModal}

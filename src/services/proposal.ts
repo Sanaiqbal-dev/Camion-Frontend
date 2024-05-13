@@ -1,13 +1,10 @@
 import { CommonSelect, IAPIResponse } from "@/interface/common";
 import { CreateQueryParams } from "@/util/PrepareQueryParams";
 import {
-  IPlaces,
   IPlacesResponseObject,
   IProposal,
   IProposalDetailResponse,
-  IProposalDetailResponseData,
   IProposalResponseObject,
-  IProposalSingle,
 } from "@/interface/proposal";
 import baseApi from "./baseApi";
 

@@ -34,10 +34,10 @@ const BoxForm: React.FC<IBoxForm> = ({
   useEffect(() => {
     if (isEdit && proposalObject) {
       let currentObj = {
-        numberOfBoxes: proposalObject.result.shipmentQuantity,
-        weightPerItem: proposalObject.result.weight,
-        isCargoItemsStackable: proposalObject.result.isCargoItemsStackable,
-        isIncludingItemsARGood: proposalObject.result.isIncludingItemsARGood,
+        numberOfBoxes: proposalObject.shipmentQuantity,
+        weightPerItem: proposalObject.weight,
+        isCargoItemsStackable: proposalObject.isCargoItemsStackable,
+        isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
