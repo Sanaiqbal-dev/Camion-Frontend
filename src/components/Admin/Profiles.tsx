@@ -31,7 +31,7 @@ const Profiles = () => {
     }
   };
 
-  const profilesData = ProfilesTableData?.map((item) => ({
+  const profilesData :Iprofiles[] = ProfilesTableData?.map((item) => ({
     id: item.userId,
     profileType: item.profiletype ? item.profiletype : '-',
     firstName: item.firstName,

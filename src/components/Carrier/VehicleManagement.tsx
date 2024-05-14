@@ -44,7 +44,7 @@ const VehicleManagement = () => {
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>();
-  const downloadFile = useDownloadFileQuery(selectedFile);
+  const {downloadFile} = useDownloadFileQuery();
 
   const { data, isLoading } = useGetVehiclesQuery({
     page: pager.page - 1,

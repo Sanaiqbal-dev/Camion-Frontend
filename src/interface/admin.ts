@@ -1,5 +1,5 @@
 export interface Iprofiles {
-  id: string;
+  id?: string;
   profileType: string;
   firstName: string;
   lastName: string;
@@ -7,8 +7,8 @@ export interface Iprofiles {
   contact: string;
   company: string;
   crDocument: IFileResponseData[];
-  status: string;
-  action: string;
+  status: string|undefined;
+  action?: string;
 }
 
 export interface IOrder {

@@ -35,7 +35,8 @@ const withSuspense = (Component: ReactElement, fallback: ReactElement = <div>Loa
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: withSuspense(<LazyCarrierHome />),
+    element:withSuspense(<LazyLogin/>),
+    // element: withSuspense(<LazyCarrierHome />),
     // element: withSuspense(<LazyShipperHome />),
     // element: withSuspense(<LazyAdminHome />),
   },

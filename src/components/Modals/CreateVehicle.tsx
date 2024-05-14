@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useUploadFileMutation } from '@/services/fileHandling';
+import { IVehicleType } from '@/interface/common';
 
 interface IVehicle {
   color: string;
@@ -94,7 +95,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                     required: 'Vehicle type is required',
                   })}>
                   <option value="">Select Vehicle Type</option>
-                  {vehicleTypes?.map((vType, index) => (
+                  {vehicleTypes?.map((vType:IVehicleType, index:number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
                     </option>

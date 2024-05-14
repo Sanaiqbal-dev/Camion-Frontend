@@ -2,7 +2,7 @@ import { Form, Button } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useGetTruckTypesQuery } from '@/services/shipmentType';
-import { IProposalDetailResponseData } from '@/interface/proposal';
+import { IProposalDetailResponseData, ITruckShipmentDetails } from '@/interface/proposal';
 import { ITruckTypes } from '@/interface/proposal';
 import { z } from 'zod';
 
@@ -32,6 +32,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
 
   const [trucks, setTrucks] = useState<ITruckItem[]>([{ noOfTrucks: 0, truckTypeId: 1 }]);
   const truckTypesData = useGetTruckTypesQuery();
+  const [showError, setShowError] = useState(false);
 
   const addTruck = () => {
     setTrucks((prevTrucks) => [...prevTrucks, { noOfTrucks: 0, truckTypeId: -1 }]);
@@ -59,12 +60,16 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
     if (isValid) {
       onSubmitShipmentForm(formData, 'Truck');
       reset(); // Reset form after submission
+      setShowError(false);
+    }
+    else{
+      setShowError(true);
     }
   };
 
   useEffect(() => {
     if (isEdit && proposalObject) {
-      const truckShipmentDetails = proposalObject.truckShipmentDetail;
+      const truckShipmentDetails:ITruckShipmentDetails[] = proposalObject.truckShipmentDetail;
       console.log(truckShipmentDetails);
       const trucksData = truckShipmentDetails.map((obj) => ({
         noOfTrucks: obj.noOfTrucks,
@@ -72,26 +77,26 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
       }));
 
       setTrucks(trucksData);
-    } else {
-      // addTruck();
-    }
+    } 
   }, [isEdit, proposalObject]);
 
   return (
+    
     <Form onSubmit={handleSubmit(onSubmit)}>
-      {trucks.map((truck, index) => (
+      <div>
+        {trucks.map((truck, index) => (
         <div key={index} style={{ display: 'flex', gap: '18px' }}>
           <Form.Group className="mb-3">
             <Form.Label>Number of Trucks</Form.Label>
             <Form.Control
               type="number"
               placeholder="1"
-              defaultValue={truck && parseInt(truck.noOfTrucks)} // Convert to number
+              defaultValue={truck && (truck.noOfTrucks)} // Convert to number
               style={{ width: '229px', height: '59px' }}
-              isInvalid={!!errors[index]?.noOfTrucks}
+              isInvalid={!!errors?.noOfTrucks}
               {...register(`${index}.noOfTrucks` as const)}
             />
-            <Form.Control.Feedback type="invalid">{errors[index]?.noOfTrucks?.message}</Form.Control.Feedback>
+             
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Type of truck</Form.Label>
@@ -100,7 +105,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
               as="select"
               style={{ width: '229px', height: '59px' }}
               defaultValue={truck && truck.truckTypeId}
-              isInvalid={!!errors[index]?.truckTypeId}
+              isInvalid={!!errors?.truckTypeId}
               {...register(`${index}.truckTypeId` as const, {
                 required: 'Truck type is required',
               })}>
@@ -111,7 +116,6 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
                 </option>
               ))}
             </Form.Control>
-            <Form.Control.Feedback type="invalid">{errors[index]?.truckTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           {index === 0 ? (
             <button
@@ -141,7 +145,10 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
             </button>
           )}
         </div>
+        
       ))}
+      {showError && <span className='tw-text-red'>Fill the data correctly</span>}
+        </div>
       <Button className="tw-ml-auto tw-mr-auto" variant="primary" type="submit">
         Submit
       </Button>

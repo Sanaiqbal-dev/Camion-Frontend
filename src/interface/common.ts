@@ -58,6 +58,7 @@ export interface ILanguage {
 export interface IAPIResponse<T> {
   result: any;
   data: {
+    statusCode?:number;
     message: string;
   };
   success: boolean;
@@ -74,6 +75,13 @@ export interface IUserManagement {
   action: string;
 }
 
+export interface IFileUploadResponse{
+  data?: IGenericResponse;
+}
+export interface IGenericResponse{
+  message:string;
+  statusCode:number
+}
 export interface IFile {
   id: number;
   description: string;
@@ -172,4 +180,9 @@ export interface IPassword {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
+}
+
+export interface IVehicleType{
+                    id: number,
+                    typeName:string;
 }

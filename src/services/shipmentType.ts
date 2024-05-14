@@ -1,7 +1,7 @@
 import { IAPIResponse } from '@/interface/common';
 
 import baseApi from './baseApi';
-import { IShipmentType, ITruckTypes } from '@/interface/proposal';
+import { IShipmentType } from '@/interface/proposal';
 
 export const shipmentTypeApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,7 +9,7 @@ export const shipmentTypeApi = baseApi.injectEndpoints({
       query: () => `api/ShipmentTypes/GetShipmentTypes`,
       providesTags: ['ShipmentType'],
     }),
-    getTruckTypes: builder.query<IAPIResponse<ITruckTypes[]>, void>({
+    getTruckTypes: builder.query<any, void>({
       query: () => `api/TruckTypes/GetTruckTypes`,
       providesTags: ['TruckType'],
     }),

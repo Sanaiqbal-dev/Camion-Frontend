@@ -3,7 +3,7 @@ import { IAPIResponse, IFile, IProposalForm } from '@/interface/common';
 
 export const fileHandling = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    uploadFile: builder.mutation<IAPIResponse<IFile>, FormData>({
+    uploadFile: builder.mutation<IAPIResponse<any>, IUploadFile>({
       query: (body) => ({
         url: '/Account/FileUpload',
         method: 'POST',
@@ -19,7 +19,7 @@ export const fileHandling = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['ProposalQuotation'],
     }),
-    downloadFile: builder.query<IAPIResponse<IFile>, string>({
+    downloadFile: builder.mutation<IAPIResponse<IFile>, string>({
       query: (filename) => ({
         url: `/Account/FileDownload?filename=${filename}`,
         method: 'GET',
@@ -35,10 +35,10 @@ export const fileHandling = baseApi.injectEndpoints({
         },
         cache: 'no-cache',
       }),
-      providesTags: ['FileDownload'],
+      invalidatesTags: ['FileDownload'],
     }),
   }),
 });
-export const { useUploadFileMutation, useAddNewProposalMutation, useDownloadFileQuery } = fileHandling;
+export const { useUploadFileMutation, useAddNewProposalMutation, useDownloadFileMutation } = fileHandling;
 
 //

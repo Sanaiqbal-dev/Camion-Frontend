@@ -18,8 +18,8 @@ interface CreateRequestModalProps {
 const schema = z.object({
   buildingNumber: z.string().min(1, 'Building number is required'),
   streetName: z.string().min(1, 'Enter street name'),
-  districtName: z.string().min(1, 'Please enter your district name'),
-  cityName: z.string().min(1, 'City name is required'),
+  districtId: z.string().min(1, 'Please enter your district name'),
+  cityId: z.string().min(1, 'City name is required'),
   zipCode: z.coerce.number().min(1, 'Zip code is required'),
   additionalNumber: z.coerce.number().min(1, 'Additional number is required'),
   unitNo: z.string().min(1, 'unit no is required'),
@@ -39,8 +39,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const { data: cityData } = useGetCityListQuery('');
   const { data: districtData } = useGetDistrictListQuery('');
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  // const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  // const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
 
@@ -51,8 +51,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
         const currentObj = {
           buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
           streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
-          districtName: infoType == 'origin' ? object.originDistrict.name : object.destinationDistrict.name,
-          cityName: infoType == 'origin' ? object.originCity.name : object.destinationCity.name,
+          districtId: infoType == 'origin' ? object.originDistrict.name : object.destinationDistrict.name,
+          cityId: infoType == 'origin' ? object.originCity.name : object.destinationCity.name,
           zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
           additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
           unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
@@ -66,8 +66,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       const currentObj = {
         buildingNumber: '',
         streetName: '',
-        districtName: '',
-        cityName: '',
+        districtId: '',
+        cityId: '',
         zipCode: '',
         additionalNumber: '',
         unitNo: '',
@@ -82,10 +82,10 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     const updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
-      districtId: districtList?.find((item) => item.name === data.districtName)?.id,
-      cityId: cityList?.find((item) => item.name === data.cityName)?.id,
-      zipCode: data.zipCode.toString(),
-      additionalNumber: data.additionalNumber.toString(),
+      districtId: districtList?.find((item) => item.id === data.districtId)?.id,
+      cityId: cityList?.find((item) => item.id === data.cityId)?.id,
+      zipCode: data.zipCode,
+      additionalNumber:data.additionalNumber,
       unitNo: data.unitNo,
     };
     handleNextStep(updatedObject, '');
@@ -174,9 +174,9 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                     borderRight: 'none',
                     borderLeft: 'none',
                   }}
-                  {...register('districtName', { required: true })}
-                  isInvalid={!!errors.districtName}
-                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                  {...register('districtId', { required: true })}
+                  isInvalid={!!errors.districtId}
+                  // onChange={(e) => setSelectedDistrict(e.target.value)}
                   readOnly>
                   <option value="">Select District</option>
                   {districtList &&
@@ -186,7 +186,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                       </option>
                     ))}
                 </Form.Control>
-                <Form.Control.Feedback type="invalid">{errors.districtName?.message}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.districtId?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>City name</Form.Label>
@@ -200,9 +200,9 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                     borderRight: 'none',
                     borderLeft: 'none',
                   }}
-                  {...register('cityName', { required: true })}
-                  isInvalid={!!errors.cityName}
-                  onChange={(e) => setSelectedCity(e.target.value)}
+                  {...register('cityId', { required: true })}
+                  isInvalid={!!errors.cityId}
+                  // onChange={(e) => setSelectedCity(e.target.value)}
                   readOnly>
                   <option value="">Select City</option>
                   {cityList &&
@@ -212,7 +212,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                       </option>
                     ))}
                 </Form.Control>
-                <Form.Control.Feedback type="invalid">{errors.cityName?.message}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.cityId?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>

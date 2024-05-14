@@ -43,7 +43,7 @@ export interface IProposalDetailResponseData extends IProposal {
   shipmentTypes: IShipmentType;
   createdById: string;
   updatedById: string | null;
-  truckShipmentDetail: ITruckShipmentDetails;
+  truckShipmentDetail: ITruckShipmentDetails[];
 }
 export interface IShipmentTruckType {
   noOfTruck: number;
@@ -120,10 +120,10 @@ export interface IProposalSearch {
 }
 
 export interface ITruckShipmentDetails {
-  id: number;
+  id?: number;
   noOfTrucks: number;
   truckTypeId: number;
-  proposalId: number;
+  proposalId?: number;
 }
 
 export interface IPlacesResponseObject {

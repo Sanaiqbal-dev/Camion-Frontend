@@ -90,7 +90,7 @@ export const ProfileColumns = ({
     accessorKey: 'action',
     header: 'Action',
     cell: ({ row }) => {
-      const id: string = row.original.id;
+      const id = row.original.id;
       const status = row.getValue('status');
 
       return status === 'Not Approved' ? (
@@ -101,7 +101,7 @@ export const ProfileColumns = ({
               color: '#0EBC93',
               backgroundColor: '#0EBC931A',
             }}
-            onClick={() => onAcceptButtonClick(id)}>
+            onClick={() => id && onAcceptButtonClick(id)}>
             <img src={IconTick} alt="Accept" />
             Accept
           </button>
@@ -111,14 +111,14 @@ export const ProfileColumns = ({
               color: '#EB5757',
               backgroundColor: '#EB57571A',
             }}
-            onClick={() => onRejectButtonClick(id)}>
+            onClick={() => id && onRejectButtonClick(id)}>
             <img src={IconRejectProfile} alt="Reject" />
             Reject
           </button>
         </div>
       ) : status === 'Active' ? (
         <div>
-          <button className="table-action-btn" style={{ color: '#F48031', backgroundColor: '#F480311A' }} onClick={() => onDeactivateButtonClick(id)}>
+          <button className="table-action-btn" style={{ color: '#F48031', backgroundColor: '#F480311A' }} onClick={() => id && onDeactivateButtonClick(id)}>
             Deactivate
           </button>
         </div>
@@ -130,7 +130,7 @@ export const ProfileColumns = ({
               color: '#EB5757',
               backgroundColor: '#EB57571A',
             }}
-            onClick={() => onDeleteButtonClick(id)}>
+            onClick={() =>id && onDeleteButtonClick(id)}>
             <img src={IconDeleteProfile} alt="Delete" />
             Delete
           </button>
