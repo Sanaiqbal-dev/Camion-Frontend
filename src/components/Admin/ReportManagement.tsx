@@ -58,12 +58,7 @@ const ReportManagement = () => {
       if (orderItems) {
         const updatedReportData = orderItems.map((currentReportObject) => {
           return {
-            id: currentReportObject.userId,
             userType: currentReportObject.userType ? currentReportObject.userType : '-',
-            shipperName: currentReportObject.name,
-            contact: currentReportObject.contactNumber ? currentReportObject.contactNumber : '-',
-            email: currentReportObject.emailAddress,
-            activeOrders: currentReportObject.noOfActiveOrders,
 						name: currentReportObject.name,
 						contactNumber: currentReportObject.contactNumber ? currentReportObject.contactNumber : "-",
 						emailAddress: currentReportObject.emailAddress,
