@@ -18,6 +18,7 @@ export type IDriver = {
   viewIqama: string;
   mobileNo: string;
   action: string;
+  iqamaId:string;
 };
 export type IRequest = {
   id: number;
