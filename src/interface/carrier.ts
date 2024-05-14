@@ -13,12 +13,15 @@ export type IDriver = {
   driverId: number;
   licenseNumber: string;
   dob: string;
-  nationality: string;
-  phoneNumber: string;
+  driverNationality: {name:string};
+  nationalityId:number;
+  phoneNumber?: string;
+  mobileno?:string;
   viewIqama: string;
   mobileNo: string;
   action: string;
   iqamaId:string;
+  fileName?:any
 };
 export type IRequest = {
   id: number;

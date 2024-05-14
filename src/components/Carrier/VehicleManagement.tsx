@@ -75,6 +75,7 @@ const VehicleManagement = () => {
     }).unwrap();
     console.log(res);
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
+    const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
       newvehicles[index].driver = selectedDriver.name;

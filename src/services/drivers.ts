@@ -3,7 +3,7 @@ import { IAPIResponse, IDriver, IFile } from '@/interface/common';
 
 export const Drivers = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    addNewDriver: builder.mutation<IAPIResponse<IFile>, IDriver>({
+    addNewDriver: builder.mutation<IAPIResponse<IFile>, any>({
       query: (body) => ({
         url: '/api/Drivers/AddNewDriver',
         method: 'POST',
@@ -28,7 +28,7 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Driver'],
     }),
-    updateDriver: builder.mutation<IAPIResponse<IDriver>, Partial<IDriver>>({
+    updateDriver: builder.mutation<IAPIResponse<IDriver>, any>({
       query: ({ id, ...rest }) => ({
         url: `/api/Drivers/UpdateDriver`,
         method: 'PUT',

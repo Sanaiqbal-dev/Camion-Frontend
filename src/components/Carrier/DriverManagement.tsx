@@ -18,13 +18,13 @@ const DriverManagement = () => {
   const [downloadFile] = useLazyDownloadFileQuery();
 
   const tableData: IDriver[] = getDriversList.data?.result.result;
-  const driversData = tableData?.map((item) => ({
+  const driversData:any = tableData?.map((item) => ({
     id: item.id,
     name: item.name,
     iqamaId: item.viewIqama,
     licenseNumber: item.licenseNumber,
     dob: item.dob,
-    nationality: item.nationality.name,
+    nationality: item.driverNationality.name,
     phoneNumber: item.phoneNumber,
     fileName: item.fileName,
     viewIqama: item.iqamaId,
@@ -36,9 +36,7 @@ const DriverManagement = () => {
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
   const [editDriverData, setEditDriverData] = useState<IDriver>();
 
-  const cleanUp = () => {
-    setEditDriverData(undefined);
-  };
+
 
   const onDeleteDriver = async (id: number) => {
     try {
@@ -50,7 +48,7 @@ const DriverManagement = () => {
   };
 
   const onUpdateDriver = (id: number) => {
-    const selectedDriver = driversData.find((driver: IDriver) => driver.id === id);
+    const selectedDriver = driversData.find((driver: any) => driver.id === id);
     setEditDriverData(selectedDriver);
     setShowAddDriverModal(true);
   };
@@ -70,7 +68,7 @@ const DriverManagement = () => {
   };
 
   const onIqamaDownloadClick = (id: number) => {
-    const selectedDriver = driversData.find((driver: IDriver) => driver.id === id);
+    const selectedDriver = driversData.find((driver: any) => driver.id === id);
     // setSelectedFile(selectedDriver.fileName);
     downloadSelectedFile(selectedDriver.fileName);
   };
@@ -81,7 +79,7 @@ const DriverManagement = () => {
     onIqamaDownloadClick,
   });
   const handleCloseModal = () => {
-    setEditDriverData(null);
+    setEditDriverData(undefined);
     setShowAddDriverModal(false);
   };
 
@@ -143,7 +141,7 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && <DataTable isAction={true} columns={columns} data={driversData} />}
-      <AddDriver show={showAddDriverModal} handleClose={handleCloseModal} driverExistingData={editDriverData} cleanUp={cleanUp} />
+      <AddDriver show={showAddDriverModal} handleClose={handleCloseModal} driverExistingData={editDriverData}  />
     </div>
   );
 };

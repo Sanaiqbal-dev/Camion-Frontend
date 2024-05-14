@@ -5,20 +5,21 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMutation } from '@/services/drivers';
 import { useUploadFileMutation } from '@/services/fileHandling';
+import { IDriver } from '@/interface/carrier';
 
-interface IDriver {
-  id?: number;
-  name: string;
-  iqamaId: string;
-  licenseNumber: string;
-  dob: string;
-  nationalityId: number;
-  nationality:string;
-  phoneNumber: string;
-  fileName: string;
-  filePath: string;
-  driverId: number;
-}
+// interface IDriver {
+//   id?: number;
+//   name: string;
+//   iqamaId: string;
+//   licenseNumber: string;
+//   dob: string;
+//   nationalityId: number;
+//   nationality:string;
+//   phoneNumber: string;
+//   fileName: string;
+//   filePath: string;
+//   driverId: number;
+// }
 
 interface CreateUserModalProps {
   show: boolean;
@@ -52,7 +53,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
   const [addNewDriver] = useAddNewDriverMutation();
   const [updateDriver] = useUpdateDriverMutation();
   const [uploadFile] = useUploadFileMutation();
-  const [nationalityId, setNationalityId] = useState<number|string>('');
+  const [nationalityId, setNationalityId] = useState<number | string>('');
   const [formData, setFormData] = useState<IDriver>();
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
@@ -77,8 +78,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
           const formData = new FormData();
           formData.append('UploadFile', file);
           const response = await uploadFile(formData);
-          if('data' in response){
-          setFilePath(response.data.message);
+          if ('data' in response) {
+            setFilePath(response.data.message);
           }
           console.log(response);
         } catch (error) {
@@ -98,8 +99,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
           name: formData.name,
           licenseNumber: formData.licenseNumber,
           dob: formData.dob,
-          nationalityId: nationalityId ? nationalityId : getNationalityIdByName(nationalityListData,driverExistingData?.nationality, ),
-          phoneNumber: formData.phoneNumber,
+          nationalityId: nationalityId ? nationalityId : getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality?.name),
+          mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
           filePath: filePath,
@@ -111,7 +112,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
           licenseNumber: data.licenseNumber,
           dob: data.dob,
           nationalityId: nationalityId,
-          phoneNumber: data.phoneNumber,
+          mobileNo: data.phoneNumber,
           iqamaId: data.iqamaId,
           driverId: 0,
           filePath: 'Not Implemented yet',
@@ -124,7 +125,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
       console.error('Error:', error);
     }
   };
-  const getNationalityIdByName = (nationalityListData: INationality[],nationalityName?: string ) => {
+  const getNationalityIdByName = (nationalityListData: INationality[], nationalityName?: string) => {
     const nationality = nationalityListData.find((nat) => nat.name === nationalityName);
     return nationality ? nationality.id : ''; // Return the ID if found, otherwise return an empty string
   };
@@ -148,7 +149,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 style={{ width: '560px', height: '59px' }}
                 {...register('name')}
                 defaultValue={formData?.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value } as  IDriver )}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value } as IDriver)}
                 isInvalid={!!errors.name}
               />
               <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
@@ -161,7 +162,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 style={{ width: '560px', height: '59px' }}
                 {...register('iqamaId')}
                 defaultValue={formData?.iqamaId}
-                onChange={(e) => setFormData({ ...formData, iqamaId: e.target.value } as  IDriver )}
+                onChange={(e) => setFormData({ ...formData, iqamaId: e.target.value } as IDriver)}
                 isInvalid={!!errors.iqamaId}
               />
               <Form.Control.Feedback type="invalid">{errors.iqamaId?.message}</Form.Control.Feedback>
@@ -175,7 +176,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 style={{ width: '560px', height: '59px' }}
                 {...register('licenseNumber')}
                 defaultValue={formData?.licenseNumber}
-                onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value }as  IDriver )}
+                onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value } as IDriver)}
                 isInvalid={!!errors.licenseNumber}
               />
               <Form.Control.Feedback type="invalid">{errors.licenseNumber?.message}</Form.Control.Feedback>
@@ -188,7 +189,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 style={{ width: '560px', height: '50px' }}
                 {...register('dob')}
                 defaultValue={formData?.dob}
-                onChange={(e) => setFormData({ ...formData, dob: e.target.value }as  IDriver )}
+                onChange={(e) => setFormData({ ...formData, dob: e.target.value } as IDriver)}
                 isInvalid={!!errors.dob}
               />
               <Form.Control.Feedback type="invalid">{errors.dob?.message}</Form.Control.Feedback>
@@ -200,7 +201,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 as="select"
                 style={{ width: '560px', height: '50px' }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                defaultValue={getNationalityIdByName(nationalityListData,driverExistingData?.nationality )}
+                defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality?.name)}
                 isInvalid={!!errors.nationalityId}>
                 <option value="" disabled>
                   Select Nationality
@@ -221,7 +222,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 style={{ width: '560px', height: '50px' }}
                 {...register('phoneNumber')}
                 defaultValue={formData?.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value }as IDriver)}
+                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value } as IDriver)}
                 isInvalid={!!errors.phoneNumber}
               />
               <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
