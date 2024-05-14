@@ -17,7 +17,7 @@ interface ProposalDetailsModalProps {
   show: boolean;
   handleClose: () => void;
   submitProposal: (proposal: IProposalForm) => void;
-  proposalId: number;
+  proposalId?: number;
 }
 
 const schema = z.object({
@@ -80,7 +80,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: filePath,
-        purposalId: proposalId,
+        purposalId: proposalId!,
         userId: userId,
       });
       console.log(proposalResponse);

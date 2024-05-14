@@ -111,7 +111,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
           const formData = new FormData();
           formData.append('UploadFile', crFile);
           const response = await uploadFile(formData);
-          setCrFilePath(response.data.message);
+          if ('data' in response) {
+            setCrFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -129,7 +131,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
           const formData = new FormData();
           formData.append('UploadFile', tlFile);
           const response = await uploadFile(formData);
-          setTlFilePath(response.data.message);
+          if ('data' in response) {
+            setTlFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -147,7 +151,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
           const formData = new FormData();
           formData.append('UploadFile', cliFile);
           const response = await uploadFile(formData);
-          setcliFilePath(response.data.message);
+          if ('data' in response) {
+            setcliFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -165,7 +171,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
           const formData = new FormData();
           formData.append('UploadFile', clFile);
           const response = await uploadFile(formData);
-          setClFilePath(response.data.message);
+          if ('data' in response) {
+            setClFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -183,7 +191,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
           const formData = new FormData();
           formData.append('UploadFile', brFile);
           const response = await uploadFile(formData);
-          setBrFilePath(response.data.message);
+          if ('data' in response) {
+            setBrFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -206,33 +216,33 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
         companyName: data.companyName,
         fileDownload: isShipper
           ? [
-            {
-              filePath: vatFilePath,
-              fileName: vatFile ? vatFile.name : 'No path uplaod',
-            },
-            {
-              filePath: crFilePath,
-              fileName: crFile ? crFile.name : 'No file uploaded',
-            },
-          ]
+              {
+                filePath: vatFilePath,
+                fileName: vatFile ? vatFile.name : 'No path uplaod',
+              },
+              {
+                filePath: crFilePath,
+                fileName: crFile ? crFile.name : 'No file uploaded',
+              },
+            ]
           : [
-            {
-              filePath: tlFilePath,
-              fileName: tlFile ? tlFile.name : 'No file uploaded',
-            },
-            {
-              filePath: cliFilePath,
-              fileName: cliFile ? cliFile.name : 'No file uploaded',
-            },
-            {
-              filePath: clFilePath,
-              fileName: clFile ? clFile.name : 'No file uploaded',
-            },
-            {
-              filePath: brFilePath,
-              fileName: brFile ? brFile.name : 'No file uploaded',
-            },
-          ],
+              {
+                filePath: tlFilePath,
+                fileName: tlFile ? tlFile.name : 'No file uploaded',
+              },
+              {
+                filePath: cliFilePath,
+                fileName: cliFile ? cliFile.name : 'No file uploaded',
+              },
+              {
+                filePath: clFilePath,
+                fileName: clFile ? clFile.name : 'No file uploaded',
+              },
+              {
+                filePath: brFilePath,
+                fileName: brFile ? brFile.name : 'No file uploaded',
+              },
+            ],
         userId: userId,
       });
       console.log(newProfileResponse);

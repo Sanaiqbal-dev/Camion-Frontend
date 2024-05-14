@@ -20,6 +20,7 @@ export const fileHandling = baseApi.injectEndpoints({
       invalidatesTags: ['ProposalQuotation'],
     }),
     downloadFile: builder.mutation<IAPIResponse<IFile>, string>({
+    downloadFile: builder.query<IAPIResponse<IFile>, string>({
       query: (filename) => ({
         url: `/Account/FileDownload?filename=${filename}`,
         method: 'GET',
@@ -36,9 +37,10 @@ export const fileHandling = baseApi.injectEndpoints({
         cache: 'no-cache',
       }),
       invalidatesTags: ['FileDownload'],
+      providesTags: ['FileDownload'],
     }),
   }),
 });
-export const { useUploadFileMutation, useAddNewProposalMutation, useDownloadFileMutation } = fileHandling;
+export const { useUploadFileMutation, useAddNewProposalMutation, useLazyDownloadFileQuery } = fileHandling;
 
 //

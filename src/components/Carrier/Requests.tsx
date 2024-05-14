@@ -85,7 +85,7 @@ const Requests = () => {
         action: '',
       }));
 
-      setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
+      setRequestTableData((prevData: any) => [...prevData, ...updatedRequestData]);
     }
   };
 
@@ -150,7 +150,7 @@ const Requests = () => {
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
         submitProposal={() => selectedProposalItem && onSubmitProposal(selectedProposalItem.id)}
-        proposalId={selectedProposalItem && selectedProposalItem?.id}
+        proposalId={selectedProposalItem && selectedProposalItem!.id}
       />
     </div>
   );

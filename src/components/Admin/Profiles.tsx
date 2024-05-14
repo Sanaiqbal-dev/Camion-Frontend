@@ -10,7 +10,7 @@ import { useGetCompanyProfilesListQuery, useUpdateCompanyAccountMutation } from 
 import { debounce } from '@/util/debounce';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { useDownloadFileQuery } from '@/services/fileHandling';
+import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 
 const Profiles = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -18,8 +18,8 @@ const Profiles = () => {
   const [updateCompanyAccount] = useUpdateCompanyAccountMutation();
 
   const companyProfiles = useGetCompanyProfilesListQuery({ term: searchTerm });
-  const [selectedFile, setSelectedFile] = useState<any>();
-  const downloadFile = useDownloadFileQuery(selectedFile?.fileName);
+  // const [selectedFile, setSelectedFile] = useState<any>();
+  const [downloadFile] = useLazyDownloadFileQuery();
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
@@ -104,7 +104,7 @@ const Profiles = () => {
     }
   };
   const onSelectFile = (file: any) => {
-    setSelectedFile(file);
+    // setSelectedFile(file);
     downloadSelectedFile(file);
   };
 

@@ -23,7 +23,7 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
-import { useDownloadFileQuery } from '@/services/fileHandling';
+import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -35,7 +35,7 @@ const VehicleManagement = () => {
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
+  const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
   // const [drivers, setDrivers] = useState<IDriver[]>([]);
   const drivers: IDriver[] = [];
   const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
@@ -43,8 +43,8 @@ const VehicleManagement = () => {
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<any>();
-  const {downloadFile} = useDownloadFileQuery();
+  // const [selectedFile, setSelectedFile] = useState<any>();
+  const [downloadFile] = useLazyDownloadFileQuery();
 
   const { data, isLoading } = useGetVehiclesQuery({
     page: pager.page - 1,
@@ -75,7 +75,6 @@ const VehicleManagement = () => {
     }).unwrap();
     console.log(res);
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
-    const selectedDriver = drivers.find((d) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
       newvehicles[index].driver = selectedDriver.name;
@@ -87,12 +86,12 @@ const VehicleManagement = () => {
     setVehicleIdfordriver(id);
     setShowDriverModal(true);
   };
-  const editVehicleHandler = (id) => {
+  const editVehicleHandler = (id: number) => {
     const veh = vehicles.find((v) => v.id === id);
     seteditedVehicle(veh);
     setShowEditVehicle(true);
   };
-  const submitCreateVehicleHandler = async (data: any) => {
+  const submitCreateVehicleHandler = async (data: unknown) => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
     console.log(resp);
@@ -104,16 +103,16 @@ const VehicleManagement = () => {
   };
   const deleteVehicleHandler = async (id: number) => {
     const veh = vehicles.find((v) => v.id === id);
-    seteditedVehicle(veh);
+    seteditedVehicle(veh && veh);
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const res = await deleteVehicle({ id: editedVehicle?.id });
+    const res = await deleteVehicle({ id: editedVehicle!.id });
     console.log(res);
 
-    const filteredvehicle = vehicles.filter((v) => v.id !== editedVehicle.id);
+    const filteredvehicle = vehicles.filter((v) => v.id !== editedVehicle?.id);
     setVehicles(filteredvehicle);
   };
   const closeCreateModal = () => {
@@ -137,7 +136,7 @@ const VehicleManagement = () => {
   };
   const onVeiwDocumentClick = (id: number) => {
     const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
-    setSelectedFile(selectedVehicle?.fileName);
+    // setSelectedFile(selectedVehicle?.fileName);
     downloadSelectedFile(selectedVehicle?.fileName);
   };
 
