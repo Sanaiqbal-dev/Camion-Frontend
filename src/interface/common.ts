@@ -67,7 +67,6 @@ export interface IAPIResponse<T> {
   pageSize: number;
   pageNumber: number;
   total: number;
-  data?:IGenericResponse;
 }
 export interface IUserManagement {
   id: string;

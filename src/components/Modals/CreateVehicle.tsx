@@ -50,7 +50,9 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
           const formData = new FormData();
           formData.append('UploadFile', selectedFile);
           const response = await uploadFile(formData);
+        if ('data' in response) {
           setSelectedFilePath(response.data.message);
+        }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
