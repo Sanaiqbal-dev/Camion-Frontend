@@ -57,7 +57,9 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
           const formData = new FormData();
           formData.append('UploadFile', selectedFile);
           const response = await uploadFile(formData);
-          setFilePath(response.data.message);
+          if ('data' in response) {
+            setFilePath(response.data.message);
+          }
           console.log('File uploaded successfully:', response);
         } catch (error) {
           console.error('Error uploading file:', error);

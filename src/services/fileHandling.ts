@@ -1,9 +1,9 @@
 import baseApi from './baseApi';
-import { IAPIResponse, IFile, IProposalForm, IUploadFile } from '@/interface/common';
+import { IAPIResponse, IFile, IProposalForm } from '@/interface/common';
 
 export const fileHandling = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    uploadFile: builder.mutation<IAPIResponse<IFile>, IUploadFile>({
+    uploadFile: builder.mutation<IAPIResponse<IFile>, FormData>({
       query: (body) => ({
         url: '/Account/FileUpload',
         method: 'POST',

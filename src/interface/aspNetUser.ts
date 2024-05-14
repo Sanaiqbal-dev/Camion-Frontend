@@ -42,7 +42,7 @@ export interface IAspNetUserSearch {
   searchTerm?: string;
 }
 export interface AspNetUserLoginRequest {
-  email: string;
+  username: string;
   password: string;
 }
 

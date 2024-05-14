@@ -50,7 +50,7 @@ const Login = () => {
             setSession({
               token: result.data.token,
               user: {
-                email: values.email,
+                email: values.username,
                 role: result.data.role,
                 userId: result.data.userId,
               },

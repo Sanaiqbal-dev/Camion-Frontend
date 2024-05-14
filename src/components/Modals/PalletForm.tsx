@@ -41,7 +41,8 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
-        setValue(key as keyof IShipmentDetails, value);
+        const valueToUse = value !== null ? value : undefined;
+        setValue(key as keyof IShipmentDetails, valueToUse);
       });
     }
   }, [isEdit, setValue]);

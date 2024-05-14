@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { useDeleteOrderMutation, useGetOrdersQuery } from '@/services/order';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
-import { useAppSelector } from '@/state';
 import { IOrder, IOrderResponseData } from '@/interface/orderDetail';
 import { IOrderTable } from '@/interface/shipper';
 import { ColumnDef } from '@tanstack/react-table';
@@ -34,7 +33,7 @@ const ShipperOrders = () => {
   });
   const [deleteOrder] = useDeleteOrderMutation();
 
-  const [orderItems, setOrderItems] = useState<IOrder>();
+  const [orderItems, setOrderItems] = useState<IOrder[]>([]);
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [isDeleteOrder, setIsDeleteOrder] = useState(false);
@@ -90,7 +89,7 @@ const ShipperOrders = () => {
     navigate('/shipper/shippertracking', {
       replace: true,
       state: {
-        orderObject: orderItems.find((item) => item.id === orderItemId).orderDetail,
+        orderObject: orderItems.find((item) => item.id === orderItemId)?.orderDetail,
       },
     });
   };

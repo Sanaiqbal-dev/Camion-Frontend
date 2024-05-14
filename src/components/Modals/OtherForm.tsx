@@ -48,7 +48,8 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
-        return setValue(key as keyof IShipmentDetails, value);
+        const valueToUse = value !== null ? value : undefined;
+        return setValue(key as keyof IShipmentDetails, valueToUse);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

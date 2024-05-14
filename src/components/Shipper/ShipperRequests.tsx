@@ -8,7 +8,7 @@ import FilterIcon from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
 import ShippementDetails from '../Modals/ShippementDetails';
-import { IProposal, IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
+import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
 import { INewRequest, IRequestTable } from '@/interface/shipper';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
@@ -107,10 +107,9 @@ const ShipperRequests = () => {
   };
 
   const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
-    const shipmentDataAll = shipmentData.data;
-    const shipmentTypeId =
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType).id;
+    const shipmentDataAll: any = shipmentData.data;
+    const shipmentTypeId = shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
 
     const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
     const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
@@ -119,7 +118,7 @@ const ShipperRequests = () => {
     const itemHeight = shipmentType === 'Other' ? data.height : 0;
     const otherItemName = shipmentType === 'Other' ? data.otherType : '';
 
-    setProposalItem((prevItem) => ({
+    setProposalItem((prevItem?: any) => ({
       ...prevItem,
       shipmentTypeId: shipmentTypeId,
       shipmentQuantity: shipmentQuantityVal,
@@ -154,7 +153,7 @@ const ShipperRequests = () => {
         action: '',
       }));
 
-      setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
+      setRequestTableData((prevData: any) => [...prevData, ...updatedRequestData]);
     }
   };
 
@@ -210,13 +209,13 @@ const ShipperRequests = () => {
   }, [error]);
   const ProposalCreateOrUpdateRequest = async () => {
     const response = isEditProposal ? await updateProposal(proposalItem) : await createNewProposal(proposalItem);
-    if (response) {
+    if (response && 'data' in response) {
       console.log('Create New Proposal response: ', response?.data.result?.result);
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
 
-      setProposalItem({} as IProposal);
+      setProposalItem({} as any);
       setSendProposalRequest(false);
     }
   };
@@ -239,7 +238,7 @@ const ShipperRequests = () => {
   useEffect(() => {
     if (showCreateUserModalFirstStep == false && showCreateUserModalSecondStep == false && showShippementDetailsModal == false) {
       setIsEditProposal(false);
-      setSelectedProposalItem({} as IProposalResponseData);
+      setSelectedProposalItem(undefined);
     }
   }, [showCreateUserModalFirstStep, showCreateUserModalSecondStep, showShippementDetailsModal]);
 
@@ -307,7 +306,7 @@ const ShipperRequests = () => {
         handleClose={() => {
           SetShowCreateUserModalFirstStep(false);
           setIsEditProposal(false);
-          setSelectedProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem(undefined);
         }}
         handleNextStep={CreateUserNextStep}
       />
@@ -319,7 +318,7 @@ const ShipperRequests = () => {
         handleClose={() => {
           SetShowCreateUserModalSecondStep(false);
           setIsEditProposal(false);
-          setSelectedProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem(undefined);
         }}
         handleNextStep={goToShippementDetails}
       />
@@ -330,7 +329,7 @@ const ShipperRequests = () => {
         handleClose={() => {
           setShowShippementDetailsModal(false);
           setIsEditProposal(false);
-          setSelectedProposalItem({} as IProposalResponseData);
+          setSelectedProposalItem(undefined);
         }}
         handleFormDataSubmission={setShipmentDetails}
       />

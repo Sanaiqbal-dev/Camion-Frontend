@@ -78,7 +78,7 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({ show, handleClose
       </Modal.Header>
 
       <Modal.Body>
-        {React.createElement(forms[activeIndex].component, {
+        {React.createElement(forms[activeIndex].component as any, {
           isEdit: proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label,
           proposalObject: proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label ? proposalItem.result : undefined,
           onSubmitShipmentForm: handleFormDataSubmission,

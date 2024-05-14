@@ -28,20 +28,10 @@ const Proposals = () => {
     ...filterKeys,
   });
 
-  const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
-  const [entriesValue, setEntriesValue] = useState(10);
 
-  function handleChangeValue(direction: number) {
-    currentIndex += direction;
+  const [entriesValue] = useState(10);
 
-    if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
-    } else if (currentIndex < 0) {
-      currentIndex = 0;
-    }
-    setEntriesValue(values[currentIndex]);
-  }
+
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };

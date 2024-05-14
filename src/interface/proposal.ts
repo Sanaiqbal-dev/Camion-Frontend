@@ -85,7 +85,7 @@ export interface ProposalPager extends Pager {
 }
 
 export interface IProposalResponseData {
-  id: number;
+  id?: number;
   origin: string;
   destination: string;
   weight: string;

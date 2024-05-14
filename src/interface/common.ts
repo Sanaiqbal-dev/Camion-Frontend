@@ -57,6 +57,9 @@ export interface ILanguage {
 
 export interface IAPIResponse<T> {
   result: any;
+  data: {
+    message: string;
+  };
   success: boolean;
   content: T;
   message: string;
