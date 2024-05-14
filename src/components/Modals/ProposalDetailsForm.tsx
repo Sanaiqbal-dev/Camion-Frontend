@@ -1,4 +1,4 @@
-import { useAddNewProposalMutation, useUploadFileMutation } from '@/services/fileHandling';
+import { useUploadFileMutation } from '@/services/fileHandling';
 import { useAppSelector } from '@/state';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useRef, useState } from 'react';
@@ -157,3 +157,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
 };
 
 export default ProposalDetailsForm;
+function useAddNewProposalMutation(): [any] {
+  throw new Error('Function not implemented.');
+}
