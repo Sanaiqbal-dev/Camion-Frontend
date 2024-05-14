@@ -39,10 +39,11 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const { data: cityData } = useGetCityListQuery('');
   const { data: districtData } = useGetDistrictListQuery('');
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
-  // const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  // const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  
 
   useEffect(() => {
     if (isEdit) {
@@ -79,11 +80,15 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   }, [isEdit, setValue, proposalObject, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
+    
+    const city_= cityList?.find((item) => item.name === selectedCity)?.id;
+    const district_ = districtList?.find((item) => item.name === selectedDistrict)?.id;
+    console.log(city_, district_);
     const updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
-      districtId: districtList?.find((item) => item.id === data.districtId)?.id,
-      cityId: cityList?.find((item) => item.id === data.cityId)?.id,
+      districtId: district_,
+      cityId: city_,
       zipCode: data.zipCode,
       additionalNumber:data.additionalNumber,
       unitNo: data.unitNo,
@@ -176,7 +181,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   }}
                   {...register('districtId', { required: true })}
                   isInvalid={!!errors.districtId}
-                  // onChange={(e) => setSelectedDistrict(e.target.value)}
+                  onChange={(e) => setSelectedDistrict(e.target.value)}
                   readOnly>
                   <option value="">Select District</option>
                   {districtList &&
@@ -202,7 +207,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   }}
                   {...register('cityId', { required: true })}
                   isInvalid={!!errors.cityId}
-                  // onChange={(e) => setSelectedCity(e.target.value)}
+                  onChange={(e) => setSelectedCity(e.target.value)}
                   readOnly>
                   <option value="">Select City</option>
                   {cityList &&
@@ -280,3 +285,4 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
 };
 
 export default CreateNewRequest;
+

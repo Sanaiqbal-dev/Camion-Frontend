@@ -157,6 +157,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
 };
 
 export default ProposalDetailsForm;
+
 function useAddNewProposalMutation(): [any] {
   throw new Error('Function not implemented.');
 }
+// function useAddNewProposalMutation(): [any] {
+//   throw new Error('Function not implemented.');
+// }
