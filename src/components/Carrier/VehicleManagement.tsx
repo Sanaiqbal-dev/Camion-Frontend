@@ -23,7 +23,7 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
-import { useDownloadFileQuery } from '@/services/fileHandling';
+// import { useDownloadFileQuery } from '@/services/fileHandling';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({

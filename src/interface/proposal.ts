@@ -46,7 +46,7 @@ export interface IProposalDetailResponseData extends IProposal {
   truckShipmentDetail: ITruckShipmentDetails[];
 }
 export interface IShipmentTruckType {
-  noOfTruck: number;
+  noOfTrucks: number;
   truckTypeId: number;
 }
 export interface IShipmentType {

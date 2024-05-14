@@ -10,7 +10,7 @@ import { useGetCompanyProfilesListQuery, useUpdateCompanyAccountMutation } from 
 import { debounce } from '@/util/debounce';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { useDownloadFileQuery } from '@/services/fileHandling';
+// import { useDownloadFileQuery } from '@/services/fileHandling';
 
 const Profiles = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');

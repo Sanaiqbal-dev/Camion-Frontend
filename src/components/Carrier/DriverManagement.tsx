@@ -13,7 +13,7 @@ import {
   useGetDriversListQuery,
 } from "@/services/drivers";
 import { ColumnDef } from "@tanstack/react-table";
-import { useDownloadFileQuery } from "@/services/fileHandling";
+// import { useDownloadFileQuery } from "@/services/fileHandling";
 const DriverManagement = () => {
 
   const getDriversList = useGetDriversListQuery();

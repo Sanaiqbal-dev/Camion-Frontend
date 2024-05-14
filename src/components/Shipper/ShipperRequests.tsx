@@ -79,8 +79,8 @@ const ShipperRequests = () => {
       originBuildingNo: requestObj.buildingNumber,
       originStreetName: requestObj.streetName,
       originCityId: requestObj.cityId,
-      originZipCode: requestObj.zipCode,
-      originAdditionalNo: requestObj.additionalNumber,
+      originZipCode: requestObj.zipCode.toString(),
+      originAdditionalNo: requestObj.additionalNumber.toString(),
       originUnitNo: requestObj.unitNo,
       originDistrictId: requestObj.districtId,
     }));
@@ -96,8 +96,8 @@ const ShipperRequests = () => {
       destinationBuildingNo: requestObj.buildingNumber,
       destinationStreetName: requestObj.streetName,
       destinationCityId: requestObj.cityId,
-      destinationZipCode: requestObj.zipCode,
-      destinationAdditionalNo: requestObj.additionalNumber,
+      destinationZipCode: requestObj.zipCode.toString(),
+      destinationAdditionalNo: requestObj.additionalNumber.toString(),
       destinationUnitNo: requestObj.unitNo,
       destinationDistrictId: requestObj.districtId,
     }));
@@ -111,7 +111,7 @@ const ShipperRequests = () => {
     const shipmentTypeId = shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
       shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
 
-    const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
+    const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
     const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
 
     const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
