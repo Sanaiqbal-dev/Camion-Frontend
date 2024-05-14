@@ -1,168 +1,163 @@
-import { createBrowserRouter } from "react-router-dom";
-import Dashboard from "../components/Carrier/Dashboard";
-import Tracking from "../components/Carrier/Tracking";
-import Requests from "../components/Carrier/Requests";
-import { ReactElement, Suspense, lazy } from "react";
-import Orders from "../components/Carrier/Orders";
-import DriverManagement from "../components/Carrier/DriverManagement";
-import VehicleManagement from "../components/Carrier/VehicleManagement";
-import Bayan from "../components/Carrier/Bayan";
-import Profiles from "../components/Admin/Profiles";
-import OrderManagement from "../components/Admin/OrderManagement";
-import ReportManagement from "../components/Admin/ReportManagement";
-import AdminUserManagement from "../components/Admin/AdminUserManagement";
-import Settings from "../components/Admin/Settings";
-import ShipperDashboard from "../components/Shipper/ShipperDashboard";
-import ShipperOrders from "../components/Shipper/ShipperOrders";
-import ShipperRequests from "../components/Shipper/ShipperRequests";
-import Proposals from "../components/Shipper/Proposals";
-import ProposalsSecond from "../components/Shipper/ProposalsSecond";
-import ShipperTracking from "../components/Shipper/ShipperTracking";
-import UserManagementShipper from "../components/Shipper/UserManagementShipper";
-import UserManagement from "../components/Carrier/UserManagement";
-import BayanBill from "../components/Carrier/BayanBill";
+import { createBrowserRouter } from 'react-router-dom';
+import Dashboard from '../components/Carrier/Dashboard';
+import Tracking from '../components/Carrier/Tracking';
+import Requests from '../components/Carrier/Requests';
+import { ReactElement, Suspense, lazy } from 'react';
+import Orders from '../components/Carrier/Orders';
+import DriverManagement from '../components/Carrier/DriverManagement';
+import VehicleManagement from '../components/Carrier/VehicleManagement';
+import Bayan from '../components/Carrier/Bayan';
+import Profiles from '../components/Admin/Profiles';
+import OrderManagement from '../components/Admin/OrderManagement';
+import ReportManagement from '../components/Admin/ReportManagement';
+import AdminUserManagement from '../components/Admin/AdminUserManagement';
+import Settings from '../components/Admin/Settings';
+import ShipperDashboard from '../components/Shipper/ShipperDashboard';
+import ShipperOrders from '../components/Shipper/ShipperOrders';
+import ShipperRequests from '../components/Shipper/ShipperRequests';
+import Proposals from '../components/Shipper/Proposals';
+import ProposalsSecond from '../components/Shipper/ProposalsSecond';
+import ShipperTracking from '../components/Shipper/ShipperTracking';
+import UserManagementShipper from '../components/Shipper/UserManagementShipper';
+import UserManagement from '../components/Carrier/UserManagement';
+import BayanBill from '../components/Carrier/BayanBill';
 
-const LazyCarrierHome = lazy(() => import("../pages/Carrier/CarrierHomePage"));
-const LazyAdminHome = lazy(() => import("../pages/Admin/AdminHomePage"));
-const LazyShipperHome = lazy(() => import("../pages/Shipper/HomePage"));
-const LazyLogin = lazy(() => import("../pages/Login"));
-const LazyRegister = lazy(() => import("../pages/Register"));
-const LazyCompanyVerification = lazy(
-  () => import("../pages/CompanyVerification")
-);
-const LazyForgotPassword = lazy(() => import("../pages/ForgetPassword"));
+const LazyCarrierHome = lazy(() => import('../pages/Carrier/CarrierHomePage'));
+const LazyAdminHome = lazy(() => import('../pages/Admin/AdminHomePage'));
+const LazyShipperHome = lazy(() => import('../pages/Shipper/HomePage'));
+const LazyLogin = lazy(() => import('../pages/Login'));
+const LazyRegister = lazy(() => import('../pages/Register'));
+const LazyCompanyVerification = lazy(() => import('../pages/CompanyVerification'));
+const LazyForgotPassword = lazy(() => import('../pages/ForgetPassword'));
 
-const withSuspense = (
-  Component: ReactElement,
-  fallback: ReactElement = <div>Loading...</div>
-): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
+const withSuspense = (Component: ReactElement, fallback: ReactElement = <div>Loading...</div>): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: withSuspense(<LazyCarrierHome />),
     // element: withSuspense(<LazyShipperHome />),
     // element: withSuspense(<LazyAdminHome />),
   },
   {
-    path: "/carrier",
+    path: '/carrier',
     element: withSuspense(<LazyCarrierHome />),
     children: [
       {
         index: true,
-        path: "dashboard",
+        path: 'dashboard',
         element: <Dashboard />,
       },
       {
-        path: "tracking",
+        path: 'tracking',
         element: <Tracking />,
       },
       {
-        path: "requests",
+        path: 'requests',
         element: <Requests />,
       },
       {
-        path: "orders",
+        path: 'orders',
         element: <Orders />,
       },
       {
-        path: "drivermanagement",
+        path: 'drivermanagement',
         element: <DriverManagement />,
       },
       {
-        path: "vehiclemanagement",
+        path: 'vehiclemanagement',
         element: <VehicleManagement />,
       },
       {
-        path: "bayan",
+        path: 'bayan',
         element: <Bayan />,
       },
       {
-        path: "userManagement",
+        path: 'userManagement',
         element: <UserManagement />,
       },
       {
-        path: "bayanBill",
+        path: 'bayanBill',
         element: <BayanBill />,
       },
     ],
   },
   {
-    path: "/shipper",
+    path: '/shipper',
     element: withSuspense(<LazyShipperHome />),
     children: [
       {
         index: true,
-        path: "shipperdashboard",
+        path: 'shipperdashboard',
         element: <ShipperDashboard />,
       },
       {
-        path: "shippertracking",
+        path: 'shippertracking',
         element: <ShipperTracking />,
       },
       {
-        path: "shipperrequests",
+        path: 'shipperrequests',
         element: <ShipperRequests />,
       },
       {
-        path: "userManagement",
+        path: 'userManagement',
         element: <UserManagementShipper />,
       },
       {
-        path: "shipperorders",
+        path: 'shipperorders',
         element: <ShipperOrders />,
       },
       {
-        path: "proposals",
+        path: 'proposals',
         element: <Proposals />,
       },
       {
-        path: "proposalssecond",
+        path: 'proposalssecond',
         element: <ProposalsSecond />,
       },
     ],
   },
   {
-    path: "/admin",
+    path: '/admin',
     element: withSuspense(<LazyAdminHome />),
     children: [
       {
         index: true,
-        path: "profiles",
+        path: 'profiles',
         element: <Profiles />,
       },
       {
-        path: "orderManagement",
+        path: 'orderManagement',
         element: <OrderManagement />,
       },
       {
-        path: "reportManagement",
+        path: 'reportManagement',
         element: <ReportManagement />,
       },
       {
-        path: "adminUserManagement",
+        path: 'adminUserManagement',
         element: <AdminUserManagement />,
       },
       {
-        path: "settings",
+        path: 'settings',
         element: <Settings />,
       },
     ],
   },
   {
-    path: "/login",
+    path: '/login',
     element: withSuspense(<LazyLogin />, <div>Loading Login...</div>),
   },
   {
-    path: "/register",
+    path: '/register',
     element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
   },
   {
-    path: "/companyVerification",
+    path: '/companyVerification',
     element: withSuspense(<LazyCompanyVerification />, <div>Loading...</div>),
   },
   {
-    path: "/forgotPassword",
+    path: '/forgotPassword',
     element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
   },
 ]);

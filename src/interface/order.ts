@@ -1,46 +1,37 @@
-import {  Pager} from './common';
+import { Pager } from './common';
 export interface IOrder {
-
-		id:	number;
-		proposalId:	number;
-		vehicleAssignedById?:	number;
-		vehicleId:	number;
-		orderStatusId:	number;
-
+  id: number;
+  proposalId: number;
+  vehicleAssignedById?: number;
+  vehicleId: number;
+  orderStatusId: number;
 }
 
 export interface IOrderIndex extends IOrder {
-
-		 orderLabel: string;
-		 proposalLabel:	any;
-		 aspNetUserLabel?:	any;
-		 vehicleLabel:	any;
-		 orderStatusLabel:	any;
-
+  orderLabel: string;
+  proposalLabel: any;
+  aspNetUserLabel?: any;
+  vehicleLabel: any;
+  orderStatusLabel: any;
 }
 
 export interface IOrderSingle extends IOrder {
-
-		 proposalLabel:	any;
-		 aspNetUserLabel?:	any;
-		 vehicleLabel:	any;
-		 orderStatusLabel:	any;
-
+  proposalLabel: any;
+  aspNetUserLabel?: any;
+  vehicleLabel: any;
+  orderStatusLabel: any;
 }
 
 export interface OrderPager extends Pager {
-	results: IOrderIndex[];
+  results: IOrderIndex[];
 }
 export interface OrderIndexQuery extends Pager {
-		 proposalId : 	number;
-		 vehicleAssignedById : 	number;
-		 vehicleId : 	number;
-		 orderStatusId : 	number;
-
+  proposalId: number;
+  vehicleAssignedById: number;
+  vehicleId: number;
+  orderStatusId: number;
 }
 export interface IOrderSearch {
-		id?:	number;
-		searchTerm?:	string;
-
-
+  id?: number;
+  searchTerm?: string;
 }

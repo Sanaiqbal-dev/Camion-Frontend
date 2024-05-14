@@ -1,21 +1,21 @@
-import ShipperImage from "../assets/images/shipper-img.svg";
-import CamionLogo from "../assets/icons/ic-camion.svg";
-import Image from "react-bootstrap/Image";
-import { Form, Row, Col } from "react-bootstrap";
-import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { useAspNetUserLoginMutation } from "@/services/aspNetUserAuth";
-import { AspNetUserLoginRequest } from "@/interface/aspNetUser";
-import { setSession } from "@/state/slice/sessionSlice";
-import { useAppSelector } from "@/state";
-import { useEffect } from "react";
+import ShipperImage from '../assets/images/shipper-img.svg';
+import CamionLogo from '../assets/icons/ic-camion.svg';
+import Image from 'react-bootstrap/Image';
+import { Form, Row, Col } from 'react-bootstrap';
+import { z } from 'zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAspNetUserLoginMutation } from '@/services/aspNetUserAuth';
+import { AspNetUserLoginRequest } from '@/interface/aspNetUser';
+import { setSession } from '@/state/slice/sessionSlice';
+import { useAppSelector } from '@/state';
+import { useEffect } from 'react';
 
 const schema = z.object({
-  username: z.string().email("Enter a valid email."),
-  password: z.string().min(6, "Enter your password."),
+  username: z.string().email('Enter a valid email.'),
+  password: z.string().min(6, 'Enter your password.'),
 });
 
 const Login = () => {
@@ -39,9 +39,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (
-    values: AspNetUserLoginRequest
-  ) => {
+  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (values: AspNetUserLoginRequest) => {
     aspNetUserLogin(values).then((result: any) => {
       if (result.error) {
         console.log(result.error);
@@ -59,15 +57,11 @@ const Login = () => {
               isLoggedIn: true,
               dir: dir,
               lang: lang,
-            })
+            }),
           );
           const userRole = result.data.role;
 
-          userRole == "Shipper"
-            ? navigate("/shipper/shipperdashboard")
-            : userRole == "Carrier"
-            ? navigate("/carrier/dashboard")
-            : navigate("/admin/Profiles");
+          userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
         }
       }
     });
@@ -104,49 +98,40 @@ const Login = () => {
                       <div>
                         <Row className="form-group mb-4">
                           <Form.Group as={Col}>
-                            <Form.Label className="customLabel">
-                              Email
-                            </Form.Label>
+                            <Form.Label className="customLabel">Email</Form.Label>
                             <Form.Control
                               type="email"
                               className="form-control customInput"
-                              {...register("username")}
+                              {...register('username')}
                               isInvalid={!!errors.username}
                               placeholder="Enter email address"
                               disabled={isLoading}
                             />
-                            <Form.Control.Feedback type="invalid">
-                              {errors.username?.message}
-                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.username?.message}</Form.Control.Feedback>
                           </Form.Group>
                         </Row>
                         <Row className="form-group">
                           <Form.Group as={Col} controlId="validationCustom05">
-                            <Form.Label className="customLabel">
-                              Password
-                            </Form.Label>
+                            <Form.Label className="customLabel">Password</Form.Label>
                             <Form.Control
                               type="password"
                               className="form-control customInput"
                               placeholder="Enter password"
-                              {...register("password")}
+                              {...register('password')}
                               isInvalid={!!errors.password}
                               disabled={isLoading}
                             />
-                            <Form.Control.Feedback type="invalid">
-                              {errors.password?.message}
-                            </Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
                               <Link
                                 to="/forgotPassword"
                                 style={{
-                                  color: "#0060b8",
-                                  fontSize: "16px",
-                                  cursor: "pointer",
-                                  textDecoration: "none",
-                                  marginLeft: "30px",
-                                }}
-                              >
+                                  color: '#0060b8',
+                                  fontSize: '16px',
+                                  cursor: 'pointer',
+                                  textDecoration: 'none',
+                                  marginLeft: '30px',
+                                }}>
                                 Forgot your Password?
                               </Link>
                             </div>
@@ -155,14 +140,8 @@ const Login = () => {
                       </div>
                       {isLoading && <p>Loading...</p>}
                       {!isLoading && error && <p>Error: User not found</p>}
-                      <div
-                        className="register-container"
-                        style={{ flexDirection: "column", width: "100%" }}
-                      >
-                        <button
-                          type="submit"
-                          className="btn customRegisterButton w-100"
-                        >
+                      <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
+                        <button type="submit" className="btn customRegisterButton w-100">
                           Login
                         </button>
                         <div className="d-flex justify-content-start">
@@ -171,13 +150,12 @@ const Login = () => {
                             <Link
                               to="/Register"
                               style={{
-                                color: "#0060b8",
-                                fontSize: "16px",
-                                cursor: "pointer",
-                                textDecoration: "none",
-                                marginLeft: "30px",
-                              }}
-                            >
+                                color: '#0060b8',
+                                fontSize: '16px',
+                                cursor: 'pointer',
+                                textDecoration: 'none',
+                                marginLeft: '30px',
+                              }}>
                               Register your account
                             </Link>
                           </div>

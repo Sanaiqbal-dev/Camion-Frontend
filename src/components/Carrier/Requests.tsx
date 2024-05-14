@@ -1,34 +1,27 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
-import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useEffect, useState } from "react";
-import { IRequest } from "../../interface/carrier";
-import { ColumnDef } from "@tanstack/react-table";
-import ProposalDetailsForm from "../Modals/ProposalDetailsForm";
-import { useGetProposalsQuery } from "@/services/proposal";
-import IconPrevious from "../../assets/icons/ic-previous.svg";
-import IconNext from "../../assets/icons/ic-next.svg";
-import { PAGER_SIZE } from "@/config/constant";
-import { QueryPager } from "@/interface/common";
-import { IProposalResponseData } from "@/interface/proposal";
-import { debounce } from "@/util/debounce";
+import { RequestColumns } from './TableColumns/RequestColumns';
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import { useEffect, useState } from 'react';
+import { IRequest } from '../../interface/carrier';
+import { ColumnDef } from '@tanstack/react-table';
+import ProposalDetailsForm from '../Modals/ProposalDetailsForm';
+import { useGetProposalsQuery } from '@/services/proposal';
+import IconPrevious from '../../assets/icons/ic-previous.svg';
+import IconNext from '../../assets/icons/ic-next.svg';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { IProposalResponseData } from '@/interface/proposal';
+import { debounce } from '@/util/debounce';
 
 const Requests = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [totalPageCount, setTotalPageCount] = useState(0);
   const { data: currentData } = useGetProposalsQuery({
     page: pager.page - 1,
@@ -45,9 +38,7 @@ const Requests = () => {
 
   const onSubmitProposal = (proposalItemId: number) => {
     setShowProposalForm(true);
-    const selectedItem = requestTableData.find(
-      (item) => item.id === proposalItemId
-    );
+    const selectedItem = requestTableData.find((item) => item.id === proposalItemId);
     setSelectedProposalItem(selectedItem);
   };
 
@@ -90,10 +81,8 @@ const Requests = () => {
         destination: currentRequestObject.destination,
         weight: currentRequestObject.weight,
         dimentions: currentRequestObject.dimentions,
-        EDT: currentRequestObject.estimatedDeliveryTime
-          ? currentRequestObject.estimatedDeliveryTime
-          : "-",
-        action: "",
+        EDT: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',
+        action: '',
       }));
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
@@ -102,7 +91,7 @@ const Requests = () => {
 
   useEffect(() => {
     if (currentData?.result.result) {
-      console.log("TableData", currentData.result);
+      console.log('TableData', currentData.result);
       FilterDataForTable(currentData?.result.result);
       const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
@@ -121,30 +110,13 @@ const Requests = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -159,46 +131,25 @@ const Requests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-                onChange={handleInputChange}
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {requestTableData && (
-        <DataTable isAction={false} columns={columns} data={requestTableData} />
-      )}
+      {requestTableData && <DataTable isAction={false} columns={columns} data={requestTableData} />}
 
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          disabled={pager.page < 2}
-          onClick={() => updatePage(-1)}
-        >
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={IconPrevious} />
         </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => updatePage(+1)}
-          disabled={pager.page >= Math.floor(totalPageCount)}
-        >
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
           <img src={IconNext} />
         </Button>
       </div>
       <ProposalDetailsForm
         show={showProposalForm}
         handleClose={() => setShowProposalForm(false)}
-        submitProposal={() =>
-          selectedProposalItem && onSubmitProposal(selectedProposalItem.id)
-        }
+        submitProposal={() => selectedProposalItem && onSubmitProposal(selectedProposalItem.id)}
         proposalId={selectedProposalItem && selectedProposalItem?.id}
       />
     </div>

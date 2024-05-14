@@ -1,16 +1,13 @@
-import { useAppSelector } from "@/state";
-import ProposalColumns from "./TableColumns/ProposalColumns";
-import {
-  useGetProposalQuotationsQuery,
-  useUpdateQuotationMutation,
-} from "@/services/ProposalQuotation";
-import { useEffect, useState } from "react";
-import { IProposalQuotation } from "@/interface/proposalQuotation";
-import { QueryPager } from "@/interface/common";
-import { PAGER_SIZE } from "@/config/constant";
-import { Button } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
+import { useAppSelector } from '@/state';
+import ProposalColumns from './TableColumns/ProposalColumns';
+import { useGetProposalQuotationsQuery, useUpdateQuotationMutation } from '@/services/ProposalQuotation';
+import { useEffect, useState } from 'react';
+import { IProposalQuotation } from '@/interface/proposalQuotation';
+import { QueryPager } from '@/interface/common';
+import { PAGER_SIZE } from '@/config/constant';
+import { Button } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
 
 const Proposals = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -19,13 +16,9 @@ const Proposals = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const { childProposal: { filterKeys = {} } = {} } = useAppSelector(
-    (state) => state.childObj
-  );
+  const { childProposal: { filterKeys = {} } = {} } = useAppSelector((state) => state.childObj);
 
-  const [quotationProposals, setQuotationProposals] = useState<
-    IProposalQuotation[]
-  >([]);
+  const [quotationProposals, setQuotationProposals] = useState<IProposalQuotation[]>([]);
 
   const [updateQuotation] = useUpdateQuotationMutation();
 
@@ -55,20 +48,14 @@ const Proposals = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      const quotations: IProposalQuotation[] =
-        data?.statusCode === 200 && data.result.total > 0
-          ? data?.result?.result
-          : [];
+      const quotations: IProposalQuotation[] = data?.statusCode === 200 && data.result.total > 0 ? data?.result?.result : [];
       setQuotationProposals(quotations);
       const maxPageCount = data.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [isLoading]);
 
-  const quotationClickHandler = async (
-    quotation: IProposalQuotation,
-    isAccepted: boolean
-  ) => {
+  const quotationClickHandler = async (quotation: IProposalQuotation, isAccepted: boolean) => {
     const updatedQuotation = {
       id: quotation.id,
       trackingId: quotation.trackingId,
@@ -82,47 +69,23 @@ const Proposals = () => {
     };
     const response = await updateQuotation(updatedQuotation).unwrap();
     if (response.statusCode === 200) {
-      const updatedQuotations = quotationProposals.filter(
-        (q: IProposalQuotation) => q.id !== quotation.id
-      );
+      const updatedQuotations = quotationProposals.filter((q: IProposalQuotation) => q.id !== quotation.id);
       setQuotationProposals(updatedQuotations);
     }
   };
 
   return (
     <div className="table-container">
-      <div style={{ height: "100vh" }}>
-        {(!quotationProposals || quotationProposals.length == 0) && (
-          <span style={{}}>No Results</span>
-        )}
-        {quotationProposals?.map(
-          (quotation: IProposalQuotation, index: number) => (
-            <ProposalColumns
-              key={index}
-              quotation={quotation}
-              onClick={quotationClickHandler}
-            />
-          )
-        )}
+      <div style={{ height: '100vh' }}>
+        {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
+        {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}
       </div>
 
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5 tw-bottom-0">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          disabled={pager.page < 2}
-          onClick={() => updatePage(-1)}
-        >
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => updatePage(+1)}
-          disabled={pager.page >= Math.floor(totalPageCount)}
-        >
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
           <img src={NextIcon} />
         </Button>
       </div>

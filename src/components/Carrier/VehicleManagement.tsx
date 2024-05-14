@@ -1,12 +1,12 @@
-import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import IconFilter from "../../assets/icons/ic-filter.svg";
-import { useEffect, useState } from "react";
-import { VehicleManagementColumns } from "./TableColumns/VehicleManagementColumns";
-import { IDriver, IVehicle } from "../../interface/carrier";
+import { DataTable } from '../ui/DataTable';
+import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import IconFilter from '../../assets/icons/ic-filter.svg';
+import { useEffect, useState } from 'react';
+import { VehicleManagementColumns } from './TableColumns/VehicleManagementColumns';
+import { IDriver, IVehicle } from '../../interface/carrier';
 import {
   useAssignDriverMutation,
   useCreateVehicleMutation,
@@ -14,23 +14,23 @@ import {
   useDeleteVehicleMutation,
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
-} from "@/services/vahicles";
+} from '@/services/vahicles';
 // import { useGetDriversQuery } from "@/services/driver";
-import AssignDriverModal from "../Modals/AssignDriver";
-import CreateVehicleModal from "../Modals/CreateVehicle";
-import EditVehicleModal from "../Modals/EditVehicle";
-import ConfirmationModal from "../Modals/ConfirmationModal";
-import { PAGER_SIZE } from "@/config/constant";
-import { QueryPager } from "@/interface/common";
-import { debounce } from "@/util/debounce";
-import { useDownloadFileQuery } from "@/services/fileHandling";
+import AssignDriverModal from '../Modals/AssignDriver';
+import CreateVehicleModal from '../Modals/CreateVehicle';
+import EditVehicleModal from '../Modals/EditVehicle';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { debounce } from '@/util/debounce';
+import { useDownloadFileQuery } from '@/services/fileHandling';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
@@ -38,9 +38,7 @@ const VehicleManagement = () => {
   const [editedVehicle, seteditedVehicle] = useState<IVehicle | null>(null);
   // const [drivers, setDrivers] = useState<IDriver[]>([]);
   const drivers: IDriver[] = [];
-  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(
-    null
-  );
+  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
 
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
@@ -53,8 +51,7 @@ const VehicleManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } =
-    useGetVehicleTypesQuery({});
+  const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
@@ -126,22 +123,20 @@ const VehicleManagement = () => {
     setShowEditVehicle(false);
   };
   const downloadSelectedFile = async (fileName?: string) => {
-    console.log("Downloading file:", fileName);
+    console.log('Downloading file:', fileName);
     try {
       if (fileName) {
         await downloadFile(fileName);
-        console.log("Download successful!");
+        console.log('Download successful!');
       } else {
-        console.log("No file selected!");
+        console.log('No file selected!');
       }
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error('Error downloading file:', error);
     }
   };
   const onVeiwDocumentClick = (id: number) => {
-    const selectedVehicle = vehicles?.find(
-      (vehicle: IVehicle) => vehicle.id === id
-    );
+    const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
     setSelectedFile(selectedVehicle?.fileName);
     downloadSelectedFile(selectedVehicle?.fileName);
   };
@@ -196,8 +191,7 @@ const VehicleManagement = () => {
               id="add-vehicle-btn"
               onClick={() => {
                 setShowCreateVehicle(true);
-              }}
-            >
+              }}>
               Add Vehicle
             </button>
           </div>
@@ -209,30 +203,13 @@ const VehicleManagement = () => {
             </Col>
             <Col xs="auto">
               <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-                <input
-                  className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                  type="text"
-                  readOnly
-                  value={entriesValue}
-                />
+                <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                  <button
-                    className="tw-border-none"
-                    onClick={() => handleChangeValue(1)}
-                  >
-                    <Image
-                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                      src={PreviousIcon}
-                    />
+                  <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                   </button>
-                  <button
-                    className="tw-border-none"
-                    onClick={() => handleChangeValue(-1)}
-                  >
-                    <Image
-                      className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                      src={NextIcon}
-                    />
+                  <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                   </button>
                 </div>
               </div>
@@ -247,47 +224,17 @@ const VehicleManagement = () => {
                 <InputGroup.Text>
                   <Image src={SearchIcon} />
                 </InputGroup.Text>
-                <FormControl
-                  type="text"
-                  placeholder="Search"
-                  className="form-control"
-                  onChange={handleInputChange}
-                ></FormControl>
+                <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
               </InputGroup>
             </Col>
           </Row>
         </div>
-        {vehicles.length ? (
-          <DataTable isAction={true} columns={columns} data={vehicles} />
-        ) : (
-          <></>
-        )}
+        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <></>}
       </div>
-      <AssignDriverModal
-        show={showDriverModal}
-        drivers={drivers}
-        handleClose={() => setShowDriverModal(false)}
-        onAssignDriver={assignDriverHandler}
-      />
-      <CreateVehicleModal
-        show={showCreateVehicle}
-        vehicleTypes={vehicleTypes}
-        handleClose={closeCreateModal}
-        onSubmitForm={submitCreateVehicleHandler}
-      />
-      <EditVehicleModal
-        vehicle={editedVehicle}
-        vehicleTypes={vehicleTypes}
-        handleClose={closeEditModal}
-        show={showEditVehicle}
-        onSubmitForm={submitEditVehicleHandler}
-      />
-      <ConfirmationModal
-        show={isConfirmationModalOpen}
-        promptMessage="Are you sure?"
-        handleClose={() => setIsConfirmationModalOpen(false)}
-        performOperation={onDeleteHandler}
-      />
+      <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
+      <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />
+      <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
+      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </>
   );
 };

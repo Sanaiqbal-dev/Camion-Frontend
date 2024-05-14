@@ -1,54 +1,45 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconSubmitted from "../../../assets/icons/ic-submitted.svg";
-import { IRequest } from "../../../interface/carrier";
+import { ColumnDef } from '@tanstack/react-table';
+import IconSubmitted from '../../../assets/icons/ic-submitted.svg';
+import { IRequest } from '../../../interface/carrier';
 
 interface RequestActionProps {
   onSubmitProposal: (id: number) => void;
 }
 
-export const RequestColumns = ({
-  onSubmitProposal,
-}: RequestActionProps): ColumnDef<IRequest>[] => [
+export const RequestColumns = ({ onSubmitProposal }: RequestActionProps): ColumnDef<IRequest>[] => [
   {
-    accessorKey: "origin",
-    header: "Origin",
+    accessorKey: 'origin',
+    header: 'Origin',
   },
   {
-    accessorKey: "destination",
-    header: "Destination",
+    accessorKey: 'destination',
+    header: 'Destination',
   },
   {
-    accessorKey: "weight",
-    header: "Weight",
+    accessorKey: 'weight',
+    header: 'Weight',
   },
   {
-    accessorKey: "dimentions",
-    header: "Dimensions",
+    accessorKey: 'dimentions',
+    header: 'Dimensions',
   },
   {
-    accessorKey: "EDT",
-    header: "EDT",
+    accessorKey: 'EDT',
+    header: 'EDT',
   },
   {
-    accessorKey: "action",
-    header: "Action",
+    accessorKey: 'action',
+    header: 'Action',
     cell: ({ row }) => {
       const isProposalSubmitted = row.original.isProposalSubmitted;
 
       return (
         <button
-          onClick={() =>
-            !isProposalSubmitted && onSubmitProposal(row.original.id)
-          }
-          className={
-            isProposalSubmitted
-              ? "proposal-btn submitted-proposal"
-              : "proposal-btn submit-proposal"
-          }
-          id="submit-proposal-btn"
-        >
+          onClick={() => !isProposalSubmitted && onSubmitProposal(row.original.id)}
+          className={isProposalSubmitted ? 'proposal-btn submitted-proposal' : 'proposal-btn submit-proposal'}
+          id="submit-proposal-btn">
           {isProposalSubmitted && <img src={IconSubmitted} />}
-          {isProposalSubmitted ? "Proposal Submitted" : "Submit proposal"}
+          {isProposalSubmitted ? 'Proposal Submitted' : 'Submit proposal'}
         </button>
       );
     },

@@ -1,5 +1,5 @@
-import { SelectedObj } from "@/interface/common";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SelectedObj } from '@/interface/common';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import produce, { Draft } from 'immer';
 
 const initialState: SelectedObj = {
@@ -9,11 +9,11 @@ const initialState: SelectedObj = {
   showDelete: false,
   hasSelected: false,
   primaryKeys: {},
-  label: "",
+  label: '',
 };
 
 const selectedObjSlice = createSlice({
-  name: "selectedObj",
+  name: 'selectedObj',
   initialState,
   reducers: {
     setSelectedObj(state: SelectedObj, action: PayloadAction<SelectedObj>) {
@@ -26,7 +26,7 @@ const selectedObjSlice = createSlice({
         primaryKeys: Record<string, any>;
         label: string;
         objName: string;
-      }>
+      }>,
     ) {
       console.log(state);
       return {
@@ -44,7 +44,7 @@ const selectedObjSlice = createSlice({
         primaryKeys: Record<string, any>;
         label: string;
         objName: string;
-      }>
+      }>,
     ) {
       console.log(state);
       return {
@@ -62,7 +62,7 @@ const selectedObjSlice = createSlice({
         primaryKeys: Record<string, any>;
         label: string;
         objName: string;
-      }>
+      }>,
     ) {
       console.log(state);
       return {
@@ -89,13 +89,6 @@ const selectedObjSlice = createSlice({
   },
 });
 
-export const {
-  setSelectedObj,
-  resetSelectedObj,
-  setInfoForDetail,
-  setInfoForEdit,
-  setInfoForDelete,
-  openDrawer,
-} = selectedObjSlice.actions;
+export const { setSelectedObj, resetSelectedObj, setInfoForDetail, setInfoForEdit, setInfoForDelete, openDrawer } = selectedObjSlice.actions;
 
 export default selectedObjSlice.reducer;

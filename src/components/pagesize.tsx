@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Col, Image } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
+import { useState } from 'react';
+import { Col, Image } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
 
 const pagesize = () => {
   const values = [10, 20, 30, 40, 50];
@@ -25,30 +25,13 @@ const pagesize = () => {
       </Col>
       <Col xs="auto">
         <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-          <input
-            className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-            type="text"
-            readOnly
-            value={entriesValue}
-          />
+          <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
           <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-            <button
-              className="tw-border-none"
-              onClick={() => handleChangeValue(1)}
-            >
-              <Image
-                className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                src={PreviousIcon}
-              />
+            <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+              <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
             </button>
-            <button
-              className="tw-border-none"
-              onClick={() => handleChangeValue(-1)}
-            >
-              <Image
-                className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                src={NextIcon}
-              />
+            <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+              <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
             </button>
           </div>
         </div>

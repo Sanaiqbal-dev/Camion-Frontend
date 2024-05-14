@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button, Form, Modal } from "react-bootstrap";
-import React from "react";
-import { IUser } from "@/interface/common";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React from 'react';
+import { IUser } from '@/interface/common';
 
 interface CreateUserModalProps {
   show: boolean;
@@ -12,27 +12,23 @@ interface CreateUserModalProps {
 }
 const schema = z
   .object({
-    firstName: z.string().min(2, "First Name must be at least 2 characters."),
-    email: z.string().email("Enter email address"),
+    firstName: z.string().min(2, 'First Name must be at least 2 characters.'),
+    email: z.string().email('Enter email address'),
     password: z
       .string()
-      .min(6, "Password must be at least 6 characters.")
+      .min(6, 'Password must be at least 6 characters.')
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character"
+        'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
       ),
-    confirmPassword: z.string().min(6, "Confirm your password."),
+    confirmPassword: z.string().min(6, 'Confirm your password.'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
-const CreateUser: React.FC<CreateUserModalProps> = ({
-  show,
-  handleClose,
-  onSubmitForm,
-}) => {
+const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm }) => {
   const {
     register,
     handleSubmit,
@@ -57,45 +53,20 @@ const CreateUser: React.FC<CreateUserModalProps> = ({
             <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter First Name"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("firstName")}
-                  isInvalid={!!errors.firstName}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.firstName?.message}
-                </Form.Control.Feedback>
+                <Form.Control type="text" placeholder="Enter First Name" style={{ width: '270px', height: '50px' }} {...register('firstName')} isInvalid={!!errors.firstName} />
+                <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email address"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("email")}
-                  isInvalid={!!errors.email}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email?.message}
-                </Form.Control.Feedback>
+                <Form.Control type="email" placeholder="Enter email address" style={{ width: '270px', height: '50px' }} {...register('email')} isInvalid={!!errors.email} />
+                <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
             <div className="tw-flex tw-flex-row tw-gap-5">
               <Form.Group className="" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("password")}
-                  isInvalid={!!errors.password}
-                />
-                <Form.Control.Feedback
-                  type="invalid"
-                  style={{ maxWidth: "270px" }}
-                >
+                <Form.Control type="password" placeholder="Password" style={{ width: '270px', height: '50px' }} {...register('password')} isInvalid={!!errors.password} />
+                <Form.Control.Feedback type="invalid" style={{ maxWidth: '270px' }}>
                   {errors.password?.message}
                 </Form.Control.Feedback>
               </Form.Group>
@@ -105,13 +76,11 @@ const CreateUser: React.FC<CreateUserModalProps> = ({
                 <Form.Control
                   type="password"
                   placeholder="Confirm Password"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("confirmPassword")}
+                  style={{ width: '270px', height: '50px' }}
+                  {...register('confirmPassword')}
                   isInvalid={!!errors.confirmPassword}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.confirmPassword?.message}
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
           </div>

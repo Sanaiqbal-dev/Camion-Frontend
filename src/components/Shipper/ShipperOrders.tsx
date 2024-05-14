@@ -1,28 +1,21 @@
-import { OrderColumns } from "./TableColumns/OrderColumn";
-import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import FilterIcon from "../../assets/icons/ic-filter.svg";
-import { useEffect, useState } from "react";
-import { useDeleteOrderMutation, useGetOrdersQuery } from "@/services/order";
-import { PAGER_SIZE } from "@/config/constant";
-import { QueryPager } from "@/interface/common";
-import { useAppSelector } from "@/state";
-import { IOrder, IOrderResponseData } from "@/interface/orderDetail";
-import { IOrderTable } from "@/interface/shipper";
-import { ColumnDef } from "@tanstack/react-table";
-import ConfirmationModal from "../Modals/ConfirmationModal";
-import { useNavigate } from "react-router-dom";
-import { debounce } from "@/util/debounce";
+import { OrderColumns } from './TableColumns/OrderColumn';
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import FilterIcon from '../../assets/icons/ic-filter.svg';
+import { useEffect, useState } from 'react';
+import { useDeleteOrderMutation, useGetOrdersQuery } from '@/services/order';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { useAppSelector } from '@/state';
+import { IOrder, IOrderResponseData } from '@/interface/orderDetail';
+import { IOrderTable } from '@/interface/shipper';
+import { ColumnDef } from '@tanstack/react-table';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { debounce } from '@/util/debounce';
 
 const ShipperOrders = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -32,7 +25,7 @@ const ShipperOrders = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
@@ -73,9 +66,9 @@ const ShipperOrders = () => {
           destination: currentOrderObject.destination,
           weight: currentOrderObject.weight,
           type: currentOrderObject.type,
-          status: currentOrderObject.status ? currentOrderObject.status : "-",
+          status: currentOrderObject.status ? currentOrderObject.status : '-',
           ETA: currentOrderObject.estimatedDeliveryTime,
-          action: "",
+          action: '',
         }));
 
         setOrderTableData((prevData) => [...prevData, ...updatedOrderData]);
@@ -86,19 +79,18 @@ const ShipperOrders = () => {
   };
 
   const onDelete = (orderItemId: number) => {
-    console.log("Delete order Id:", orderItemId);
+    console.log('Delete order Id:', orderItemId);
 
     setSelectedOrderId(orderItemId);
     setIsDeleteOrder(true);
     setShowConfirmationModal(true);
   };
   const onTrackOrder = (orderItemId: number) => {
-    console.log("Tracking order Id:", orderItemId);
-    navigate("/shipper/shippertracking", {
+    console.log('Tracking order Id:', orderItemId);
+    navigate('/shipper/shippertracking', {
       replace: true,
       state: {
-        orderObject: orderItems.find((item) => item.id === orderItemId)
-          .orderDetail,
+        orderObject: orderItems.find((item) => item.id === orderItemId).orderDetail,
       },
     });
   };
@@ -111,9 +103,9 @@ const ShipperOrders = () => {
   const DeleteOrder = async () => {
     try {
       const result = await deleteOrder({ id: selectedOrderId });
-      console.log("Proposal deleted successfully:", result);
+      console.log('Proposal deleted successfully:', result);
     } catch (error) {
-      console.error("Error deleting proposal:", error);
+      console.error('Error deleting proposal:', error);
     }
   };
 
@@ -136,7 +128,7 @@ const ShipperOrders = () => {
   }, [entriesValue]);
 
   useEffect(() => {
-    console.log("shipper order:", currentData);
+    console.log('shipper order:', currentData);
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
       setOrderItems(currentData?.result.result);
@@ -160,30 +152,13 @@ const ShipperOrders = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -198,47 +173,22 @@ const ShipperOrders = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-                onChange={handleInputChange}
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {orderTableData && (
-        <DataTable
-          isAction={false}
-          columns={orderColumns}
-          data={orderTableData}
-        />
-      )}
+      {orderTableData && <DataTable isAction={false} columns={orderColumns} data={orderTableData} />}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          disabled={pager.page < 2}
-          onClick={() => updatePage(-1)}
-        >
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => updatePage(+1)}
-          disabled={pager.page >= Math.floor(totalPageCount)}
-        >
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
           <img src={NextIcon} />
         </Button>
       </div>
       <ConfirmationModal
-        promptMessage={
-          isDeleteOrder ? "Are you sure, you want to delete this order?" : ""
-        }
+        promptMessage={isDeleteOrder ? 'Are you sure, you want to delete this order?' : ''}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {

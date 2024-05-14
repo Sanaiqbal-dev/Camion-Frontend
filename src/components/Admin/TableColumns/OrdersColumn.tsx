@@ -1,51 +1,44 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconDelete from "../../../assets/icons/ic-delete.svg";
-import IconDown from "../../../assets/icons/ic-down.svg";
-import { IOrder } from "../../../interface/admin";
-import { useGetOrderStatusesQuery } from "@/services/orderStatus";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
-import { DropdownMenu, Button } from "react-bootstrap";
+import { ColumnDef } from '@tanstack/react-table';
+import IconDelete from '../../../assets/icons/ic-delete.svg';
+import IconDown from '../../../assets/icons/ic-down.svg';
+import { IOrder } from '../../../interface/admin';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
+import { DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenu, Button } from 'react-bootstrap';
 
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
 }
-export const OrderColumns = ({
-  onDelete,
-  onUpdateStatus,
-}: OrderActionsProps): ColumnDef<IOrder>[] => [
+export const OrderColumns = ({ onDelete, onUpdateStatus }: OrderActionsProps): ColumnDef<IOrder>[] => [
   {
-    accessorKey: "assignedCarrier",
-    header: "Assigned Carrier",
+    accessorKey: 'assignedCarrier',
+    header: 'Assigned Carrier',
   },
   {
-    accessorKey: "origin",
-    header: "Origin",
+    accessorKey: 'origin',
+    header: 'Origin',
   },
   {
-    accessorKey: "destination",
-    header: "Destination",
+    accessorKey: 'destination',
+    header: 'Destination',
   },
   {
-    accessorKey: "weight",
-    header: "Weight",
+    accessorKey: 'weight',
+    header: 'Weight',
   },
   {
-    accessorKey: "dimentions",
-    header: "Dimensions",
+    accessorKey: 'dimentions',
+    header: 'Dimensions',
   },
   {
-    accessorKey: "ETA",
-    header: "ETA",
+    accessorKey: 'ETA',
+    header: 'ETA',
   },
 
   {
-    accessorKey: "status",
-    header: "status",
+    accessorKey: 'status',
+    header: 'status',
     cell: ({ row }) => {
       const item = row.original;
       const noItemSeleted = (
@@ -59,23 +52,15 @@ export const OrderColumns = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">
-                {item.status ? item.status : noItemSeleted}
-              </span>
+              <span className="sr-only tw-flex tw-gap-1">{item.status ? item.status : noItemSeleted}</span>
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            className="tw-flex tw-flex-col tw-gap-2 tw-p-2"
-            align="end"
-          >
+          <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
             {orderStatuses &&
               orderStatuses.result.map((statusItem: any) => {
                 return (
-                  <DropdownMenuItem
-                    className="hover:tw-bg-black hover:tw-text-white"
-                    onClick={() => onUpdateStatus(item.id, statusItem.id)}
-                  >
+                  <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
                     {statusItem.description}
                   </DropdownMenuItem>
                 );
@@ -86,14 +71,14 @@ export const OrderColumns = ({
     },
   },
   {
-    accessorKey: "action",
-    header: "Action",
+    accessorKey: 'action',
+    header: 'Action',
     cell: ({ row }) => {
       return (
-        <div className="action-container" style={{ justifyContent: "start" }}>
+        <div className="action-container" style={{ justifyContent: 'start' }}>
           <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
-            <span style={{ color: "#EB5757" }}>Delete</span>
+            <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
         </div>
       );

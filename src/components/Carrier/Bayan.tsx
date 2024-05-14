@@ -1,98 +1,98 @@
-import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import IconFilter from "../../assets/icons/ic-filter.svg";
-import { useState } from "react";
-import { BayanColumns } from "./TableColumns/BayanColums";
-import { IBayanItem } from "../../interface/carrier";
+import { DataTable } from '../ui/DataTable';
+import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import IconFilter from '../../assets/icons/ic-filter.svg';
+import { useState } from 'react';
+import { BayanColumns } from './TableColumns/BayanColums';
+import { IBayanItem } from '../../interface/carrier';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
     {
-      id: "728ed52f",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '728ed52f',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
     {
-      id: "489e1d42",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
-    },
-
-    {
-      id: "489e1e742",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '489e1d42',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
 
     {
-      id: "9e19od42",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '489e1e742',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
 
     {
-      id: "56te1d42",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '9e19od42',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
+    },
+
+    {
+      id: '56te1d42',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
     {
-      id: "7tf5d52f",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '7tf5d52f',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
     {
-      id: "720ui72f",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '720ui72f',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
     {
-      id: "728eb92f",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '728eb92f',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
     {
-      id: "72ted52f",
-      origin: "Riyadh, KSA",
-      destination: "Riyadh, KSA",
-      weight: "82.5 kg",
-      type: "flatbed",
-      ETA: "3/25/2024",
-      action: "",
+      id: '72ted52f',
+      origin: 'Riyadh, KSA',
+      destination: 'Riyadh, KSA',
+      weight: '82.5 kg',
+      type: 'flatbed',
+      ETA: '3/25/2024',
+      action: '',
     },
   ];
 
@@ -131,30 +131,13 @@ const Bayan = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -169,11 +152,7 @@ const Bayan = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control"></FormControl>
             </InputGroup>
           </Col>
         </Row>

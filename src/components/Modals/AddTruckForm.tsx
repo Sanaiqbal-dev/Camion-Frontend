@@ -1,12 +1,10 @@
-import { Form, Button } from "react-bootstrap";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { useGetTruckTypesQuery } from "@/services/shipmentType";
-import { IProposalDetailResponseData } from "@/interface/proposal";
-import {
-  ITruckTypes,
-} from "@/interface/proposal";
-import { z } from "zod";
+import { Form, Button } from 'react-bootstrap';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useGetTruckTypesQuery } from '@/services/shipmentType';
+import { IProposalDetailResponseData } from '@/interface/proposal';
+import { ITruckTypes } from '@/interface/proposal';
+import { z } from 'zod';
 
 interface IPalletForm {
   isEdit: boolean;
@@ -20,15 +18,11 @@ interface ITruckItem {
 }
 
 const schema = z.object({
-  noOfTrucks: z.number().int().min(1, "Enter number of trucks"),
-  truckTypeId: z.number().int().min(1, "Please select a truck type"),
+  noOfTrucks: z.number().int().min(1, 'Enter number of trucks'),
+  truckTypeId: z.number().int().min(1, 'Please select a truck type'),
 });
 
-const AddTruckForm: React.FC<IPalletForm> = ({
-  isEdit,
-  proposalObject,
-  onSubmitShipmentForm,
-}) => {
+const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
   const {
     register,
     handleSubmit,
@@ -36,14 +30,11 @@ const AddTruckForm: React.FC<IPalletForm> = ({
     reset,
   } = useForm();
 
-  const [trucks, setTrucks] = useState<ITruckItem[]>([{noOfTrucks:0,truckTypeId:1}]);
+  const [trucks, setTrucks] = useState<ITruckItem[]>([{ noOfTrucks: 0, truckTypeId: 1 }]);
   const truckTypesData = useGetTruckTypesQuery();
 
   const addTruck = () => {
-    setTrucks((prevTrucks) => [
-      ...prevTrucks,
-      { noOfTrucks: 0, truckTypeId: -1 },
-    ]);
+    setTrucks((prevTrucks) => [...prevTrucks, { noOfTrucks: 0, truckTypeId: -1 }]);
   };
 
   const removeTruck = (index: number) => {
@@ -66,7 +57,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({
     });
 
     if (isValid) {
-      onSubmitShipmentForm(formData, "Truck");
+      onSubmitShipmentForm(formData, 'Truck');
       reset(); // Reset form after submission
     }
   };
@@ -89,62 +80,50 @@ const AddTruckForm: React.FC<IPalletForm> = ({
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {trucks.map((truck, index) => (
-        <div key={index} style={{ display: "flex", gap: "18px" }}>
+        <div key={index} style={{ display: 'flex', gap: '18px' }}>
           <Form.Group className="mb-3">
             <Form.Label>Number of Trucks</Form.Label>
             <Form.Control
               type="number"
               placeholder="1"
               defaultValue={truck && parseInt(truck.noOfTrucks)} // Convert to number
-              style={{ width: "229px", height: "59px" }}
+              style={{ width: '229px', height: '59px' }}
               isInvalid={!!errors[index]?.noOfTrucks}
               {...register(`${index}.noOfTrucks` as const)}
             />
-            <Form.Control.Feedback type="invalid">
-              {errors[index]?.noOfTrucks?.message}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors[index]?.noOfTrucks?.message}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Type of truck</Form.Label>
 
             <Form.Control
               as="select"
-              style={{ width: "229px", height: "59px" }}
+              style={{ width: '229px', height: '59px' }}
               defaultValue={truck && truck.truckTypeId}
               isInvalid={!!errors[index]?.truckTypeId}
               {...register(`${index}.truckTypeId` as const, {
-                required: "Truck type is required",
-              })}
-            >
+                required: 'Truck type is required',
+              })}>
               <option value="">Select Truck Type</option>
               {truckTypesData?.data?.map((item: ITruckTypes, index: number) => (
-                <option
-                  key={index}
-                  value={item.id}
-                  selected={
-                    item.id === truck?.truckTypeId
-                  }
-                >
+                <option key={index} value={item.id} selected={item.id === truck?.truckTypeId}>
                   {item.name}
                 </option>
               ))}
             </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors[index]?.truckTypeId?.message}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors[index]?.truckTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           {index === 0 ? (
             <button
               type="button"
               onClick={() => addTruck()}
               style={{
-                height: "62px",
-                width: "59px",
-                backgroundColor: "#0060B8",
-                color: "#FFF",
-                marginTop: "30px",
-              }}
-            >
+                height: '62px',
+                width: '59px',
+                backgroundColor: '#0060B8',
+                color: '#FFF',
+                marginTop: '30px',
+              }}>
               +
             </button>
           ) : (
@@ -152,13 +131,12 @@ const AddTruckForm: React.FC<IPalletForm> = ({
               type="button"
               onClick={() => removeTruck(index)}
               style={{
-                height: "62px",
-                width: "59px",
-                backgroundColor: "#FF8484",
-                color: "#FFF",
-                marginTop: "30px",
-              }}
-            >
+                height: '62px',
+                width: '59px',
+                backgroundColor: '#FF8484',
+                color: '#FFF',
+                marginTop: '30px',
+              }}>
               -
             </button>
           )}

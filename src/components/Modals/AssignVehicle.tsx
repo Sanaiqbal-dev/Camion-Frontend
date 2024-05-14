@@ -1,10 +1,10 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button, Form, Modal } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
-import { useGetVehiclesQuery } from "@/services/vahicles";
-import { IVehicle } from "@/interface/carrier";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { useGetVehiclesQuery } from '@/services/vahicles';
+import { IVehicle } from '@/interface/carrier';
 
 interface IVehicleType {
   vehicleTypeId: number;
@@ -17,14 +17,10 @@ interface AssignVehicleModalProps {
 }
 // eslint-disable-next-line react-refresh/only-export-components
 export const schema = z.object({
-  vehicleTypeId: z.coerce.number().min(1, "select a vehicle"),
+  vehicleTypeId: z.coerce.number().min(1, 'select a vehicle'),
 });
 
-const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
-  show,
-  handleClose,
-  onAssignVehicleToOrderItem,
-}) => {
+const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, onAssignVehicleToOrderItem }) => {
   const {
     register,
     handleSubmit,
@@ -35,9 +31,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
 
   const { data } = useGetVehiclesQuery({});
 
-  const [vehicleList, setVehicleList] = useState<IVehicle[]>(
-    data?.result.result
-  );
+  const [vehicleList, setVehicleList] = useState<IVehicle[]>(data?.result.result);
 
   const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
     console.log(data);
@@ -45,7 +39,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
   };
 
   const onerror = (error: any) => {
-    console.log("vehicle from submission error:", error);
+    console.log('vehicle from submission error:', error);
   };
 
   useEffect(() => {
@@ -60,18 +54,13 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onerror)}>
-          <Form.Group
-            className="mb-3"
-            style={{ minWidth: "436px" }}
-            controlId="formBasicVehicle"
-          >
+          <Form.Group className="mb-3" style={{ minWidth: '436px' }} controlId="formBasicVehicle">
             <Form.Label>Vehicles</Form.Label>
             <Form.Control
               as="select"
-              {...register("vehicleTypeId", {
-                required: "Vehicle type is required",
-              })}
-            >
+              {...register('vehicleTypeId', {
+                required: 'Vehicle type is required',
+              })}>
               <option value="" disabled>
                 Select a Vehicle
               </option>
@@ -82,9 +71,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({
                   </option>
                 ))}
             </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors.vehicleTypeId?.message}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.vehicleTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
 
           <Button variant="primary" type="submit">

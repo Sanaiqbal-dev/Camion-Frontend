@@ -1,22 +1,19 @@
-import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
-import { IProfileResponseData, Iprofiles } from "../../interface/admin";
-import { ProfileColumns } from "./TableColumns/ProfileColumns";
-import {
-  useGetCompanyProfilesListQuery,
-  useUpdateCompanyAccountMutation,
-} from "@/services/companyProfile";
-import { debounce } from "@/util/debounce";
+import { DataTable } from '../ui/DataTable';
+import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import { useState } from 'react';
+import { IProfileResponseData, Iprofiles } from '../../interface/admin';
+import { ProfileColumns } from './TableColumns/ProfileColumns';
+import { useGetCompanyProfilesListQuery, useUpdateCompanyAccountMutation } from '@/services/companyProfile';
+import { debounce } from '@/util/debounce';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { useDownloadFileQuery } from "@/services/fileHandling";
+import { ColumnDef } from '@tanstack/react-table';
+import { useDownloadFileQuery } from '@/services/fileHandling';
 
 const Profiles = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const [updateCompanyAccount] = useUpdateCompanyAccountMutation();
 
@@ -26,27 +23,24 @@ const Profiles = () => {
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
-      return "Not Approved";
+      return 'Not Approved';
     } else if (accountStatus == 1 && isActive) {
-      return "Active";
+      return 'Active';
     } else if (accountStatus == 1 && !isActive) {
-      return "Deactivated";
+      return 'Deactivated';
     }
   };
 
   const profilesData = ProfilesTableData?.map((item) => ({
     id: item.userId,
-    profileType: item.profiletype ? item.profiletype : "-",
+    profileType: item.profiletype ? item.profiletype : '-',
     firstName: item.firstName,
     lastName: item.lastName,
     email: item.emailAddress,
-    contact: item.contactNumber ? item.contactNumber : "-",
-    company: item.companyName ? item.companyName : "-",
+    contact: item.contactNumber ? item.contactNumber : '-',
+    company: item.companyName ? item.companyName : '-',
     crDocument: item.files,
-    status: getStatusColumn(
-      item.companyAccountStatus,
-      item.isCompanyAccountActive
-    ),
+    status: getStatusColumn(item.companyAccountStatus, item.isCompanyAccountActive),
   }));
   const onAcceptButtonClick = async (id: string) => {
     const selectedItem = ProfilesTableData.find((item) => item.userId === id);
@@ -97,16 +91,16 @@ const Profiles = () => {
     }
   };
   const downloadSelectedFile = async (file: any) => {
-    console.log("Downloading file:", file);
+    console.log('Downloading file:', file);
     try {
       if (file) {
         await downloadFile(file.fileName);
-        console.log("Download successful!");
+        console.log('Download successful!');
       } else {
-        console.log("No file selected!");
+        console.log('No file selected!');
       }
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error('Error downloading file:', error);
     }
   };
   const onSelectFile = (file: any) => {
@@ -153,30 +147,13 @@ const Profiles = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -191,19 +168,12 @@ const Profiles = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-                onChange={handleInputChange}
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {profilesData && (
-        <DataTable isAction={false} columns={columns} data={profilesData} />
-      )}
+      {profilesData && <DataTable isAction={false} columns={columns} data={profilesData} />}
     </div>
   );
 };

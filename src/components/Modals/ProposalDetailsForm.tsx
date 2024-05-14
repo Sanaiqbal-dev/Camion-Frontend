@@ -1,13 +1,10 @@
-import {
-  useAddNewProposalMutation,
-  useUploadFileMutation,
-} from "@/services/fileHandling";
-import { useAppSelector } from "@/state";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import { useAddNewProposalMutation, useUploadFileMutation } from '@/services/fileHandling';
+import { useAppSelector } from '@/state';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useRef, useState } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 interface IProposalForm {
   amount: string;
@@ -24,26 +21,20 @@ interface ProposalDetailsModalProps {
 }
 
 const schema = z.object({
-  amount: z.string().min(3, "Enter the ammount."),
+  amount: z.string().min(3, 'Enter the ammount.'),
   EDD: z.string().refine(
     (value) => {
       const date = Date.parse(value);
       return !isNaN(date);
     },
     {
-      message: "Enter expected delivery date", // Custom error message
-    }
+      message: 'Enter expected delivery date', // Custom error message
+    },
   ),
-  otherDetails: z
-    .string()
-    .min(1, "Enter addition details about order proposal."),
+  otherDetails: z.string().min(1, 'Enter addition details about order proposal.'),
 });
 
-const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
-  show,
-  handleClose,
-  proposalId,
-}) => {
+const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handleClose, proposalId }) => {
   const {
     register,
     handleSubmit,
@@ -57,19 +48,19 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
   const [addNewProposal] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSeletedFile] = useState<File>();
-  const [filePath, setFilePath] = useState("");
+  const [filePath, setFilePath] = useState('');
 
   useEffect(() => {
     const uploadFiles = async () => {
       if (selectedFile) {
         try {
           const formData = new FormData();
-          formData.append("UploadFile", selectedFile);
+          formData.append('UploadFile', selectedFile);
           const response = await uploadFile(formData);
           setFilePath(response.data.message);
-          console.log("File uploaded successfully:", response);
+          console.log('File uploaded successfully:', response);
         } catch (error) {
-          console.error("Error uploading file:", error);
+          console.error('Error uploading file:', error);
         }
       }
     };
@@ -83,7 +74,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         amount: data.amount,
         delieveryDate: data.EDD,
         otherDetails: data.otherDetails,
-        fileName: selectedFile ? selectedFile.name : "No file uploaded",
+        fileName: selectedFile ? selectedFile.name : 'No file uploaded',
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: filePath,
@@ -95,7 +86,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
       reset(); // Reset the form
       setSeletedFile(undefined);
     } catch (error) {
-      console.error("Error submitting proposal:", error);
+      console.error('Error submitting proposal:', error);
     }
   };
 
@@ -113,80 +104,36 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <div className="singleLineControl tw-flex  tw-gap-5">
-              <Form.Group
-                className="tw-mb-3 tw-flex-1"
-                controlId="formBasicAmount"
-              >
+              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
                 <Form.Label className="tw-text-sm">Amount</Form.Label>
-                <Form.Control
-                  type="number"
-                  className="form-control customInput"
-                  {...register("amount")}
-                  isInvalid={!!errors.amount}
-                  placeholder="Enter amount"
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.amount?.message}
-                </Form.Control.Feedback>
+                <Form.Control type="number" className="form-control customInput" {...register('amount')} isInvalid={!!errors.amount} placeholder="Enter amount" />
+                <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group
-                className="tw-mb-3 tw-flex-1"
-                controlId="formBasicEDD"
-              >
-                <Form.Label className="tw-text-sm">
-                  Expected Delivery Date
-                </Form.Label>
-                <Form.Control
-                  type="date"
-                  placeholder="Select a date"
-                  style={{ width: "270px", height: "50px" }}
-                  {...register("EDD")}
-                  isInvalid={!!errors.EDD}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.EDD?.message}
-                </Form.Control.Feedback>
+              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
+                <Form.Label className="tw-text-sm">Expected Delivery Date</Form.Label>
+                <Form.Control type="date" placeholder="Select a date" style={{ width: '270px', height: '50px' }} {...register('EDD')} isInvalid={!!errors.EDD} />
+                <Form.Control.Feedback type="invalid">{errors.EDD?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
             <Form.Group controlId="formBasicOtherDetails">
               <Form.Label className="tw-text-sm">Other Details</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={5}
-                placeholder="Enter text here"
-                style={{ width: "100%" }}
-                {...register("otherDetails")}
-                isInvalid={!!errors.otherDetails}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.otherDetails?.message}
-              </Form.Control.Feedback>
+              <Form.Control as="textarea" rows={5} placeholder="Enter text here" style={{ width: '100%' }} {...register('otherDetails')} isInvalid={!!errors.otherDetails} />
+              <Form.Control.Feedback type="invalid">{errors.otherDetails?.message}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group
-              className="tw-flex tw-flex-col"
-              controlId="formBasicUploadDocument"
-            >
-              <Form.Label className="tw-text-sm">
-                Upload Document (if any)
-              </Form.Label>
+            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
+              <Form.Label className="tw-text-sm">Upload Document (if any)</Form.Label>
               <div className="tw-flex">
-                <Button
-                  variant="default"
-                  onClick={handleFileInputClick}
-                  className="custom-file-upload-button"
-                >
+                <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
                   Upload the document
                 </Button>
-                <p className="tw-mt-auto tw-mb-auto tw-ml-1">
-                  {selectedFile?.name}
-                </p>
+                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
               </div>
               <Form.Control
                 type="file"
                 ref={fileInputRef}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 onChange={(e) => {
                   const files = (e.target as HTMLInputElement).files;
                   if (files && files.length > 0) {

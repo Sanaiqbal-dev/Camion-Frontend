@@ -1,51 +1,32 @@
-import { RequestColumns } from "./TableColumns/RequestColumns";
-import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import FilterIcon from "../../assets/icons/ic-filter.svg";
-import { useEffect, useState } from "react";
-import CreateNewRequest from "../Modals/CreateNewRequest";
-import ShippementDetails from "../Modals/ShippementDetails";
-import {
-  IProposal,
-  IProposalResponseData,
-  IShipmentDetails,
-} from "@/interface/proposal";
-import { INewRequest, IRequestTable } from "@/interface/shipper";
-import { useGetShipmentTypesQuery } from "@/services/shipmentType";
-import {
-  useCreateNewProposalMutation,
-  useDeleteProposalMutation,
-  useGetProposalsQuery,
-  useUpdateProposalMutation,
-} from "@/services/proposal";
-import { useAppSelector } from "@/state";
-import { PAGER_SIZE } from "@/config/constant";
-import { QueryPager } from "@/interface/common";
-import { ColumnDef } from "@tanstack/react-table";
-import ConfirmationModal from "../Modals/ConfirmationModal";
-import { useNavigate } from "react-router-dom";
-import { debounce } from "@/util/debounce";
+import { RequestColumns } from './TableColumns/RequestColumns';
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import FilterIcon from '../../assets/icons/ic-filter.svg';
+import { useEffect, useState } from 'react';
+import CreateNewRequest from '../Modals/CreateNewRequest';
+import ShippementDetails from '../Modals/ShippementDetails';
+import { IProposal, IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
+import { INewRequest, IRequestTable } from '@/interface/shipper';
+import { useGetShipmentTypesQuery } from '@/services/shipmentType';
+import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
+import { useAppSelector } from '@/state';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { ColumnDef } from '@tanstack/react-table';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { debounce } from '@/util/debounce';
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
   const [sendProposalRequest, setSendProposalRequest] = useState(false);
 
-  const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] =
-    useState(false);
-  const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] =
-    useState(false);
-  const [showShippementDetailsModal, setShowShippementDetailsModal] =
-    useState(false);
+  const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] = useState(false);
+  const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] = useState(false);
+  const [showShippementDetailsModal, setShowShippementDetailsModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const shipmentData = useGetShipmentTypesQuery();
@@ -58,7 +39,7 @@ const ShipperRequests = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
@@ -90,9 +71,7 @@ const ShipperRequests = () => {
   }
 
   //Create New Proposal implementation...
-  const [proposalItem, setProposalItem] = useState<IProposalResponseData>(
-    {} as IProposalResponseData
-  );
+  const [proposalItem, setProposalItem] = useState<IProposalResponseData>({} as IProposalResponseData);
 
   const CreateUserNextStep = (requestObj: INewRequest) => {
     setProposalItem((prevItem) => ({
@@ -106,7 +85,7 @@ const ShipperRequests = () => {
       originDistrictId: requestObj.districtId,
     }));
 
-    console.log("userId: ", userData);
+    console.log('userId: ', userData);
     SetShowCreateUserModalFirstStep(false);
     SetShowCreateUserModalSecondStep(true);
   };
@@ -127,33 +106,18 @@ const ShipperRequests = () => {
     setShowShippementDetailsModal(true);
   };
 
-  const setShipmentDetails = async (
-    data: IShipmentDetails,
-    shipmentType: string
-  ) => {
+  const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
     const shipmentDataAll = shipmentData.data;
     const shipmentTypeId =
-      shipmentDataAll?.find(
-        (type: { shipmentTypeName: string }) =>
-          type.shipmentTypeName === shipmentType
-      ) &&
-      shipmentDataAll?.find(
-        (type: { shipmentTypeName: string }) =>
-          type.shipmentTypeName === shipmentType
-      ).id;
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType).id;
 
-    const shipmentTruckTypeDefault =
-      shipmentType === "Truck" ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
-    const shipmentQuantityVal =
-      shipmentType === "Box"
-        ? data.numberOfBoxes
-        : shipmentType === "Pallet"
-        ? data.numberOfPallets
-        : 0;
+    const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTruck: 0, truckTypeId: 0 }];
+    const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
 
-    const itemWeight = shipmentType === "Truck" ? "0" : data.weightPerItem;
-    const itemHeight = shipmentType === "Other" ? data.height : 0;
-    const otherItemName = shipmentType === "Other" ? data.otherType : "";
+    const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
+    const itemHeight = shipmentType === 'Other' ? data.height : 0;
+    const otherItemName = shipmentType === 'Other' ? data.otherType : '';
 
     setProposalItem((prevItem) => ({
       ...prevItem,
@@ -162,19 +126,15 @@ const ShipperRequests = () => {
       length: data.length ? data.length : 0,
       width: data.width ? data.width : 0,
       height: itemHeight,
-      isCargoItemsStackable: data.isCargoItemsStackable
-        ? data.isCargoItemsStackable
-        : false,
-      isIncludingItemsARGood: data.isIncludingItemsARGood
-        ? data.isIncludingItemsARGood
-        : false,
+      isCargoItemsStackable: data.isCargoItemsStackable ? data.isCargoItemsStackable : false,
+      isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
       shipmentTruckType: shipmentTruckTypeDefault,
       userId: userData.user.userId,
       weight: itemWeight,
       otherName: otherItemName,
       proposalId: isEditProposal ? selectedProposalItem : 0,
-      FileName: "",
-      FilePath: "",
+      FileName: '',
+      FilePath: '',
     }));
 
     setSendProposalRequest(false);
@@ -190,10 +150,8 @@ const ShipperRequests = () => {
         destination: currentRequestObject.destination,
         weight: currentRequestObject.weight,
         dimentions: currentRequestObject.dimentions,
-        ETA: currentRequestObject.estimatedDeliveryTime
-          ? currentRequestObject.estimatedDeliveryTime
-          : "-",
-        action: "",
+        ETA: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',
+        action: '',
       }));
 
       setRequestTableData((prevData) => [...prevData, ...updatedRequestData]);
@@ -212,7 +170,7 @@ const ShipperRequests = () => {
   };
 
   const onProposalList = () => {
-    navigate("/shipper/proposals");
+    navigate('/shipper/proposals');
   };
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
     onEdit,
@@ -223,9 +181,9 @@ const ShipperRequests = () => {
   const DeleteProposal = async () => {
     try {
       const result = await deleteProposal({ id: deleteItemId });
-      console.log("Proposal deleted successfully:", result);
+      console.log('Proposal deleted successfully:', result);
     } catch (error) {
-      console.error("Error deleting proposal:", error);
+      console.error('Error deleting proposal:', error);
     }
   };
 
@@ -251,14 +209,9 @@ const ShipperRequests = () => {
     }
   }, [error]);
   const ProposalCreateOrUpdateRequest = async () => {
-    const response = isEditProposal
-      ? await updateProposal(proposalItem)
-      : await createNewProposal(proposalItem);
+    const response = isEditProposal ? await updateProposal(proposalItem) : await createNewProposal(proposalItem);
     if (response) {
-      console.log(
-        "Create New Proposal response: ",
-        response?.data.result?.result
-      );
+      console.log('Create New Proposal response: ', response?.data.result?.result);
       FilterDataForTable(response?.data.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
@@ -284,19 +237,11 @@ const ShipperRequests = () => {
   }, [sendProposalRequest]);
 
   useEffect(() => {
-    if (
-      showCreateUserModalFirstStep == false &&
-      showCreateUserModalSecondStep == false &&
-      showShippementDetailsModal == false
-    ) {
+    if (showCreateUserModalFirstStep == false && showCreateUserModalSecondStep == false && showShippementDetailsModal == false) {
       setIsEditProposal(false);
       setSelectedProposalItem({} as IProposalResponseData);
     }
-  }, [
-    showCreateUserModalFirstStep,
-    showCreateUserModalSecondStep,
-    showShippementDetailsModal,
-  ]);
+  }, [showCreateUserModalFirstStep, showCreateUserModalSecondStep, showShippementDetailsModal]);
 
   return (
     <div className="table-container">
@@ -307,11 +252,7 @@ const ShipperRequests = () => {
           </button>
         </div>
         <div>
-          <button
-            className="add-item-btn"
-            id="add-driver-btn"
-            onClick={() => SetShowCreateUserModalFirstStep(true)}
-          >
+          <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
             Create new Request
           </button>
         </div>
@@ -323,30 +264,13 @@ const ShipperRequests = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -361,42 +285,23 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-                onChange={handleInputChange}
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {requestTableData && (
-        <DataTable columns={columns} data={requestTableData} isAction={false} />
-      )}
+      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={false} />}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          disabled={pager.page < 2}
-          onClick={() => updatePage(-1)}
-        >
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => updatePage(+1)}
-          disabled={pager.page >= Math.floor(totalPageCount)}
-        >
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
           <img src={NextIcon} />
         </Button>
       </div>
       <CreateNewRequest
         show={showCreateUserModalFirstStep}
-        infoType={"origin"}
+        infoType={'origin'}
         isEdit={isEditProposal}
         proposalObject={selectedProposalItem ? selectedProposalItem : undefined}
         handleClose={() => {
@@ -408,13 +313,9 @@ const ShipperRequests = () => {
       />
       <CreateNewRequest
         show={showCreateUserModalSecondStep}
-        infoType={"destination"}
+        infoType={'destination'}
         isEdit={isEditProposal}
-        proposalObject={
-          isEditProposal && selectedProposalItem
-            ? selectedProposalItem
-            : undefined
-        }
+        proposalObject={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
         handleClose={() => {
           SetShowCreateUserModalSecondStep(false);
           setIsEditProposal(false);
@@ -425,11 +326,7 @@ const ShipperRequests = () => {
       <ShippementDetails
         show={showShippementDetailsModal}
         isEdit={isEditProposal}
-        proposalId={
-          isEditProposal && selectedProposalItem
-            ? selectedProposalItem
-            : undefined
-        }
+        proposalId={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
         handleClose={() => {
           setShowShippementDetailsModal(false);
           setIsEditProposal(false);
@@ -440,10 +337,10 @@ const ShipperRequests = () => {
       <ConfirmationModal
         promptMessage={
           isEditProposal
-            ? "Are you sure, you want to update this request?"
+            ? 'Are you sure, you want to update this request?'
             : isDeletePropoasl
-            ? "Are you sure, you want to delete this request?"
-            : "Are you sure, you want to create new request?"
+              ? 'Are you sure, you want to delete this request?'
+              : 'Are you sure, you want to create new request?'
         }
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}

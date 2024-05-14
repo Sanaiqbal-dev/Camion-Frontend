@@ -1,4 +1,4 @@
-import { Pager } from "./common";
+import { Pager } from './common';
 export interface IProposal {
   id: number;
   originBuildingNo: string;
@@ -9,16 +9,16 @@ export interface IProposal {
   originAdditionalNo: string;
   originUnitNo: string;
   originDistrictId: number;
-  originDistrict:IPlaces
+  originDistrict: IPlaces;
   destinationBuildingNo: string;
   destinationStreetName: string;
   destinationCityId: number;
-  destinationCity:IPlaces;
+  destinationCity: IPlaces;
   destinationZipCode: string;
   destinationAdditionalNo: string;
   destinationUnitNo: string;
   destinationDistrictId: number;
-  destinationDistrict:IPlaces;
+  destinationDistrict: IPlaces;
   shipmentTypeId: number;
   shipmentQuantity: number;
   length: number | null;
@@ -84,14 +84,13 @@ export interface ProposalPager extends Pager {
   results: IProposalIndex[];
 }
 
-
-export interface IProposalResponseData{
+export interface IProposalResponseData {
   id: number;
-  origin:string;
-  destination:string;
+  origin: string;
+  destination: string;
   weight: string;
-  dimentions:string;
-  estimatedDeliveryTime: string|null;
+  dimentions: string;
+  estimatedDeliveryTime: string | null;
   hasSubmitedByMe: boolean;
 }
 export interface ProposalResult {
@@ -99,7 +98,7 @@ export interface ProposalResult {
   currentPage: number;
   showCount: number;
   pageCount: number;
-  result: IProposalResponseData[] ;
+  result: IProposalResponseData[];
 }
 export interface IProposalResponseObject {
   statusCode: number;
@@ -131,7 +130,7 @@ export interface IPlacesResponseObject {
   statusCode: number;
   result: IPlaces[];
 }
-export interface IPlaces{
-  id:number;
-  name:string;
+export interface IPlaces {
+  id: number;
+  name: string;
 }

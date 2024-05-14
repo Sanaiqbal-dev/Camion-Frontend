@@ -22,7 +22,7 @@ export interface SelectedObj {
   child?: SelectedObj;
 }
 
-export type RelationshipType = "M2M" | "O2M" | "M2O" | "" | undefined;
+export type RelationshipType = 'M2M' | 'O2M' | 'M2O' | '' | undefined;
 export interface ChildObj {
   objName: string | undefined;
   openDrawer: boolean;
@@ -34,7 +34,7 @@ export interface ChildObj {
 }
 export interface ISessionUser {
   email: string;
-  role: "Admin" | "Carrier" | "Shipper";
+  role: 'Admin' | 'Carrier' | 'Shipper';
   userId: string;
 }
 
@@ -52,7 +52,7 @@ export interface IFile {
 
 export interface ILanguage {
   code: string;
-  dir: "rtl" | "ltr";
+  dir: 'rtl' | 'ltr';
 }
 
 export interface IAPIResponse<T> {

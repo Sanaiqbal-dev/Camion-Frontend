@@ -1,53 +1,44 @@
-import baseApi from "./baseApi";
-import {
-  IAPIResponse,
-  IFile,
-  IProposalForm,
-  IUploadFile,
-} from "@/interface/common";
+import baseApi from './baseApi';
+import { IAPIResponse, IFile, IProposalForm, IUploadFile } from '@/interface/common';
 
 export const fileHandling = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     uploadFile: builder.mutation<IAPIResponse<IFile>, IUploadFile>({
       query: (body) => ({
-        url: "/Account/FileUpload",
-        method: "POST",
+        url: '/Account/FileUpload',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["FileUpload"],
+      invalidatesTags: ['FileUpload'],
     }),
     addNewProposal: builder.mutation<IAPIResponse<IFile>, IProposalForm>({
       query: (body) => ({
-        url: "/api/ProposalQuotations/AddNewProposalQuotation",
-        method: "POST",
+        url: '/api/ProposalQuotations/AddNewProposalQuotation',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["ProposalQuotation"],
+      invalidatesTags: ['ProposalQuotation'],
     }),
     downloadFile: builder.query<IAPIResponse<IFile>, string>({
       query: (filename) => ({
         url: `/Account/FileDownload?filename=${filename}`,
-        method: "GET",
+        method: 'GET',
         responseHandler: async (response) => {
           const blob = await response.blob();
           const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
+          const a = document.createElement('a');
           a.href = url;
           a.download = filename.toLowerCase();
           a.click();
           URL.revokeObjectURL(url);
           return response;
         },
-        cache: "no-cache",
+        cache: 'no-cache',
       }),
-      providesTags: ["FileDownload"],
+      providesTags: ['FileDownload'],
     }),
   }),
 });
-export const {
-  useUploadFileMutation,
-  useAddNewProposalMutation,
-  useDownloadFileQuery,
-} = fileHandling;
+export const { useUploadFileMutation, useAddNewProposalMutation, useDownloadFileQuery } = fileHandling;
 
 //

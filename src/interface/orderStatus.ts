@@ -1,33 +1,22 @@
 import { Pager } from './common';
 export interface IOrderStatus {
-
-		id:	number;
-		description:	string;
-
+  id: number;
+  description: string;
 }
 
 export interface IOrderStatusIndex extends IOrderStatus {
-
-		 orderStatusLabel: string;
-
+  orderStatusLabel: string;
 }
 
-export interface IOrderStatusSingle extends IOrderStatus {
-
-
-}
+export interface IOrderStatusSingle extends IOrderStatus {}
 
 export interface OrderStatusPager extends Pager {
-	results: IOrderStatusIndex[];
+  results: IOrderStatusIndex[];
 }
-export interface OrderStatusIndexQuery extends Pager {
-
-}
+export interface OrderStatusIndexQuery extends Pager {}
 export interface IOrderStatusSearch {
-		id?:	number;
-		searchTerm?:	string;
-
-
+  id?: number;
+  searchTerm?: string;
 }
 
 export interface IOrderStatusResponseObject {

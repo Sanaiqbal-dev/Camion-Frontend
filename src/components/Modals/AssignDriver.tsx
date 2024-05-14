@@ -1,10 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button, Form, Modal } from "react-bootstrap";
-import React from "react";
-import { IDriver } from "@/interface/carrier";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React from 'react';
+import { IDriver } from '@/interface/carrier';
 
 interface AssignVehicleModalProps {
   show: boolean;
@@ -16,15 +16,10 @@ interface IdriverForm {
   driver: string;
 }
 export const schema = z.object({
-  driver: z.string().min(1, "Select Driver"),
+  driver: z.string().min(1, 'Select Driver'),
 });
 
-const AssignDriver: React.FC<AssignVehicleModalProps> = ({
-  show,
-  drivers,
-  handleClose,
-  onAssignDriver,
-}) => {
+const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, handleClose, onAssignDriver }) => {
   const {
     register,
     handleSubmit,
@@ -45,30 +40,23 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Form.Group
-            className="mb-3"
-            style={{ minWidth: "436px" }}
-            controlId="formBasicEmail"
-          >
+          <Form.Group className="mb-3" style={{ minWidth: '436px' }} controlId="formBasicEmail">
             <Form.Label>Drivers</Form.Label>
             <Form.Control
               as="select"
-              {...register("driver", {
-                required: "driver is required",
-              })}
-            >
+              {...register('driver', {
+                required: 'driver is required',
+              })}>
               <option value="">Select a driver</option>
               {drivers.map((d, index) => {
                 return (
-                  <option key={"driverOption_" + index} value={d.id}>
+                  <option key={'driverOption_' + index} value={d.id}>
                     {d.name}
                   </option>
                 );
               })}
             </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {errors.driver?.message}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.driver?.message}</Form.Control.Feedback>
           </Form.Group>
 
           <Button variant="primary" type="submit">

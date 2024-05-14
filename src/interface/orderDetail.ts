@@ -1,6 +1,6 @@
-import { Pager } from "./common";
-import { IOrderStatus } from "./orderStatus";
-import { IPlaces, IShipmentType } from "./proposal";
+import { Pager } from './common';
+import { IOrderStatus } from './orderStatus';
+import { IPlaces, IShipmentType } from './proposal';
 export interface IOrder {
   id: number;
   proposalId: number;

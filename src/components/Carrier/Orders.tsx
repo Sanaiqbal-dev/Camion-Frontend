@@ -1,32 +1,20 @@
-import { DataTable } from "../ui/DataTable";
-import {
-  Button,
-  Col,
-  FormControl,
-  Image,
-  InputGroup,
-  Row,
-} from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import { OrderColumns } from "./TableColumns/OrdersColumn";
-import { useEffect, useState } from "react";
-import { IOrderTable } from "../../interface/carrier";
-import { ColumnDef } from "@tanstack/react-table";
-import AssignVehicle from "../Modals/AssignVehicle";
-import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../Modals/ConfirmationModal";
-import {
-  useAssignVehicleToOrderMutation,
-  useDeleteOrderMutation,
-  useGetOrdersQuery,
-  useUpdateOrderMutation,
-} from "@/services/order";
-import { QueryPager } from "@/interface/common";
-import { PAGER_SIZE } from "@/config/constant";
-import { IOrderResponseData } from "@/interface/orderDetail";
-import { debounce } from "@/util/debounce";
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import { OrderColumns } from './TableColumns/OrdersColumn';
+import { useEffect, useState } from 'react';
+import { IOrderTable } from '../../interface/carrier';
+import { ColumnDef } from '@tanstack/react-table';
+import AssignVehicle from '../Modals/AssignVehicle';
+import { useNavigate } from 'react-router-dom';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import { useAssignVehicleToOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import { QueryPager } from '@/interface/common';
+import { PAGER_SIZE } from '@/config/constant';
+import { IOrderResponseData } from '@/interface/orderDetail';
+import { debounce } from '@/util/debounce';
 
 export interface StatusProps {
   id: string;
@@ -39,7 +27,7 @@ const Orders = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
@@ -75,14 +63,14 @@ const Orders = () => {
     setShowAssignVehicleForm(false);
   };
   const onDelete = (orderId: number) => {
-    console.log("Delete is clicked on :", orderId);
+    console.log('Delete is clicked on :', orderId);
     setSelectedOrderId(orderId);
 
     setShowDeleteForm(true);
   };
   const onPrintBill = (orderItemId: number) => {
-    console.log("Print Bayan Bill is clicked on order: ", orderItemId);
-    navigate("/carrier/bayanBill");
+    console.log('Print Bayan Bill is clicked on order: ', orderItemId);
+    navigate('/carrier/bayanBill');
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
@@ -90,9 +78,9 @@ const Orders = () => {
         orderId: id,
         orderStatusId: statusId,
       });
-      console.log("status update:", response);
+      console.log('status update:', response);
     } catch (error) {
-      console.log("status update error: ", error);
+      console.log('status update error: ', error);
     }
   };
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
@@ -120,9 +108,9 @@ const Orders = () => {
     setShowDeleteForm(false);
     try {
       const result = await deleteOrder({ id: selectedOrderId });
-      console.log("Proposal deleted successfully:", result);
+      console.log('Proposal deleted successfully:', result);
     } catch (error) {
-      console.error("Error deleting proposal:", error);
+      console.error('Error deleting proposal:', error);
     }
   };
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
@@ -135,12 +123,10 @@ const Orders = () => {
             origin: currentOrderObject.origin,
             destination: currentOrderObject.destination,
             weight: currentOrderObject.weight,
-            dimentions: currentOrderObject.dimentions
-              ? currentOrderObject.dimentions
-              : "-",
+            dimentions: currentOrderObject.dimentions ? currentOrderObject.dimentions : '-',
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
-            action: "",
+            action: '',
           };
         });
 
@@ -185,30 +171,13 @@ const Orders = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -223,46 +192,23 @@ const Orders = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-                onChange={handleInputChange}
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {orderTableData && (
-        <DataTable isAction={false} columns={columns} data={orderTableData} />
-      )}
+      {orderTableData && <DataTable isAction={false} columns={columns} data={orderTableData} />}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
-        <Button
-          className="img-prev"
-          variant="outline"
-          size="sm"
-          disabled={pager.page < 2}
-          onClick={() => updatePage(-1)}
-        >
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
-        <Button
-          className="img-next"
-          variant="outline"
-          size="sm"
-          onClick={() => updatePage(+1)}
-          disabled={pager.page >= Math.floor(totalPageCount)}
-        >
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
           <img src={NextIcon} />
         </Button>
       </div>
-      <AssignVehicle
-        show={showAssignVehicleForm}
-        handleClose={() => setShowAssignVehicleForm(false)}
-        onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
-      />
+      <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
       <ConfirmationModal
-        promptMessage={"Are you sure, you want to delete this order?"}
+        promptMessage={'Are you sure, you want to delete this order?'}
         show={showDeleteForm}
         handleClose={() => setShowDeleteForm(false)}
         performOperation={() => DeleteOrder()}
