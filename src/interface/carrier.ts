@@ -10,13 +10,18 @@ export type IBayanItem = {
 export type IDriver = {
   id: string;
   name: string;
-  driverId: string;
+  driverId: number;
   licenseNumber: string;
-  DOB: string;
-  nationality: string;
-  phoneNumber: string;
+  dob: string;
+  driverNationality: {name:string};
+  nationalityId:number;
+  phoneNumber?: string;
+  mobileno?:string;
   viewIqama: string;
+  mobileNo: string;
   action: string;
+  iqamaId:string;
+  fileName?:any
 };
 export type IRequest = {
   id: number;
@@ -32,10 +37,11 @@ export type IRequest = {
 export type IVehicle = {
   id: number;
   driver: string;
-  vehicleType: string;
+  vehicleType: { typeName: string };
   modelYear: string;
   vehicleNumber: string;
   color: string;
+  numberPlate: string;
   registrationNumber: string;
   IMEINumber: string;
   vehicleRegistration: string;

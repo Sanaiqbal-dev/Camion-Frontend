@@ -1,4 +1,4 @@
-import { useAddNewProposalMutation, useUploadFileMutation } from '@/services/fileHandling';
+import { useUploadFileMutation } from '@/services/fileHandling';
 import { useAppSelector } from '@/state';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useRef, useState } from 'react';
@@ -17,7 +17,7 @@ interface ProposalDetailsModalProps {
   show: boolean;
   handleClose: () => void;
   submitProposal: (proposal: IProposalForm) => void;
-  proposalId: number;
+  proposalId?: number;
 }
 
 const schema = z.object({
@@ -80,7 +80,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
         proposalQuotationId: 0,
         proposalQuotationStatusId: 0,
         filePath: filePath,
-        purposalId: proposalId,
+        purposalId: proposalId!,
         userId: userId,
       });
       console.log(proposalResponse);
@@ -157,3 +157,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
 };
 
 export default ProposalDetailsForm;
+function useAddNewProposalMutation(): [any] {
+  throw new Error('Function not implemented.');
+}

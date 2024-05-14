@@ -126,13 +126,14 @@ export interface ICompanyProfile {
 }
 
 export interface IDriver {
-  id?: number;
+  id?: number | string;
   name: string;
   iqamaId: string;
   licenseNumber: string;
   dob: string;
-  nationalityId: number;
+  nationalityId: number | string;
   phoneNumber: string;
+  mobileNo?: string;
   fileName: string;
   filePath: string;
   driverId: number;

@@ -44,7 +44,7 @@ export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqam
       const driverId = row.original.id;
 
       return (
-        <div onClick={() => onIqamaDownloadClick(driverId)}>
+        <div onClick={() => onIqamaDownloadClick(parseInt(driverId))}>
           <Link to={''}>View Iqama/ID</Link>
         </div>
       );
@@ -58,11 +58,11 @@ export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqam
       const driverId = row.original.id;
       return (
         <div className="action-container" style={{ justifyContent: 'start' }}>
-          <div onClick={() => onUpdateDriver(driverId)}>
+          <div onClick={() => onUpdateDriver(parseInt(driverId))}>
             <img src={IconEdit} />
             <span style={{ color: '#27AE60' }}>Edit</span>
           </div>
-          <div onClick={() => onDeleteDriver(driverId)}>
+          <div onClick={() => onDeleteDriver(parseInt(driverId))}>
             <img src={IconDelete} />
             <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
