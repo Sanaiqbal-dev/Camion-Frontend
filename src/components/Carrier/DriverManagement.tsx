@@ -18,10 +18,10 @@ const DriverManagement = () => {
   const [downloadFile] = useLazyDownloadFileQuery();
 
   const tableData: IDriver[] = getDriversList.data?.result.result;
-  const driversData:any = tableData?.map((item) => ({
+  const driversData: any = tableData?.map((item) => ({
     id: item.id,
     name: item.name,
-    iqamaId: item.viewIqama,
+    iqamaId: item.iqamaId,
     licenseNumber: item.licenseNumber,
     dob: item.dob,
     nationality: item.driverNationality.name,
@@ -35,8 +35,6 @@ const DriverManagement = () => {
   const [entriesValue, setEntriesValue] = useState(10);
   const [showAddDriverModal, setShowAddDriverModal] = useState(false);
   const [editDriverData, setEditDriverData] = useState<IDriver>();
-
-
 
   const onDeleteDriver = async (id: number) => {
     try {
@@ -141,7 +139,7 @@ const DriverManagement = () => {
         </Row>
       </div>
       {driversData && <DataTable isAction={true} columns={columns} data={driversData} />}
-      <AddDriver show={showAddDriverModal} handleClose={handleCloseModal} driverExistingData={editDriverData}  />
+      <AddDriver show={showAddDriverModal} handleClose={handleCloseModal} driverExistingData={editDriverData} />
     </div>
   );
 };

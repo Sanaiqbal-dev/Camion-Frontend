@@ -115,8 +115,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
           mobileNo: data.phoneNumber,
           iqamaId: data.iqamaId,
           driverId: 0,
-          filePath: 'Not Implemented yet',
-          fileName: 'To be implemented Yet',
+          filePath: filePath,
+          fileName: file ? file.name : 'no file uploaded.',
         });
       }
       handleClose();
