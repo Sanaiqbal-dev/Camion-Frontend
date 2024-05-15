@@ -1,9 +1,9 @@
 import { DataTable } from '../ui/DataTable';
-import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import IconFilter from '../../assets/icons/ic-filter.svg';
+// import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import { VehicleManagementColumns } from './TableColumns/VehicleManagementColumns';
 import { IDriver, IVehicle } from '../../interface/carrier';
@@ -24,6 +24,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
+import { useGetDriversListQuery } from '@/services/drivers';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -31,13 +32,16 @@ const VehicleManagement = () => {
     pageSize: PAGER_SIZE,
   });
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const values = [10, 20, 30, 40, 50];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [entriesValue, setEntriesValue] = useState(10);
 
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
-  // const [drivers, setDrivers] = useState<IDriver[]>([]);
-  const drivers: IDriver[] = [];
+  const [drivers, setDrivers] = useState<IDriver[]>([]);
   const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
 
   const [showDriverModal, setShowDriverModal] = useState(false);
@@ -56,11 +60,20 @@ const VehicleManagement = () => {
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
   const [editVehicle] = useEditVehicleMutation();
+  const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
+
   useEffect(() => {
     if (!isLoading) {
       data.result.total > 0 && setVehicles(data.result.result);
+      const maxPageCount = data.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
     }
-  }, [isLoading]);
+  }, [data?.result?.result, data?.result?.total, entriesValue, isLoading]);
+  useEffect(() => {
+    if (!isLoadingDrivers) {
+      getDriversList?.result?.total > 0 && setDrivers(getDriversList!.result!.result);
+    }
+  }, [isLoadingDrivers]);
   useEffect(() => {
     if (!isLoadingVehicleTypes) {
       setVehicleTypes(vehicleTypesData.result);
@@ -141,9 +154,6 @@ const VehicleManagement = () => {
     downloadSelectedFile(selectedVehicle?.fileName);
   };
 
-  const values = [10, 20, 30, 40, 50];
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [entriesValue, setEntriesValue] = useState(10);
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
@@ -159,14 +169,15 @@ const VehicleManagement = () => {
   }
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      // Perform your search operation here
-      setSearchTerm(search);
-    }
-  }, 3000); // Adjust the delay time as needed
+    setSearchTerm(() => search);
+  }, 1000);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     debouncedSearch(value);
+  };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
   };
 
   const columns = VehicleManagementColumns({
@@ -181,9 +192,9 @@ const VehicleManagement = () => {
       <div className="table-container">
         <div className="search-and-entries-container">
           <div>
-            <button className="filter-btn">
+            {/* <button className="filter-btn">
               <img src={IconFilter} /> Filter
-            </button>
+            </button> */}
           </div>
           <div>
             <button
@@ -230,6 +241,21 @@ const VehicleManagement = () => {
           </Row>
         </div>
         {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <></>}
+        {data && (
+          <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+            <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= data.result.total} onClick={() => updatePage(-1)}>
+              <img src={PreviousIcon} />
+            </Button>
+            <Button
+              className="img-next"
+              variant="outline"
+              size="sm"
+              onClick={() => updatePage(+1)}
+              disabled={pager.page >= Math.floor(totalPageCount) || entriesValue >= data.result.total}>
+              <img src={NextIcon} />
+            </Button>
+          </div>
+        )}
       </div>
       <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
       <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />

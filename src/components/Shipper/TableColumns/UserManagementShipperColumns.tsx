@@ -11,6 +11,9 @@ export const UserManagementShipperColumns = ({ onEdit, onDelete }: UserActionsPr
   {
     accessorKey: 'userName',
     header: 'User Name',
+    cell: ({ row }) => {
+      return <div>{row.original.fullName}</div>;
+    },
   },
   {
     accessorKey: 'email',

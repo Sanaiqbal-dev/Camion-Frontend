@@ -62,9 +62,6 @@ export const VehicleManagementColumns = ({
   {
     accessorKey: 'imeiNumber',
     header: 'IMEI Number',
-    cell: ({ row }) => {
-      return <div>{row.original.IMEINumber}</div>;
-    },
   },
 
   {
