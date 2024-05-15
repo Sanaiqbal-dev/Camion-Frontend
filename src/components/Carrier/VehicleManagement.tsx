@@ -24,6 +24,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
+import { useGetDriversListQuery } from '@/services/drivers';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -36,8 +37,7 @@ const VehicleManagement = () => {
   const [vehicleTypes, setVehicleTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
-  // const [drivers, setDrivers] = useState<IDriver[]>([]);
-  const drivers: IDriver[] = [];
+  const [drivers, setDrivers] = useState<IDriver[]>([]);
   const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
 
   const [showDriverModal, setShowDriverModal] = useState(false);
@@ -56,11 +56,18 @@ const VehicleManagement = () => {
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
   const [editVehicle] = useEditVehicleMutation();
+  const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery();
+
   useEffect(() => {
     if (!isLoading) {
       data.result.total > 0 && setVehicles(data.result.result);
     }
   }, [isLoading]);
+  useEffect(() => {
+    if (!isLoadingDrivers) {
+      getDriversList?.result?.total > 0 && setDrivers(getDriversList!.result!.result);
+    }
+  }, [isLoadingDrivers]);
   useEffect(() => {
     if (!isLoadingVehicleTypes) {
       setVehicleTypes(vehicleTypesData.result);

@@ -58,7 +58,7 @@ export interface ILanguage {
 export interface IAPIResponse<T> {
   result: any;
   data: {
-    statusCode?:number;
+    statusCode?: number;
     message: string;
   };
   success: boolean;
@@ -71,16 +71,17 @@ export interface IAPIResponse<T> {
 export interface IUserManagement {
   id: string;
   userName: string;
+  fullName: string;
   email: string;
   action: string;
 }
 
-export interface IFileUploadResponse{
+export interface IFileUploadResponse {
   data?: IGenericResponse;
 }
-export interface IGenericResponse{
-  message:string;
-  statusCode:number
+export interface IGenericResponse {
+  message: string;
+  statusCode: number
 }
 export interface IFile {
   id: number;
@@ -183,7 +184,7 @@ export interface IPassword {
   confirmPassword: string;
 }
 
-export interface IVehicleType{
-                    id: number,
-                    typeName:string;
+export interface IVehicleType {
+  id: number,
+  typeName: string;
 }
