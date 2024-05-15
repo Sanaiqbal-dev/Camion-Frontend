@@ -9,8 +9,26 @@ export const reportsApi = baseApi.injectEndpoints({
       query: (queryParams) => `api/ReportManager/GetUserReportList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Order'],
     }),
+    downloadReport: builder.query<IAPIResponse<IReportResponseObject>, string>({
+      query: (userId) => ({
+        url: `/api/ReportManager/ReportDownload?userId=${userId}`,
+        method: 'GET',
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `report_${userId}.xlsx`;
+          a.click();
+          URL.revokeObjectURL(url);
+          return response;
+        },
+        cache: 'no-cache',
+      }),
+
+      providesTags: ['FileDownload'],
+    }),
   }),
 });
 
-// Export hooks for use in the app
-export const { useGetReportsQuery } = reportsApi;
+export const { useGetReportsQuery, useLazyDownloadReportQuery } = reportsApi;

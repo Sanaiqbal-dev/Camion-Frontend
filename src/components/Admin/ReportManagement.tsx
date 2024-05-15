@@ -6,8 +6,7 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
-// import { useAppSelector } from '@/state';
-import { useGetReportsQuery } from '@/services/report';
+import { useGetReportsQuery, useLazyDownloadReportQuery } from '@/services/report';
 import { ColumnDef } from '@tanstack/react-table';
 import { IReport } from '@/interface/reports';
 import { ReportsColumn } from './TableColumns/ReportColumns';
@@ -20,8 +19,7 @@ const ReportManagement = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState<string>('');
-
-  // const {} = useAppSelector((state) => state.childObj);
+  const [downloadReport] = useLazyDownloadReportQuery();
   const { data: currentData } = useGetReportsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
@@ -32,9 +30,7 @@ const ReportManagement = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-  useEffect(() => {
-    setPager({ page: 1, pageSize: entriesValue });
-  }, [entriesValue]);
+
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -46,12 +42,26 @@ const ReportManagement = () => {
     setEntriesValue(values[currentIndex]);
   }
 
-  const onDownloadReport = (userId: string) => {
+  const onDownloadReport = async (userId: string) => {
     console.log('Download report for :', userId);
+    const selectedReport = reportsTableData.find((report: IReport) => report.userId === userId);
+    console.log('selectedReport', selectedReport?.name);
+    try {
+      if (selectedReport) {
+        await downloadReport(selectedReport.userId);
+        console.log('Download successful!');
+      } else {
+        console.log('No file selected!');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
   };
+
   const columns: ColumnDef<IReport>[] = ReportsColumn({
     onDownloadReport,
   });
+
   const FilterDataForTable = (orderItems: IReport[]) => {
     setReportsTableData([]);
     try {
@@ -59,11 +69,11 @@ const ReportManagement = () => {
         const updatedReportData = orderItems.map((currentReportObject) => {
           return {
             userType: currentReportObject.userType ? currentReportObject.userType : '-',
-						name: currentReportObject.name,
-						contactNumber: currentReportObject.contactNumber ? currentReportObject.contactNumber : "-",
-						emailAddress: currentReportObject.emailAddress,
-						noOfActiveOrders: currentReportObject.noOfActiveOrders,
-						userId: currentReportObject.userId,
+            name: currentReportObject.name,
+            contactNumber: currentReportObject.contactNumber ? currentReportObject.contactNumber : '-',
+            emailAddress: currentReportObject.emailAddress,
+            noOfActiveOrders: currentReportObject.noOfActiveOrders,
+            userId: currentReportObject.userId,
             report: '',
           };
         });
@@ -84,17 +94,22 @@ const ReportManagement = () => {
       setSearchTerm(search);
     }
   }, 3000);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     debouncedSearch(value);
   };
+
   useEffect(() => {
     if (currentData?.result.result) {
       FilterDataForTable(currentData?.result.result);
       const maxPageCount = currentData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
-  }, [currentData, entriesValue]);
+  }, [currentData]);
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
 
   return (
     <div className="table-container">
@@ -136,7 +151,7 @@ const ReportManagement = () => {
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
-        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= totalPageCount}>
           <img src={NextIcon} />
         </Button>
       </div>
