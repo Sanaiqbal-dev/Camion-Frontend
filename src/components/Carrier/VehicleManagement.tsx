@@ -68,7 +68,7 @@ const VehicleManagement = () => {
       const maxPageCount = data.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
-  }, [data.result.result, data.result.total, entriesValue, isLoading]);
+  }, [data?.result?.result, data?.result?.total, entriesValue, isLoading]);
   useEffect(() => {
     if (!isLoadingDrivers) {
       getDriversList?.result?.total > 0 && setDrivers(getDriversList!.result!.result);
