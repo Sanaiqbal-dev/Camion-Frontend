@@ -81,6 +81,7 @@ const Requests = () => {
         destination: currentRequestObject.destination,
         weight: currentRequestObject.weight,
         dimentions: currentRequestObject.dimentions,
+        isProposalSubmitted: currentRequestObject.hasSubmitedByMe,
         EDT: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',
         action: '',
       }));
