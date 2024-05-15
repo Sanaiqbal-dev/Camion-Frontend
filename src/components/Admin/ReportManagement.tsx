@@ -18,7 +18,7 @@ const ReportManagement = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [downloadReport] = useLazyDownloadReportQuery();
   const { data: currentData } = useGetReportsQuery({
     page: pager.page - 1,
@@ -90,14 +90,10 @@ const ReportManagement = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
 
   useEffect(() => {
@@ -107,9 +103,9 @@ const ReportManagement = () => {
       setTotalPageCount(maxPageCount);
     }
   }, [currentData]);
-  useEffect(() => {
-    setPager({ page: 1, pageSize: entriesValue });
-  }, [entriesValue]);
+  // useEffect(() => {
+  //   setPager({ page: 1, pageSize: entriesValue });
+  // }, [entriesValue]);
 
   return (
     <div className="table-container">
@@ -141,7 +137,7 @@ const ReportManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

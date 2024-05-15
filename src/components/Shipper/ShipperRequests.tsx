@@ -39,7 +39,7 @@ const ShipperRequests = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
@@ -108,7 +108,8 @@ const ShipperRequests = () => {
 
   const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
     const shipmentDataAll: any = shipmentData.data;
-    const shipmentTypeId = shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
+    const shipmentTypeId =
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
       shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
 
     const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
@@ -221,14 +222,12 @@ const ShipperRequests = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
+
   useEffect(() => {
     if (sendProposalRequest) {
       ProposalCreateOrUpdateRequest();
@@ -284,7 +283,7 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

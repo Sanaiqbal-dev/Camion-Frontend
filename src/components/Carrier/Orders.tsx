@@ -27,7 +27,7 @@ const Orders = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
   const { data: currentData } = useGetOrdersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
@@ -142,13 +142,10 @@ const Orders = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
@@ -192,7 +189,7 @@ const Orders = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
