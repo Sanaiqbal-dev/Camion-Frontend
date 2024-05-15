@@ -23,6 +23,12 @@ export type IDriver = {
   iqamaId: string;
   fileName?: any;
 };
+
+export interface IDriverModalForm {
+  show: boolean;
+  mode: 'add' | 'edit';
+}
+
 export type IRequest = {
   hasSubmitedByMe: boolean;
 

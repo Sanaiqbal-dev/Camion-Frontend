@@ -28,7 +28,7 @@ export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqam
     header: 'Date Of Birth',
   },
   {
-    accessorKey: 'nationality',
+    accessorKey: 'driverNationality.name',
     header: 'Nationality',
   },
 
