@@ -12,6 +12,9 @@ export const AdminUsersColumn = ({ onEdit, onDelete }: AdminUserActionsProps): C
   {
     accessorKey: 'userName',
     header: 'User Name',
+    cell: ({ row }) => {
+      return <div>{row.original.fullName}</div>;
+    },
   },
   {
     accessorKey: 'email',

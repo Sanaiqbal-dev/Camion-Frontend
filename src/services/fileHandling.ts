@@ -41,6 +41,4 @@ export const fileHandling = baseApi.injectEndpoints({
     }),
   }),
 });
-export const { useUploadFileMutation, useLazyDownloadFileQuery } = fileHandling;
-
-//
+export const { useUploadFileMutation, useLazyDownloadFileQuery, useAddNewProposalMutation } = fileHandling;

@@ -11,19 +11,19 @@ export const ReportsColumn = ({ onDownloadReport }: ReportActionProps): ColumnDe
     header: 'User Type',
   },
   {
-    accessorKey: 'shipperName',
+    accessorKey: 'name',
     header: 'Shipper Name',
   },
   {
-    accessorKey: 'contact',
+    accessorKey: 'contactNumber',
     header: 'Contact Number',
   },
   {
-    accessorKey: 'email',
+    accessorKey: 'emailAddress',
     header: 'Email Address',
   },
   {
-    accessorKey: 'activeOrders',
+    accessorKey: 'noOfActiveOrders',
     header: 'Number of Active Orders',
   },
   {

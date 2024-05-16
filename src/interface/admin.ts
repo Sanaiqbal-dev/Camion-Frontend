@@ -7,7 +7,7 @@ export interface Iprofiles {
   contact: string;
   company: string;
   crDocument: IFileResponseData[];
-  status: string|undefined;
+  status: string | undefined;
   action?: string;
 }
 
@@ -61,4 +61,23 @@ export interface IProfileResponseData {
   lastName: string;
   profiletype: string | null;
   userId: string;
+}
+export interface ICreateSubUserResponse {
+  error?: {
+    data?: {
+      errors?: Array<{
+        code: string;
+        description: string;
+      }>;
+      statusCode?: number;
+    };
+    status?: number;
+  };
+  data?: any;
+}
+
+export interface ISubUser {
+  userId: string;
+  fullName: string;
+  email: string;
 }

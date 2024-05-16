@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 $theme-colors: (
-  "primary": #0060b8,
-  "secondary": #7b7878,
+  'primary': #0060b8,
+  'secondary': #7b7878,
 );
 $font-family-base: Inter, sans-serif;
 $grid-breakpoints: (
@@ -15,7 +15,7 @@ $grid-breakpoints: (
   xl: 1200px,
   xxl: 1400px,
 );
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 .main-container {
   max-height: 100vh;
@@ -288,8 +288,11 @@ tr {
   border: 0;
   border-radius: 10px;
   overflow-anchor: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
     border-radius 0.15s ease;
 }
 
@@ -829,4 +832,16 @@ body {
   --bs-btn-active-border-color: transparent;
   --bs-btn-hover-bg: transparent;
   --bs-btn-hover-border-color: transparent;
+}
+
+.success {
+  position: fixed !important;
+  z-index: 10000;
+  background-color: lightgreen;
+}
+
+.danger {
+  position: fixed !important;
+  z-index: 10000;
+  background-color: lightcoral;
 }

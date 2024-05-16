@@ -13,17 +13,25 @@ export type IDriver = {
   driverId: number;
   licenseNumber: string;
   dob: string;
-  driverNationality: {name:string};
-  nationalityId:number;
+  driverNationality: { name: string };
+  nationalityId: number;
   phoneNumber?: string;
-  mobileno?:string;
+  mobileno?: string;
   viewIqama: string;
   mobileNo: string;
   action: string;
-  iqamaId:string;
-  fileName?:any
+  iqamaId: string;
+  fileName?: any;
 };
+
+export interface IDriverModalForm {
+  show: boolean;
+  mode: 'add' | 'edit';
+}
+
 export type IRequest = {
+  hasSubmitedByMe: boolean;
+
   id: number;
   origin: string;
   destination: string;

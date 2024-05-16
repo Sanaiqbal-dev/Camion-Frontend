@@ -1,42 +1,57 @@
+import { useState, useEffect } from 'react';
+
 import { DataTable } from '../ui/DataTable';
-import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import FilterIcon from '../../assets/icons/ic-filter.svg';
-import { useState } from 'react';
+// import FilterIcon from '../../assets/icons/ic-filter.svg';
+
 import { DriverManagementColumns } from './TableColumns/DriverManagementColumns';
-import { IDriver } from '../../interface/carrier';
+import { IDriver, IDriverModalForm } from '../../interface/carrier';
 import AddDriver from '../Modals/AddDriver';
 import { useDeleteDriverMutation, useGetDriversListQuery } from '@/services/drivers';
 import { ColumnDef } from '@tanstack/react-table';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { debounce } from '@/util/debounce';
 const DriverManagement = () => {
-  const getDriversList = useGetDriversListQuery();
+  const values = [10, 20, 30, 40, 50];
+
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [entriesValue, setEntriesValue] = useState(10);
+  const [modal, setModal] = useState<IDriverModalForm>({ show: false, mode: 'add' });
+  const [editDriverData, setEditDriverData] = useState<IDriver>();
+
+  const getDriversList = useGetDriversListQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
   const [deleteDriver] = useDeleteDriverMutation();
 
   const [downloadFile] = useLazyDownloadFileQuery();
 
   const tableData: IDriver[] = getDriversList.data?.result.result;
-  const driversData:any = tableData?.map((item) => ({
+  const driversData: any = tableData?.map((item) => ({
     id: item.id,
     name: item.name,
-    iqamaId: item.viewIqama,
+    iqamaId: item.iqamaId,
     licenseNumber: item.licenseNumber,
     dob: item.dob,
-    nationality: item.driverNationality.name,
+    driverNationality: item.driverNationality,
     phoneNumber: item.phoneNumber,
     fileName: item.fileName,
     viewIqama: item.iqamaId,
     action: '',
   }));
-  const values = [10, 20, 30, 40, 50];
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [entriesValue, setEntriesValue] = useState(10);
-  const [showAddDriverModal, setShowAddDriverModal] = useState(false);
-  const [editDriverData, setEditDriverData] = useState<IDriver>();
 
-
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
 
   const onDeleteDriver = async (id: number) => {
     try {
@@ -50,7 +65,7 @@ const DriverManagement = () => {
   const onUpdateDriver = (id: number) => {
     const selectedDriver = driversData.find((driver: any) => driver.id === id);
     setEditDriverData(selectedDriver);
-    setShowAddDriverModal(true);
+    setModal({ show: true, mode: 'edit' });
   };
 
   const downloadSelectedFile = async (fileName: string) => {
@@ -80,7 +95,7 @@ const DriverManagement = () => {
   });
   const handleCloseModal = () => {
     setEditDriverData(undefined);
-    setShowAddDriverModal(false);
+    setModal({ show: false, mode: 'add' });
   };
 
   function handleChangeValue(direction: number) {
@@ -93,16 +108,30 @@ const DriverManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+  const debouncedSearch = debounce((search: string) => {
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+
+  useEffect(() => {
+    if (getDriversList.data?.result.result) {
+      const maxPageCount = getDriversList.data.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
+    }
+  }, [entriesValue, getDriversList]);
+
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
         <div>
-          <button className="filter-btn">
+          {/* <button className="filter-btn">
             <img src={FilterIcon} /> Filter
-          </button>
+          </button> */}
         </div>
         <div>
-          <button className="add-item-btn" id="add-driver-btn" onClick={() => setShowAddDriverModal(true)}>
+          <button className="add-item-btn" id="add-driver-btn" onClick={() => setModal({ show: true, mode: 'add' })}>
             Add Driver
           </button>
         </div>
@@ -135,13 +164,28 @@ const DriverManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control"></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
       {driversData && <DataTable isAction={true} columns={columns} data={driversData} />}
-      <AddDriver show={showAddDriverModal} handleClose={handleCloseModal} driverExistingData={editDriverData}  />
+      {getDriversList && getDriversList.data && (
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+          <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= getDriversList.data.result.total} onClick={() => updatePage(-1)}>
+            <img src={PreviousIcon} />
+          </Button>
+          <Button
+            className="img-next"
+            variant="outline"
+            size="sm"
+            onClick={() => updatePage(+1)}
+            disabled={pager.page >= Math.floor(totalPageCount) || entriesValue >= getDriversList.data.result.total}>
+            <img src={NextIcon} />
+          </Button>
+        </div>
+      )}
+      <AddDriver modal={modal} handleClose={handleCloseModal} driverExistingData={editDriverData} />
     </div>
   );
 };

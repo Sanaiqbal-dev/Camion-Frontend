@@ -1,3 +1,4 @@
+import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import baseApi from './baseApi';
 import { IAPIResponse, IDriver, IFile } from '@/interface/common';
 
@@ -11,8 +12,8 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Driver'],
     }),
-    getDriversList: builder.query<IAPIResponse<IDriver[]>, void>({
-      query: () => `/api/Drivers/GetDriverList`,
+    getDriversList: builder.query<IAPIResponse<IDriver[]>, any>({
+      query: (queryParams) => `/api/Drivers/GetDriverList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Driver'],
     }),
 

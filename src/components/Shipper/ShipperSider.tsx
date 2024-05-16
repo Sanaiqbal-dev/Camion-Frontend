@@ -77,12 +77,12 @@ const ShipperSider = () => {
       </div>
 
       <div className="sidebar-admin">
-        <NavLink key={'Settings'} to={'/admin/settings'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
+        <div key={'Settings'}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={SettingIcon} />
             Settings
           </div>
-        </NavLink>
+        </div>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />
