@@ -63,12 +63,12 @@ const VehicleManagement = () => {
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && data && data.result) {
       data.result.total > 0 && setVehicles(data.result.result);
       const maxPageCount = data.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
-  }, [data?.result?.result, data?.result?.total, entriesValue, isLoading]);
+  }, [data, data?.result?.result, data?.result?.total, entriesValue, isLoading]);
   useEffect(() => {
     if (!isLoadingDrivers) {
       getDriversList?.result?.total > 0 && setDrivers(getDriversList!.result!.result);
