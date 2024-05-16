@@ -25,19 +25,19 @@ const UserManagementShipper = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+  const { data: companyUserData, isLoading: userIsloading } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser] = useCreateSubUserMutation();
+  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   useEffect(() => {
     if (!isLoading) {
-      setUsers(companyUserData.result.result);
+      setUsers(companyUserData?.result.result);
     }
-  }, [isLoading]);
+  }, [userIsloading]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -152,7 +152,13 @@ const UserManagementShipper = () => {
       </div>
       {users.length > 0 ? <DataTable columns={columns} data={users} isAction={false} /> : <span>No Users Found!</span>}
 
-      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} />
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        showError={!isLoading && isError && error}
+        isSuccess={!error ? 'success' : ''}
+      />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </div>

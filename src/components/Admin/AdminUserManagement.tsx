@@ -32,7 +32,7 @@ const AdminUserManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser, { isLoading, isError, error, data }] = useCreateSubUserMutation();
+  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
