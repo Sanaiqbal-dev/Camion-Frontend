@@ -32,7 +32,7 @@ const AdminUserManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser, { isLoading, isError, error, data }] = useCreateSubUserMutation();
+  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
@@ -92,6 +92,7 @@ const AdminUserManagement = () => {
   const submitCreateFormHandler = async (data: IUser) => {
     try {
       const resp = await createSubUser(data).unwrap();
+      console.log(resp);
       refetch();
       setshowCreateUserModal(false);
     } catch (error) {
@@ -109,7 +110,6 @@ const AdminUserManagement = () => {
     console.log(resp);
   };
 
-  
   const debouncedSearch = debounce((search: string) => {
     setSearchTerm(() => search);
   }, 1000);

@@ -22,7 +22,7 @@ const UserManagement = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: companyUserData } = useGetCompanyUsersQuery({
+  const { data: companyUserData , refetch} = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -32,7 +32,7 @@ const UserManagement = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const [createSubUser] = useCreateSubUserMutation();
+  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   const values = [10, 20, 30, 40, 50];
@@ -77,9 +77,14 @@ const UserManagement = () => {
   };
 
   const submitCreateFormHandler = async (data: IUser) => {
-    setshowCreateUserModal(false);
-    const resp = await createSubUser(data);
-    console.log(resp);
+     try {
+       const resp = await createSubUser(data).unwrap();
+       console.log(resp);
+       refetch();
+       setshowCreateUserModal(false);
+     } catch (error) {
+       console.log(error);
+     }
   };
 
   const submitEditFormHandler = async (data: IPassword) => {
@@ -186,7 +191,13 @@ const UserManagement = () => {
           <img src={NextIcon} />
         </Button>
       </div>
-      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} />
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        showError={!isLoading && isError && error}
+        isSuccess={!error ? 'success' : ''}
+      />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </div>
