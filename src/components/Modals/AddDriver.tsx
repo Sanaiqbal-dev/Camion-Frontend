@@ -62,7 +62,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   });
   const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver }] = useAddNewDriverMutation();
   const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver }] = useUpdateDriverMutation();
-  const [uploadFile, { isSuccess: isFileUploaded }] = useUploadFileMutation();
+  const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
 
   const [showToast, setShowToast] = useState(false);
   const [nationalityId, setNationalityId] = useState<number | string>('');
@@ -272,7 +272,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 />
               </Form.Group>
             </div>
-            <Button variant="primary" type="submit" disabled={isAddingDriver || isUpdatingDriver}>
+            <Button variant="primary" type="submit" disabled={isAddingDriver || isUpdatingDriver || isUploadingFile}>
               {modal.mode === 'edit' ? 'Update Driver' : 'Add Driver'}
             </Button>
           </Form>
