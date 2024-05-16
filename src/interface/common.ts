@@ -70,7 +70,7 @@ export interface IAPIResponse<T> {
 }
 export interface IUserManagement {
   id: string;
-  userId:string;
+  userId: string;
   userName: string;
   fullName: string;
   email: string;
@@ -82,7 +82,7 @@ export interface IFileUploadResponse {
 }
 export interface IGenericResponse {
   message: string;
-  statusCode: number
+  statusCode: number;
 }
 export interface IFile {
   id: number;
@@ -186,6 +186,6 @@ export interface IPassword {
 }
 
 export interface IVehicleType {
-  id: number,
+  id: number;
   typeName: string;
 }

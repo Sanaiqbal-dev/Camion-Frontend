@@ -36,7 +36,7 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
       };
 
-      Object.entries(currentObj).forEach(([key, value]) =>value&& setValue(key as keyof IShipmentDetails, value));
+      Object.entries(currentObj).forEach(([key, value]) => value && setValue(key as keyof IShipmentDetails, value));
     }
   }, [isEdit, setValue, proposalObject]);
 

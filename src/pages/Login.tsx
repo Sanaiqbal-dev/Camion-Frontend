@@ -69,17 +69,14 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      if (user.role === "Carrier") {
-        navigate('/carrier/dashboard')
-      }
-      else if (user.role === "Shipper") {
-        navigate('/shipper/shipperdashboard')
-      }
-      else {
+      if (user.role === 'Carrier') {
+        navigate('/carrier/dashboard');
+      } else if (user.role === 'Shipper') {
+        navigate('/shipper/shipperdashboard');
+      } else {
         navigate('/admin/Profiles');
       }
     }
-
   }, []);
   return (
     <div className="main-container">

@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/carrier',
-    element: <PrivateRoute allowedRoles={['Carrier']} ></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={['Carrier']}></PrivateRoute>,
     children: [
       {
         path: '*',
@@ -88,11 +88,11 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ]
+    ],
   },
   {
     path: '/shipper',
-    element: <PrivateRoute allowedRoles={['Shipper']} ></PrivateRoute>,
+    element: <PrivateRoute allowedRoles={['Shipper']}></PrivateRoute>,
     children: [
       {
         path: '*',
@@ -129,7 +129,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ]
+    ],
   },
   {
     path: '/admin',
@@ -162,7 +162,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
-    ]
+    ],
   },
   {
     path: '/login',
@@ -180,5 +180,4 @@ export const router = createBrowserRouter([
     path: '/forgotPassword',
     element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
   },
-
 ]);

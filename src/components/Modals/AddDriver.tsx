@@ -5,7 +5,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMutation } from '@/services/drivers';
 import { useUploadFileMutation } from '@/services/fileHandling';
-import { IDriver } from '@/interface/carrier';
+import { IDriver, IDriverModalForm } from '@/interface/carrier';
 
 // interface IDriver {
 //   id?: number;
@@ -22,7 +22,7 @@ import { IDriver } from '@/interface/carrier';
 // }
 
 interface CreateUserModalProps {
-  show: boolean;
+  modal: IDriverModalForm;
   handleClose: () => void;
   driverExistingData?: IDriver;
 }
@@ -40,7 +40,7 @@ const schema = z.object({
   phoneNumber: z.string().min(6, 'please enter phone number'),
 });
 
-const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverExistingData }) => {
+const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
   const {
     register,
     handleSubmit,
@@ -93,13 +93,13 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
 
   const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
-      if (driverExistingData && formData) {
+      if (modal.mode === 'edit' && formData) {
         // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
         await updateDriver({
           name: formData.name,
           licenseNumber: formData.licenseNumber,
           dob: formData.dob,
-          nationalityId: nationalityId ? nationalityId : getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality?.name),
+          nationalityId: nationalityId ? nationalityId : getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name),
           mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
@@ -134,9 +134,9 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
     handleClose();
   };
   return (
-    <Modal show={show} onHide={handleCloseModal} centered size={'sm'}>
+    <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'}>
       <Modal.Header style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <Modal.Title>{driverExistingData ? 'Update' : 'Add A New'} Driver</Modal.Title>
+        <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'} Driver</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -201,7 +201,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
                 as="select"
                 style={{ width: '560px', height: '50px' }}
                 onChange={(e) => setNationalityId(Number(e.target.value))}
-                defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality?.name)}
+                defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name)}
                 isInvalid={!!errors.nationalityId}>
                 <option value="" disabled>
                   Select Nationality
@@ -258,7 +258,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ show, handleClose, driverEx
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            {driverExistingData ? 'Update Driver' : 'Add Driver'}
+            {modal.mode === 'edit' ? 'Update Driver' : 'Add Driver'}
           </Button>
         </Form>
       </Modal.Body>

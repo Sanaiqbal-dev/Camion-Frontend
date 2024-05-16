@@ -39,7 +39,7 @@ const ShipperRequests = () => {
     pageSize: PAGER_SIZE,
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [isEditProposal, setIsEditProposal] = useState(false);
   const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
@@ -53,19 +53,18 @@ const ShipperRequests = () => {
 
   const [requestTableData, setRequestTableData] = useState<IRequestTable[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] = useState<number>();
-
+  const [currentIndex, setCurrentIndex] = useState(0);
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
 
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }
@@ -108,7 +107,8 @@ const ShipperRequests = () => {
 
   const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
     const shipmentDataAll: any = shipmentData.data;
-    const shipmentTypeId = shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
+    const shipmentTypeId =
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
       shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
 
     const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
@@ -221,14 +221,12 @@ const ShipperRequests = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
+
   useEffect(() => {
     if (sendProposalRequest) {
       ProposalCreateOrUpdateRequest();
@@ -284,13 +282,13 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={false} />}
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>
