@@ -67,7 +67,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
               {vehicleList &&
                 vehicleList.map((vehicle: IVehicle) => (
                   <option key={vehicle.id} value={vehicle.id}>
-                    {vehicle.IMEINumber}
+                    {vehicle.vehicleType.typeName}
                   </option>
                 ))}
             </Form.Control>

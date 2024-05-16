@@ -21,7 +21,7 @@ interface ProposalDetailsModalProps {
 }
 
 const schema = z.object({
-  amount: z.number().min(1, 'Enter an amount greater than zero.'),
+  amount: z.string().min(3, 'Please enter the ammount of minumum 3 dugits.'),
   EDD: z.string().refine(
     (value) => {
       const date = Date.parse(value);

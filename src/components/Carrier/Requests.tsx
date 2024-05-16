@@ -76,7 +76,7 @@ const Requests = () => {
         id: currentRequestObject.id,
         origin: currentRequestObject.origin,
         destination: currentRequestObject.destination,
-        weight: currentRequestObject.weight,
+        weight: currentRequestObject.weight ? currentRequestObject.weight : '-',
         dimentions: currentRequestObject.dimentions,
         isProposalSubmitted: currentRequestObject.hasSubmitedByMe,
         EDT: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',

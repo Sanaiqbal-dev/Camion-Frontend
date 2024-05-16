@@ -53,19 +53,18 @@ const ShipperRequests = () => {
 
   const [requestTableData, setRequestTableData] = useState<IRequestTable[]>([]);
   const [selectedProposalItem, setSelectedProposalItem] = useState<number>();
-
+  const [currentIndex, setCurrentIndex] = useState(0);
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
 
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }
@@ -288,7 +287,7 @@ const ShipperRequests = () => {
           </Col>
         </Row>
       </div>
-      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={false} />}
+      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
