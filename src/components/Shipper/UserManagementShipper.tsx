@@ -1,6 +1,6 @@
 import { UserManagementShipperColumns } from './TableColumns/UserManagementShipperColumns';
 import { DataTable } from '../ui/DataTable';
-import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
@@ -19,25 +19,30 @@ const UserManagementShipper = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser] = useCreateSubUserMutation();
+  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [updateSubUser] = useUpdateSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
+
   useEffect(() => {
-    if (!isLoading) {
+    if (companyUserData?.result.result) {
       setUsers(companyUserData.result.result);
+      const maxPageCount = companyUserData.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
     }
-  }, [isLoading]);
+  }, [companyUserData]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -47,6 +52,11 @@ const UserManagementShipper = () => {
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -78,10 +88,14 @@ const UserManagementShipper = () => {
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: any) => {
-    setshowCreateUserModal(false);
-    console.log('submitCreateFormHandler', data);
-    const resp = await createSubUser(data);
-    console.log(resp);
+    try {
+      const resp = await createSubUser(data).unwrap();
+      console.log(resp);
+      refetch();
+      setshowCreateUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const submitEditFormHandler = async (data: any) => {
     setshowUpdatePasswordModal(false);
@@ -150,9 +164,22 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable columns={columns} data={users} isAction={false} /> : <span>No Users Found!</span>}
-
-      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} />
+      {users.length > 0 ? <DataTable columns={columns} data={users} isAction={true} /> : <span>No Users Found!</span>}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        showError={!isLoading && isError && error}
+        isSuccess={!error ? 'success' : ''}
+      />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </div>

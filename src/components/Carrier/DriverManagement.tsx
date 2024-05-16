@@ -171,7 +171,7 @@ const DriverManagement = () => {
       </div>
       {driversData && <DataTable isAction={true} columns={columns} data={driversData} />}
       {getDriversList && getDriversList.data && (
-        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
           <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= getDriversList.data.result.total} onClick={() => updatePage(-1)}>
             <img src={PreviousIcon} />
           </Button>
