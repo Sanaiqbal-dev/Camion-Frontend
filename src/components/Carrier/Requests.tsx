@@ -21,7 +21,7 @@ const Requests = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [totalPageCount, setTotalPageCount] = useState(0);
   const { data: currentData } = useGetProposalsQuery({
     page: pager.page - 1,
@@ -62,13 +62,10 @@ const Requests = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
@@ -79,7 +76,7 @@ const Requests = () => {
         id: currentRequestObject.id,
         origin: currentRequestObject.origin,
         destination: currentRequestObject.destination,
-        weight: currentRequestObject.weight,
+        weight: currentRequestObject.weight ? currentRequestObject.weight : '-',
         dimentions: currentRequestObject.dimentions,
         isProposalSubmitted: currentRequestObject.hasSubmitedByMe,
         EDT: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',
@@ -132,7 +129,7 @@ const Requests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

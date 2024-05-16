@@ -20,7 +20,7 @@ const OrderManagement = () => {
     pageSize: PAGER_SIZE,
   });
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
@@ -70,10 +70,7 @@ const OrderManagement = () => {
       console.log('status update error: ', error);
     }
   };
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
-  };
+
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,
@@ -118,14 +115,11 @@ const OrderManagement = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-
-  useEffect(() => {
-    setPager({ page: 1, pageSize: entriesValue });
-  }, [entriesValue]);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
 
   useEffect(() => {
     if (currentData?.result.result) {
@@ -165,7 +159,7 @@ const OrderManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
