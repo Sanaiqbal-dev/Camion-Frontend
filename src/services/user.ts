@@ -21,6 +21,13 @@ export const proposalApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    deleteSubUser: builder.mutation<any, any>({
+      query: (body) => ({
+        url: 'Account/DeleteCompanySubUsers',
+        method: 'POST',
+        body,
+      }),
+    }),
     updateSubUserPassword: builder.mutation<any, any>({
       query: (body) => ({
         url: '/Account/ResetPassword',
@@ -32,4 +39,4 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation } = proposalApi;
+export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } = proposalApi;

@@ -25,11 +25,11 @@ export const UserManagementShipperColumns = ({ onEdit, onDelete }: UserActionsPr
     cell: ({ row }) => {
       return (
         <div className="action-container" style={{ justifyContent: 'start' }}>
-          <div onClick={() => onEdit(row.original.id)}>
+          <div onClick={() => onEdit(row.original.userId)}>
             <img src={EditIcon} />
             <span style={{ color: '#27AE60' }}>Edit</span>
           </div>
-          <div onClick={() => onDelete(row.original.id)}>
+          <div onClick={() => onDelete(row.original.userId)}>
             <img src={DeleteIcon} />
             <span style={{ color: '#EB5757' }}>Delete</span>
           </div>

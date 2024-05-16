@@ -21,6 +21,7 @@ import ShipperTracking from '../components/Shipper/ShipperTracking';
 import UserManagementShipper from '../components/Shipper/UserManagementShipper';
 import UserManagement from '../components/Carrier/UserManagement';
 import BayanBill from '../components/Carrier/BayanBill';
+import PrivateRoute from './PrivateRoute';
 
 const LazyCarrierHome = lazy(() => import('../pages/Carrier/CarrierHomePage'));
 const LazyAdminHome = lazy(() => import('../pages/Admin/AdminHomePage'));
@@ -35,115 +36,133 @@ const withSuspense = (Component: ReactElement, fallback: ReactElement = <div>Loa
 export const router = createBrowserRouter([
   {
     path: '/',
-    element:withSuspense(<LazyLogin/>),
+    element: withSuspense(<LazyLogin />),
     // element: withSuspense(<LazyCarrierHome />),
     // element: withSuspense(<LazyShipperHome />),
     // element: withSuspense(<LazyAdminHome />),
   },
   {
     path: '/carrier',
-    element: withSuspense(<LazyCarrierHome />),
+    element: <PrivateRoute allowedRoles={['Carrier']} ></PrivateRoute>,
     children: [
       {
-        index: true,
-        path: 'dashboard',
-        element: <Dashboard />,
+        path: '*',
+        element: withSuspense(<LazyCarrierHome />),
+        children: [
+          {
+            index: true,
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+          {
+            path: 'tracking',
+            element: <Tracking />,
+          },
+          {
+            path: 'requests',
+            element: <Requests />,
+          },
+          {
+            path: 'orders',
+            element: <Orders />,
+          },
+          {
+            path: 'drivermanagement',
+            element: <DriverManagement />,
+          },
+          {
+            path: 'vehiclemanagement',
+            element: <VehicleManagement />,
+          },
+          {
+            path: 'bayan',
+            element: <Bayan />,
+          },
+          {
+            path: 'userManagement',
+            element: <UserManagement />,
+          },
+          {
+            path: 'bayanBill',
+            element: <BayanBill />,
+          },
+        ],
       },
-      {
-        path: 'tracking',
-        element: <Tracking />,
-      },
-      {
-        path: 'requests',
-        element: <Requests />,
-      },
-      {
-        path: 'orders',
-        element: <Orders />,
-      },
-      {
-        path: 'drivermanagement',
-        element: <DriverManagement />,
-      },
-      {
-        path: 'vehiclemanagement',
-        element: <VehicleManagement />,
-      },
-      {
-        path: 'bayan',
-        element: <Bayan />,
-      },
-      {
-        path: 'userManagement',
-        element: <UserManagement />,
-      },
-      {
-        path: 'bayanBill',
-        element: <BayanBill />,
-      },
-    ],
+    ]
   },
   {
     path: '/shipper',
-    element: withSuspense(<LazyShipperHome />),
+    element: <PrivateRoute allowedRoles={['Shipper']} ></PrivateRoute>,
     children: [
       {
-        index: true,
-        path: 'shipperdashboard',
-        element: <ShipperDashboard />,
+        path: '*',
+        element: withSuspense(<LazyShipperHome />),
+        children: [
+          {
+            index: true,
+            path: 'shipperdashboard',
+            element: <ShipperDashboard />,
+          },
+          {
+            path: 'shippertracking',
+            element: <ShipperTracking />,
+          },
+          {
+            path: 'shipperrequests',
+            element: <ShipperRequests />,
+          },
+          {
+            path: 'userManagement',
+            element: <UserManagementShipper />,
+          },
+          {
+            path: 'shipperorders',
+            element: <ShipperOrders />,
+          },
+          {
+            path: 'proposals',
+            element: <Proposals />,
+          },
+          {
+            path: 'proposalssecond',
+            element: <ProposalsSecond />,
+          },
+        ],
       },
-      {
-        path: 'shippertracking',
-        element: <ShipperTracking />,
-      },
-      {
-        path: 'shipperrequests',
-        element: <ShipperRequests />,
-      },
-      {
-        path: 'userManagement',
-        element: <UserManagementShipper />,
-      },
-      {
-        path: 'shipperorders',
-        element: <ShipperOrders />,
-      },
-      {
-        path: 'proposals',
-        element: <Proposals />,
-      },
-      {
-        path: 'proposalssecond',
-        element: <ProposalsSecond />,
-      },
-    ],
+    ]
   },
   {
     path: '/admin',
-    element: withSuspense(<LazyAdminHome />),
+    element: <PrivateRoute allowedRoles={['Admin']} />,
     children: [
       {
-        index: true,
-        path: 'profiles',
-        element: <Profiles />,
+        path: '*',
+        element: withSuspense(<LazyAdminHome />),
+        children: [
+          {
+            index: true,
+            path: 'profiles',
+            element: <Profiles />,
+          },
+          {
+            path: 'orderManagement',
+            element: <OrderManagement />,
+          },
+          {
+            path: 'reportManagement',
+            element: <ReportManagement />,
+          },
+          {
+            path: 'adminUserManagement',
+            element: <AdminUserManagement />,
+          },
+          {
+            path: 'settings',
+            element: <Settings />,
+          },
+        ],
       },
-      {
-        path: 'orderManagement',
-        element: <OrderManagement />,
-      },
-      {
-        path: 'reportManagement',
-        element: <ReportManagement />,
-      },
-      {
-        path: 'adminUserManagement',
-        element: <AdminUserManagement />,
-      },
-      {
-        path: 'settings',
-        element: <Settings />,
-      },
-    ],
+    ]
   },
   {
     path: '/login',
@@ -161,4 +180,5 @@ export const router = createBrowserRouter([
     path: '/forgotPassword',
     element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
   },
+
 ]);

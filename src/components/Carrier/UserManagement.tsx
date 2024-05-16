@@ -10,7 +10,7 @@ import { Col, FormControl, InputGroup, Image, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import { useCreateSubUserMutation, useGetCompanyUsersQuery, useUpdateSubUserMutation, useUpdateSubUserPasswordMutation } from '@/services/user';
+import { useCreateSubUserMutation, useDeleteSubUserMutation, useGetCompanyUsersQuery, useUpdateSubUserPasswordMutation } from '@/services/user';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
@@ -33,7 +33,7 @@ const UserManagement = () => {
     term: searchTerm,
   });
   const [createSubUser] = useCreateSubUserMutation();
-  const [updateSubUser] = useUpdateSubUserMutation();
+  const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
   useEffect(() => {
@@ -62,24 +62,24 @@ const UserManagement = () => {
   }
 
   const onEdit = (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const resp = await updateSubUser({
-      userId: edituser?.id,
+    const resp = await deleteSubUser({
+      userId: edituser?.userId,
       isDeleted: true,
     });
     console.log(resp);
-    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: IUser) => {

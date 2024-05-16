@@ -70,6 +70,7 @@ export interface IAPIResponse<T> {
 }
 export interface IUserManagement {
   id: string;
+  userId:string;
   userName: string;
   fullName: string;
   email: string;
