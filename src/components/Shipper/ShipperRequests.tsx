@@ -288,7 +288,7 @@ const ShipperRequests = () => {
         </Row>
       </div>
       {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>

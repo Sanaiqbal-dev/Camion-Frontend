@@ -14,6 +14,12 @@ export const baseApi = createApi({
       }
       return headers;
     },
+    responseHandler: (response): Promise<Response> => {
+      if (response.status === 403) {
+        // storeDispatch(deleteUser());
+      }
+      return response.json();
+    },
   }),
   tagTypes: [
     'Vehicle',
