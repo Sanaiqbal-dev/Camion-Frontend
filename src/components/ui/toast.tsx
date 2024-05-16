@@ -10,7 +10,7 @@ interface IAlertProps {
 }
 
 export const Toast = (props: IAlertProps) => {
-  const { showToast, variant, setShowToast, autoClose = true, duration = 3000 } = props;
+  const { showToast, variant, setShowToast, autoClose = true, duration = 1500 } = props;
 
   const handleCloseAlert = useCallback(() => {
     console.log('here got');
@@ -32,7 +32,7 @@ export const Toast = (props: IAlertProps) => {
               }, 2500),
             );
           }
-        }, 1500),
+        }, duration),
       );
     }
 
