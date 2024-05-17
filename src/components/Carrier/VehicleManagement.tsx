@@ -3,7 +3,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-// import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import { VehicleManagementColumns } from './TableColumns/VehicleManagementColumns';
 import { IDriver, IVehicle } from '../../interface/carrier';
@@ -14,9 +13,7 @@ import {
   useDeleteVehicleMutation,
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
-  useGetPlateTypesQuery,
 } from '@/services/vahicles';
-// import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from '../Modals/AssignDriver';
 import CreateVehicleModal from '../Modals/CreateVehicle';
 import EditVehicleModal from '../Modals/EditVehicle';
@@ -26,14 +23,12 @@ import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { useGetDriversListQuery } from '@/services/drivers';
-import { Toast } from '../ui/toast';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
-  const [showToast, setShowToast] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [totalPageCount, setTotalPageCount] = useState(0);
   const values = [10, 20, 30, 40, 50];
@@ -42,7 +37,6 @@ const VehicleManagement = () => {
 
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
-  const [plateTypes, setPlateTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
   const [drivers, setDrivers] = useState<IDriver[]>([]);
@@ -60,10 +54,9 @@ const VehicleManagement = () => {
     term: searchTerm,
   });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
-  const { data: plateTypesData, isLoading: isLoadingPlateTypes } = useGetPlateTypesQuery({});
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
-  const [createVehicle, { isSuccess: isVehicleAdded }] = useCreateVehicleMutation();
+  const [createVehicle] = useCreateVehicleMutation();
   const [editVehicle] = useEditVehicleMutation();
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
@@ -84,12 +77,6 @@ const VehicleManagement = () => {
       setVehicleTypes(vehicleTypesData.result);
     }
   }, [isLoadingVehicleTypes]);
-
-   useEffect(() => {
-     if (!isLoadingPlateTypes) {
-       setPlateTypes(plateTypesData.result);
-     }
-   }, [isLoadingPlateTypes]);
 
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
@@ -120,7 +107,6 @@ const VehicleManagement = () => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
     console.log(resp);
-    setShowToast(true);
   };
   const submitEditVehicleHandler = async (data: any) => {
     setShowEditVehicle(false);
@@ -201,7 +187,6 @@ const VehicleManagement = () => {
 
   return (
     <>
-      {showToast && <Toast variant={isVehicleAdded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       <div className="table-container">
         <div className="search-and-entries-container">
           <div>
@@ -271,7 +256,7 @@ const VehicleManagement = () => {
         )}
       </div>
       <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
-      <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} plateTypes={plateTypes} />
+      <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />
       <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </>
