@@ -13,14 +13,12 @@ export const Toast = (props: IAlertProps) => {
   const { showToast, variant, setShowToast, autoClose = true, duration = 1500 } = props;
 
   const handleCloseAlert = useCallback(() => {
-    console.log('here got');
     setShowToast(false);
   }, [setShowToast]);
 
   useEffect(() => {
     const timeoutRef: NodeJS.Timeout[] = [];
     if (autoClose) {
-      console.log('here');
       timeoutRef.push(
         setTimeout(() => {
           const closeButton: HTMLButtonElement | null = document.querySelector('button[class=btn-close]');

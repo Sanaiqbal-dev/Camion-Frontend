@@ -6,6 +6,8 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
+import BayanLocationModal from '../Modals/BayanLocationModal';
+import ProductTypeModal from '../Modals/ProductTypeModal';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -98,7 +100,10 @@ const Bayan = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  const [showCreateBayanModal, setShowCreateBayanModal] = useState(false);
+  const [showProductTypeModal, setShowProductTypeModal] = useState(false);
+  const [showShippingInfoModal, setShowShippingInfoModal] = useState(false);
+  const [locationType, setLocationType] = useState<string>('pickup');
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -109,10 +114,32 @@ const Bayan = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const SubmitPickUpLocationInfo = () => {
+    setLocationType('delivery');
+  };
+
+  console.log('ShowInfoModal', showShippingInfoModal);
+
+  const SubmitDeliveryLocationInfo = () => {
+    setShowCreateBayanModal(false);
+    setShowProductTypeModal(true);
+    //show product type modal
+  };
+
+  const SubmitProductTypeInfo = () => {
+    setShowProductTypeModal(false);
+    setShowShippingInfoModal(true);
+  };
   return (
     <div className="table-container">
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button className="add-item-btn" id="create-bayan-btn">
+        <button
+          className="add-item-btn"
+          id="create-bayan-btn"
+          onClick={() => {
+            setShowCreateBayanModal(true);
+          }}>
           Create Bayan
         </button>
       </div>
@@ -150,8 +177,22 @@ const Bayan = () => {
         </Row>
       </div>
       {bayanData && <DataTable isAction={true} columns={BayanColumns} data={bayanData} />}
+      <BayanLocationModal
+        show={showCreateBayanModal}
+        infoType={locationType}
+        handleClose={() => setShowCreateBayanModal(false)}
+        handleNextStep={() => {
+          locationType == 'pickup' ? SubmitPickUpLocationInfo() : SubmitDeliveryLocationInfo();
+        }}
+      />
+      <ProductTypeModal
+        show={showProductTypeModal}
+        handleClose={() => setShowProductTypeModal(false)}
+        handleNextStep={() => {
+          SubmitProductTypeInfo();
+        }}
+      />
     </div>
   );
 };
-
 export default Bayan;

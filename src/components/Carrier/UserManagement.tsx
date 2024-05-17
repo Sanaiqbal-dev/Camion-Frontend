@@ -33,7 +33,7 @@ const UserManagement = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const [createSubUser, { isSuccess: isUserAdded, isLoading: isUserAdding, isError, error }] = useCreateSubUserMutation();
+  const [createSubUser, { isSuccess: isUserAdded, error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   const values = [10, 20, 30, 40, 50];
@@ -200,12 +200,21 @@ const UserManagement = () => {
           show={showCreateUserModal}
           onSubmitForm={submitCreateFormHandler}
           handleClose={() => setshowCreateUserModal(false)}
-          showError={!isUserAdding && isError && error}
+          // showError={!isUserAdding && isError && error}
           isSuccess={!error ? 'success' : ''}
         />
         <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
         <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
       </div>
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        // showError={!isLoading && isError && error}
+        isSuccess={!error ? 'success' : ''}
+      />
+      <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
+      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </>
   );
 };

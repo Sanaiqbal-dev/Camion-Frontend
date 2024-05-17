@@ -18,6 +18,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const ShipperRequests = () => {
   const userData = useAppSelector((state) => state.session);
@@ -27,11 +28,12 @@ const ShipperRequests = () => {
   const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] = useState(false);
   const [showShippementDetailsModal, setShowShippementDetailsModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const shipmentData = useGetShipmentTypesQuery();
-  const [createNewProposal] = useCreateNewProposalMutation();
-  const [updateProposal] = useUpdateProposalMutation();
-  const [deleteProposal] = useDeleteProposalMutation();
+  const [createNewProposal, { isSuccess: isProposalCreated }] = useCreateNewProposalMutation();
+  const [updateProposal, { isSuccess: isProposalUpdated }] = useUpdateProposalMutation();
+  const [deleteProposal, { isSuccess: isProposalDeleted }] = useDeleteProposalMutation();
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -178,10 +180,10 @@ const ShipperRequests = () => {
 
   const DeleteProposal = async () => {
     try {
-      const result = await deleteProposal({ id: deleteItemId });
-      console.log('Proposal deleted successfully:', result);
+      await deleteProposal({ id: deleteItemId }).unwrap();
+      setShowToast(true);
     } catch (error) {
-      console.error('Error deleting proposal:', error);
+      setShowToast(true);
     }
   };
 
@@ -207,15 +209,18 @@ const ShipperRequests = () => {
     }
   }, [error]);
   const ProposalCreateOrUpdateRequest = async () => {
-    const response = isEditProposal ? await updateProposal(proposalItem) : await createNewProposal(proposalItem);
-    if (response && 'data' in response) {
-      console.log('Create New Proposal response: ', response?.data.result?.result);
-      FilterDataForTable(response?.data.result.result);
+    try {
+      const response = isEditProposal ? await updateProposal(proposalItem).unwrap() : await createNewProposal(proposalItem).unwrap();
+      // console.log('Create New Proposal response: ', response?.result?.result);
+      FilterDataForTable(response?.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
 
       setProposalItem({} as any);
       setSendProposalRequest(false);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
     }
   };
 
@@ -241,6 +246,7 @@ const ShipperRequests = () => {
 
   return (
     <div className="table-container">
+       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
