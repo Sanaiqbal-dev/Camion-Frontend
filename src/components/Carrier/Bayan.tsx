@@ -8,6 +8,8 @@ import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
 import BayanLocationModal from '../Modals/BayanLocationModal';
 import ProductTypeModal from '../Modals/ProductTypeModal';
+import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
+import AssignVehicle from '../Modals/AssignVehicle';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -103,6 +105,7 @@ const Bayan = () => {
   const [showCreateBayanModal, setShowCreateBayanModal] = useState(false);
   const [showProductTypeModal, setShowProductTypeModal] = useState(false);
   const [showShippingInfoModal, setShowShippingInfoModal] = useState(false);
+  const [showAssignVehicleModal, setShowAssignVehicleModal] = useState(false);
   const [locationType, setLocationType] = useState<string>('pickup');
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -131,6 +134,18 @@ const Bayan = () => {
     setShowProductTypeModal(false);
     setShowShippingInfoModal(true);
   };
+  const SubmitShippingInfo = () => {
+    setShowShippingInfoModal(false);
+    setShowAssignVehicleModal(true);
+  };
+
+  const AssignVehicleToBayan = (vehicleId: number) => {
+    console.log('Assigned vehicle Id:', vehicleId);
+    setShowAssignVehicleModal(false);
+
+    // Add request for create bayan.
+  };
+
   return (
     <div className="table-container">
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -190,6 +205,22 @@ const Bayan = () => {
         handleClose={() => setShowProductTypeModal(false)}
         handleNextStep={() => {
           SubmitProductTypeInfo();
+        }}
+      />
+      <BayanShippingInfoModal
+        show={showShippingInfoModal}
+        handleClose={() => setShowShippingInfoModal(false)}
+        handleNextStep={() => {
+          SubmitShippingInfo();
+        }}
+      />
+      <AssignVehicle
+        show={showAssignVehicleModal}
+        handleClose={() => {
+          setShowAssignVehicleModal(false);
+        }}
+        onAssignVehicleToOrderItem={(vehicleId) => {
+          AssignVehicleToBayan(vehicleId);
         }}
       />
     </div>

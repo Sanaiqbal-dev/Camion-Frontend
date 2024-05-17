@@ -21,7 +21,7 @@ export const Drivers = baseApi.injectEndpoints({
       query: () => `/api/Drivers/GetNationalityList`,
       providesTags: ['Driver'],
     }),
-
+   
     deleteDriver: builder.mutation<IAPIResponse<IDriver[]>, Partial<IDriver>>({
       query: ({ id }) => ({
         url: `/api/Drivers/DeleteDriver?id=${id}`,

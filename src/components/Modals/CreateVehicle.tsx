@@ -43,11 +43,11 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
-  const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
-  const { data: plateTypes } = useGetPlateTypeQuery();
-  const [selectedFile, setSeletedFile] = useState<File>();
-  const [showToast, setShowToast] = useState(false);
-  const [selectedFilePath, setSelectedFilePath] = useState('');
+   const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
+   const { data: plateTypes } = useGetPlateTypeQuery();
+   const [selectedFile, setSeletedFile] = useState<File>();
+   const [showToast, setShowToast] = useState(false);
+   const [selectedFilePath, setSelectedFilePath] = useState('');
 
   useEffect(() => {
     const uploadFiles = async () => {
@@ -60,10 +60,8 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
             setSelectedFilePath(response.data.message);
           }
           console.log(response);
-          setShowToast(true);
         } catch (error) {
           console.error('Error uploading file:', error);
-          setShowToast(true);
         }
       }
     };

@@ -11,6 +11,7 @@ export const proposalApi = baseApi.injectEndpoints({
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
     }),
+   
     assignDriver: builder.mutation<any, any>({
       query: (body) => ({
         url: '/api/Vehicles/AssignDriverToVehicle',
