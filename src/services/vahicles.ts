@@ -1,10 +1,12 @@
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import baseApi from './baseApi';
+import { ICustomAPIRes, TVehicleTypeList } from '@/interface/vehicle';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getVehicles: builder.query<any, any>({
       query: (queryParams) => `/api/Vehicles/GetVehicleList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
+      providesTags: ['VehicleList'],
     }),
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
@@ -21,6 +23,7 @@ export const proposalApi = baseApi.injectEndpoints({
         url: '/api/Vehicles/DeleteVehicle?id=' + id,
         method: 'DELETE',
       }),
+      invalidatesTags: ['VehicleList'],
     }),
     createVehicle: builder.mutation<any, any>({
       query: (body) => ({
@@ -28,6 +31,7 @@ export const proposalApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: ['VehicleList'],
     }),
     editVehicle: builder.mutation<any, any>({
       query: (body) => ({
@@ -36,8 +40,21 @@ export const proposalApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    getPlateType: builder.query<ICustomAPIRes<TVehicleTypeList>, void>({
+      query: () => '/api/Vehicles/GetPlateTypes',
+      providesTags: ['PlateType'],
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
 // Export hooks for use in the app
-export const { useGetVehicleTypesQuery, useGetVehiclesQuery, useAssignDriverMutation, useDeleteVehicleMutation, useCreateVehicleMutation, useEditVehicleMutation } = proposalApi;
+export const {
+  useGetVehicleTypesQuery,
+  useGetVehiclesQuery,
+  useAssignDriverMutation,
+  useDeleteVehicleMutation,
+  useCreateVehicleMutation,
+  useEditVehicleMutation,
+  useGetPlateTypeQuery,
+} = proposalApi;

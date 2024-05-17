@@ -5,6 +5,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
+import { useGetPlateTypeQuery } from '@/services/vahicles';
 
 interface IVehicle {
   color: string;
@@ -13,6 +14,7 @@ interface IVehicle {
   registrationNumber: string;
   modelYear: number;
   vehicleType: number;
+  PlateTypeId: number;
 }
 
 interface EditUserModalProps {
@@ -31,6 +33,7 @@ const schema = z.object({
   numberPlate: z.string().min(1, 'Enter Number plate'),
   modelYear: z.string().min(1, 'Enter Model Year'),
   vehicleType: z.string().min(1, 'Select Vehicle Type'),
+  PlateTypeId: z.string().min(1, 'Select Plate Type'),
 });
 
 const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle, vehicleTypes, onSubmitForm }) => {
@@ -45,8 +48,10 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
   useEffect(() => {
     reset();
   }, [vehicle]);
+
   const fileType = 4;
   const [uploadFile] = useUploadFileMutation();
+  const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
 
   useEffect(() => {
@@ -89,7 +94,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Vehicle Type</Form.Label>
                 <Form.Control
-                  defaultValue={vehicle?.vehicleType.id}
+                  defaultValue={vehicle?.vehicleType?.id}
                   style={{ width: '270px', height: '50px' }}
                   as="select"
                   {...register('vehicleType', {
@@ -118,8 +123,29 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
               </Form.Group>
             </div>
             <div className="tw-gap-5  tw-flex tw-flex-row">
+              <Form.Group
+                className="mb-3"
+                // style={{ minWidth: "436px" }}
+                controlId="formBasicEmail">
+                <Form.Label>Palte Type</Form.Label>
+                <Form.Control
+                  defaultValue={vehicle?.plateType?.id}
+                  style={{ width: '270px', height: '50px' }}
+                  as="select"
+                  {...register('PlateTypeId', {
+                    required: 'Vehicle type is required',
+                  })}>
+                  <option value="">Select Plate Type</option>
+                  {plateTypes?.result.map((plateType, index: number) => (
+                    <option key={'type_' + index} value={plateType.id}>
+                      {plateType.name}
+                    </option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">{errors.PlateTypeId?.message}</Form.Control.Feedback>
+              </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Number Plate</Form.Label>
+                <Form.Label>Plate Number</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.numberPlate}
                   type="text"
@@ -130,6 +156,8 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 />
                 <Form.Control.Feedback type="invalid">{errors.numberPlate?.message}</Form.Control.Feedback>
               </Form.Group>
+            </div>
+            <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>color</Form.Label>
                 <Form.Control
@@ -142,8 +170,6 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 />
                 <Form.Control.Feedback type="invalid">{errors.color?.message}</Form.Control.Feedback>
               </Form.Group>
-            </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Registration Number</Form.Label>
                 <Form.Control
@@ -156,6 +182,8 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 />
                 <Form.Control.Feedback type="invalid">{errors.registrationNumber?.message}</Form.Control.Feedback>
               </Form.Group>
+            </div>
+            <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>imeiNumber</Form.Label>
                 <Form.Control
