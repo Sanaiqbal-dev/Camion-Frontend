@@ -11,7 +11,7 @@ import { useAspNetUserLoginMutation } from '@/services/aspNetUserAuth';
 import { AspNetUserLoginRequest } from '@/interface/aspNetUser';
 import { setSession } from '@/state/slice/sessionSlice';
 import { useAppSelector } from '@/state';
-import { SetStateAction, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Toast } from '@/components/ui/toast';
 
 const schema = z.object({
@@ -20,6 +20,8 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const [showToast, setShowToast] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -34,7 +36,7 @@ const Login = () => {
   //   session: { user },
   // } = useAppSelector((state) => state);
 
-  const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
+  const [aspNetUserLogin, { isLoading, error, isSuccess }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
@@ -43,13 +45,14 @@ const Login = () => {
   const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (values: AspNetUserLoginRequest) => {
     aspNetUserLogin(values).then((result: any) => {
       if (result.error) {
-        console.log(result.error);
+        setShowToast(true);
       } else {
         console.log(result);
         if (!error) {
           dispatch(
             setSession({
               token: result.data.token,
+              isCompanyAccount: result.data.isCompanyAccount,
               user: {
                 email: values.username,
                 role: result.data.role,
@@ -84,6 +87,7 @@ const Login = () => {
   }, []);
   return (
     <div className="main-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isSuccess ? 'success' : 'danger'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={ShipperImage} />
@@ -148,10 +152,8 @@ const Login = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      {isLoading && <p>Loading...</p>}
-                      {!isLoading && error && <p>Error: {error}</p>}
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-                        <button type="submit" className="btn customRegisterButton w-100">
+                        <button type="submit" className="btn customRegisterButton w-100" disabled={isLoading}>
                           Login
                         </button>
                         <div className="d-flex justify-content-start">
