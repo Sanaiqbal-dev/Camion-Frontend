@@ -1,4 +1,4 @@
-import { ITruckTypes } from '@/interface/proposal';
+// import { ITruckTypes } from '@/interface/proposal';
 export interface IBayan {}
 export interface ILocation {
   name: string;
@@ -12,22 +12,22 @@ export interface ILocation {
   unitNo?: string;
 }
 
-export interface IShippingInfo{
-  temprature:string;
-  truckType:number;
+export interface IShippingInfo {
+  temprature: string;
+  truckType: number;
   estimatedPickupDate: string;
-  estimatedDropOffDate:string;
-  fare:number;
+  estimatedDropOffDate: string;
+  fare: number;
 }
 export interface IProductType {
   productType: IGoodsType;
-  name:string;
-  price:number;
-  quantity:number;
-  weight:string;
+  name: string;
+  price: number;
+  quantity: number;
+  weight: string;
 }
 
-export interface IGoodsType{
-  id:number;
-  name:string;
+export interface IGoodsType {
+  id: number;
+  name: string;
 }
