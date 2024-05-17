@@ -30,7 +30,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
     reset,
   } = useForm();
 
-  const [trucks, setTrucks] = useState<ITruckItem[]>([{ noOfTrucks: 0, truckTypeId: 1 }]);
+  const [trucks, setTrucks] = useState<ITruckItem[]>(isEdit ? [] : [{ noOfTrucks: 0, truckTypeId: 1 }]);
   const truckTypesData = useGetTruckTypesQuery();
   const [showError, setShowError] = useState(false);
 
@@ -44,7 +44,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
 
   const onSubmit: SubmitHandler<Record<string, any>> = (data) => {
     const formData: ITruckItem[] = Object.keys(data).map((key) => ({
-      noOfTrucks: parseInt(data[key].noOfTrucks), // Convert to number
+      noOfTrucks: parseInt(data[key].noOfTrucks),
       truckTypeId: parseInt(data[key].truckTypeId),
     }));
 
@@ -59,7 +59,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
 
     if (isValid) {
       onSubmitShipmentForm(formData, 'Truck');
-      reset(); // Reset form after submission
+      reset(); 
       setShowError(false);
     } else {
       setShowError(true);
@@ -89,7 +89,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
               <Form.Control
                 type="number"
                 placeholder="1"
-                defaultValue={truck && truck.noOfTrucks} // Convert to number
+                defaultValue={truck && truck.noOfTrucks} 
                 style={{ width: '229px', height: '59px' }}
                 isInvalid={!!errors?.noOfTrucks}
                 {...register(`${index}.noOfTrucks` as const)}

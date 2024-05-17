@@ -13,7 +13,7 @@ export const UsersColumn = ({ onEdit, onDelete }: UserActionsProps): ColumnDef<I
     accessorKey: 'userName',
     header: 'User Name',
     cell: ({ row }) => {
-      return <div>{row.original.fullName}</div>;
+      return <div>{row.original.userName}</div>;
     },
   },
   {

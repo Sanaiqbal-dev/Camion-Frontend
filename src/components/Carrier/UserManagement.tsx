@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import UpdatePassword from '../Modals/UpdatePassword';
 import { ColumnDef } from '@tanstack/react-table';
 import { IPassword, IUser, IUserManagement, QueryPager } from '../../interface/common';
-import { Col, FormControl, InputGroup, Image, Row } from 'react-bootstrap';
+import { Col, FormControl, InputGroup, Image, Row, Button } from 'react-bootstrap';
 
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
@@ -16,37 +16,28 @@ import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
 
 const UserManagement = () => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    term: searchTerm,
   });
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const { data: companyUserData, isLoading: userIsloadding } = useGetCompanyUsersQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    term: searchTerm,
-  });
   const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
-
-  useEffect(() => {
-    if (!isLoading) {
-      setUsers(companyUserData?.result?.result);
-    }
-  }, [userIsloadding]);
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-  useEffect(() => {
-    setPager({ page: 1, pageSize: entriesValue });
-  }, [entriesValue]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -66,11 +57,13 @@ const UserManagement = () => {
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
+
   const onDelete = async (id: string) => {
     const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
+
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
@@ -82,11 +75,18 @@ const UserManagement = () => {
     const newUsers = users.filter((u) => u.userId !== edituser?.userId);
     setUsers(newUsers);
   };
+
   const submitCreateFormHandler = async (data: IUser) => {
-    setshowCreateUserModal(false);
-    const resp = await createSubUser(data);
-    console.log(resp);
+    try {
+      const resp = await createSubUser(data).unwrap();
+      console.log(resp);
+      refetch();
+      setshowCreateUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   const submitEditFormHandler = async (data: IPassword) => {
     setshowUpdatePasswordModal(false);
 
@@ -98,19 +98,49 @@ const UserManagement = () => {
     console.log(resp);
   };
 
-  const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
+  const FilterDataForTable = (users: IUserManagement[]) => {
+    setUsers([]);
+    try {
+      if (users) {
+        const updatedUserData = users.map((currentOrderObject) => {
+          return {
+            userName: currentOrderObject.fullName,
+            email: currentOrderObject.email,
+            action: '',
+          };
+        });
+
+        setUsers((prevData: any) => [...prevData, ...updatedUserData]);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
   };
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
   const columns: ColumnDef<IUserManagement>[] = UsersColumn({
     onEdit,
     onDelete,
   });
+  useEffect(() => {
+    if (companyUserData?.result.result) {
+      FilterDataForTable(companyUserData?.result.result);
+      const maxPageCount = companyUserData?.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
+    }
+  }, [companyUserData]);
 
   return (
     <div className="table-container">
@@ -147,12 +177,20 @@ const UserManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {users ? <DataTable isAction={false} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      {users ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
       <CreateUser
         show={showCreateUserModal}
         onSubmitForm={submitCreateFormHandler}
