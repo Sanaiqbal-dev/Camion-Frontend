@@ -62,14 +62,12 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
       reset(); 
       setShowError(false);
     } else {
-    } else {
       setShowError(true);
     }
   };
 
   useEffect(() => {
     if (isEdit && proposalObject) {
-      const truckShipmentDetails: ITruckShipmentDetails[] = proposalObject.truckShipmentDetail;
       const truckShipmentDetails: ITruckShipmentDetails[] = proposalObject.truckShipmentDetail;
       console.log(truckShipmentDetails);
       const trucksData = truckShipmentDetails.map((obj) => ({
@@ -78,7 +76,6 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
       }));
 
       setTrucks(trucksData);
-    }
     }
   }, [isEdit, proposalObject]);
 
@@ -101,53 +98,6 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
             <Form.Group className="mb-3">
               <Form.Label>Type of truck</Form.Label>
 
-              <Form.Control
-                as="select"
-                style={{ width: '229px', height: '59px' }}
-                defaultValue={truck && truck.truckTypeId}
-                isInvalid={!!errors?.truckTypeId}
-                {...register(`${index}.truckTypeId` as const, {
-                  required: 'Truck type is required',
-                })}>
-                <option value="">Select Truck Type</option>
-                {truckTypesData?.data?.map((item: ITruckTypes, index: number) => (
-                  <option key={index} value={item.id} selected={item.id === truck?.truckTypeId}>
-                    {item.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            {index === 0 ? (
-              <button
-                type="button"
-                onClick={() => addTruck()}
-                style={{
-                  height: '62px',
-                  width: '59px',
-                  backgroundColor: '#0060B8',
-                  color: '#FFF',
-                  marginTop: '30px',
-                }}>
-                +
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => removeTruck(index)}
-                style={{
-                  height: '62px',
-                  width: '59px',
-                  backgroundColor: '#FF8484',
-                  color: '#FFF',
-                  marginTop: '30px',
-                }}>
-                -
-              </button>
-            )}
-          </div>
-        ))}
-        {showError && <span className="tw-text-red">Fill the data correctly</span>}
-      </div>
               <Form.Control
                 as="select"
                 style={{ width: '229px', height: '59px' }}

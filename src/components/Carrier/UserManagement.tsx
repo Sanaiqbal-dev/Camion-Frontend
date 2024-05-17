@@ -32,11 +32,6 @@ const UserManagement = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const { data: companyUserData, isLoading: userIsloadding } = useGetCompanyUsersQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    term: searchTerm,
-  });
   const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
