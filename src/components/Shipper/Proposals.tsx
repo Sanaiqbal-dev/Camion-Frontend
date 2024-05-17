@@ -8,6 +8,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { Button } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
+import { Toast } from '../ui/toast';
 
 const Proposals = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -19,8 +20,9 @@ const Proposals = () => {
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector((state) => state.childObj);
 
   const [quotationProposals, setQuotationProposals] = useState<IProposalQuotation[]>([]);
+  const [showToast, setShowToast] = useState(false);
 
-  const [updateQuotation] = useUpdateQuotationMutation();
+  const [updateQuotation, { isSuccess: isQuotationUpdated }] = useUpdateQuotationMutation();
 
   const { data, isLoading } = useGetProposalQuotationsQuery({
     page: pager.page - 1,
@@ -28,9 +30,7 @@ const Proposals = () => {
     ...filterKeys,
   });
 
-
   const [entriesValue] = useState(10);
-
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
@@ -46,26 +46,30 @@ const Proposals = () => {
   }, [isLoading]);
 
   const quotationClickHandler = async (quotation: IProposalQuotation, isAccepted: boolean) => {
-    const updatedQuotation = {
-      id: quotation.id,
-      trackingId: quotation.trackingId,
-      status: quotation.status,
-      origin: quotation.origin,
-      destination: quotation.destination,
-      weight: quotation.weight,
-      dimentions: quotation.dimentions,
-      proposalQuotationStatusId: isAccepted ? 1 : 0,
-      amount: quotation.amount,
-    };
-    const response = await updateQuotation(updatedQuotation).unwrap();
-    if (response.statusCode === 200) {
+    try {
+      const updatedQuotation = {
+        id: quotation.id,
+        trackingId: quotation.trackingId,
+        status: quotation.status,
+        origin: quotation.origin,
+        destination: quotation.destination,
+        weight: quotation.weight,
+        dimentions: quotation.dimentions,
+        proposalQuotationStatusId: isAccepted ? 1 : 0,
+        amount: quotation.amount,
+      };
+      await updateQuotation(updatedQuotation).unwrap();
+      setShowToast(true);
       const updatedQuotations = quotationProposals.filter((q: IProposalQuotation) => q.id !== quotation.id);
       setQuotationProposals(updatedQuotations);
+    } catch (e) {
+      setShowToast(true);
     }
   };
 
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationUpdated ? 'success' : 'danger'} />}
       <div style={{ height: '100vh' }}>
         {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}

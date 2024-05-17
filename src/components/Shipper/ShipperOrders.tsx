@@ -15,6 +15,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const ShipperOrders = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -23,6 +24,7 @@ const ShipperOrders = () => {
   });
 
   const [totalPageCount, setTotalPageCount] = useState(0);
+  const [showToast, setShowToast] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -31,7 +33,7 @@ const ShipperOrders = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [deleteOrder] = useDeleteOrderMutation();
+  const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
 
   const [orderItems, setOrderItems] = useState<IOrder[]>([]);
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
@@ -101,10 +103,10 @@ const ShipperOrders = () => {
 
   const DeleteOrder = async () => {
     try {
-      const result = await deleteOrder({ id: selectedOrderId });
-      console.log('Proposal deleted successfully:', result);
+      await deleteOrder({ id: selectedOrderId }).unwrap();
+      setShowToast(true);
     } catch (error) {
-      console.error('Error deleting proposal:', error);
+      setShowToast(true);
     }
   };
 
@@ -134,6 +136,7 @@ const ShipperOrders = () => {
   }, [currentData]);
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? 'success' : 'danger'} />}
       <div className="search-and-entries-container">
         <div>
           <button className="filter-btn">

@@ -81,7 +81,7 @@ export interface IFileUploadResponse {
 }
 export interface IGenericResponse {
   message: string;
-  statusCode: number
+  statusCode: number;
 }
 export interface IFile {
   id: number;
@@ -185,6 +185,6 @@ export interface IPassword {
 }
 
 export interface IVehicleType {
-  id: number,
+  id: number;
   typeName: string;
 }

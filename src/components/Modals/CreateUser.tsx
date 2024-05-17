@@ -2,12 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React from 'react';
+import React, { useState } from 'react';
 import { IUser } from '@/interface/common';
 
 interface CreateUserModalProps {
   show: boolean;
-  onSubmitForm: (data: IUser) => void;
+  onSubmitForm: (data: IUser) => Promise<void>;
   handleClose: () => void;
 }
 const schema = z
@@ -29,6 +29,7 @@ const schema = z
   });
 
 const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -38,8 +39,10 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
-    onSubmitForm(data);
+    setIsLoading(true);
+    await onSubmitForm(data);
     reset();
+    setIsLoading(false);
   };
 
   return (
@@ -84,7 +87,7 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
               </Form.Group>
             </div>
           </div>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" disabled={isLoading}>
             Add new user
           </Button>
         </Form>

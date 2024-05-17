@@ -13,6 +13,7 @@ import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserMuta
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const UserManagementShipper = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -24,15 +25,16 @@ const UserManagementShipper = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [showToast, setShowToast] = useState(false);
 
   const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser] = useCreateSubUserMutation();
-  const [updateSubUser] = useUpdateSubUserMutation();
-  const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
+  const [createSubUser, { isSuccess: isUserCreated }] = useCreateSubUserMutation();
+  const [updateSubUser, { isSuccess: isUserDeleted }] = useUpdateSubUserMutation();
+  const [updateSubUserPassword, { isSuccess: isUserUpdated }] = useUpdateSubUserPasswordMutation();
   useEffect(() => {
     if (!isLoading) {
       setUsers(companyUserData.result.result);
@@ -68,33 +70,47 @@ const UserManagementShipper = () => {
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
-    setIsConfirmationModalOpen(false);
-    const resp = await updateSubUser({
-      userId: edituser?.id,
-      isDeleted: true,
-    });
-    console.log(resp);
-    const newUsers = users.filter((u) => u.id !== edituser?.id);
-    setUsers(newUsers);
+    try {
+      await updateSubUser({
+        userId: edituser?.id,
+        isDeleted: true,
+      }).unwrap();
+      setShowToast(true);
+
+      setIsConfirmationModalOpen(false);
+      const newUsers = users.filter((u) => u.id !== edituser?.id);
+      setUsers(newUsers);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
   const submitCreateFormHandler = async (data: any) => {
-    setshowCreateUserModal(false);
-    console.log('submitCreateFormHandler', data);
-    const resp = await createSubUser(data);
-    console.log(resp);
+    try {
+      // console.log('submitCreateFormHandler', data);
+      await createSubUser(data).unwrap();
+      setshowCreateUserModal(false);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
   const submitEditFormHandler = async (data: any) => {
-    setshowUpdatePasswordModal(false);
-    console.log('submitCreateFormHandler', {
-      ...data,
-      email: edituser?.email,
-    });
-    const resp = await updateSubUserPassword({
-      password: data.newPassword,
-      confirmPassword: data.confirmPassword,
-      email: edituser?.email,
-    });
-    console.log(resp);
+    try {
+      // console.log('submitCreateFormHandler', {
+      //   ...data,
+      //   email: edituser?.email,
+      // });
+      await updateSubUserPassword({
+        password: data.newPassword,
+        confirmPassword: data.confirmPassword,
+        email: edituser?.email,
+      }).unwrap();
+
+      setShowToast(true);
+      setshowUpdatePasswordModal(false);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
 
   const debouncedSearch = debounce((search: string) => {
@@ -112,6 +128,7 @@ const UserManagementShipper = () => {
   });
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? 'success' : 'danger'} />}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
           Create New User
