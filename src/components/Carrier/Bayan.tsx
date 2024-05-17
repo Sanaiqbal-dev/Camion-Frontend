@@ -129,6 +129,7 @@ const Bayan = () => {
   const SubmitProductTypeInfo = () => {
     setShowProductTypeModal(false);
     setShowShippingInfoModal(true);
+    showShippingInfoModal && console.log('');
   };
   return (
     <div className="table-container">
