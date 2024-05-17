@@ -49,6 +49,7 @@ const Login = () => {
           dispatch(
             setSession({
               token: result.data.token,
+              isCompanyAccount: result.data.isCompanyAccount,
               user: {
                 email: values.username,
                 role: result.data.role,

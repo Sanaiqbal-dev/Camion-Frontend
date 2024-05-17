@@ -161,7 +161,7 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable columns={columns} data={users} isAction={true} /> : <span>No Users Found!</span>}
+      {users ? <DataTable columns={columns} data={users} isAction={true} /> : <span>No Users Found!</span>}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />

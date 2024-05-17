@@ -58,8 +58,8 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Update Password</Modal.Title>
       </Modal.Header>
       <Modal.Body>

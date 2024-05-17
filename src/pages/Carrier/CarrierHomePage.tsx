@@ -11,6 +11,7 @@ import { useState } from 'react';
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useSelector((state: any) => state.session.token);
+  const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
   const currentRouteLocation = useLocation();
 
   const pageTitleMap = [
@@ -34,7 +35,7 @@ const CarrierHomePage = () => {
   if (!token) {
     return <Navigate to="/login" state={{ from: { currentRouteLocation } }} replace />;
   }
-
+  const showCreateCompanyNotification = hasNoCompanyRegistered && currentRouteLocation.pathname === '/carrier/dashboard';
   return (
     <div className="wrapper">
       <CarrierSider />
@@ -63,7 +64,7 @@ const CarrierHomePage = () => {
                 </Button>
               </DropdownMenuTrigger>
 
-              {currentRouteLocation.pathname === '/carrier/dashboard' && (
+              {showCreateCompanyNotification && (
                 <div
                   style={{
                     fontFamily: 'Inter',

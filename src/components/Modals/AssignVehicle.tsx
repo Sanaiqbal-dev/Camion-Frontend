@@ -48,8 +48,8 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
     }
   }, [data]);
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Assign Vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>
