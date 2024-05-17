@@ -22,6 +22,7 @@ export type IDriver = {
   action: string;
   iqamaId: string;
   fileName?: any;
+  issueNumber: string;
 };
 
 export interface IDriverModalForm {

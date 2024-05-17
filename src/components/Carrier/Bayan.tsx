@@ -3,12 +3,13 @@ import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
 import BayanLocationModal from '../Modals/BayanLocationModal';
 import ProductTypeModal from '../Modals/ProductTypeModal';
+import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
+import AssignVehicle from '../Modals/AssignVehicle';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -104,6 +105,7 @@ const Bayan = () => {
   const [showCreateBayanModal, setShowCreateBayanModal] = useState(false);
   const [showProductTypeModal, setShowProductTypeModal] = useState(false);
   const [showShippingInfoModal, setShowShippingInfoModal] = useState(false);
+  const [showAssignVehicleModal, setShowAssignVehicleModal] = useState(false);
   const [locationType, setLocationType] = useState<string>('pickup');
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -120,6 +122,8 @@ const Bayan = () => {
     setLocationType('delivery');
   };
 
+  console.log('ShowInfoModal', showShippingInfoModal);
+
   const SubmitDeliveryLocationInfo = () => {
     setShowCreateBayanModal(false);
     setShowProductTypeModal(true);
@@ -131,24 +135,29 @@ const Bayan = () => {
     setShowShippingInfoModal(true);
     showShippingInfoModal && console.log('');
   };
+  const SubmitShippingInfo = () => {
+    setShowShippingInfoModal(false);
+    setShowAssignVehicleModal(true);
+  };
+
+  const AssignVehicleToBayan = (vehicleId: number) => {
+    console.log('Assigned vehicle Id:', vehicleId);
+    setShowAssignVehicleModal(false);
+
+    // Add request for create bayan.
+  };
+
   return (
     <div className="table-container">
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={IconFilter} /> Filter
-          </button>
-        </div>
-        <div>
-          <button
-            className="add-item-btn"
-            id="create-bayan-btn"
-            onClick={() => {
-              setShowCreateBayanModal(true);
-            }}>
-            Create Bayan
-          </button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button
+          className="add-item-btn"
+          id="create-bayan-btn"
+          onClick={() => {
+            setShowCreateBayanModal(true);
+          }}>
+          Create Bayan
+        </button>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
@@ -197,6 +206,22 @@ const Bayan = () => {
         handleClose={() => setShowProductTypeModal(false)}
         handleNextStep={() => {
           SubmitProductTypeInfo();
+        }}
+      />
+      <BayanShippingInfoModal
+        show={showShippingInfoModal}
+        handleClose={() => setShowShippingInfoModal(false)}
+        handleNextStep={() => {
+          SubmitShippingInfo();
+        }}
+      />
+      <AssignVehicle
+        show={showAssignVehicleModal}
+        handleClose={() => {
+          setShowAssignVehicleModal(false);
+        }}
+        onAssignVehicleToOrderItem={(vehicleId) => {
+          AssignVehicleToBayan(vehicleId);
         }}
       />
     </div>
