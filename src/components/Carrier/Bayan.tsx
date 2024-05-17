@@ -7,6 +7,7 @@ import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
+import BayanLocationModal from '../Modals/BayanLocationModal';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -99,7 +100,8 @@ const Bayan = () => {
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
-
+  const [showCreateBayanModal, setShowCreateBayanModal] = useState<boolean>(false);
+  const [locationType, setLocationType] = useState<string>("pickup");
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -110,6 +112,18 @@ const Bayan = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const SubmitPickUpLocationInfo = () => {
+    setLocationType("delivery");
+  }
+
+  const SubmitDeliveryLocationInfo = () => {
+    //show product type modal
+  }
+
+  const SubmitProductTypeInfo = () => {
+    
+  }
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
@@ -119,7 +133,7 @@ const Bayan = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="create-bayan-btn">
+          <button className="add-item-btn" id="create-bayan-btn" onClick={()=> {setShowCreateBayanModal(true)}}>
             Create Bayan
           </button>
         </div>
@@ -158,8 +172,8 @@ const Bayan = () => {
         </Row>
       </div>
       {bayanData && <DataTable isAction={true} columns={BayanColumns} data={bayanData} />}
+      <BayanLocationModal show={showCreateBayanModal} infoType={locationType} handleClose={()=>setShowCreateBayanModal(false)} handleNextStep={()=>{locationType=="pickup"? SubmitPickUpLocationInfo() : SubmitDeliveryLocationInfo()}}/>
     </div>
   );
-};
-
+}
 export default Bayan;
