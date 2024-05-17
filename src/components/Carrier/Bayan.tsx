@@ -103,7 +103,10 @@ const Bayan = () => {
   const [entriesValue, setEntriesValue] = useState(10);
   const [showCreateBayanModal, setShowCreateBayanModal] = useState(false);
   const [showProductTypeModal, setShowProductTypeModal] = useState(false);
-  const [showShippingInfoModal, setShowShippingInfoModal] = useState(false);
+  const [
+    // showShippingInfoModal,
+    setShowShippingInfoModal,
+  ] = useState(false);
   const [locationType, setLocationType] = useState<string>('pickup');
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
