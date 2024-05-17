@@ -12,22 +12,22 @@ export interface ILocation {
   unitNo?: string;
 }
 
-export interface IShippingInfo{
-  temprature:string;
-  truckType:number;
+export interface IShippingInfo {
+  shipmentType: number;
+  temprature: string;
   estimatedPickupDate: string;
-  estimatedDropOffDate:string;
-  fare:number;
+  estimatedDropOffDate: string;
+  fare: number;
 }
 export interface IProductType {
   productType: IGoodsType;
-  name:string;
-  price:number;
-  quantity:number;
-  weight:string;
+  name: string;
+  price: number;
+  quantity: number;
+  weight: string;
 }
 
-export interface IGoodsType{
-  id:number;
-  name:string;
+export interface IGoodsType {
+  id: number;
+  name: string;
 }

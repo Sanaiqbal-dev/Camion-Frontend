@@ -11,7 +11,8 @@ import { useAspNetUserLoginMutation } from '@/services/aspNetUserAuth';
 import { AspNetUserLoginRequest } from '@/interface/aspNetUser';
 import { setSession } from '@/state/slice/sessionSlice';
 import { useAppSelector } from '@/state';
-import { useEffect } from 'react';
+import { SetStateAction, useEffect } from 'react';
+import { Toast } from '@/components/ui/toast';
 
 const schema = z.object({
   username: z.string().email('Enter a valid email.'),
@@ -62,6 +63,9 @@ const Login = () => {
           const userRole = result.data.role;
 
           userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
+        }
+        else{
+          // <Toast variant={'success'} showToast={false} setShowToast={}/>
         }
       }
     });
@@ -145,7 +149,7 @@ const Login = () => {
                         </Row>
                       </div>
                       {isLoading && <p>Loading...</p>}
-                      {!isLoading && error && <p>Error: User not found</p>}
+                      {!isLoading && error && <p>Error: {error}</p>}
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
                         <button type="submit" className="btn customRegisterButton w-100">
                           Login
