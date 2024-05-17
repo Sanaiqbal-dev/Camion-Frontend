@@ -53,7 +53,7 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
 
     getCityList: builder.query<IAPIResponse<IPlacesResponseObject[]>, any>({
-      query: () => `api/Proposals/GetNationalityList`,
+      query: (selectedDistrict) => `api/Proposals/GetNationalityList?id=${selectedDistrict}`,
       providesTags: ['Proposal'],
     }),
 
