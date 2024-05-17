@@ -32,7 +32,7 @@ const AdminUserManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
+  const [createSubUser, { error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
@@ -175,7 +175,7 @@ const AdminUserManagement = () => {
         show={showCreateUserModal}
         onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
-        showError={!isLoading && isError && error}
+        // showError={!isLoading && isError && error}
         isSuccess={!error ? 'success' : ''}
       />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />

@@ -2,14 +2,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React from 'react';
+import React, { useState } from 'react';
 import { IUser } from '@/interface/common';
 
 interface CreateUserModalProps {
   show: boolean;
-  onSubmitForm: (data: IUser) => void;
+  onSubmitForm: (data: IUser) => Promise<void>;
   handleClose: () => void;
-  showError: any;
   isSuccess: string;
 }
 const schema = z
@@ -30,7 +29,8 @@ const schema = z
     path: ['confirmPassword'],
   });
 
-const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm, showError, isSuccess }) => {
+const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm, isSuccess }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,7 +40,9 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
+    setIsLoading(true);
     onSubmitForm(data);
+    setIsLoading(false);
     isSuccess == 'success' && reset();
   };
 
@@ -86,8 +88,7 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
               </Form.Group>
             </div>
           </div>
-          <span>{showError && showError.data.errors[0].description}</span>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" disabled={isLoading}>
             Add new user
           </Button>
         </Form>
