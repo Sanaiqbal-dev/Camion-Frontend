@@ -1,120 +1,92 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconSaveFile from "../../../assets/icons/ic-file-earmark.svg";
-import IconAssignVehicle from "../../../assets/icons/ic-vehicle.svg";
-import IconDelete from "../../../assets/icons/ic-delete.svg";
-import IconPrintBill from "../../../assets/icons/ic-printer.svg";
-import IconDown from "../../../assets/icons/ic-down.svg";
-import { IOrder } from "../../../interface/carrier";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../../../@/components/ui/dropdown-menu";
-import { Button } from "../../../../@/components/ui/button";
+import { ColumnDef } from '@tanstack/react-table';
+import IconAssignVehicle from '../../../assets/icons/ic-vehicle.svg';
+import IconDelete from '../../../assets/icons/ic-delete.svg';
+import IconPrintBill from '../../../assets/icons/ic-printer.svg';
+import IconDown from '../../../assets/icons/ic-down.svg';
+import { IOrderTable } from '../../../interface/carrier';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../../../@/components/ui/dropdown-menu';
+import { Button } from '../../../../@/components/ui/button';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 
 interface OrderActionsProps {
-  onSave: (orderItem: IOrder) => void;
-  onDelete: (orderItem: IOrder) => void;
-  onAssignVehicle: (orderItem: IOrder) => void;
-  onPrintBill: (orderItem: IOrder) => void;
-  onUpdateStatus: (id: string, statusVal: string) => void;
+  onDelete: (orderItemId: number) => void;
+  onAssignVehicle: (orderItemId: number) => void;
+  onPrintBill: (orderItemId: number) => void;
+  onUpdateStatus: (id: number, statusId: number) => void;
 }
-export const OrderColumns = ({
-  onSave,
-  onDelete,
-  onAssignVehicle,
-  onPrintBill,
-  onUpdateStatus,
-}: OrderActionsProps): ColumnDef<IOrder>[] => [
+export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateStatus }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {
-    accessorKey: "origin",
-    header: "Origin",
+    accessorKey: 'origin',
+    header: 'Origin',
   },
   {
-    accessorKey: "destination",
-    header: "Destination",
+    accessorKey: 'destination',
+    header: 'Destination',
   },
   {
-    accessorKey: "weight",
-    header: "Weight",
+    accessorKey: 'weight',
+    header: 'Weight',
   },
   {
-    accessorKey: "dimentions",
-    header: "Dimensions",
+    accessorKey: 'dimentions',
+    header: 'Dimensions',
   },
   {
-    accessorKey: "ETA",
-    header: "ETA",
+    accessorKey: 'ETA',
+    header: 'ETA',
   },
 
   {
-    accessorKey: "status",
-    header: "status",
+    accessorKey: 'status',
+    header: 'status',
     cell: ({ row }) => {
       const item = row.original;
+      const noItemSeleted = (
+        <>
+          Select Status <img src={IconDown} />
+        </>
+      );
+      const { data: orderStatuses } = useGetOrderStatusesQuery();
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">
-                Select Status <img src={IconDown} />
-              </span>
+              <span className="sr-only tw-flex tw-gap-1">{item.status ? item.status : noItemSeleted}</span>
             </Button>
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            className="tw-flex tw-flex-col tw-gap-2 tw-p-2"
-            align="end"
-          >
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, "waiting")}
-            >
-              Waiting
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, "enroute")}
-            >
-              Enroute
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="hover:tw-bg-black hover:tw-text-white"
-              onClick={() => onUpdateStatus(item.id, "delivered")}
-            >
-              Delivered
-            </DropdownMenuItem>
+          <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
+            {orderStatuses &&
+              orderStatuses.result.map((statusItem: any) => {
+                return (
+                  <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
+                    {statusItem.description}
+                  </DropdownMenuItem>
+                );
+              })}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
   {
-    accessorKey: "action",
-    header: "Action",
+    accessorKey: 'action',
+    header: 'Action',
     cell: ({ row }) => {
       return (
-        <div className="action-container" style={{ justifyContent: "start" }}>
-          <div onClick={() => onSave(row.original)}>
-            <img src={IconSaveFile} />
-            <span style={{ color: "#27AE60" }}>Save</span>
-          </div>
-          <div onClick={() => onDelete(row.original)}>
+        <div className="action-container" style={{ justifyContent: 'start' }}>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={IconDelete} />
-            <span style={{ color: "#EB5757" }}>Delete</span>
+            <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
-          <div onClick={() => onAssignVehicle(row.original)}>
+          <div onClick={() => onAssignVehicle(row.original.id)}>
             <img src={IconAssignVehicle} />
-            <span style={{ color: "#0060B8" }}>Assign Vehicle</span>
+            <span style={{ color: '#0060B8' }}>Assign Vehicle</span>
           </div>
-          <div
-            style={{ marginLeft: "10px" }}
-            onClick={() => onPrintBill(row.original)}
-          >
+          <div style={{ marginLeft: '10px' }} onClick={() => onPrintBill(row.original.id)}>
             <img src={IconPrintBill} />
-            <span style={{ color: "#F48031" }}>Print Bayan Bill</span>
+            <span style={{ color: '#F48031' }}>Print Bayan Bill</span>
           </div>
         </div>
       );

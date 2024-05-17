@@ -1,6 +1,6 @@
-import { BASE_URL } from "../config/app";
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BASE_URL } from '../config/app';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
@@ -10,26 +10,37 @@ export const baseApi = createApi({
         session: { token },
       } = getState() as any;
       if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+        headers.set('Authorization', `Bearer ${token}`);
       }
       return headers;
     },
+    responseHandler: (response): Promise<Response> => {
+      if (response.status === 403) {
+        // storeDispatch(deleteUser());
+      }
+      return response.json();
+    },
   }),
   tagTypes: [
-    "Vehicle",
-    "AspNetUser",
-    "Driver",
-    "Company",
-    "DriverAssignment",
-    "OrderDetail",
-    "FileType",
-    "Order",
-    "OrderStatus",
-    "OrderVehicleTracking",
-    "ProposalQuotation",
-    "Proposal",
+    'Vehicle',
+    'AspNetUser',
+    'Driver',
+    'ShipmentType',
+    'TruckType',
+    'Company',
+    'DriverAssignment',
+    'OrderDetail',
+    'FileType',
+    'Order',
+    'OrderStatus',
+    'OrderVehicleTracking',
+    'ProposalQuotation',
+    'Proposal',
+    'FileUpload',
+    'FileDownload',
+    'CreateProfile',
   ],
-  reducerPath: "baseApi",
+  reducerPath: 'baseApi',
   endpoints: () => ({}),
 });
 

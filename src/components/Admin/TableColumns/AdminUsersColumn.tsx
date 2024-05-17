@@ -1,42 +1,38 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconEdit from "../../../assets/icons/ic-edit.svg";
-import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { IAdminUser } from "../../../interface/admin";
+import { ColumnDef } from '@tanstack/react-table';
+import IconEdit from '../../../assets/icons/ic-edit.svg';
+import IconDelete from '../../../assets/icons/ic-delete.svg';
+import { IUserManagement } from '@/interface/common';
 
-interface AdminUserActionsProps{
-  onEdit : () => void;
+interface AdminUserActionsProps {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export const AdminUsersColumn = ({onEdit} : AdminUserActionsProps) : ColumnDef<IAdminUser>[] => [
+export const AdminUsersColumn = ({ onEdit, onDelete }: AdminUserActionsProps): ColumnDef<IUserManagement>[] => [
   {
-    accessorKey: "userName",
-    header: "User Name",
-  },
-  {
-    accessorKey: "email",
-    header: "Email Address",
-  },
-  {
-    accessorKey: "password",
-    header: "Password",
+    accessorKey: 'userName',
+    header: 'User Name',
     cell: ({ row }) => {
-      const count: string = row.getValue("password");
-      return <span>{"*".repeat(count.length)}</span>;
+      return <div>{row.original.fullName}</div>;
     },
   },
   {
-    accessorKey: "action",
-    header: "Action",
-    cell: () => {
+    accessorKey: 'email',
+    header: 'Email Address',
+  },
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => {
       return (
-        <div className="action-container" style={{ justifyContent: "start" }}>
-          <div onClick={() => onEdit()}>
+        <div className="action-container" style={{ justifyContent: 'start' }}>
+          <div onClick={() => onEdit(row.original.userId)}>
             <img src={IconEdit} />
-            <span style={{ color: "#27AE60" }}>Edit</span>
+            <span style={{ color: '#27AE60' }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDelete(row.original.userId)}>
             <img src={IconDelete} />
-            <span style={{ color: "#EB5757" }}>Delete</span>
+            <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
         </div>
       );

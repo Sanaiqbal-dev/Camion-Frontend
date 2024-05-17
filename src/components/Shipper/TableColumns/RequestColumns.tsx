@@ -1,72 +1,52 @@
-import { ColumnDef } from "@tanstack/react-table";
-import DeleteIcon from "../../../assets/icons/ic-delete.svg";
-import EditIcon from "../../../assets/icons/ic-edit.svg";
-import ProposalIcon from "../../../assets/icons/ic-proposal.svg";
-import { Link } from "react-router-dom";
+import { ColumnDef } from '@tanstack/react-table';
+import DeleteIcon from '../../../assets/icons/ic-delete.svg';
+import EditIcon from '../../../assets/icons/ic-edit.svg';
+import ProposalIcon from '../../../assets/icons/ic-proposal.svg';
+import { IRequestTable } from '@/interface/shipper';
 
-export type Payment = {
-  id: string;
-  origin: string;
-  destination: string;
-  weight: string;
-  dimentions: string;
-  ETA: string;
-  action: string;
-  onProposalClick?: () => void;
-};
-export const RequestColumns: ColumnDef<Payment>[] = [
+interface RequestActionsProps {
+  onEdit: (proposalItemId: number) => void;
+  onDelete: (proposalItemId: number) => void;
+  onProposalList: (proposalItemId: number) => void;
+}
+export const RequestColumns = ({ onEdit, onDelete, onProposalList }: RequestActionsProps): ColumnDef<IRequestTable>[] => [
   {
-    accessorKey: "origin",
-    header: "Origin",
+    accessorKey: 'origin',
+    header: 'Origin',
   },
   {
-    accessorKey: "destination",
-    header: "Destination",
+    accessorKey: 'destination',
+    header: 'Destination',
   },
   {
-    accessorKey: "weight",
-    header: "Weight",
+    accessorKey: 'weight',
+    header: 'Weight',
   },
   {
-    accessorKey: "dimentions",
-    header: "Dimensions",
+    accessorKey: 'dimentions',
+    header: 'Dimensions',
   },
   {
-    accessorKey: "ETA",
-    header: "ETA",
+    accessorKey: 'ETA',
+    header: 'ETA',
   },
   {
-    accessorKey: "action",
-    header: "Action",
-    cell: () => {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => {
       return (
-        <div
-          className="action-container"
-          style={{ justifyContent: "start", gap: "20px" }}
-        >
-          <div>
+        <div className="action-container" style={{ justifyContent: 'start', gap: '20px' }}>
+          <div onClick={() => onEdit(row.original.id)}>
             <img src={EditIcon} />
-            <span style={{ color: "#27AE60" }}>Edit</span>
+            <span style={{ color: '#27AE60' }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDelete(row.original.id)}>
             <img src={DeleteIcon} />
-            <span style={{ color: "#EB5757" }}>Delete</span>
+            <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
-          <div>
-            <Link
-              to={"/shipper/proposalssecond"}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <img src={ProposalIcon} />
-              <span style={{ color: "#F2994A", marginTop: "5px" }}>
-                Proposals
-              </span>
-            </Link>
+          <div onClick={() => onProposalList(row.original.id)}>
+            <img src={ProposalIcon} />
+            <span style={{ color: '#F2994A' }}>Proposals</span>
           </div>
         </div>
       );

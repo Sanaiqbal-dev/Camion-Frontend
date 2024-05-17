@@ -3,7 +3,7 @@ export interface ILoginRequest {
   password: string;
 }
 
-export interface IUser{
+export interface IUser {
   username: string;
   role: string;
 }
@@ -11,7 +11,7 @@ export interface ISessionState {
   username: string | null;
   role: string | null;
   token: string | null;
-  status: "active" | "expired";
+  status: 'active' | 'expired';
 }
 export interface ILoginResponse {
   token: string;

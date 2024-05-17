@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 $theme-colors: (
-  "primary": #0060b8,
-  "secondary": #7b7878,
+  'primary': #0060b8,
+  'secondary': #7b7878,
 );
 $font-family-base: Inter, sans-serif;
 $grid-breakpoints: (
@@ -15,7 +15,7 @@ $grid-breakpoints: (
   xl: 1200px,
   xxl: 1400px,
 );
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 .main-container {
   max-height: 100vh;
@@ -255,7 +255,7 @@ tr {
   flex-direction: column;
   justify-content: space-between;
 }
-.accordion{
+.accordion {
   margin-top: 100px;
   margin-left: 20px;
   margin-right: 20px;
@@ -288,8 +288,11 @@ tr {
   border: 0;
   border-radius: 10px;
   overflow-anchor: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
     border-radius 0.15s ease;
 }
 
@@ -497,17 +500,66 @@ tr {
   gap: 0%;
 }
 
+.custom-file-upload-button {
+  background-color: #f2f2f2;
+  color: black;
+  border: 1px solid #e0e0e0;
+  padding: 7px 20px !important;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-file-upload-button:hover {
+  background-color: #e7e6e6;
+}
+
+.bayan-bill-card {
+  border: none;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0px 20px 50px 0px #dce0f980;
+  padding: 30px 20px;
+  gap: 20px;
+}
+.bill-main-content > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+
+  p {
+    line-height: 10px;
+    padding: 0px;
+  }
+}
+.bayan-bill-container {
+  padding-top: 1.5rem;
+  max-height: calc(100vh - 160px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.trackingEnabled {
+  color: #0060b8;
+}
+.trackingDisabled {
+  color: #bdbdbd;
+}
 @media (max-width: 1024px) {
+  .parent-row {
+    padding-left: 0;
+  }
+
+  .img-container {
+    img {
+      display: none;
+    }
+  }
   .row {
     width: 100%;
   }
 
   .form-group {
     display: block;
-  }
-
-  .form-control {
-    width: auto;
   }
 
   .customInput {
@@ -564,7 +616,7 @@ tr {
   box-sizing: border-box;
 }
 
-.table-contents>div:nth-child(1) {
+.table-contents > div:nth-child(1) {
   height: 100%;
 }
 .data-table {
@@ -584,7 +636,7 @@ thead th:first-child {
   padding-left: 20px;
 }
 
-.orders-table .data-table tr td:last-child{
+.orders-table .data-table tr td:last-child {
   width: 0px;
 }
 .data-table tr td:last-child,
@@ -611,10 +663,18 @@ thead th:last-child {
 .img-next {
   padding: 5px 20px;
   cursor: pointer;
+  background-color: white;
 }
+.img-prev-disabled,
+.img-next-disabled {
+  svg {
+    fill: rgb(231, 230, 230);
+  }
+}
+
 .img-prev:hover,
 .img-next:hover {
-  background-color: #7a7a7a;
+  background-color: #a5a4a4;
 }
 .img-prev img,
 .img-next img {
@@ -662,12 +722,11 @@ thead th:last-child {
   gap: 10px;
 }
 
-
 //Modals
 .modal {
   --bs-modal-width: 1000px;
 }
-.modal-dialog{
+.modal-dialog {
   justify-content: center;
 }
 .modal-content {
@@ -687,12 +746,15 @@ thead th:last-child {
   border-radius: 5px;
 }
 .modal-header {
+  display: flex;
   justify-content: center;
+  flex-direction: column-reverse;
   border-bottom: 0 none;
   padding: 0%;
+  gap: 20px;
 }
 .modal-header .btn-close {
-  display: none;
+  display: flex;
 }
 .modal-header .modal-title {
   font-weight: 700;
@@ -737,51 +799,49 @@ thead th:last-child {
 .submit-proposal:active {
   background-color: #0ca07e;
 }
-@media (max-width: 1024px) {
-  //   .parent-row {
-  //     padding-left: 0;
-  //   }
-
-  //   .img-container {
-  //     // max-width: 50%; /* Adjust image container width */
-  //     position: static; /* Adjust positioning if needed */
-  //   }
-
-  //   .background-img {
-  //     height: auto; /* Adjust height for responsive behavior */
-  //     max-height: 50vh; /* Limit image height on smaller screens */
-  //   }
-
-  //   .form-main-container, .login {
-  //     height: auto; /* Allow container to resize based on content */
-  //     min-height: 50vh; /* Minimum height to balance with image section */
-  //   }
-
-  //   /* Adjustments for form layout */
-  //   .form-container, .form-container > * {
-  //     flex-direction: column;
-  //   }
+.auth-form-container {
+  padding: 0px 30px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0px auto;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
-// @media (max-width: 768px) {
-//   /* Similar adjustments as above, tailored for even smaller screens */
-//   .background-img {
-//     display: none; /* Optionally hide the background image on very small screens */
-//   }
+body *::-webkit-scrollbar {
+  display: none;
+}
 
-//   .login {
-//     padding-top: 2rem; /* Adjust padding for top alignment */
-//   }
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.menu-toggle {
+  background-color: transparent;
+  border: none;
+  padding: 0%;
+}
+.menu-toggle::after {
+  display: none;
+}
+.menu-dropdown {
+  z-index: 10;
+}
+.menu-dropdown .btn-primary {
+  --bs-btn-active-bg: transparent;
+  --bs-btn-active-border-color: transparent;
+  --bs-btn-hover-bg: transparent;
+  --bs-btn-hover-border-color: transparent;
+}
 
-//   /* Further adjust form layout and input sizes if necessary */
-//   .customInput {
-//     width: 100%; /* Ensure inputs span the full container width */
-//   }
+.success {
+  position: fixed !important;
+  z-index: 10000;
+  background-color: lightgreen;
+}
 
-//   .register-container {
-//     flex-direction: column;
-//     align-items: center; /* Center align the elements for a vertical layout */
-//   }
-
-//   /* Adjust the size and layout of buttons and other interactive elements for easier touch */
-// }
+.danger {
+  position: fixed !important;
+  z-index: 10000;
+  background-color: lightcoral;
+}

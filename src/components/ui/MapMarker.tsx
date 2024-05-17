@@ -1,12 +1,7 @@
-import { ReactNode } from "react";
-import {
-  AdvancedMarker,
-  InfoWindow,
-  Pin,
-  useAdvancedMarkerRef,
-} from "@vis.gl/react-google-maps";
-import MarkerImage from "../../assets/icons/ic-tracker.svg";
-import { Image } from "react-bootstrap";
+import { ReactNode } from 'react';
+import { AdvancedMarker, InfoWindow, Pin, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
+import MarkerImage from '../../assets/icons/ic-tracker.svg';
+import { Image } from 'react-bootstrap';
 
 interface MapMarkerParams {
   lat: number;
@@ -14,12 +9,7 @@ interface MapMarkerParams {
   shipperTrackingInfo?: ReactNode;
   infoWindowText?: JSX.Element;
 }
-export const MapMarker: React.FC<MapMarkerParams> = ({
-  lat,
-  lng,
-  infoWindowText,
-  shipperTrackingInfo,
-}) => {
+export const MapMarker: React.FC<MapMarkerParams> = ({ lat, lng, infoWindowText, shipperTrackingInfo }) => {
   const [markerRef, marker] = useAdvancedMarkerRef();
 
   return (

@@ -1,99 +1,31 @@
-import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import { useState } from "react";
-import { IReport } from "../../interface/admin";
-import { ReportsColumn } from "./TableColumns/ReportColumns";
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import { useEffect, useState } from 'react';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { useGetReportsQuery, useLazyDownloadReportQuery } from '@/services/report';
+import { ColumnDef } from '@tanstack/react-table';
+import { IReport } from '@/interface/reports';
+import { ReportsColumn } from './TableColumns/ReportColumns';
+import { debounce } from '@/util/debounce';
 
 const ReportManagement = () => {
-  const reportsData: IReport[] = [
-    {
-      id: "728ed52f",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-    {
-      id: "489e1d42",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-
-    {
-      id: "489e1e742",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-
-    {
-      id: "9e19od42",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-
-    {
-      id: "56te1d42",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-    {
-      id: "7tf5d52f",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-    {
-      id: "720ui72f",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-    {
-      id: "728eb92f",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-    {
-      id: "72ted52f",
-      userType: "Shipper",
-      shipperName: "Acme Co.",
-      contact: "+96 876 5678",
-      email: "mr_abasi@mail.com",
-      activeOrders: "10",
-      report: "",
-    },
-  ];
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [downloadReport] = useLazyDownloadReportQuery();
+  const { data: currentData } = useGetReportsQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    term: searchTerm,
+  });
+  const [reportsTableData, setReportsTableData] = useState<IReport[]>([]);
 
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -109,6 +41,72 @@ const ReportManagement = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const onDownloadReport = async (userId: string) => {
+    console.log('Download report for :', userId);
+    const selectedReport = reportsTableData.find((report: IReport) => report.userId === userId);
+    console.log('selectedReport', selectedReport?.name);
+    try {
+      if (selectedReport) {
+        await downloadReport(selectedReport.userId);
+        console.log('Download successful!');
+      } else {
+        console.log('No file selected!');
+      }
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  const columns: ColumnDef<IReport>[] = ReportsColumn({
+    onDownloadReport,
+  });
+
+  const FilterDataForTable = (orderItems: IReport[]) => {
+    setReportsTableData([]);
+    try {
+      if (orderItems) {
+        const updatedReportData = orderItems.map((currentReportObject) => {
+          return {
+            userType: currentReportObject.userType ? currentReportObject.userType : '-',
+            name: currentReportObject.name,
+            contactNumber: currentReportObject.contactNumber ? currentReportObject.contactNumber : '-',
+            emailAddress: currentReportObject.emailAddress,
+            noOfActiveOrders: currentReportObject.noOfActiveOrders,
+            userId: currentReportObject.userId,
+            report: '',
+          };
+        });
+
+        setReportsTableData((prevData) => [...prevData, ...updatedReportData]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+
+  useEffect(() => {
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
+    }
+  }, [currentData]);
+  // useEffect(() => {
+  //   setPager({ page: 1, pageSize: entriesValue });
+  // }, [entriesValue]);
+
   return (
     <div className="table-container">
       <div className="tw-flex tw-justify-between tw-items-center">
@@ -118,30 +116,13 @@ const ReportManagement = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -156,16 +137,20 @@ const ReportManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {reportsData && <DataTable isAction={false} columns={ReportsColumn} data={reportsData} />}
+      {reportsTableData && <DataTable isAction={false} columns={columns} data={reportsTableData} />}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= totalPageCount}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
     </div>
   );
 };

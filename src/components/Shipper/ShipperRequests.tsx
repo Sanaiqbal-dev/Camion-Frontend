@@ -1,116 +1,253 @@
-import { Payment, RequestColumns } from "./TableColumns/RequestColumns";
-import { DataTable } from "../ui/DataTable";
-import { Col, FormControl, Image, InputGroup, Row } from "react-bootstrap";
-import PreviousIcon from "../../assets/icons/ic-previous.svg";
-import NextIcon from "../../assets/icons/ic-next.svg";
-import SearchIcon from "../../assets/icons/ic-search.svg";
-import FilterIcon from "../../assets/icons/ic-filter.svg";
-import { useState } from "react";
+import { RequestColumns } from './TableColumns/RequestColumns';
+import { DataTable } from '../ui/DataTable';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import PreviousIcon from '../../assets/icons/ic-previous.svg';
+import NextIcon from '../../assets/icons/ic-next.svg';
+import SearchIcon from '../../assets/icons/ic-search.svg';
+import FilterIcon from '../../assets/icons/ic-filter.svg';
+import { useEffect, useState } from 'react';
+import CreateNewRequest from '../Modals/CreateNewRequest';
+import ShippementDetails from '../Modals/ShippementDetails';
+import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
+import { INewRequest, IRequestTable } from '@/interface/shipper';
+import { useGetShipmentTypesQuery } from '@/services/shipmentType';
+import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
+import { useAppSelector } from '@/state';
+import { PAGER_SIZE } from '@/config/constant';
+import { QueryPager } from '@/interface/common';
+import { ColumnDef } from '@tanstack/react-table';
+import ConfirmationModal from '../Modals/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const ShipperRequests = () => {
-  const data: Payment[] = [
-    {
-      id: "728ed52f",
-      origin: "Maputo, Mozambique",
-      destination: "Dublin, Ireland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "489e1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
+  const userData = useAppSelector((state) => state.session);
+  const [sendProposalRequest, setSendProposalRequest] = useState(false);
 
-    {
-      id: "489e1e742",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
+  const [showCreateUserModalFirstStep, SetShowCreateUserModalFirstStep] = useState(false);
+  const [showCreateUserModalSecondStep, SetShowCreateUserModalSecondStep] = useState(false);
+  const [showShippementDetailsModal, setShowShippementDetailsModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
-    {
-      id: "9e19od42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
+  const shipmentData = useGetShipmentTypesQuery();
+  const [createNewProposal, { isSuccess: isProposalCreated }] = useCreateNewProposalMutation();
+  const [updateProposal, { isSuccess: isProposalUpdated }] = useUpdateProposalMutation();
+  const [deleteProposal, { isSuccess: isProposalDeleted }] = useDeleteProposalMutation();
+  const navigate = useNavigate();
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE,
+  });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
-    {
-      id: "56te1d42",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "7tf5d52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "720ui72f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "728eb92f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-    {
-      id: "72ted52f",
-      origin: "Brussels, Belgium",
-      destination: "Warsaw, Poland",
-      weight: "82.5 kg",
-      dimentions: "45x45x45",
-      ETA: "9/20/2024",
-      action: "",
-    },
-  ];
+  const [isEditProposal, setIsEditProposal] = useState(false);
+  const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
 
+  const [deleteItemId, setDeleteItemId] = useState<number>();
+  const { data: currentData, error } = useGetProposalsQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    term: searchTerm,
+  });
+
+  const [requestTableData, setRequestTableData] = useState<IRequestTable[]>([]);
+  const [selectedProposalItem, setSelectedProposalItem] = useState<number>();
+  const [currentIndex, setCurrentIndex] = useState(0);
   const values = [10, 20, 30, 40, 50];
-  let currentIndex = 0;
+
   const [entriesValue, setEntriesValue] = useState(10);
 
   function handleChangeValue(direction: number) {
-    currentIndex += direction;
+    setCurrentIndex(currentIndex + direction);
 
     if (currentIndex >= values.length) {
-      currentIndex = values.length - 1;
+      setCurrentIndex(values.length - 1);
     } else if (currentIndex < 0) {
-      currentIndex = 0;
+      setCurrentIndex(0);
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  //Create New Proposal implementation...
+  const [proposalItem, setProposalItem] = useState<IProposalResponseData>({} as IProposalResponseData);
+
+  const CreateUserNextStep = (requestObj: INewRequest) => {
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      originBuildingNo: requestObj.buildingNumber,
+      originStreetName: requestObj.streetName,
+      originCityId: requestObj.cityId,
+      originZipCode: requestObj.zipCode.toString(),
+      originAdditionalNo: requestObj.additionalNumber.toString(),
+      originUnitNo: requestObj.unitNo,
+      originDistrictId: requestObj.districtId,
+    }));
+
+    console.log('userId: ', userData);
+    SetShowCreateUserModalFirstStep(false);
+    SetShowCreateUserModalSecondStep(true);
+  };
+
+  const goToShippementDetails = (requestObj: INewRequest) => {
+    setProposalItem((prevItem) => ({
+      ...prevItem,
+      destinationBuildingNo: requestObj.buildingNumber,
+      destinationStreetName: requestObj.streetName,
+      destinationCityId: requestObj.cityId,
+      destinationZipCode: requestObj.zipCode.toString(),
+      destinationAdditionalNo: requestObj.additionalNumber.toString(),
+      destinationUnitNo: requestObj.unitNo,
+      destinationDistrictId: requestObj.districtId,
+    }));
+
+    SetShowCreateUserModalSecondStep(false);
+    setShowShippementDetailsModal(true);
+  };
+
+  const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
+    const shipmentDataAll: any = shipmentData.data;
+    const shipmentTypeId =
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
+      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
+
+    const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
+    const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
+
+    const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
+    const itemHeight = shipmentType === 'Other' ? data.height : 0;
+    const otherItemName = shipmentType === 'Other' ? data.otherType : '';
+
+    setProposalItem((prevItem?: any) => ({
+      ...prevItem,
+      shipmentTypeId: shipmentTypeId,
+      shipmentQuantity: shipmentQuantityVal,
+      length: data.length ? data.length : 0,
+      width: data.width ? data.width : 0,
+      height: itemHeight,
+      isCargoItemsStackable: data.isCargoItemsStackable ? data.isCargoItemsStackable : false,
+      isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
+      shipmentTruckType: shipmentTruckTypeDefault,
+      userId: userData.user.userId,
+      weight: itemWeight,
+      otherName: otherItemName,
+      proposalId: isEditProposal ? selectedProposalItem : 0,
+      FileName: '',
+      FilePath: '',
+    }));
+
+    setSendProposalRequest(false);
+    setShowConfirmationModal(true);
+  };
+
+  const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
+    setRequestTableData([]);
+    if (requestItems) {
+      const updatedRequestData = requestItems.map((currentRequestObject) => ({
+        id: currentRequestObject.id,
+        origin: currentRequestObject.origin,
+        destination: currentRequestObject.destination,
+        weight: currentRequestObject.weight,
+        dimentions: currentRequestObject.dimentions,
+        ETA: currentRequestObject.estimatedDeliveryTime ? currentRequestObject.estimatedDeliveryTime : '-',
+        action: '',
+      }));
+
+      setRequestTableData((prevData: any) => [...prevData, ...updatedRequestData]);
+    }
+  };
+
+  const onEdit = async (proposalItemId: number) => {
+    setSelectedProposalItem(proposalItemId);
+    setIsEditProposal(true);
+    SetShowCreateUserModalFirstStep(true);
+  };
+  const onDelete = (proposalItemId: number) => {
+    setDeleteItemId(proposalItemId);
+    setIsDeleteProposal(true);
+    setShowConfirmationModal(true);
+  };
+
+  const onProposalList = () => {
+    navigate('/shipper/proposals');
+  };
+  const columns: ColumnDef<IRequestTable>[] = RequestColumns({
+    onEdit,
+    onDelete,
+    onProposalList,
+  });
+
+  const DeleteProposal = async () => {
+    try {
+      await deleteProposal({ id: deleteItemId }).unwrap();
+      setShowToast(true);
+    } catch (error) {
+      setShowToast(true);
+    }
+  };
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
+  useEffect(() => {
+    if (currentData?.result.result) {
+      FilterDataForTable(currentData?.result.result);
+      const maxPageCount = currentData?.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
+    }
+  }, [currentData]);
+
+  useEffect(() => {
+    setPager({ page: 1, pageSize: entriesValue });
+  }, [entriesValue]);
+
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+    }
+  }, [error]);
+  const ProposalCreateOrUpdateRequest = async () => {
+    try {
+      const response = isEditProposal ? await updateProposal(proposalItem).unwrap() : await createNewProposal(proposalItem).unwrap();
+      // console.log('Create New Proposal response: ', response?.result?.result);
+      FilterDataForTable(response?.result.result);
+      setShowShippementDetailsModal(false);
+      setIsEditProposal(false);
+
+      setProposalItem({} as any);
+      setSendProposalRequest(false);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
+  };
+
+  const debouncedSearch = debounce((search: string) => {
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
+  };
+
+  useEffect(() => {
+    if (sendProposalRequest) {
+      ProposalCreateOrUpdateRequest();
+    }
+  }, [sendProposalRequest]);
+
+  useEffect(() => {
+    if (showCreateUserModalFirstStep == false && showCreateUserModalSecondStep == false && showShippementDetailsModal == false) {
+      setIsEditProposal(false);
+      setSelectedProposalItem(undefined);
+    }
+  }, [showCreateUserModalFirstStep, showCreateUserModalSecondStep, showShippementDetailsModal]);
+
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
       <div className="search-and-entries-container">
         <div>
           <button className="filter-btn">
@@ -118,7 +255,7 @@ const ShipperRequests = () => {
           </button>
         </div>
         <div>
-          <button className="add-item-btn" id="add-driver-btn">
+          <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
             Create new Request
           </button>
         </div>
@@ -130,30 +267,13 @@ const ShipperRequests = () => {
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input
-                className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base"
-                type="text"
-                readOnly
-                value={entriesValue}
-              />
+              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
               <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={PreviousIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
                 </button>
-                <button
-                  className="tw-border-none"
-                  onClick={() => handleChangeValue(-1)}
-                >
-                  <Image
-                    className="tw-cursor-pointer tw-border-0 tw-bg-transparent"
-                    src={NextIcon}
-                  />
+                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
                 </button>
               </div>
             </div>
@@ -168,18 +288,70 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control"
-              ></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {data && (
-        <DataTable columns={RequestColumns} data={data} isAction={false} />
-      )}
+      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
+      <CreateNewRequest
+        show={showCreateUserModalFirstStep}
+        infoType={'origin'}
+        isEdit={isEditProposal}
+        proposalObject={selectedProposalItem ? selectedProposalItem : undefined}
+        handleClose={() => {
+          SetShowCreateUserModalFirstStep(false);
+          setIsEditProposal(false);
+          setSelectedProposalItem(undefined);
+        }}
+        handleNextStep={CreateUserNextStep}
+      />
+      <CreateNewRequest
+        show={showCreateUserModalSecondStep}
+        infoType={'destination'}
+        isEdit={isEditProposal}
+        proposalObject={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
+        handleClose={() => {
+          SetShowCreateUserModalSecondStep(false);
+          setIsEditProposal(false);
+          setSelectedProposalItem(undefined);
+        }}
+        handleNextStep={goToShippementDetails}
+      />
+      <ShippementDetails
+        show={showShippementDetailsModal}
+        isEdit={isEditProposal}
+        proposalId={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
+        handleClose={() => {
+          setShowShippementDetailsModal(false);
+          setIsEditProposal(false);
+          setSelectedProposalItem(undefined);
+        }}
+        handleFormDataSubmission={setShipmentDetails}
+      />
+      <ConfirmationModal
+        promptMessage={
+          isEditProposal
+            ? 'Are you sure, you want to update this request?'
+            : isDeletePropoasl
+              ? 'Are you sure, you want to delete this request?'
+              : 'Are you sure, you want to create new request?'
+        }
+        show={showConfirmationModal}
+        handleClose={() => setShowConfirmationModal(false)}
+        performOperation={() => {
+          setShowConfirmationModal(false);
+          isDeletePropoasl ? DeleteProposal() : setSendProposalRequest(true);
+        }}
+      />
     </div>
   );
 };

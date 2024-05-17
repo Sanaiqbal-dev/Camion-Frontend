@@ -1,34 +1,34 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button, Form, Modal } from "react-bootstrap";
-import React from "react";
-
-interface IPassword {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button, Form, Modal } from 'react-bootstrap';
+import React from 'react';
+import { IPassword } from '@/interface/common';
 
 interface UpdatePasswordModalProps {
   show: boolean;
+  onSubmitForm: (data: IPassword) => void;
+
   handleClose: () => void;
 }
 const schema = z
   .object({
-    currentPassword: z.string().min(1, "Enter your current password"),
-    newPassword: z.string().min(6, "Password must be at least 6 characters."),
-    confirmPassword: z.string().min(6, "Confirm your password."),
+    currentPassword: z.string().min(1, 'Enter your current password'),
+    newPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters.')
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
+        'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
+      ),
+    confirmPassword: z.string().min(6, 'Confirm your password.'),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
-const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
-  show,
-  handleClose,
-}) => {
+const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm, handleClose }) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +37,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
     resolver: zodResolver(schema),
   });
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
-        console.log(data);
+    onSubmitForm(data);
 
     //    try {
     //      const loginResponse = await login(data).unwrap();
@@ -58,8 +58,8 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Update Password</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -70,13 +70,11 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
               <Form.Control
                 type="password"
                 placeholder="Enter current password"
-                style={{ width: "270px", height: "50px" }}
-                {...register("currentPassword")}
+                style={{ width: '270px', height: '50px' }}
+                {...register('currentPassword')}
                 isInvalid={!!errors.currentPassword}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.currentPassword?.message}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.currentPassword?.message}</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicNewPassword">
@@ -84,11 +82,11 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
               <Form.Control
                 type="password"
                 placeholder="Enter New Password"
-                style={{ width: "270px", height: "50px" }}
-                {...register("newPassword")}
+                style={{ width: '270px', height: '50px' }}
+                {...register('newPassword')}
                 isInvalid={!!errors.newPassword}
               />
-              <Form.Control.Feedback type="invalid">
+              <Form.Control.Feedback type="invalid" style={{ maxWidth: '270px' }}>
                 {errors.newPassword?.message}
               </Form.Control.Feedback>
             </Form.Group>
@@ -98,13 +96,11 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({
               <Form.Control
                 type="password"
                 placeholder="Confirm Password"
-                style={{ width: "270px", height: "50px" }}
-                {...register("confirmPassword")}
+                style={{ width: '270px', height: '50px' }}
+                {...register('confirmPassword')}
                 isInvalid={!!errors.confirmPassword}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.confirmPassword?.message}
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">

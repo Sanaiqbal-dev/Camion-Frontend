@@ -1,7 +1,7 @@
-import { ColumnDef } from "@tanstack/react-table";
-import TickIcon from "../../../assets/icons/ic-tickIcon.svg";
-import CrossIcon from "../../../assets/icons/ic-crossIcon.svg";
-import CompanyLogo from "../../../assets/icons/companyLogo.svg";
+import { ColumnDef } from '@tanstack/react-table';
+import TickIcon from '../../../assets/icons/ic-tickIcon.svg';
+import CrossIcon from '../../../assets/icons/ic-crossIcon.svg';
+import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 export type Payment = {
   id: string;
@@ -16,54 +16,48 @@ export type Payment = {
 };
 export const Proposals1Column: ColumnDef<Payment>[] = [
   {
-    accessorKey: "transportInc",
-    header: "Transport Inc",
+    accessorKey: 'transportInc',
+    header: 'Transport Inc',
     cell: () => {
       return (
-        <div style={{ display: "flex", gap: "20px" }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <img src={CompanyLogo} />
         </div>
       );
     },
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
   },
   {
-    accessorKey: "origin",
-    header: "Origin",
+    accessorKey: 'origin',
+    header: 'Origin',
   },
   {
-    accessorKey: "destination",
-    header: "Destination",
+    accessorKey: 'destination',
+    header: 'Destination',
   },
   {
-    accessorKey: "weight",
-    header: "Weight",
+    accessorKey: 'weight',
+    header: 'Weight',
   },
   {
-    accessorKey: "dimentions",
-    header: "Dimensions",
+    accessorKey: 'dimentions',
+    header: 'Dimensions',
   },
   {
-    accessorKey: "ammount",
-    header: "Ammount",
+    accessorKey: 'ammount',
+    header: 'Ammount',
   },
   {
-    accessorKey: "action",
-    header: "Action",
+    accessorKey: 'action',
+    header: 'Action',
     cell: () => {
       return (
-        <div style={{ display: "flex", gap: "20px" }}>
-          <img
-            src={TickIcon}
-            onClick={() => console.warn("Not implemented yet")}
-          />
-          <img
-            src={CrossIcon}
-            onClick={() => console.warn("Not implemented yet")}
-          />
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <img src={TickIcon} onClick={() => console.warn('Not implemented yet')} />
+          <img src={CrossIcon} onClick={() => console.warn('Not implemented yet')} />
         </div>
       );
     },

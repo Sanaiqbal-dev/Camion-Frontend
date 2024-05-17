@@ -9,40 +9,56 @@ export type IBayanItem = {
 };
 export type IDriver = {
   id: string;
-  driverName: string;
-  driverId: string;
+  name: string;
+  driverId: number;
   licenseNumber: string;
-  DOB: string;
-  nationality: string;
-  mobileNumber: string;
+  dob: string;
+  driverNationality: { name: string };
+  nationalityId: number;
+  phoneNumber?: string;
+  mobileno?: string;
   viewIqama: string;
+  mobileNo: string;
   action: string;
+  iqamaId: string;
+  fileName?: any;
 };
+
+export interface IDriverModalForm {
+  show: boolean;
+  mode: 'add' | 'edit';
+}
+
 export type IRequest = {
-  id: string;
+  hasSubmitedByMe: boolean;
+
+  id: number;
   origin: string;
   destination: string;
   weight: string;
   dimentions: string;
   EDT: string;
   action: string;
+  isProposalSubmitted?: boolean;
 };
 
 export type IVehicle = {
-  id: string;
-  driverName: string;
-  vehicleType: string;
+  id: number;
+  driver: string;
+  vehicleType: { typeName: string };
   modelYear: string;
   vehicleNumber: string;
   color: string;
+  numberPlate: string;
   registrationNumber: string;
   IMEINumber: string;
   vehicleRegistration: string;
   action: string;
+  fileName?: string;
 };
 
-export type IOrder = {
-  id: string;
+export type IOrderTable = {
+  id: number;
   origin: string;
   destination: string;
   weight: string;

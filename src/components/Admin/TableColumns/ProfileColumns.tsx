@@ -1,91 +1,124 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconTick from "../../../assets/icons/ic-submitted.svg";
-import IconDeleteProfile from "../../../assets/icons/ic-delete-profile.svg";
-import IconRejectProfile from "../../../assets/icons/ic-reject-profile.svg";
-import { Iprofiles } from "../../../interface/admin";
-import { Link } from "react-router-dom";
-import clsx from "clsx";
+import { ColumnDef } from '@tanstack/react-table';
+import IconTick from '../../../assets/icons/ic-submitted.svg';
+import IconDeleteProfile from '../../../assets/icons/ic-delete-profile.svg';
+import IconRejectProfile from '../../../assets/icons/ic-reject-profile.svg';
+import { Iprofiles } from '../../../interface/admin';
+import clsx from 'clsx';
 
-export const ProfileColumns: ColumnDef<Iprofiles>[] = [
+interface ProfileActionProps {
+  onSelectFile: (file: any) => void;
+  onAcceptButtonClick: (id: string) => void;
+  onRejectButtonClick: (id: string) => void;
+  onDeactivateButtonClick: (id: string) => void;
+  onDeleteButtonClick: (id: string) => void;
+}
+
+export const ProfileColumns = ({
+  onSelectFile,
+  onAcceptButtonClick,
+  onRejectButtonClick,
+  onDeactivateButtonClick,
+  onDeleteButtonClick,
+}: ProfileActionProps): ColumnDef<Iprofiles>[] => [
   {
-    accessorKey: "profileType",
-    header: "ProfileType",
+    accessorKey: 'profileType',
+    header: 'ProfileType',
   },
   {
-    accessorKey: "firstName",
-    header: "First Name",
+    accessorKey: 'firstName',
+    header: 'First Name',
   },
   {
-    accessorKey: "lastName",
-    header: "Last Name",
+    accessorKey: 'lastName',
+    header: 'Last Name',
   },
   {
-    accessorKey: "email",
-    header: "Email Address",
+    accessorKey: 'email',
+    header: 'Email Address',
   },
   {
-    accessorKey: "contact",
-    header: "Contact Number",
+    accessorKey: 'contact',
+    header: 'Contact Number',
   },
   {
-    accessorKey: "company",
-    header: "Company Name",
+    accessorKey: 'company',
+    header: 'Company Name',
   },
   {
-    accessorKey: "CRDocument",
-    header: "CR Document",
-    cell: () => {
-      return <Link to={""}>View Document</Link>;
+    accessorKey: 'CRDocument',
+    header: 'CR Document',
+    cell: ({ row }) => {
+      const files = row.original.crDocument || [];
+      const renderOptions = () => {
+        return files.map((file) => (
+          <option key={file.id} value={file.id}>
+            {file.fileName}
+          </option>
+        ));
+      };
+
+      const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedIndex = event.target.selectedIndex;
+        const selectedFile = files[selectedIndex - 1];
+        if (selectedFile) {
+          onSelectFile(selectedFile);
+        }
+      };
+
+      return (
+        <select onChange={handleChange}>
+          <option value="">Select Document</option>
+          {renderOptions()}
+        </select>
+      );
     },
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: 'status',
+    header: 'Status',
     cell: ({ row }) => {
-      const status: string = row.getValue("status");
+      const status: string = row.getValue('status');
       const className_ = clsx({
-        "tw-text-orange-500": status === "Not Approved",
-        "tw-text-red-500": status === "Deactivated",
-        "tw-text-green-500": status === "Active",
+        'tw-text-orange-500': status === 'Not Approved',
+        'tw-text-red-500': status === 'Deactivated',
+        'tw-text-green-500': status === 'Active',
       });
       return <span className={className_}>{status}</span>;
     },
   },
   {
-    accessorKey: "action",
-    header: "Action",
+    accessorKey: 'action',
+    header: 'Action',
     cell: ({ row }) => {
-      const status = row.getValue("status");
+      const id = row.original.id;
+      const status = row.getValue('status');
 
-      return status === "Not Approved" ? (
+      return status === 'Not Approved' ? (
         <div className="tw-flex tw-gap-2">
           <button
             className="table-action-btn"
             style={{
-              color: "#0EBC93",
-              backgroundColor: "#0EBC931A",
+              color: '#0EBC93',
+              backgroundColor: '#0EBC931A',
             }}
-          >
-            <img src={IconTick} />
+            onClick={() => id && onAcceptButtonClick(id)}>
+            <img src={IconTick} alt="Accept" />
             Accept
           </button>
           <button
             className="table-action-btn"
             style={{
-              color: "#EB5757",
-              backgroundColor: "#EB57571A",
+              color: '#EB5757',
+              backgroundColor: '#EB57571A',
             }}
-          >
-            <img src={IconRejectProfile} />
+            onClick={() => id && onRejectButtonClick(id)}>
+            <img src={IconRejectProfile} alt="Reject" />
             Reject
           </button>
         </div>
-      ) : status === "Active" ? (
+      ) : status === 'Active' ? (
         <div>
-          <button
-            className="table-action-btn"
-            style={{ color: "#F48031", backgroundColor: "#F480311A" }}
-          >
+          <button className="table-action-btn" style={{ color: '#F48031', backgroundColor: '#F480311A' }} onClick={() => id && onDeactivateButtonClick(id)}>
             Deactivate
           </button>
         </div>
@@ -94,11 +127,11 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
           <button
             className="table-action-btn"
             style={{
-              color: "#EB5757",
-              backgroundColor: "#EB57571A",
+              color: '#EB5757',
+              backgroundColor: '#EB57571A',
             }}
-          >
-            <img src={IconDeleteProfile} />
+            onClick={() => id && onDeleteButtonClick(id)}>
+            <img src={IconDeleteProfile} alt="Delete" />
             Delete
           </button>
         </div>
@@ -106,3 +139,5 @@ export const ProfileColumns: ColumnDef<Iprofiles>[] = [
     },
   },
 ];
+
+export default ProfileColumns;

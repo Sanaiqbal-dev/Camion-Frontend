@@ -22,7 +22,7 @@ export interface SelectedObj {
   child?: SelectedObj;
 }
 
-export type RelationshipType = "M2M" | "O2M" | "M2O" | "" | undefined;
+export type RelationshipType = 'M2M' | 'O2M' | 'M2O' | '' | undefined;
 export interface ChildObj {
   objName: string | undefined;
   openDrawer: boolean;
@@ -34,8 +34,8 @@ export interface ChildObj {
 }
 export interface ISessionUser {
   email: string;
-  status: boolean;
-  scope: string;
+  role: 'Admin' | 'Carrier' | 'Shipper';
+  userId: string;
 }
 
 export interface MenuItem {
@@ -52,10 +52,15 @@ export interface IFile {
 
 export interface ILanguage {
   code: string;
-  dir: "rtl" | "ltr";
+  dir: 'rtl' | 'ltr';
 }
 
 export interface IAPIResponse<T> {
+  result: any;
+  data: {
+    statusCode?: number;
+    message: string;
+  };
   success: boolean;
   content: T;
   message: string;
@@ -63,10 +68,124 @@ export interface IAPIResponse<T> {
   pageNumber: number;
   total: number;
 }
-
-export interface IUser {
-  id: String;
-  userName: String;
+export interface IUserManagement {
+  id: string;
+  userId: string;
+  userName: string;
+  fullName: string;
   email: string;
   action: string;
+}
+
+export interface IFileUploadResponse {
+  data?: IGenericResponse;
+}
+export interface IGenericResponse {
+  message: string;
+  statusCode: number;
+}
+export interface IFile {
+  id: number;
+  description: string;
+}
+
+export interface IUploadFile {
+  fileType?: number;
+  uploadFile: string;
+}
+
+export interface IProposalForm {
+  amount: string;
+  delieveryDate: string;
+  otherDetails: string;
+  proposalQuotationId: number;
+  proposalQuotationStatusId: number;
+  fileName?: string;
+  filePath: string;
+  purposalId: number;
+  userId: string;
+}
+
+interface IFileDownload {
+  filePath: string;
+  fileName: string;
+  fileType?: number;
+}
+export interface ICompanyProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  companyAccountStatus?: number | null;
+  isCompanyAccountActive?: boolean;
+  password: string;
+  confirmPassword: string;
+  companyName: string;
+  companyId?: number;
+  deleteCompanyAccount?: boolean;
+  fileDownload: IFileDownload[];
+  userId: string;
+}
+
+export interface IDriver {
+  id?: number | string;
+  name: string;
+  iqamaId: string;
+  licenseNumber: string;
+  dob: string;
+  nationalityId: number | string;
+  phoneNumber: string;
+  mobileNo?: string;
+  fileName: string;
+  filePath: string;
+  driverId: number;
+}
+export interface IAppUser {
+  id: string;
+  userName: string;
+  normalizedUserName: string;
+  email: string;
+  normalizedEmail: string;
+  emailConfirmed: boolean;
+  passwordHash: string;
+  securityStamp: string;
+  concurrencyStamp: string;
+  phoneNumber: string;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
+  lockoutEnd: string;
+  lockoutEnabled: boolean;
+  accessFailedCount: number;
+  firstName: string;
+  lastName: string;
+  isVerified: boolean;
+  companyId: number;
+  company: ICompany;
+  isManager: boolean;
+}
+
+export interface ICompany {
+  id: number;
+  name: string;
+  nameAr: string;
+  createdDate: string;
+  createdById: string;
+  appUser: IAppUser;
+}
+export interface IUser {
+  firstName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface IPassword {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface IVehicleType {
+  id: number;
+  typeName: string;
 }

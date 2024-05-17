@@ -1,58 +1,70 @@
-import { ColumnDef } from "@tanstack/react-table";
-import IconEdit from "../../../assets/icons/ic-edit.svg";
-import IconDelete from "../../../assets/icons/ic-delete.svg";
-import { Link } from "react-router-dom";
-import { IDriver } from "../../../interface/carrier";
+import { ColumnDef } from '@tanstack/react-table';
+import IconEdit from '../../../assets/icons/ic-edit.svg';
+import IconDelete from '../../../assets/icons/ic-delete.svg';
+import { Link } from 'react-router-dom';
+import { IDriver } from '../../../interface/carrier';
 
-export const DriverManagementColumns: ColumnDef<IDriver>[] = [
+interface DriverActionProps {
+  onDeleteDriver: (id: number) => void;
+  onUpdateDriver: (id: number) => void;
+  onIqamaDownloadClick: (id: number) => void;
+}
+
+export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick }: DriverActionProps): ColumnDef<IDriver>[] => [
   {
-    accessorKey: "driverName",
-    header: "Driver Name",
+    accessorKey: 'name',
+    header: 'Driver Name',
   },
   {
-    accessorKey: "driverId",
-    header: "Driver ID/Iqama",
+    accessorKey: 'iqamaId',
+    header: 'Driver ID/Iqama',
   },
   {
-    accessorKey: "licenseNumber",
-    header: "License Number",
+    accessorKey: 'licenseNumber',
+    header: 'License Number',
   },
   {
-    accessorKey: "DOB",
-    header: "Date Of Birth",
+    accessorKey: 'dob',
+    header: 'Date Of Birth',
   },
   {
-    accessorKey: "nationality",
-    header: "Nationality",
+    accessorKey: 'driverNationality.name',
+    header: 'Nationality',
   },
 
   {
-    accessorKey: "mobileNumber",
-    header: "Mobile Number",
+    accessorKey: 'phoneNumber',
+    header: 'Mobile Number',
   },
 
   {
-    accessorKey: "viewIqama",
-    header: "Iqama/Id",
-    cell:()=>{
-        return(
-            <Link to={""}>View Iqama/ID</Link>
-        )
-    }
-  },
-  {
-    accessorKey: "action",
-    header: "Action",
-    cell: () => {
+    accessorKey: 'viewIqama',
+    header: 'Iqama/Id',
+    cell: ({ row }) => {
+      const driverId = row.original.id;
+
       return (
-        <div className="action-container" style={{ justifyContent: "start" }}>
-          <div>
+        <div onClick={() => onIqamaDownloadClick(parseInt(driverId))}>
+          <Link to={''}>View Iqama/ID</Link>
+        </div>
+      );
+    },
+  },
+
+  {
+    accessorKey: 'action',
+    header: 'Action',
+    cell: ({ row }) => {
+      const driverId = row.original.id;
+      return (
+        <div className="action-container" style={{ justifyContent: 'start' }}>
+          <div onClick={() => onUpdateDriver(parseInt(driverId))}>
             <img src={IconEdit} />
-            <span style={{ color: "#27AE60" }}>Edit</span>
+            <span style={{ color: '#27AE60' }}>Edit</span>
           </div>
-          <div>
+          <div onClick={() => onDeleteDriver(parseInt(driverId))}>
             <img src={IconDelete} />
-            <span style={{ color: "#EB5757" }}>Delete</span>
+            <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
         </div>
       );
