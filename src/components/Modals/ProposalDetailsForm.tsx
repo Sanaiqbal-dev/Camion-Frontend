@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Toast } from '../ui/toast';
 
 interface IProposalForm {
   amount: string;
@@ -44,8 +45,9 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
     resolver: zodResolver(schema),
   });
   const userId = useAppSelector((state) => state.session.user.userId);
-  const [uploadFile] = useUploadFileMutation();
-  const [addNewProposal] = useAddNewProposalMutation();
+  const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
+  const [showToast, setShowToast] = useState(false);
+  const [addNewProposal, { isSuccess: isProposalSubmitted, isLoading: isSubmittingProposal }] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSeletedFile] = useState<File>();
   const [filePath, setFilePath] = useState('');
@@ -61,8 +63,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
             setFilePath(response.data.message);
           }
           console.log('File uploaded successfully:', response);
+          setShowToast(true);
         } catch (error) {
           console.error('Error uploading file:', error);
+          setShowToast(true);
         }
       }
     };
@@ -84,11 +88,13 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
         userId: userId,
       });
       console.log(proposalResponse);
+      setShowToast(true);
       handleClose();
       reset(); // Reset the form
       setSeletedFile(undefined);
     } catch (error) {
       console.error('Error submitting proposal:', error);
+      setShowToast(true);
     }
   };
 
@@ -98,61 +104,64 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Proposal Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <div className="singleLineControl tw-flex  tw-gap-5">
-              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
-                <Form.Label className="tw-text-sm">Amount</Form.Label>
-                <Form.Control type="string" className="form-control customInput" {...register('amount')} isInvalid={!!errors.amount} placeholder="Enter amount" />
-                <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
+    <>
+      {showToast && <Toast variant={isProposalSubmitted || isSubmittingProposal || isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Proposal Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
+              <div className="singleLineControl tw-flex  tw-gap-5">
+                <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
+                  <Form.Label className="tw-text-sm">Amount</Form.Label>
+                  <Form.Control type="string" className="form-control customInput" {...register('amount')} isInvalid={!!errors.amount} placeholder="Enter amount" />
+                  <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
+                  <Form.Label className="tw-text-sm">Expected Delivery Date</Form.Label>
+                  <Form.Control type="date" placeholder="Select a date" style={{ width: '270px', height: '50px' }} {...register('EDD')} isInvalid={!!errors.EDD} />
+                  <Form.Control.Feedback type="invalid">{errors.EDD?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <Form.Group controlId="formBasicOtherDetails">
+                <Form.Label className="tw-text-sm">Other Details</Form.Label>
+                <Form.Control as="textarea" rows={5} placeholder="Enter text here" style={{ width: '100%' }} {...register('otherDetails')} isInvalid={!!errors.otherDetails} />
+                <Form.Control.Feedback type="invalid">{errors.otherDetails?.message}</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
-                <Form.Label className="tw-text-sm">Expected Delivery Date</Form.Label>
-                <Form.Control type="date" placeholder="Select a date" style={{ width: '270px', height: '50px' }} {...register('EDD')} isInvalid={!!errors.EDD} />
-                <Form.Control.Feedback type="invalid">{errors.EDD?.message}</Form.Control.Feedback>
+              <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
+                <Form.Label className="tw-text-sm">Upload Document (if any)</Form.Label>
+                <div className="tw-flex">
+                  <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
+                    Upload the document
+                  </Button>
+                  <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
+                </div>
+                <Form.Control
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const files = (e.target as HTMLInputElement).files;
+                    if (files && files.length > 0) {
+                      const file = files[0];
+                      setSeletedFile(file);
+                      console.log(file);
+                    }
+                  }}
+                />
               </Form.Group>
             </div>
-            <Form.Group controlId="formBasicOtherDetails">
-              <Form.Label className="tw-text-sm">Other Details</Form.Label>
-              <Form.Control as="textarea" rows={5} placeholder="Enter text here" style={{ width: '100%' }} {...register('otherDetails')} isInvalid={!!errors.otherDetails} />
-              <Form.Control.Feedback type="invalid">{errors.otherDetails?.message}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
-              <Form.Label className="tw-text-sm">Upload Document (if any)</Form.Label>
-              <div className="tw-flex">
-                <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
-                  Upload the document
-                </Button>
-                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
-              </div>
-              <Form.Control
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const files = (e.target as HTMLInputElement).files;
-                  if (files && files.length > 0) {
-                    const file = files[0];
-                    setSeletedFile(file);
-                    console.log(file);
-                  }
-                }}
-              />
-            </Form.Group>
-          </div>
-          <Button variant="primary" type="submit">
-            Submit Proposal
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+            <Button variant="primary" type="submit" disabled={isSubmittingProposal || isUploadingFile}>
+              Submit Proposal
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
 

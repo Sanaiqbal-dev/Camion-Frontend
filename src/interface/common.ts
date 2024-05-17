@@ -108,8 +108,7 @@ export interface IProposalForm {
 
 interface IFileDownload {
   filePath: string;
-  fileName: string;
-  fileType?: number;
+  fileName?: string;
 }
 export interface ICompanyProfile {
   firstName: string;
@@ -124,6 +123,7 @@ export interface ICompanyProfile {
   companyId?: number;
   deleteCompanyAccount?: boolean;
   fileDownload: IFileDownload[];
+  moiNumber: string;
   userId: string;
 }
 
