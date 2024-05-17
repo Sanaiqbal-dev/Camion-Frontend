@@ -25,7 +25,7 @@ const schema = z.object({
   unitNo: z.string(),
 });
 
-const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClose, handleNextStep, infoType = 'origin' }) => {
+const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClose, handleNextStep, infoType='pickup'}) => {
   const {
     register,
     handleSubmit,
