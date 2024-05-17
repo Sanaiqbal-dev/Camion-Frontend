@@ -5,8 +5,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-// import FilterIcon from '../../assets/icons/ic-filter.svg';
-
 import { DriverManagementColumns } from './TableColumns/DriverManagementColumns';
 import { IDriver, IDriverModalForm } from '../../interface/carrier';
 import AddDriver from '../Modals/AddDriver';
@@ -16,6 +14,7 @@ import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 const DriverManagement = () => {
   const values = [10, 20, 30, 40, 50];
 
@@ -27,6 +26,10 @@ const DriverManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
+  const [isDeleteDriver, setIsDeleteDriver] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
+  const [selectedDriverId, setSelectedDriverId] = useState<number>();
   const [modal, setModal] = useState<IDriverModalForm>({ show: false, mode: 'add' });
   const [editDriverData, setEditDriverData] = useState<IDriver>();
 
@@ -54,14 +57,19 @@ const DriverManagement = () => {
   };
 
   const onDeleteDriver = async (id: number) => {
+    setSelectedDriverId(id);
+    setIsDeleteDriver(true);
+    setShowConfirmationModal(true);
+  };
+
+  const DeleteDriver = async () => {
     try {
-      await deleteDriver({ id: id });
+      await deleteDriver({ id: selectedDriverId });
       console.log('Driver deleted successfully');
     } catch (error) {
       console.error('Error deleting driver:', error);
     }
   };
-
   const onUpdateDriver = (id: number) => {
     const selectedDriver = driversData.find((driver: any) => driver.id === id);
     setEditDriverData(selectedDriver);
@@ -125,11 +133,7 @@ const DriverManagement = () => {
   return (
     <div className="table-container">
       <div className="search-and-entries-container">
-        <div>
-          {/* <button className="filter-btn">
-            <img src={FilterIcon} /> Filter
-          </button> */}
-        </div>
+        <div></div>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => setModal({ show: true, mode: 'add' })}>
             Add Driver
@@ -171,7 +175,7 @@ const DriverManagement = () => {
       </div>
       {driversData && <DataTable isAction={true} columns={columns} data={driversData} />}
       {getDriversList && getDriversList.data && (
-        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
           <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= getDriversList.data.result.total} onClick={() => updatePage(-1)}>
             <img src={PreviousIcon} />
           </Button>
@@ -186,6 +190,15 @@ const DriverManagement = () => {
         </div>
       )}
       <AddDriver modal={modal} handleClose={handleCloseModal} driverExistingData={editDriverData} />
+      <ConfirmationModal
+        promptMessage={isDeleteDriver ? 'Are you sure, you want to delete this driver?' : ''}
+        show={showConfirmationModal}
+        handleClose={() => setShowConfirmationModal(false)}
+        performOperation={() => {
+          setShowConfirmationModal(false);
+          isDeleteDriver && DeleteDriver();
+        }}
+      />
     </div>
   );
 };

@@ -78,8 +78,8 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Edit Vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -96,7 +96,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                     // required: "Vehicle type is required",
                   })}>
                   <option value="">Select Vehicle Type</option>
-                  {vehicleTypes?.map((vType:IVehicleType, index:number) => (
+                  {vehicleTypes?.map((vType: IVehicleType, index: number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
                     </option>

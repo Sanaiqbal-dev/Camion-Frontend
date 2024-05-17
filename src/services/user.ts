@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import baseApi from './baseApi';
+import { ICreateSubUserResponse, ISubUser } from '@/interface/admin';
+import { IAPIResponse } from '@/interface/common';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getCompanyUsers: builder.query<any, any>({
+    getCompanyUsers: builder.query<IAPIResponse<ISubUser>, any>({
       query: (queryParams) => `/Account/GetCompanySubUsers${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
     }),
-    createSubUser: builder.mutation<any, any>({
+    createSubUser: builder.mutation<ICreateSubUserResponse, any>({
       query: (body) => ({
         url: '/Account/RegisterSubUser',
         method: 'POST',
@@ -17,6 +19,13 @@ export const proposalApi = baseApi.injectEndpoints({
     updateSubUser: builder.mutation<any, any>({
       query: (body) => ({
         url: '/Account/UpdateCompanySubUsers',
+        method: 'POST',
+        body,
+      }),
+    }),
+    deleteSubUser: builder.mutation<any, any>({
+      query: (body) => ({
+        url: 'Account/DeleteCompanySubUsers',
         method: 'POST',
         body,
       }),
@@ -32,4 +41,4 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation } = proposalApi;
+export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } = proposalApi;

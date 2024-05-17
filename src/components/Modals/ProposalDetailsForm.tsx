@@ -21,7 +21,7 @@ interface ProposalDetailsModalProps {
 }
 
 const schema = z.object({
-  amount: z.string().min(3, 'Please enter the ammount of minumum 3 dugits.'),
+  amount: z.string().min(3, 'Please enter minimum 3 digits.'),
   EDD: z.string().refine(
     (value) => {
       const date = Date.parse(value);
@@ -98,8 +98,8 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Proposal Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -108,7 +108,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
             <div className="singleLineControl tw-flex  tw-gap-5">
               <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
                 <Form.Label className="tw-text-sm">Amount</Form.Label>
-                <Form.Control type="number" className="form-control customInput" {...register('amount')} isInvalid={!!errors.amount} placeholder="Enter amount" />
+                <Form.Control type="string" className="form-control customInput" {...register('amount')} isInvalid={!!errors.amount} placeholder="Enter amount" />
                 <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
               </Form.Group>
 

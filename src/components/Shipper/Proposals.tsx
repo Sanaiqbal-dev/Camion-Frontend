@@ -70,12 +70,12 @@ const Proposals = () => {
   return (
     <div className="table-container">
       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationUpdated ? 'success' : 'danger'} />}
-      <div style={{ height: '100vh' }}>
+      <div style={{ height: '100vh', overflowY: 'scroll' }}>
         {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}
       </div>
 
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5 tw-bottom-0">
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5 tw-bottom-0">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
         </Button>

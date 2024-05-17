@@ -6,12 +6,12 @@ import UpdatePassword from '../Modals/UpdatePassword';
 import { ColumnDef } from '@tanstack/react-table';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager, IUserManagement, IPassword, IUser } from '@/interface/common';
-import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserMutation, useUpdateSubUserPasswordMutation } from '@/services/user';
+import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } from '@/services/user';
 import { debounce } from '@/util/debounce';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import { Row, Col, InputGroup, Image, FormControl } from 'react-bootstrap';
+import { Row, Col, InputGroup, Image, FormControl, Button } from 'react-bootstrap';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 
 const AdminUserManagement = () => {
@@ -21,31 +21,39 @@ const AdminUserManagement = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
-  console.log(users, 'users');
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser] = useCreateSubUserMutation();
-  const [updateSubUser] = useUpdateSubUserMutation();
+  const [createSubUser, { error }] = useCreateSubUserMutation();
+  const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (companyUserData?.result.result) {
       setUsers(companyUserData.result.result);
+      const maxPageCount = companyUserData.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
     }
-  }, [isLoading]);
+  }, [companyUserData]);
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -61,30 +69,35 @@ const AdminUserManagement = () => {
   }
 
   const onEdit = (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const resp = await updateSubUser({
-      userId: edituser?.id,
+    const resp = await deleteSubUser({
+      userId: edituser?.userId,
       isDeleted: true,
     });
     console.log(resp);
-    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: IUser) => {
-    setshowCreateUserModal(false);
-    const resp = await createSubUser(data);
-    console.log(resp);
+    try {
+      const resp = await createSubUser(data).unwrap();
+      console.log(resp);
+      refetch();
+      setshowCreateUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const submitEditFormHandler = async (data: IPassword) => {
     setshowUpdatePasswordModal(false);
@@ -98,14 +111,12 @@ const AdminUserManagement = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
+
   const columns: ColumnDef<IUserManagement>[] = AdminUsersColumn({
     onEdit,
     onDelete,
@@ -146,13 +157,27 @@ const AdminUserManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable isAction={false} columns={columns} data={users} /> : <span>No Users Found!</span>}
-      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} />
+      {users.length > 0 ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        // showError={!isLoading && isError && error}
+        isSuccess={!error ? 'success' : ''}
+      />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </div>

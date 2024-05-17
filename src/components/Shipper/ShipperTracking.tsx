@@ -79,7 +79,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             marginTop: '20px',
           }}>
           <div style={{ fontWeight: '600' }}>Order number</div>
-          <div>{state.orderObject && state.orderObject.id}</div>
+          <div>{state && state.orderObject.id}</div>
         </div>
         <div
           style={{
@@ -88,7 +88,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Origin:</div>
-          <div>{state.orderObject && state.orderObject.originCity.name}</div>
+          <div>{state && state.orderObject.originCity.name}</div>
         </div>
         <div
           style={{
@@ -97,7 +97,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Distination:</div>
-          <div>{state.orderObject && state.orderObject.destinationCity.name}</div>
+          <div>{state && state.orderObject.destinationCity.name}</div>
         </div>
         <div
           style={{
@@ -106,7 +106,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Weight</div>
-          <div>{state.orderObject && state.orderObject.weight}</div>
+          <div>{state && state.orderObject.weight}</div>
         </div>
         <div
           style={{
@@ -115,7 +115,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Dimensions:</div>
-          <div>{state.orderObject && state.orderObject.length + 'x' + state.orderObject.width + 'x' + state.orderObject.height}</div>
+          <div>{state && state.orderObject.length + 'x' + state.orderObject.width + 'x' + state.orderObject.height}</div>
         </div>
         <div
           style={{
@@ -124,7 +124,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Estimated Delivery Date:</div>
-          <div>{state.orderObject && state.orderObject.preferredDeliveryDate ? state.orderObject.preferredDeliveryDate : '-'}</div>
+          <div>{state && state.orderObject.preferredDeliveryDate ? state.orderObject.preferredDeliveryDate : '-'}</div>
         </div>
       </div>
       <APIProvider apiKey={mapApiKey}>

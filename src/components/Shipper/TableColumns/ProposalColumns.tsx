@@ -3,46 +3,7 @@ import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
   return (
-    <div style={{ marginBottom: '10px' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginBottom: '-20px',
-        }}>
-        <div
-          style={{
-            display: 'flex',
-            height: '42px',
-            width: '166px',
-            borderRadius: '6px',
-            backgroundColor: 'white',
-            alignItems: 'center',
-            marginLeft: '10px',
-          }}>
-          <img src={CompanyLogo} />
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '166px',
-            height: '42px',
-            borderRadius: '10px',
-            backgroundColor: '#0060B8',
-            fontFamily: 'Inter',
-            fontSize: '18px',
-            fontWeight: '600',
-            textAlign: 'center',
-            color: '#FFF',
-            marginRight: '20px',
-            zIndex: '3',
-          }}>
-          SAR: {quotation.amount}
-        </div>
-      </div>
-
+    <div style={{ marginBottom: '10px', marginTop: '20px' }}>
       <div
         className="container"
         style={{
@@ -51,7 +12,49 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
           padding: '15px',
           borderRadius: '10px',
           paddingTop: '35px',
+          marginBottom: '30px',
         }}>
+        <div
+          style={{
+            display: 'flex',
+            marginTop: '-50px',
+            position: 'relative',
+            marginBottom: '10px',
+            width: '100%%',
+            justifyContent: 'space-between',
+          }}>
+          <div
+            style={{
+              display: 'flex',
+              height: '42px',
+              width: '166px',
+              borderRadius: '6px',
+              backgroundColor: 'white',
+              alignItems: 'center',
+              marginLeft: '10px',
+            }}>
+            <img src={CompanyLogo} />
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '166px',
+              height: '42px',
+              borderRadius: '10px',
+              backgroundColor: '#0060B8',
+              fontFamily: 'Inter',
+              fontSize: '18px',
+              fontWeight: '600',
+              textAlign: 'center',
+              color: '#FFF',
+              marginRight: '20px',
+              zIndex: '3',
+            }}>
+            SAR: {quotation.amount}
+          </div>
+        </div>
         <div className="row" style={{ display: 'flex' }}>
           <div className="col-sm">
             <div

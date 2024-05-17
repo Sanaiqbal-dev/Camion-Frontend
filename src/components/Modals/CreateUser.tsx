@@ -9,6 +9,7 @@ interface CreateUserModalProps {
   show: boolean;
   onSubmitForm: (data: IUser) => Promise<void>;
   handleClose: () => void;
+  isSuccess: string;
 }
 const schema = z
   .object({
@@ -28,7 +29,7 @@ const schema = z
     path: ['confirmPassword'],
   });
 
-const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm }) => {
+const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm, isSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -40,14 +41,14 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
   });
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     setIsLoading(true);
-    await onSubmitForm(data);
-    reset();
+    onSubmitForm(data);
     setIsLoading(false);
+    isSuccess == 'success' && reset();
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Add a new user</Modal.Title>
       </Modal.Header>
       <Modal.Body>

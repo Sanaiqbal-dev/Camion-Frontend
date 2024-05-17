@@ -1,6 +1,6 @@
 import { UserManagementShipperColumns } from './TableColumns/UserManagementShipperColumns';
 import { DataTable } from '../ui/DataTable';
-import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
+import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
@@ -9,7 +9,7 @@ import CreateUser from '../Modals/CreateUser';
 import UpdatePassword from '../Modals/UpdatePassword';
 import { IUserManagement, QueryPager } from '../../interface/common';
 import { ColumnDef } from '@tanstack/react-table';
-import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserMutation, useUpdateSubUserPasswordMutation } from '@/services/user';
+import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } from '@/services/user';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
@@ -20,6 +20,8 @@ const UserManagementShipper = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const [totalPageCount, setTotalPageCount] = useState(0);
+
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
@@ -27,19 +29,21 @@ const UserManagementShipper = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showToast, setShowToast] = useState(false);
 
-  const { data: companyUserData, isLoading } = useGetCompanyUsersQuery({
+  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
   const [createSubUser, { isSuccess: isUserCreated }] = useCreateSubUserMutation();
-  const [updateSubUser, { isSuccess: isUserDeleted }] = useUpdateSubUserMutation();
+  const [deleteSubUser, { isSuccess: isUserDeleted }] = useDeleteSubUserMutation();
   const [updateSubUserPassword, { isSuccess: isUserUpdated }] = useUpdateSubUserPasswordMutation();
   useEffect(() => {
-    if (!isLoading) {
+    if (companyUserData?.result.result) {
       setUsers(companyUserData.result.result);
+      const maxPageCount = companyUserData.result.total / entriesValue + 1;
+      setTotalPageCount(maxPageCount);
     }
-  }, [isLoading]);
+  }, [companyUserData]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
 
@@ -49,6 +53,11 @@ const UserManagementShipper = () => {
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
+
+  const updatePage = (action: number) => {
+    setPager({ page: pager.page + action, pageSize: entriesValue });
+  };
+
   function handleChangeValue(direction: number) {
     currentIndex += direction;
 
@@ -60,37 +69,36 @@ const UserManagementShipper = () => {
     setEntriesValue(values[currentIndex]);
   }
   const onEdit = (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
     try {
-      await updateSubUser({
-        userId: edituser?.id,
+      setIsConfirmationModalOpen(false);
+      await deleteSubUser({
+        userId: edituser?.userId,
         isDeleted: true,
       }).unwrap();
       setShowToast(true);
-
-      setIsConfirmationModalOpen(false);
-      const newUsers = users.filter((u) => u.id !== edituser?.id);
+      const newUsers = users.filter((u) => u.userId !== edituser?.userId);
       setUsers(newUsers);
-    } catch (e) {
+    } catch (err) {
       setShowToast(true);
     }
   };
   const submitCreateFormHandler = async (data: any) => {
     try {
-      // console.log('submitCreateFormHandler', data);
       await createSubUser(data).unwrap();
-      setshowCreateUserModal(false);
       setShowToast(true);
-    } catch (e) {
+      refetch();
+      setshowCreateUserModal(false);
+    } catch (error) {
       setShowToast(true);
     }
   };
@@ -114,13 +122,10 @@ const UserManagementShipper = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
   const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,
@@ -162,14 +167,27 @@ const UserManagementShipper = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable columns={columns} data={users} isAction={false} /> : <span>No Users Found!</span>}
-
-      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} />
+      {users ? <DataTable columns={columns} data={users} isAction={true} /> : <span>No Users Found!</span>}
+      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+          <img src={PreviousIcon} />
+        </Button>
+        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+          <img src={NextIcon} />
+        </Button>
+      </div>
+      <CreateUser
+        show={showCreateUserModal}
+        onSubmitForm={submitCreateFormHandler}
+        handleClose={() => setshowCreateUserModal(false)}
+        // showError={!isLoading && isError && error}
+        isSuccess={isUserCreated ? 'success' : ''}
+      />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </div>

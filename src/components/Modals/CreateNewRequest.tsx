@@ -43,7 +43,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
-  
 
   useEffect(() => {
     if (isEdit) {
@@ -80,8 +79,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   }, [isEdit, setValue, proposalObject, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    
-    const city_= cityList?.find((item) => item.name === selectedCity)?.id;
+    const city_ = cityList?.find((item) => item.name === selectedCity)?.id;
     const district_ = districtList?.find((item) => item.name === selectedDistrict)?.id;
     console.log(city_, district_);
     const updatedObject = {
@@ -90,7 +88,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       districtId: district_,
       cityId: city_,
       zipCode: data.zipCode,
-      additionalNumber:data.additionalNumber,
+      additionalNumber: data.additionalNumber,
       unitNo: data.unitNo,
     };
     handleNextStep(updatedObject, '');
@@ -285,4 +283,3 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
 };
 
 export default CreateNewRequest;
-
