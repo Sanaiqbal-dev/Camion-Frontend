@@ -28,9 +28,7 @@ const Proposals = () => {
     ...filterKeys,
   });
 
-
   const [entriesValue] = useState(10);
-
 
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });

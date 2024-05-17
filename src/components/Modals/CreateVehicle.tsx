@@ -50,9 +50,9 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
           const formData = new FormData();
           formData.append('UploadFile', selectedFile);
           const response = await uploadFile(formData);
-        if ('data' in response) {
-          setSelectedFilePath(response.data.message);
-        }
+          if ('data' in response) {
+            setSelectedFilePath(response.data.message);
+          }
           console.log(response);
         } catch (error) {
           console.error('Error uploading file:', error);
@@ -97,7 +97,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                     required: 'Vehicle type is required',
                   })}>
                   <option value="">Select Vehicle Type</option>
-                  {vehicleTypes?.map((vType:IVehicleType, index:number) => (
+                  {vehicleTypes?.map((vType: IVehicleType, index: number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
                     </option>
