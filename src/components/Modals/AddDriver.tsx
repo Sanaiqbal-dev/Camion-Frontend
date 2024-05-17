@@ -131,8 +131,9 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
         }).unwrap();
         setShowToast(true);
       }
+          reset();
+
       handleClose();
-      reset();
     } catch (error) {
       setShowToast(true);
     }

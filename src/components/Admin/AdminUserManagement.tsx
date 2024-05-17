@@ -6,7 +6,7 @@ import UpdatePassword from '../Modals/UpdatePassword';
 import { ColumnDef } from '@tanstack/react-table';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager, IUserManagement, IPassword, IUser } from '@/interface/common';
-import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserMutation, useUpdateSubUserPasswordMutation } from '@/services/user';
+import { useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } from '@/services/user';
 import { debounce } from '@/util/debounce';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
@@ -33,7 +33,7 @@ const AdminUserManagement = () => {
     term: searchTerm,
   });
   const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
-  const [updateSubUser] = useUpdateSubUserMutation();
+  const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
   useEffect(() => {
@@ -69,24 +69,24 @@ const AdminUserManagement = () => {
   }
 
   const onEdit = (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const resp = await updateSubUser({
-      userId: edituser?.id,
+    const resp = await deleteSubUser({
+      userId: edituser?.userId,
       isDeleted: true,
     });
     console.log(resp);
-    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
     setUsers(newUsers);
   };
   const submitCreateFormHandler = async (data: IUser) => {

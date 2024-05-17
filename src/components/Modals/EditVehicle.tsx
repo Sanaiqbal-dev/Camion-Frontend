@@ -96,7 +96,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                     // required: "Vehicle type is required",
                   })}>
                   <option value="">Select Vehicle Type</option>
-                  {vehicleTypes?.map((vType:IVehicleType, index:number) => (
+                  {vehicleTypes?.map((vType: IVehicleType, index: number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
                     </option>

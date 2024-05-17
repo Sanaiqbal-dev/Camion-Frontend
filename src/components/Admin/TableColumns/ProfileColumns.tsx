@@ -130,7 +130,7 @@ export const ProfileColumns = ({
               color: '#EB5757',
               backgroundColor: '#EB57571A',
             }}
-            onClick={() =>id && onDeleteButtonClick(id)}>
+            onClick={() => id && onDeleteButtonClick(id)}>
             <img src={IconDeleteProfile} alt="Delete" />
             Delete
           </button>

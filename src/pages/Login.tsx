@@ -27,7 +27,7 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  const { isLoggedIn, dir, lang } = useAppSelector((state) => state.session);
+  const { isLoggedIn, dir, lang, user } = useAppSelector((state) => state.session);
 
   // const {
   //   session: { user },
@@ -69,7 +69,13 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      // navigate(from, { replace: true });
+      if (user.role === 'Carrier') {
+        navigate('/carrier/dashboard');
+      } else if (user.role === 'Shipper') {
+        navigate('/shipper/shipperdashboard');
+      } else {
+        navigate('/admin/Profiles');
+      }
     }
   }, []);
   return (
