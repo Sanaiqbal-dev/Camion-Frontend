@@ -9,7 +9,7 @@ export const reportsApi = baseApi.injectEndpoints({
       query: (queryParams) => `api/ReportManager/GetUserReportList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Order'],
     }),
-    downloadReport: builder.query<IAPIResponse<IReportResponseObject>, string>({
+    downloadReport: builder.query<IAPIResponse<IReportResponseObject>, string | undefined>({
       query: (userId) => ({
         url: `/api/ReportManager/ReportDownload?userId=${userId}`,
         method: 'GET',
