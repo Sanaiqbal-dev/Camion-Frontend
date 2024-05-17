@@ -32,7 +32,7 @@ const UserManagement = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
+  const [createSubUser, { error }] = useCreateSubUserMutation();
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   const values = [10, 20, 30, 40, 50];
@@ -195,7 +195,7 @@ const UserManagement = () => {
         show={showCreateUserModal}
         onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
-        showError={!isLoading && isError && error}
+        // showError={!isLoading && isError && error}
         isSuccess={!error ? 'success' : ''}
       />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
