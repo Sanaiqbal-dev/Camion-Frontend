@@ -39,6 +39,8 @@ export const baseApi = createApi({
     'FileUpload',
     'FileDownload',
     'CreateProfile',
+    'PlateType',
+    'VehicleList',
   ],
   reducerPath: 'baseApi',
   endpoints: () => ({}),

@@ -11,6 +11,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { IReport } from '@/interface/reports';
 import { ReportsColumn } from './TableColumns/ReportColumns';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const ReportManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -19,7 +20,8 @@ const ReportManagement = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [downloadReport] = useLazyDownloadReportQuery();
+  const [showToast, setshowToast] = useState(false);
+  const [downloadReport, { isSuccess: isReportDownloaded }] = useLazyDownloadReportQuery();
   const { data: currentData } = useGetReportsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
@@ -47,14 +49,10 @@ const ReportManagement = () => {
     const selectedReport = reportsTableData.find((report: IReport) => report.userId === userId);
     console.log('selectedReport', selectedReport?.name);
     try {
-      if (selectedReport) {
-        await downloadReport(selectedReport.userId);
-        console.log('Download successful!');
-      } else {
-        console.log('No file selected!');
-      }
+      await downloadReport(selectedReport?.userId).unwrap();
+      setshowToast(true);
     } catch (error) {
-      console.error('Error downloading file:', error);
+      setshowToast(true);
     }
   };
 
@@ -109,6 +107,7 @@ const ReportManagement = () => {
 
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isReportDownloaded ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">

@@ -5,6 +5,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
+import { useGetPlateTypeQuery } from '@/services/vahicles';
 
 interface IVehicle {
   color: string;
@@ -13,6 +14,7 @@ interface IVehicle {
   registrationNumber: string;
   modelYear: number;
   vehicleType: number;
+  PlateTypeId: number;
 }
 
 interface CreateUserModalProps {
@@ -28,6 +30,7 @@ const schema = z.object({
   numberPlate: z.string().min(1, 'Enter Number plate'),
   modelYear: z.string().min(1, 'Enter Model Year'),
   vehicleType: z.string().min(1, 'Select Vehicle Type'),
+  PlateTypeId: z.string().min(1, 'Select Plate Type'),
 });
 
 const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, handleClose, onSubmitForm }) => {
@@ -40,6 +43,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
     resolver: zodResolver(schema),
   });
   const [uploadFile] = useUploadFileMutation();
+  const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
   const [selectedFilePath, setSelectedFilePath] = useState('');
 
@@ -112,6 +116,26 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
               </Form.Group>
             </div>
             <div className="tw-gap-5  tw-flex tw-flex-row">
+              <Form.Group
+                className="mb-3"
+                // style={{ minWidth: "436px" }}
+                controlId="formBasicEmail">
+                <Form.Label>Palte Type</Form.Label>
+                <Form.Control
+                  style={{ width: '270px', height: '50px' }}
+                  as="select"
+                  {...register('PlateTypeId', {
+                    required: 'Vehicle type is required',
+                  })}>
+                  <option value="">Select Plate Type</option>
+                  {plateTypes?.result.map((plateType, index: number) => (
+                    <option key={'type_' + index} value={plateType.id}>
+                      {plateType.name}
+                    </option>
+                  ))}
+                </Form.Control>
+                <Form.Control.Feedback type="invalid">{errors.PlateTypeId?.message}</Form.Control.Feedback>
+              </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Number Plate</Form.Label>
                 <Form.Control
@@ -123,13 +147,13 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 />
                 <Form.Control.Feedback type="invalid">{errors.numberPlate?.message}</Form.Control.Feedback>
               </Form.Group>
+            </div>
+            <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>color</Form.Label>
                 <Form.Control type="text" placeholder="Enter color" style={{ width: '270px', height: '50px' }} {...register('color')} isInvalid={!!errors.color} />
                 <Form.Control.Feedback type="invalid">{errors.color?.message}</Form.Control.Feedback>
               </Form.Group>
-            </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Registration Number</Form.Label>
                 <Form.Control
@@ -141,8 +165,10 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 />
                 <Form.Control.Feedback type="invalid">{errors.registrationNumber?.message}</Form.Control.Feedback>
               </Form.Group>
+            </div>
+            <div className="tw-gap-5 tw-flex tw-flex-row">
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>imeiNumber</Form.Label>
+                <Form.Label>IMEI Number</Form.Label>
                 <Form.Control type="text" placeholder="Enter imeiNumber" style={{ width: '270px', height: '50px' }} {...register('imeiNumber')} isInvalid={!!errors.imeiNumber} />
                 <Form.Control.Feedback type="invalid">{errors.imeiNumber?.message}</Form.Control.Feedback>
               </Form.Group>
