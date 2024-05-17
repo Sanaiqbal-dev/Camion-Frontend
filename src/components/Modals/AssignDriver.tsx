@@ -34,8 +34,8 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, handle
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Assign Vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>

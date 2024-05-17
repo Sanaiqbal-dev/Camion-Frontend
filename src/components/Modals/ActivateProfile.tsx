@@ -262,22 +262,24 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'}>
-      <Modal.Header style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <Image src={PropfileImage} style={{ height: '106px' }} />
-        <Modal.Title>Company Profile</Modal.Title>
-        <div
-          style={{
-            fontFamily: 'Inter',
-            fontSize: '14px',
-            fontWeight: '400',
-            textAlign: 'left',
-            color: '#000000',
-            backgroundColor: '#F9090973',
-            borderRadius: '45px',
-            padding: '4px',
-          }}>
-          To activate your profile please complete your profile details
+    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+      <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
+          <Image src={PropfileImage} style={{ height: '106px' }} />
+          <Modal.Title>Company Profile</Modal.Title>
+          <div
+            style={{
+              fontFamily: 'Inter',
+              fontSize: '14px',
+              fontWeight: '400',
+              textAlign: 'left',
+              color: '#000000',
+              backgroundColor: '#F9090973',
+              borderRadius: '45px',
+              padding: '4px',
+            }}>
+            To activate your profile please complete your profile details
+          </div>
         </div>
       </Modal.Header>
       <Modal.Body>

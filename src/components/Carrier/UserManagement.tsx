@@ -10,7 +10,7 @@ import { Col, FormControl, InputGroup, Image, Row, Button } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import { useCreateSubUserMutation, useGetCompanyUsersQuery, useUpdateSubUserMutation, useUpdateSubUserPasswordMutation } from '@/services/user';
+import { useCreateSubUserMutation, useDeleteSubUserMutation, useGetCompanyUsersQuery, useUpdateSubUserPasswordMutation } from '@/services/user';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
@@ -22,7 +22,7 @@ const UserManagement = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: companyUserData , refetch} = useGetCompanyUsersQuery({
+  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -33,7 +33,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const [createSubUser, { isLoading, isError, error }] = useCreateSubUserMutation();
-  const [updateSubUser] = useUpdateSubUserMutation();
+  const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -53,13 +53,13 @@ const UserManagement = () => {
   }
 
   const onEdit = (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setshowUpdatePasswordModal(true);
   };
 
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.id === id);
+    const euser = users.find((u) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
   };
@@ -67,24 +67,24 @@ const UserManagement = () => {
   const onDeleteHandler = async () => {
     setIsConfirmationModalOpen(false);
 
-    const resp = await updateSubUser({
-      userId: edituser?.id,
+    const resp = await deleteSubUser({
+      userId: edituser?.userId,
       isDeleted: true,
     });
     console.log(resp);
-    const newUsers = users.filter((u) => u.id !== edituser?.id);
+    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
     setUsers(newUsers);
   };
 
   const submitCreateFormHandler = async (data: IUser) => {
-     try {
-       const resp = await createSubUser(data).unwrap();
-       console.log(resp);
-       refetch();
-       setshowCreateUserModal(false);
-     } catch (error) {
-       console.log(error);
-     }
+    try {
+      const resp = await createSubUser(data).unwrap();
+      console.log(resp);
+      refetch();
+      setshowCreateUserModal(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const submitEditFormHandler = async (data: IPassword) => {
@@ -182,7 +182,7 @@ const UserManagement = () => {
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      {users ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
