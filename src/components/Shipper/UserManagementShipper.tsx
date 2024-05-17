@@ -112,13 +112,10 @@ const UserManagementShipper = () => {
   };
 
   const debouncedSearch = debounce((search: string) => {
-    if (search.length >= 3) {
-      setSearchTerm(search);
-    }
-  }, 3000);
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    debouncedSearch(value);
+    setSearchTerm(() => search);
+  }, 1000);
+  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(event.target.value);
   };
   const columns: ColumnDef<IUserManagement>[] = UserManagementShipperColumns({
     onEdit,
@@ -159,7 +156,7 @@ const UserManagementShipper = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

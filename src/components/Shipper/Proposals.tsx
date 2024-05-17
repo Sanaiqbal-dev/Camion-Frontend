@@ -64,7 +64,7 @@ const Proposals = () => {
 
   return (
     <div className="table-container">
-      <div style={{ height: '100vh' }}>
+      <div style={{ height: '100vh' , overflowY:'scroll'}}>
         {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}
       </div>
