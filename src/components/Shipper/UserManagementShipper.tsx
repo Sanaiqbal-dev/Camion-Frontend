@@ -150,7 +150,7 @@ const UserManagementShipper = () => {
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable columns={columns} data={users} isAction={false} /> : <span>No Users Found!</span>}
+      {users ? <DataTable columns={columns} data={users} isAction={false} /> : <span>No Users Found!</span>}
 
       <CreateUser
         show={showCreateUserModal}

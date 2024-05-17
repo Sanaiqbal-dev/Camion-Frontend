@@ -6,6 +6,7 @@ import { Image } from 'react-bootstrap';
 import ShipperSider from '../../components/Shipper/ShipperSider';
 import ActivateProfile from '../../components/Modals/ActivateProfile';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const HomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -27,6 +28,7 @@ const HomePage = () => {
   };
 
   const toggleSidebar = () => {};
+  const showCreateCompanyNotification = useSelector((state: any) => !state.session.isCompanyAccount) && currentPageTitle.pathname === '/shipper/shipperdashboard';
 
   return (
     <div className="wrapper" style={{ backgroundColor: '#F3F3F3' }}>
@@ -50,7 +52,7 @@ const HomePage = () => {
             </Link>
             <Image className="notification-icon" src={NotificationIcon} alt="Notifications" width="22" height="22" />
             <Image className="menu-icon" src={MenuIcon} alt="Menu" width="22" height="22" />
-            {currentPageTitle.pathname === '/shipper/shipperdashboard' && (
+            {showCreateCompanyNotification && (
               <div
                 style={{
                   fontFamily: 'Inter',

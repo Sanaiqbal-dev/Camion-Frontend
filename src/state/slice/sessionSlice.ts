@@ -8,6 +8,7 @@ export interface SessionState {
   lang: string;
   dir: 'rtl' | 'ltr';
   isLoggedIn: boolean;
+  isCompanyAccount: boolean;
 }
 
 const initialState: SessionState = {
@@ -16,6 +17,7 @@ const initialState: SessionState = {
   lang: 'en',
   dir: 'ltr',
   isLoggedIn: false,
+  isCompanyAccount: false,
 };
 
 const sessionSlice = createSlice({
@@ -26,6 +28,7 @@ const sessionSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isLoggedIn = action.payload.token !== null;
+      state.isCompanyAccount = action.payload.isCompanyAccount;
       return state;
     },
     setLanguage(state, action: PayloadAction<ILanguage>) {

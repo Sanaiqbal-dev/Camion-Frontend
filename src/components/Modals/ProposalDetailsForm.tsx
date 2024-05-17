@@ -98,8 +98,8 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Proposal Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>

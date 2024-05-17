@@ -152,7 +152,7 @@ const UserManagement = () => {
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable isAction={false} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      {users ? <DataTable isAction={false} columns={columns} data={users} /> : <span>No Users Found!</span>}
       <CreateUser
         show={showCreateUserModal}
         onSubmitForm={submitCreateFormHandler}

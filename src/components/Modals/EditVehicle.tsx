@@ -78,8 +78,8 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Edit Vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>
