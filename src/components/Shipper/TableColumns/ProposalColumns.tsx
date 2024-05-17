@@ -3,7 +3,7 @@ import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
   return (
-    <div style={{ marginBottom: '10px' }}>
+    <div style={{ marginBottom: '10px', marginTop: '20px' }}>
       <div
         className="container"
         style={{
@@ -18,8 +18,9 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
           style={{
             display: 'flex',
             marginTop: '-50px',
-            position: 'absolute',
-            width: '98%',
+            position: 'relative',
+            marginBottom: '10px',
+            width: '100%%',
             justifyContent: 'space-between',
           }}>
           <div

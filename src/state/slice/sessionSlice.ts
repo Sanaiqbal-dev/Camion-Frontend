@@ -8,7 +8,7 @@ export interface SessionState {
   lang: string;
   dir: 'rtl' | 'ltr';
   isLoggedIn: boolean;
-  isCompanyAccount: boolean;
+  isCompanyAccount?: boolean;
 }
 
 const initialState: SessionState = {
