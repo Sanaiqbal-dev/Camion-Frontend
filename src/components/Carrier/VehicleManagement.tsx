@@ -14,6 +14,7 @@ import {
   useDeleteVehicleMutation,
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
+  useGetPlateTypesQuery,
 } from '@/services/vahicles';
 // import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from '../Modals/AssignDriver';
@@ -39,6 +40,7 @@ const VehicleManagement = () => {
 
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const [vehicleTypes, setVehicleTypes] = useState([]);
+  const [plateTypes, setPlateTypes] = useState([]);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
   const [drivers, setDrivers] = useState<IDriver[]>([]);
@@ -56,6 +58,7 @@ const VehicleManagement = () => {
     term: searchTerm,
   });
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
+  const { data: plateTypesData, isLoading: isLoadingPlateTypes } = useGetPlateTypesQuery({});
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle] = useCreateVehicleMutation();
@@ -79,6 +82,12 @@ const VehicleManagement = () => {
       setVehicleTypes(vehicleTypesData.result);
     }
   }, [isLoadingVehicleTypes]);
+
+   useEffect(() => {
+     if (!isLoadingPlateTypes) {
+       setPlateTypes(plateTypesData.result);
+     }
+   }, [isLoadingPlateTypes]);
 
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
@@ -258,7 +267,7 @@ const VehicleManagement = () => {
         )}
       </div>
       <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
-      <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />
+      <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} plateTypes={plateTypes} />
       <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </>

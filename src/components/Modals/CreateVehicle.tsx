@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useUploadFileMutation } from '@/services/fileHandling';
-import { IVehicleType } from '@/interface/common';
+import { IPlateType, IVehicleType } from '@/interface/common';
 
 interface IVehicle {
   color: string;
@@ -13,11 +13,13 @@ interface IVehicle {
   registrationNumber: string;
   modelYear: number;
   vehicleType: number;
+  plateType:number;
 }
 
 interface CreateUserModalProps {
   show: boolean;
   vehicleTypes: any;
+  plateTypes:any;
   handleClose: () => void;
   onSubmitForm: (requestData: any) => void;
 }
@@ -28,9 +30,11 @@ const schema = z.object({
   numberPlate: z.string().min(1, 'Enter Number plate'),
   modelYear: z.string().min(1, 'Enter Model Year'),
   vehicleType: z.string().min(1, 'Select Vehicle Type'),
+  plateType: z.string().min(1, 'Select Plate Type'),
+  
 });
 
-const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, handleClose, onSubmitForm }) => {
+const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes,plateTypes, handleClose, onSubmitForm }) => {
   const {
     register,
     handleSubmit,
@@ -64,13 +68,14 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   }, [selectedFile]);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
-    const { vehicleType, modelYear, ...rest } = data;
+    const { vehicleType, modelYear,plateType, ...rest } = data;
     const requestData = {
       ...rest,
       modelYear: modelYear,
       fileName: selectedFile ? selectedFile.name : 'no file selected',
       filePath: selectedFilePath,
       vehicleTypeId: vehicleType,
+      plateTypeId: plateType,
     };
     onSubmitForm(requestData);
     reset();
@@ -85,10 +90,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-col  tw-mb-10">
             <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group
-                className="mb-3"
-                // style={{ minWidth: "436px" }}
-                controlId="formBasicEmail">
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Vehicle Type</Form.Label>
                 <Form.Control
                   style={{ width: '270px', height: '50px' }}
@@ -147,6 +149,23 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 <Form.Control.Feedback type="invalid">{errors.imeiNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Plate Type</Form.Label>
+              <Form.Control
+                style={{ width: '270px', height: '50px' }}
+                as="select"
+                {...register('plateType', {
+                  required: 'plate type is required',
+                })}>
+                <option value="">Select Plate Type</option>
+                {plateTypes?.map((pType: IPlateType, index: number) => (
+                  <option key={'type_' + index} value={pType.id}>
+                    {pType.name}
+                  </option>
+                ))}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">{errors.plateType?.message}</Form.Control.Feedback>
+            </Form.Group>
             <div className="tw-gap-5  tw-flex tw-flex-row">
               <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
                 <Form.Label className="tw-text-sm">Vehicle Registration</Form.Label>

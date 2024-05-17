@@ -9,6 +9,9 @@ export const proposalApi = baseApi.injectEndpoints({
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
     }),
+    getPlateTypes: builder.query<any, any>({
+      query: () => `/api/Vehicles/GetPlateTypes`,
+    }),
     assignDriver: builder.mutation<any, any>({
       query: (body) => ({
         url: '/api/Vehicles/AssignDriverToVehicle',
@@ -40,4 +43,4 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useGetVehicleTypesQuery, useGetVehiclesQuery, useAssignDriverMutation, useDeleteVehicleMutation, useCreateVehicleMutation, useEditVehicleMutation } = proposalApi;
+export const { useGetVehicleTypesQuery, useGetVehiclesQuery, useGetPlateTypesQuery, useAssignDriverMutation, useDeleteVehicleMutation, useCreateVehicleMutation, useEditVehicleMutation } = proposalApi;

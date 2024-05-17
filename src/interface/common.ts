@@ -189,3 +189,9 @@ export interface IVehicleType {
   id: number;
   typeName: string;
 }
+
+export interface IPlateType {
+  id: number;
+  name: string;
+  nameAr?: string|null;
+}

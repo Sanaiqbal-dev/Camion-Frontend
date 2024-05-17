@@ -32,17 +32,13 @@ const Login = () => {
 
   const { isLoggedIn, dir, lang, user } = useAppSelector((state) => state.session);
 
-  // const {
-  //   session: { user },
-  // } = useAppSelector((state) => state);
-
   const [aspNetUserLogin, { isLoading, error, isSuccess }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (values: AspNetUserLoginRequest) => {
+  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = (values: AspNetUserLoginRequest) => {
     aspNetUserLogin(values).then((result: any) => {
       if (result.error) {
         setShowToast(true);
@@ -66,9 +62,8 @@ const Login = () => {
           const userRole = result.data.role;
 
           userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
-        }
-        else{
-          // <Toast variant={'success'} showToast={false} setShowToast={}/>
+        } else {
+          setShowToast(true);
         }
       }
     });
