@@ -27,7 +27,10 @@ const schema = z.object({
   color: z.string().min(1, 'Enter Color'),
   imeiNumber: z.string().min(1, 'Enter imeiNumber'),
   registrationNumber: z.string().min(1, 'Enter registrationNumber'),
-  numberPlate: z.string().min(1, 'Enter Number plate'),
+  numberPlate: z
+    .string()
+    // .regex(/^(A-Za-z)(4)d(4)$/, 'number plate should container 3 alphabets /n and 4 didgits, (e.g. AAA 1234)')
+    .min(1, 'Enter Number plate'),
   modelYear: z.string().min(1, 'Enter Model Year'),
   vehicleType: z.string().min(1, 'Select Vehicle Type'),
   PlateTypeId: z.string().min(1, 'Select Plate Type'),

@@ -122,7 +122,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
 
                 <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
                   <Form.Label className="tw-text-sm">Expected Delivery Date</Form.Label>
-                  <Form.Control type="date" placeholder="Select a date" style={{ width: '270px', height: '50px' }} {...register('EDD')} isInvalid={!!errors.EDD} />
+                  <Form.Control type="date" min={new Date().toISOString().split("T")[0]} placeholder="Select a date" style={{ width: '270px', height: '50px' }} {...register('EDD')} isInvalid={!!errors.EDD} />
                   <Form.Control.Feedback type="invalid">{errors.EDD?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>

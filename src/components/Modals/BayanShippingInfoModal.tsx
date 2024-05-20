@@ -76,6 +76,7 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
                 <Form.Label>Estimated Pickup Date</Form.Label>
                 <Form.Control
                   type="date"
+                  min={new Date().toISOString().split('T')[0]}
                   placeholder="Select pickup date"
                   style={{
                     width: '270px',
@@ -94,6 +95,7 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
                 <Form.Control
                   type="date"
                   placeholder="Select drop off date"
+                  min={new Date().toISOString().split('T')[0]}
                   style={{
                     width: '270px',
                     height: '50px',
