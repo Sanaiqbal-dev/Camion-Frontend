@@ -27,11 +27,14 @@ const ShipperOrders = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: currentData } = useGetOrdersQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    term: searchTerm,
-  });
+  const { data: currentData } = useGetOrdersQuery(
+    {
+      page: pager.page - 1,
+      pageCount: pager.pageSize,
+      term: searchTerm,
+    },
+    { refetchOnMountOrArgChange: true },
+  );
   const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
 
   const [orderItems, setOrderItems] = useState<IOrder[]>([]);
@@ -135,7 +138,7 @@ const ShipperOrders = () => {
   }, [currentData]);
   return (
     <div className="table-container">
-        {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">

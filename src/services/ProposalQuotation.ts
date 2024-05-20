@@ -21,6 +21,7 @@ export const proposalApi = baseApi.injectEndpoints({
         method: 'PUT',
         body: body,
       }),
+      invalidatesTags: ['Order'],
     }),
   }),
 });
