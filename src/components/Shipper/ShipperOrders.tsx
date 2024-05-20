@@ -86,11 +86,11 @@ const ShipperOrders = () => {
     setShowConfirmationModal(true);
   };
   const onTrackOrder = (orderItemId: number) => {
-    console.log('Tracking order Id:', orderItemId);
+    console.log('Tracking order Id:', orderItemId, orderItems);
     navigate('/shipper/shippertracking', {
       replace: true,
       state: {
-        orderObject: orderItems.find((item) => item.id === orderItemId)?.orderDetail,
+        orderObject: orderItems.find((item) => item.id === orderItemId),
       },
     });
   };

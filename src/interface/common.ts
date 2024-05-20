@@ -196,3 +196,12 @@ export interface IPlateType {
   name: string;
   nameAr?: string | null;
 }
+export interface IMarkers {
+  id: number;
+  numberPlate: string;
+  driver: string;
+  imeiNumber: string;
+  longitude: number;
+  latitude: number;
+  lastUpdatedDate: string;
+}

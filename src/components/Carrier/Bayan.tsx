@@ -3,13 +3,15 @@ import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
 import BayanLocationModal from '../Modals/BayanLocationModal';
 import ProductTypeModal from '../Modals/ProductTypeModal';
 import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
 import AssignVehicle from '../Modals/AssignVehicle';
+import { ICreateBayan, ILocation, IProductType, IShippingInfo } from '@/interface/bayan';
+import { useCreateBayanMutation } from '@/services/bayan';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -106,7 +108,11 @@ const Bayan = () => {
   const [showProductTypeModal, setShowProductTypeModal] = useState(false);
   const [showShippingInfoModal, setShowShippingInfoModal] = useState(false);
   const [showAssignVehicleModal, setShowAssignVehicleModal] = useState(false);
+  const [bayanObject, setBayanObject] = useState<ICreateBayan>({} as ICreateBayan);
   const [locationType, setLocationType] = useState<string>('pickup');
+  const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
+  const [createBayan] = useCreateBayanMutation();
+
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -118,35 +124,86 @@ const Bayan = () => {
     setEntriesValue(values[currentIndex]);
   }
 
-  const SubmitPickUpLocationInfo = () => {
+  const SubmitPickUpLocationInfo = (locationData: ILocation) => {
+    // console.log('pickup location data:', locationData);
+
+    setBayanObject((prevItem) => ({
+      ...prevItem,
+      senderName: locationData.name,
+      senderPhone: locationData.phoneNumber,
+      senderCityId: locationData.cityId,
+      senderAddress: 'Building No: ' + locationData.buildingNumber + ', Street:' + locationData.streetName,
+    }));
     setLocationType('delivery');
   };
 
-  console.log('ShowInfoModal', showShippingInfoModal);
-
-  const SubmitDeliveryLocationInfo = () => {
+  const SubmitDeliveryLocationInfo = (locationData: ILocation) => {
+    // console.log('delivery location data:', locationData);
+    setBayanObject((prevItem) => ({
+      ...prevItem,
+      recipientName: locationData.name,
+      recipientPhone: locationData.phoneNumber,
+      recipientCityId: locationData.cityId,
+      recipientAddress: 'Building No: ' + locationData.buildingNumber + ', Street:' + locationData.streetName,
+    }));
     setShowCreateBayanModal(false);
     setShowProductTypeModal(true);
-    //show product type modal
   };
 
-  const SubmitProductTypeInfo = () => {
+  const SubmitProductTypeInfo = (productData: IProductType) => {
+    // console.log('product type data :', productData);
+
+    setBayanObject((prevItem) => ({
+      ...prevItem,
+      goodTypeId: productData.productTypeId,
+      weight: productData.weight,
+      itemQuantity: productData.quantity,
+      dimentions: productData.length + 'x' + productData.width + 'x' + productData.height,
+      tradable: productData.isCargoItemsStackable,
+      itemValid: productData.isIncludingItemsARGood,
+    }));
+
     setShowProductTypeModal(false);
     setShowShippingInfoModal(true);
     showShippingInfoModal && console.log('');
   };
-  const SubmitShippingInfo = () => {
+  const SubmitShippingInfo = (shipmentData: IShippingInfo) => {
+    setBayanObject((prevItem) => ({
+      ...prevItem,
+      itemUnitId: shipmentData.shipmentType,
+      receivedDate: shipmentData.estimatedPickupDate,
+      expectedDeliveryDate: shipmentData.estimatedDropOffDate,
+      fare: shipmentData.fare,
+    }));
+
     setShowShippingInfoModal(false);
     setShowAssignVehicleModal(true);
   };
 
-  const AssignVehicleToBayan = (vehicleId: number) => {
-    console.log('Assigned vehicle Id:', vehicleId);
+  const AssignVehicleToBayan = (id: number) => {
+    // console.log('Assigned vehicle Id:', id);
+    setBayanObject((prevItem) => ({
+      ...prevItem,
+      vehicleId: id,
+    }));
     setShowAssignVehicleModal(false);
 
-    // Add request for create bayan.
+    console.log('Create Bayan Object:', bayanObject);
+
+    setSendBayanCreateRequest(true);
   };
 
+  useEffect(() => {
+    if (sendBayanCreateRequest) {
+      try {
+        const response = createBayan(bayanObject).unwrap();
+        console.log('Create bayan response:', response);
+        setSendBayanCreateRequest(false);
+      } catch (error) {
+        console.log('Create bayan error:', error);
+      }
+    }
+  }, [sendBayanCreateRequest]);
   return (
     <div className="table-container">
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -197,22 +254,22 @@ const Bayan = () => {
         show={showCreateBayanModal}
         infoType={locationType}
         handleClose={() => setShowCreateBayanModal(false)}
-        handleNextStep={() => {
-          locationType == 'pickup' ? SubmitPickUpLocationInfo() : SubmitDeliveryLocationInfo();
+        handleNextStep={(data) => {
+          locationType == 'pickup' ? SubmitPickUpLocationInfo(data) : SubmitDeliveryLocationInfo(data);
         }}
       />
       <ProductTypeModal
         show={showProductTypeModal}
         handleClose={() => setShowProductTypeModal(false)}
-        handleNextStep={() => {
-          SubmitProductTypeInfo();
+        handleNextStep={(data) => {
+          SubmitProductTypeInfo(data);
         }}
       />
       <BayanShippingInfoModal
         show={showShippingInfoModal}
         handleClose={() => setShowShippingInfoModal(false)}
-        handleNextStep={() => {
-          SubmitShippingInfo();
+        handleNextStep={(data) => {
+          SubmitShippingInfo(data);
         }}
       />
       <AssignVehicle

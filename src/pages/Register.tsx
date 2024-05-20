@@ -25,10 +25,10 @@ interface IRegisterFormInput {
 
 const schema = z
   .object({
-    firstName: z.string().min(1, 'Enter first name.'),
-    lastName: z.string().min(1, 'Enter last name.'),
+    firstName: z.string().min(3, 'Enter first name, minimum 3 letters.'),
+    lastName: z.string().min(3, 'Enter last name, minimum 3 letters.'),
     email: z.string().email('Enter a valid email.'),
-    phoneNumber: z.string().regex(/^\+?\d[\d\s]{10,}$/, 'Enter a valid contact number.'),
+    phoneNumber: z.string().regex(/^\+?\d{10,}$/, 'Enter a valid contact number.'),
 
     password: z
       .string()
@@ -58,7 +58,6 @@ const Register = () => {
   const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
-  // const { dir, lang } = useAppSelector((state) => state.session);
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
     try {
       values.role = isCarrier ? 'carrier' : 'shipper';
@@ -208,6 +207,7 @@ const Register = () => {
                         // onChange={onChange}
                       />
                       {isLoading && <p>Loading ...</p>}
+                      {/* {isError && registerError.data && <p>{registerError.data.errors[0].description}</p>} */}
                       <div className="register-container">
                         <div>
                           <button type="submit" className="btn customRegisterButton">
