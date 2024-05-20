@@ -23,19 +23,33 @@ const UserManagement = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    term: searchTerm,
-  });
+  // const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
+  //   page: pager.page - 1,
+  //   pageCount: pager.pageSize,
+  //   term: searchTerm,
+  // });
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
+  const {
+    data: companyUserData,
+    isLoading: userIsloadding,
+    refetch,
+  } = useGetCompanyUsersQuery({
+    page: pager.page - 1,
+    pageCount: pager.pageSize,
+    term: searchTerm,
+  });
   const [createSubUser, { isSuccess: isUserAdded, error }] = useCreateSubUserMutation();
   const [deleteSubUser, { isSuccess: isUserDeleted }] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
+  useEffect(() => {
+    if (!userIsloadding) {
+      setUsers(companyUserData?.result?.result);
+    }
+  }, [userIsloadding]);
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
