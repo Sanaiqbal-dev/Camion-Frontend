@@ -5,10 +5,13 @@ import { useGetTruckTypesQuery } from '@/services/shipmentType';
 import { IProposalDetailResponseData, ITruckShipmentDetails } from '@/interface/proposal';
 import { ITruckTypes } from '@/interface/proposal';
 import { z } from 'zod';
+import { useGetAllGoodTypesQuery } from '@/services/proposal';
+import { IGoodType } from '@/interface/goodType';
 
 interface IPalletForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
+  // shipmentTypeId: number;
   onSubmitShipmentForm: (data: ITruckItem[], shipmentType: string) => void;
 }
 
@@ -20,6 +23,7 @@ interface ITruckItem {
 const schema = z.object({
   noOfTrucks: z.number().int().min(1, 'Enter number of trucks'),
   truckTypeId: z.number().int().min(1, 'Please select a truck type'),
+  goodTypeId: z.number({ invalid_type_error: 'Good Type is required.', required_error: 'Good Type is required.', message: 'Good Type is required.' }),
 });
 
 const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
@@ -29,6 +33,8 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
     formState: { errors },
     reset,
   } = useForm();
+
+  const { data: allGoodTypes } = useGetAllGoodTypesQuery();
 
   const [trucks, setTrucks] = useState<ITruckItem[]>(isEdit ? [] : [{ noOfTrucks: 0, truckTypeId: 1 }]);
   const truckTypesData = useGetTruckTypesQuery();
@@ -59,7 +65,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
 
     if (isValid) {
       onSubmitShipmentForm(formData, 'Truck');
-      reset(); 
+      reset();
       setShowError(false);
     } else {
       setShowError(true);
@@ -81,6 +87,32 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form.Group className="mb-3">
+        <Form.Label>Good Type</Form.Label>
+        <Form.Control
+          as="select"
+          placeholder="Select district"
+          style={{
+            width: '100%',
+            height: '59px',
+            // borderTop: 'none',
+            // borderRight: 'none',
+            // borderLeft: 'none',
+          }}
+          {...register('goodTypeId', { required: true })}
+          isInvalid={!!errors.goodTypeId}
+          // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
+          readOnly>
+          <option value="">Select Good Type</option>
+          {allGoodTypes &&
+            allGoodTypes.result.map((goodType: IGoodType) => (
+              <option key={goodType.id} value={goodType.id}>
+                {goodType.nameEnglish}
+              </option>
+            ))}
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{`${errors.goodTypeId?.message}`}</Form.Control.Feedback>
+      </Form.Group>
       <div>
         {trucks.map((truck, index) => (
           <div key={index} style={{ display: 'flex', gap: '18px' }}>
@@ -89,7 +121,7 @@ const AddTruckForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitS
               <Form.Control
                 type="number"
                 placeholder="1"
-                defaultValue={truck && truck.noOfTrucks} 
+                defaultValue={truck && truck.noOfTrucks}
                 style={{ width: '229px', height: '59px' }}
                 isInvalid={!!errors?.noOfTrucks}
                 {...register(`${index}.noOfTrucks` as const)}

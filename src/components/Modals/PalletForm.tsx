@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { IProposalDetailResponseData, IShipmentDetails } from '@/interface/proposal';
 import { useEffect } from 'react';
+import { useGetAllGoodTypesQuery } from '@/services/proposal';
+import { IGoodType } from '@/interface/goodType';
 
 const schema = z.object({
   numberOfPallets: z.coerce.number().int().min(1, 'Enter number of items'),
@@ -12,11 +14,13 @@ const schema = z.object({
   weightPerItem: z.string().min(1, 'Please enter weight per item'),
   isCargoItemsStackable: z.boolean().optional().default(false),
   isIncludingItemsARGood: z.boolean().optional().default(false),
+  goodTypeId: z.string().min(1, 'Good Type is required.'),
 });
 
 interface IPalletForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
+  // shipmentTypeId: number;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
 const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
@@ -29,13 +33,16 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
     resolver: zodResolver(schema),
   });
 
+  const { data: allGoodTypes } = useGetAllGoodTypesQuery();
+
   useEffect(() => {
     if (isEdit && proposalObject) {
       const currentObj = {
         numberOfPallets: proposalObject.shipmentQuantity,
         length: proposalObject.length,
         width: proposalObject.width,
-        weightPerItem: proposalObject.weight,
+        // shipmentTypeId: proposalObject.shipmentTypeId,
+        weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
       };
@@ -58,6 +65,32 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
     <Modal.Body>
       <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
+          <Form.Group className="mb-3">
+            <Form.Label>Good Type</Form.Label>
+            <Form.Control
+              as="select"
+              placeholder="Select district"
+              style={{
+                width: '100%',
+                height: '59px',
+                // borderTop: 'none',
+                // borderRight: 'none',
+                // borderLeft: 'none',
+              }}
+              {...register('goodTypeId', { required: true })}
+              isInvalid={!!errors.goodTypeId}
+              // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
+              readOnly>
+              <option value="">Select Good Type</option>
+              {allGoodTypes &&
+                allGoodTypes.result.map((goodType: IGoodType) => (
+                  <option key={goodType.id} value={goodType.id}>
+                    {goodType.nameEnglish}
+                  </option>
+                ))}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
+          </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>No. of Pallets</Form.Label>
             <Form.Control

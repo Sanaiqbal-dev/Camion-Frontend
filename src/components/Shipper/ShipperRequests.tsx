@@ -7,7 +7,7 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
 import ShippementDetails from '../Modals/ShippementDetails';
-import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
+import { IProposalResponseData, IShipmentDetails, IShipmentType } from '@/interface/proposal';
 import { INewRequest, IRequestTable } from '@/interface/shipper';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
@@ -107,10 +107,8 @@ const ShipperRequests = () => {
   };
 
   const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
-    const shipmentDataAll: any = shipmentData.data;
-    const shipmentTypeId =
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
+    const shipmentDataAll: IShipmentType[] = shipmentData.data?.result;
+    const shipmentTypeId = shipmentDataAll?.find((type) => type.name === shipmentType) && shipmentDataAll?.find((type) => type.name === shipmentType)?.id;
 
     const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
     const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
@@ -130,11 +128,12 @@ const ShipperRequests = () => {
       isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
       shipmentTruckType: shipmentTruckTypeDefault,
       userId: userData.user.userId,
-      weight: itemWeight,
+      weight: Number(itemWeight),
       otherName: otherItemName,
       proposalId: isEditProposal ? selectedProposalItem : 0,
       FileName: '',
       FilePath: '',
+      goodTypeId: Number(data.goodTypeId),
     }));
 
     setSendProposalRequest(false);

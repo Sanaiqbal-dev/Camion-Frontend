@@ -8,9 +8,9 @@ import { useEffect, useState } from 'react';
 import { IOrderTable } from '../../interface/carrier';
 import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import { useAssignVehicleToOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
@@ -38,6 +38,7 @@ const Orders = () => {
   const [deleteOrder, { isSuccess: isOrderDeleted, isLoading: isOrderDeleting }] = useDeleteOrderMutation();
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
+  const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
@@ -45,7 +46,7 @@ const Orders = () => {
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [selectedOrderItemId, setSelectedOrderItemId] = useState<number>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const onAssignVehicle = (orderItemId: number) => {
     setShowAssignVehicleForm(true);
     setSelectedOrderItemId(orderItemId);
@@ -71,9 +72,16 @@ const Orders = () => {
 
     setShowDeleteForm(true);
   };
-  const onPrintBill = (orderItemId: number) => {
+  const onPrintBill = async (orderItemId: number) => {
     console.log('Print Bayan Bill is clicked on order: ', orderItemId);
-    navigate('/carrier/bayanBill');
+    // navigate('/carrier/bayanBill');
+    try {
+      const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
+      console.log('Bayan Bill', response);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
@@ -167,6 +175,7 @@ const Orders = () => {
   return (
     <>
       {showToast && <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && isBayanCreated && <Toast showToast={showToast} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
       <div className="table-container orders-table">
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">

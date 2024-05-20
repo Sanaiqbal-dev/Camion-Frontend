@@ -1,4 +1,6 @@
+import { IGoodType } from '@/interface/goodType';
 import { IProposalDetailResponseData, IShipmentDetails } from '@/interface/proposal';
+import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
@@ -13,11 +15,13 @@ const schema = z.object({
   weightPerItem: z.string().min(1, 'Please enter weight per item'),
   isCargoItemsStackable: z.boolean().optional().default(false),
   isIncludingItemsARGood: z.boolean().optional().default(false),
+  goodTypeId: z.number({ invalid_type_error: 'Good Type is required.', required_error: 'Good Type is required.', message: 'Good Type is required.' }),
 });
 
 interface IOtherForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
+  // shipmentTypeId: number;
   onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
 }
 const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
@@ -30,6 +34,8 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
     resolver: zodResolver(schema),
   });
 
+  const { data: allGoodTypes } = useGetAllGoodTypesQuery();
+
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     console.log(data);
     onSubmitShipmentForm(data, 'Other');
@@ -41,7 +47,8 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
         otherType: proposalObject.otherName,
         length: proposalObject.length,
         width: proposalObject.width,
-        weightPerItem: proposalObject.weight,
+        // shipmentTypeId: proposalObject.shipmentTypeId,
+        weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
         height: proposalObject.height,
@@ -58,20 +65,48 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group className="mb-3">
-          <Form.Label>Other Type</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter other shipment type"
-            style={{
-              width: '560px',
-              height: '59px',
-            }}
-            isInvalid={!!errors.otherType}
-            {...register('otherType')}
-          />
-          <Form.Control.Feedback type="invalid">{errors.otherType?.message}</Form.Control.Feedback>
-        </Form.Group>
+        <div className="tw-grid  tw-w-full">
+          <Form.Group className="mb-3">
+            <Form.Label>Other Type</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter other shipment type"
+              style={{
+                width: '100%',
+                height: '59px',
+              }}
+              isInvalid={!!errors.otherType}
+              {...register('otherType')}
+            />
+            <Form.Control.Feedback type="invalid">{errors.otherType?.message}</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Good Type</Form.Label>
+            <Form.Control
+              as="select"
+              placeholder="Select district"
+              style={{
+                width: '100%',
+                height: '59px',
+                // borderTop: 'none',
+                // borderRight: 'none',
+                // borderLeft: 'none',
+              }}
+              {...register('goodTypeId', { required: true })}
+              isInvalid={!!errors.goodTypeId}
+              // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
+              readOnly>
+              <option value="">Select Good Type</option>
+              {allGoodTypes &&
+                allGoodTypes.result.map((goodType: IGoodType) => (
+                  <option key={goodType.id} value={goodType.id}>
+                    {goodType.nameEnglish}
+                  </option>
+                ))}
+            </Form.Control>
+            <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
+          </Form.Group>
+        </div>
         <Form.Group className="mb-3 d-flex">
           <Form.Control
             type="number"
@@ -126,6 +161,7 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
             Cm
           </div>
         </Form.Group>
+
         <Form.Group className="mb-3 d-flex">
           <Form.Control
             type="text"
