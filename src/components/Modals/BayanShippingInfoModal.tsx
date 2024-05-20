@@ -1,5 +1,5 @@
 import { IShippingInfo } from '@/interface/bayan';
-import { IShipmentType } from '@/interface/common';
+import { IShipmentType } from '@/interface/proposal';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';

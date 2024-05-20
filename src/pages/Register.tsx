@@ -12,7 +12,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAspNetUserRegisterMutation } from '@/services/aspNetUserAuth';
 import { Toast } from '@/components/ui/toast';
-import { isErrored } from 'stream';
 
 interface IRegisterFormInput {
   role: string;
@@ -56,7 +55,7 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered, isError, error: registerError }] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
@@ -208,7 +207,7 @@ const Register = () => {
                         // onChange={onChange}
                       />
                       {isLoading && <p>Loading ...</p>}
-                      {isError && registerError && <p>{registerError.data.errors[0].description}</p>}
+                      {/* {isError && registerError.data && <p>{registerError.data.errors[0].description}</p>} */}
                       <div className="register-container">
                         <div>
                           <button type="submit" className="btn customRegisterButton">

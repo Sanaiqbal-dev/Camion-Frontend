@@ -111,7 +111,7 @@ const Bayan = () => {
   const [bayanObject, setBayanObject] = useState<ICreateBayan>({} as ICreateBayan);
   const [locationType, setLocationType] = useState<string>('pickup');
   const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
-  const [createBayan, { isSuccess: isBayanCreated }] = useCreateBayanMutation();
+  const [createBayan] = useCreateBayanMutation();
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
