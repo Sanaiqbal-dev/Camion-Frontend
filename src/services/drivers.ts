@@ -1,10 +1,10 @@
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import baseApi from './baseApi';
-import { IAPIResponse, IDriver, IFile } from '@/interface/common';
+import { IAPIResponse, IDriver } from '@/interface/common';
 
 export const Drivers = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    addNewDriver: builder.mutation<IAPIResponse<IFile>, any>({
+    addNewDriver: builder.mutation<IAPIResponse<IDriver[]>, any>({
       query: (body) => ({
         url: '/api/Drivers/AddNewDriver',
         method: 'POST',
@@ -21,7 +21,7 @@ export const Drivers = baseApi.injectEndpoints({
       query: () => `/api/Drivers/GetNationalityList`,
       providesTags: ['Driver'],
     }),
-   
+
     deleteDriver: builder.mutation<IAPIResponse<IDriver[]>, Partial<IDriver>>({
       query: ({ id }) => ({
         url: `/api/Drivers/DeleteDriver?id=${id}`,
