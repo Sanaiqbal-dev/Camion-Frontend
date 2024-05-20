@@ -50,7 +50,7 @@ const VehicleManagement = () => {
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
 
-  const { data, isLoading } = useGetVehiclesQuery({
+  const { data, isLoading, refetch } = useGetVehiclesQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -108,11 +108,13 @@ const VehicleManagement = () => {
   const submitCreateVehicleHandler = async (data: unknown) => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
+    refetch();
     console.log(resp);
   };
   const submitEditVehicleHandler = async (data: any) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
+    refetch();
     console.log(resp);
   };
   const deleteVehicleHandler = async (id: number) => {

@@ -3,49 +3,33 @@ import { MapMarker } from '../ui/MapMarker';
 import React, { useEffect, useState } from 'react';
 import { IOrderDetail } from '@/interface/orderDetail';
 import { useLocation } from 'react-router-dom';
+import { useGetShipperOrderTrackingsQuery } from '@/services/tracking';
+import { IMarkers } from '@/interface/common';
 
 interface IShipperTracking {
   orderObject?: IOrderDetail;
 }
+
 const ShipperTracking: React.FC<IShipperTracking> = () => {
   const [mapApiKey, setMapApiKey] = useState('');
-  // const [selectedOrder, setSelectedOrder] = useState<IOrderDetail>();
-
   const location = useLocation();
-  const { state } = location;
-
+  const { orderObject } = location.state || {};
+  console.log(orderObject, location);
   useEffect(() => {
     setMapApiKey(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
   }, []);
-  console.log(mapApiKey);
-  const position = { lat: 24.686111, lng: 46.827661 };
+  const { data: orderTracking, isLoading: isLoadingOrderTracking } = useGetShipperOrderTrackingsQuery({});
 
-  const markers = [
-    {
-      lng: 46.796315045962444,
-      lat: 24.725669644462503,
-      title: 'Marker 1',
-      icon: '',
-      shipp: (
-        <div>
-          <span style={{ fontWeight: '800' }}>Ahmed Yasir</span>
-          <br /> 5675 LSD
-        </div>
-      ),
-    },
-    {
-      lng: 46.815,
-      lat: 24.666,
-      title: 'Marker 2',
-      icon: '',
-      content: (
-        <div style={{ backgroundColor: '#FFF' }}>
-          <span style={{ fontWeight: '800' }}>Ahmed Yasir</span>
-          <br /> 5675 LSD
-        </div>
-      ),
-    },
-  ];
+  const [markers, setMarkers] = useState<IMarkers[]>([]);
+  const [position, setPosition] = useState({ lat: 24.686111, lng: 46.827661 });
+  useEffect(() => {
+    if (!isLoadingOrderTracking) {
+      if (orderTracking.length > 0) {
+        setPosition({ lat: orderTracking[0].latitude, lng: orderTracking[0].longitude });
+      }
+      setMarkers(orderTracking);
+    }
+  }, [isLoadingOrderTracking]);
 
   return (
     <div>
@@ -79,7 +63,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             marginTop: '20px',
           }}>
           <div style={{ fontWeight: '600' }}>Order number</div>
-          <div>{state.orderObject && state.orderObject.id}</div>
+          <div>{orderObject && orderObject.id}</div>
         </div>
         <div
           style={{
@@ -88,7 +72,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Origin:</div>
-          <div>{state.orderObject && state.orderObject.originCity.name}</div>
+          <div>{orderObject && orderObject.origin}</div>
         </div>
         <div
           style={{
@@ -97,7 +81,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Distination:</div>
-          <div>{state.orderObject && state.orderObject.destinationCity.name}</div>
+          <div>{orderObject && orderObject.destination}</div>
         </div>
         <div
           style={{
@@ -106,7 +90,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Weight</div>
-          <div>{state.orderObject && state.orderObject.weight}</div>
+          <div>{orderObject && orderObject.weight}</div>
         </div>
         <div
           style={{
@@ -115,7 +99,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Dimensions:</div>
-          <div>{state.orderObject && state.orderObject.length + 'x' + state.orderObject.width + 'x' + state.orderObject.height}</div>
+          <div>{orderObject && orderObject.dimentions}</div>
         </div>
         <div
           style={{
@@ -124,7 +108,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
           }}>
           <div style={{ fontWeight: '600' }}>Estimated Delivery Date:</div>
-          <div>{state.orderObject && state.orderObject.preferredDeliveryDate ? state.orderObject.preferredDeliveryDate : '-'}</div>
+          <div>{orderObject ? orderObject.estimatedDeliveryTime : '-'}</div>
         </div>
       </div>
       <APIProvider apiKey={mapApiKey}>
@@ -140,8 +124,8 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
           }}>
           {markers.map((item) => (
             <MapMarker
-              lat={item.lat}
-              lng={item.lng}
+              lat={item.latitude}
+              lng={item.longitude}
               shipperTrackingInfo={
                 <div
                   style={{
@@ -152,8 +136,8 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
                     justifyContent: 'center',
                     padding: '10px',
                   }}>
-                  Al Manar
-                  <br /> Some where in Arabia
+                  {item.driver}
+                  <br /> {item.numberPlate}
                 </div>
               }
             />

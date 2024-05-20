@@ -44,7 +44,7 @@ export type IRequest = {
 
 export type IVehicle = {
   id: number;
-  driver: string;
+  driver: IDriver;
   vehicleType: { typeName: string };
   modelYear: string;
   vehicleNumber: string;

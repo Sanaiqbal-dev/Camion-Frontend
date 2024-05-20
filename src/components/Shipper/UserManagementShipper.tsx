@@ -25,7 +25,11 @@ const UserManagementShipper = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const { data: companyUserData, isLoading: userIsloading } = useGetCompanyUsersQuery({
+  const {
+    data: companyUserData,
+    isLoading: userIsloading,
+    refetch,
+  } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -34,7 +38,7 @@ const UserManagementShipper = () => {
   const [deleteSubUser] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   useEffect(() => {
-    if (!isLoading) {
+    if (!userIsloading) {
       setUsers(companyUserData?.result.result);
     }
   }, [userIsloading]);
@@ -79,9 +83,9 @@ const UserManagementShipper = () => {
   };
   const submitCreateFormHandler = async (data: any) => {
     setshowCreateUserModal(false);
-    console.log('submitCreateFormHandler', data);
     const resp = await createSubUser(data);
     console.log(resp);
+    refetch();
   };
   const submitEditFormHandler = async (data: any) => {
     setshowUpdatePasswordModal(false);

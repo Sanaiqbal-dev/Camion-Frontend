@@ -26,7 +26,7 @@ export const VehicleManagementColumns = ({
           className={clsx({
             'tw-text-red-600': !row.original.driver,
           })}>
-          {row.original.driver ?? 'Driver Not Assign'}
+          {row.original.driver ? row.original.driver.name : 'Driver Not Assign'}
         </div>
       );
     },

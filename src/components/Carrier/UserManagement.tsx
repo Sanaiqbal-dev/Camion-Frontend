@@ -27,7 +27,11 @@ const UserManagement = () => {
 
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
-  const { data: companyUserData, isLoading: userIsloadding } = useGetCompanyUsersQuery({
+  const {
+    data: companyUserData,
+    isLoading: userIsloadding,
+    refetch,
+  } = useGetCompanyUsersQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -37,7 +41,7 @@ const UserManagement = () => {
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!userIsloadding) {
       setUsers(companyUserData?.result?.result);
     }
   }, [userIsloadding]);
@@ -86,6 +90,7 @@ const UserManagement = () => {
     setshowCreateUserModal(false);
     const resp = await createSubUser(data);
     console.log(resp);
+    refetch();
   };
   const submitEditFormHandler = async (data: IPassword) => {
     setshowUpdatePasswordModal(false);

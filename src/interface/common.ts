@@ -189,3 +189,13 @@ export interface IVehicleType {
   id: number;
   typeName: string;
 }
+
+export interface IMarkers {
+  id: number;
+  numberPlate: string;
+  driver: string;
+  imeiNumber: string;
+  longitude: number;
+  latitude: number;
+  lastUpdatedDate: string;
+}
