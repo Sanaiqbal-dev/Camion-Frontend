@@ -3,7 +3,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-// import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import { VehicleManagementColumns } from './TableColumns/VehicleManagementColumns';
 import { IDriver, IVehicle } from '../../interface/carrier';
@@ -15,7 +14,6 @@ import {
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
 } from '@/services/vahicles';
-// import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from '../Modals/AssignDriver';
 import CreateVehicleModal from '../Modals/CreateVehicle';
 import EditVehicleModal from '../Modals/EditVehicle';

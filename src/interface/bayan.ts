@@ -1,4 +1,3 @@
-// import { ITruckTypes } from '@/interface/proposal';
 export interface IBayan {}
 export interface ILocation {
   name: string;
@@ -13,8 +12,8 @@ export interface ILocation {
 }
 
 export interface IShippingInfo {
+  shipmentType: number;
   temprature: string;
-  truckType: number;
   estimatedPickupDate: string;
   estimatedDropOffDate: string;
   fare: number;

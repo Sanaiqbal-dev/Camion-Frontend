@@ -4,7 +4,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import FilterIcon from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
 import ShippementDetails from '../Modals/ShippementDetails';
@@ -247,13 +246,8 @@ const ShipperRequests = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={FilterIcon} /> Filter
-          </button>
-        </div>
+       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
             Create new Request

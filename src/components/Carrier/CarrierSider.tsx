@@ -10,7 +10,6 @@ import IconDriverManagment from '../../assets/icons/ic-driver-management.svg';
 import IconVehicleManagment from '../../assets/icons/ic-vehicle-management.svg';
 import IconBayan from '../../assets/icons/ic-bayan.svg';
 
-import SettingIcon from '../../assets/icons/ic-settingIcon.svg';
 import LogoutIcon from '../../assets/icons/ic-logoutIcon.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -120,12 +119,6 @@ const CarrierSider = () => {
         </Accordion>
       </div>
       <div className="sidebar-admin">
-        <div key={'Settings'}>
-          <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
-            <Image src={SettingIcon} />
-            Settings
-          </div>
-        </div>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />

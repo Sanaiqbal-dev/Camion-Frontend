@@ -155,7 +155,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
       {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
-        <Modal.Header style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} closeButton>
+        <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
           <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'} Driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>

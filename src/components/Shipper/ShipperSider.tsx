@@ -4,7 +4,6 @@ import IconDashboard from '../../assets/icons/ic-dashboard.svg';
 import IconOrderManagment from '../../assets/icons/ic-order-management.svg';
 import IconRequest from '../../assets/icons/ic-request.svg';
 import IconOrder from '../../assets/icons/ic-orders.svg';
-import SettingIcon from '../../assets/icons/ic-settingIcon.svg';
 import LogoutIcon from '../../assets/icons/ic-logoutIcon.svg';
 
 import { NavLink } from 'react-router-dom';
@@ -77,12 +76,6 @@ const ShipperSider = () => {
       </div>
 
       <div className="sidebar-admin">
-        <div key={'Settings'}>
-          <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
-            <Image src={SettingIcon} />
-            Settings
-          </div>
-        </div>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />

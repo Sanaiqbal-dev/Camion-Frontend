@@ -41,19 +41,23 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <Form.Group className="mb-3">
-              <Form.Label>ProductType</Form.Label>
+              <Form.Label>Product Type</Form.Label>
               <Form.Control
                 as="select"
                 placeholder="Select product type"
+                required
                 style={{
                   width: '560px',
                   height: '59px',
-                }}>
+                }}
+                {...register('productType')}
+                isInvalid={!!errors.productType}>
                 <option>Select Product Type</option>
                 <option value={1}>A</option>
                 <option value={2}>B</option>
                 <option value={3}>C</option>
               </Form.Control>
+              <Form.Control.Feedback type="invalid">{errors.productType?.message}</Form.Control.Feedback>
             </Form.Group>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
