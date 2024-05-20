@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/state';
 import ProposalColumns from './TableColumns/ProposalColumns';
-import { useGetProposalQuotationsQuery, useUpdateQuotationMutation } from '@/services/ProposalQuotation';
+import { useGetProposalQuotationsQuery, useUpdateQuotationStatusMutation } from '@/services/ProposalQuotation';
 import { useEffect, useState } from 'react';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
 import { QueryPager } from '@/interface/common';
@@ -22,7 +22,7 @@ const Proposals = () => {
   const [quotationProposals, setQuotationProposals] = useState<IProposalQuotation[]>([]);
   const [showToast, setShowToast] = useState(false);
 
-  const [updateQuotation, { isSuccess: isQuotationUpdated }] = useUpdateQuotationMutation();
+  const [updateQuotationStatus, { isSuccess: isQuotationStatusUpdated }] = useUpdateQuotationStatusMutation();
 
   const { data, isLoading } = useGetProposalQuotationsQuery({
     page: pager.page - 1,
@@ -49,16 +49,16 @@ const Proposals = () => {
     try {
       const updatedQuotation = {
         id: quotation.id,
-        trackingId: quotation.trackingId,
+        // trackingId: quotation.trackingId,
         status: quotation.status,
-        origin: quotation.origin,
-        destination: quotation.destination,
-        weight: quotation.weight,
-        dimentions: quotation.dimentions,
+        // origin: quotation.origin,
+        // destination: quotation.destination,
+        // weight: quotation.weight,
+        // dimentions: quotation.dimentions,
         proposalQuotationStatusId: isAccepted ? 1 : 0,
-        amount: quotation.amount,
+        // amount: quotation.amount,
       };
-      await updateQuotation(updatedQuotation).unwrap();
+      await updateQuotationStatus(updatedQuotation).unwrap();
       setShowToast(true);
       const updatedQuotations = quotationProposals.filter((q: IProposalQuotation) => q.id !== quotation.id);
       setQuotationProposals(updatedQuotations);
@@ -69,7 +69,7 @@ const Proposals = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationUpdated ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? 'success' : 'danger'} />}
       <div style={{ height: '100vh', overflowY: 'scroll' }}>
         {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}

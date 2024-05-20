@@ -53,6 +53,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   });
   const userId = useAppSelector((state) => state.session.user.userId);
   const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
+
   const [showToast, setShowToast] = useState(false);
   const [addNewProposal, { isSuccess: isProposalSubmitted, isLoading: isSubmittingProposal }] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);

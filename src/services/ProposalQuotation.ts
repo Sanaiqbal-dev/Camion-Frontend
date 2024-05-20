@@ -1,6 +1,7 @@
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import { IProposalQuotationUpdateBody } from '@/interface/proposalQuotation';
 import baseApi from './baseApi';
+import { IAPIResponse } from '@/interface/common';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,8 +15,15 @@ export const proposalApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    updateQuotationStatus: builder.mutation<IAPIResponse<unknown>, { id: number; status?: string; proposalQuotationStatusId: number }>({
+      query: (body) => ({
+        url: '/api/ProposalQuotations/UpdateProposalQuotationStatus',
+        method: 'PUT',
+        body: body,
+      }),
+    }),
   }),
 });
 
 // Export hooks for use in the app
-export const { useGetProposalQuotationsQuery, useUpdateQuotationMutation } = proposalApi;
+export const { useGetProposalQuotationsQuery, useUpdateQuotationMutation, useUpdateQuotationStatusMutation } = proposalApi;

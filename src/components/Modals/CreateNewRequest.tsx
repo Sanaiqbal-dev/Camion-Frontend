@@ -118,7 +118,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>Search your address to auto fill all the details</Form.Label>
               <Form.Control
                 type="text"
@@ -128,7 +128,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   height: '59px',
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
                 <Form.Label>Building number</Form.Label>
