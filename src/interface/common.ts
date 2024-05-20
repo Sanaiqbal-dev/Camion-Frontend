@@ -139,6 +139,7 @@ export interface IDriver {
   fileName: string;
   filePath: string;
   driverId: number;
+  issueNumber: number;
 }
 export interface IAppUser {
   id: string;
@@ -193,5 +194,5 @@ export interface IVehicleType {
 export interface IPlateType {
   id: number;
   name: string;
-  nameAr?: string|null;
+  nameAr?: string | null;
 }
