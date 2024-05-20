@@ -49,29 +49,14 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
                   style={{
                     width: '560px',
                     height: '59px',
-                  }}>
+                  }}
+                  {...register('shipmentType')}
+                  isInvalid={!!errors.shipmentType}>
                   <option>Select shipment type</option>
                   <option value={1}>A</option>
                   <option value={2}>B</option>
                   <option value={3}>C</option>
                 </Form.Control>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Temprature</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter temprature"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
-                  {...register('temprature')}
-                  isInvalid={!!errors.temprature}
-                />
-                <Form.Control.Feedback type="invalid">{errors.temprature?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
@@ -110,23 +95,42 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
                 <Form.Control.Feedback type="invalid">{errors.estimatedDropOffDate?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Fare</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter fare"
-                style={{
-                  width: '270px',
-                  height: '50px',
-                  borderTop: 'none',
-                  borderRight: 'none',
-                  borderLeft: 'none',
-                }}
-                {...register('fare')}
-                isInvalid={!!errors.fare}
-              />
-              <Form.Control.Feedback type="invalid">{errors.fare?.message}</Form.Control.Feedback>
-            </Form.Group>
+            <div style={{ display: 'flex', gap: '18px' }}>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Fare</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter fare"
+                  style={{
+                    width: '270px',
+                    height: '50px',
+                    borderTop: 'none',
+                    borderRight: 'none',
+                    borderLeft: 'none',
+                  }}
+                  {...register('fare')}
+                  isInvalid={!!errors.fare}
+                />
+                <Form.Control.Feedback type="invalid">{errors.fare?.message}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Temprature</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter temprature"
+                  style={{
+                    width: '270px',
+                    height: '50px',
+                    borderTop: 'none',
+                    borderRight: 'none',
+                    borderLeft: 'none',
+                  }}
+                  {...register('temprature')}
+                  isInvalid={!!errors.temprature}
+                />
+                <Form.Control.Feedback type="invalid">{errors.temprature?.message}</Form.Control.Feedback>
+              </Form.Group>
+            </div>
           </div>
           <Button variant="primary" type="submit">
             Next
