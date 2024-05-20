@@ -13,7 +13,10 @@ export const shipmentTypeApi = baseApi.injectEndpoints({
       query: () => `api/TruckTypes/GetTruckTypes`,
       providesTags: ['TruckType'],
     }),
+    getAllGoodTypes: builder.query<any, void>({
+      query: () => `api/Bayan/GetAllGoodTypes`,
+    }),
   }),
 });
 // Export hooks for use in the app
-export const { useGetShipmentTypesQuery, useGetTruckTypesQuery } = shipmentTypeApi;
+export const { useGetShipmentTypesQuery, useGetTruckTypesQuery, useGetAllGoodTypesQuery } = shipmentTypeApi;
