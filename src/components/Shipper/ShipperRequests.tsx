@@ -246,7 +246,7 @@ const ShipperRequests = () => {
 
   return (
     <div className="table-container">
-       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>

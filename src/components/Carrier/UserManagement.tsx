@@ -34,7 +34,7 @@ const UserManagement = () => {
   const [users, setUsers] = useState<IUserManagement[]>([]);
 
   const [createSubUser, { isSuccess: isUserAdded, error }] = useCreateSubUserMutation();
-  const [deleteSubUser] = useDeleteSubUserMutation();
+  const [deleteSubUser, { isSuccess: isUserDeleted }] = useDeleteSubUserMutation();
   const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,6 +42,13 @@ const UserManagement = () => {
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const companyData: IUserManagement[] = companyUserData?.result.result;
+  const UsersData: any = companyData?.map((item: IUserManagement) => ({
+    userId: item.userId,
+    userName: item.fullName,
+    email: item.email,
+    action: '',
+  }));
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
 
@@ -60,21 +67,26 @@ const UserManagement = () => {
   };
 
   const onDelete = async (id: string) => {
-    const euser = users.find((u) => u.userId === id);
+    const euser = UsersData.find((u: IUserManagement) => u.userId === id);
     setEditUser(euser);
     setIsConfirmationModalOpen(true);
+    console.log(euser?.userId);
   };
 
   const onDeleteHandler = async () => {
-    setIsConfirmationModalOpen(false);
-
-    const resp = await deleteSubUser({
-      userId: edituser?.userId,
-      isDeleted: true,
-    });
-    console.log(resp);
-    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
-    setUsers(newUsers);
+    try {
+      setIsConfirmationModalOpen(false);
+      await deleteSubUser({
+        userId: edituser?.userId,
+        isDeleted: true,
+      }).unwrap();
+      setShowToast(true);
+      refetch();
+      const newUsers = users.filter((u) => u.userId !== edituser?.userId);
+      setUsers(newUsers);
+    } catch (err) {
+      setShowToast(true);
+    }
   };
 
   const submitCreateFormHandler = async (data: IUser) => {
@@ -148,6 +160,7 @@ const UserManagement = () => {
   return (
     <>
       {showToast && <Toast variant={isUserAdded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && <Toast variant={isUserDeleted ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       <div className="table-container">
         <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
           <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
@@ -187,7 +200,7 @@ const UserManagement = () => {
             </Col>
           </Row>
         </div>
-        {users ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
+        {UsersData ? <DataTable isAction={true} columns={columns} data={UsersData} /> : <span>No Users Found!</span>}
         <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
           <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
             <img src={PreviousIcon} />

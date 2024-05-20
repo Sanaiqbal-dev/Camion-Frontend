@@ -26,13 +26,20 @@ const schema = z.object({
   EDD: z.string().refine(
     (value) => {
       const date = Date.parse(value);
-      return !isNaN(date);
+      if (isNaN(date)) {
+        return false;
+      }
+      const inputDate = new Date(date);
+      const today = new Date();
+      // Set today's date to the end of the day to allow for full day comparison
+      today.setHours(23, 59, 59, 999);
+      return inputDate > today;
     },
     {
-      message: 'Enter expected delivery date', // Custom error message
+      message: 'Enter an expected delivery date that is a day greater than today',
     },
   ),
-  otherDetails: z.string().min(1, 'Enter addition details about order proposal.'),
+  otherDetails: z.string().min(1, 'Enter additional details about order proposal.'),
 });
 
 const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handleClose, proposalId }) => {
