@@ -3,7 +3,6 @@ import CamionLogo from '../../assets/images/camion-logo.svg';
 import IconUser from '../../assets/icons/ic-user.svg';
 import IconOrderManagement from '../../assets/icons/ic-order-management.svg';
 import IconReportManagement from '../../assets/icons/ic-report-management.svg';
-import IconSettings from '../../assets/icons/ic-settings.svg';
 import IconLogout from '../../assets/icons/ic-logout.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -42,12 +41,6 @@ const AdminSider = () => {
         </div>
       </div>
       <div className="sidebar-admin">
-        <NavLink key={'Settings'} to={'/admin/settings'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
-          <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
-            <Image src={IconSettings} />
-            Settings
-          </div>
-        </NavLink>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={IconLogout} />

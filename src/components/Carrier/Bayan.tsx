@@ -3,7 +3,6 @@ import { Col, FormControl, Image, InputGroup, Row } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
@@ -123,6 +122,8 @@ const Bayan = () => {
     setLocationType('delivery');
   };
 
+  console.log('ShowInfoModal', showShippingInfoModal);
+
   const SubmitDeliveryLocationInfo = () => {
     setShowCreateBayanModal(false);
     setShowProductTypeModal(true);
@@ -132,6 +133,7 @@ const Bayan = () => {
   const SubmitProductTypeInfo = () => {
     setShowProductTypeModal(false);
     setShowShippingInfoModal(true);
+    showShippingInfoModal && console.log('');
   };
   const SubmitShippingInfo = () => {
     setShowShippingInfoModal(false);
@@ -147,22 +149,15 @@ const Bayan = () => {
 
   return (
     <div className="table-container">
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={IconFilter} /> Filter
-          </button>
-        </div>
-        <div>
-          <button
-            className="add-item-btn"
-            id="create-bayan-btn"
-            onClick={() => {
-              setShowCreateBayanModal(true);
-            }}>
-            Create Bayan
-          </button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <button
+          className="add-item-btn"
+          id="create-bayan-btn"
+          onClick={() => {
+            setShowCreateBayanModal(true);
+          }}>
+          Create Bayan
+        </button>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">

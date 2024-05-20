@@ -1,4 +1,3 @@
-import { ITruckTypes } from '@/interface/proposal';
 export interface IBayan {}
 export interface ILocation {
   name: string;
