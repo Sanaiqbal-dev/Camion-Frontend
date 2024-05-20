@@ -114,7 +114,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
-          issueNumber: data.issueNumber,
+          issueNumber: formData.issueNumber,
           filePath: filePath,
           fileName: file ? file.name : 'no file uploaded.',
         }).unwrap();
@@ -248,7 +248,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Iqama Issue Count</Form.Label>
+                <Form.Label>Iqama Issue Count {formData?.issueNumber}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter iqama issue count"

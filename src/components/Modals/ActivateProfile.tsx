@@ -40,7 +40,7 @@ const schema = z
     password: z.string().min(6, 'Password must be at least 6 characters.'),
     confirmPassword: z.string().min(6, 'Confirm your password.'),
     companyName: z.string().min(6, 'Company name should be atleast 5 characters.'),
-    moiNumber: z.string().min(6, 'Moi should be atleast 5 characters.'),
+    moiNumber: z.string().min(4, 'Moi should be atleast 4 characters.'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -398,7 +398,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Moi Number</Form.Label>
-                  <Form.Control type="text" placeholder="Moi Number" style={{ width: '560px', height: '50px' }} {...register('moiNumber')} isInvalid={!!errors.companyName} />
+                  <Form.Control type="text" placeholder="Moi Number" style={{ width: '560px', height: '50px' }} {...register('moiNumber')} isInvalid={!!errors.moiNumber} />
                   <Form.Control.Feedback type="invalid">{errors.moiNumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
