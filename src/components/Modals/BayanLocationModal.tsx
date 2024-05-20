@@ -15,7 +15,7 @@ interface BayanLocationModalProps {
 }
 const schema = z.object({
   name: z.string().min(3, 'Enter name'),
-  phoneNumber: z.string().regex(/^\+?\d[\d\s]{10,}$/, 'Enter a valid contact number.'),
+  phoneNumber: z.string().regex(/^\+?\d[\d\s]{9,}$/, 'Enter a valid contact number.'),
   buildingNumber: z.string().min(1, 'Building number is required'),
   streetName: z.string().min(1, 'Enter street name'),
   districtId: z.string().min(1, 'Please enter your district name'),

@@ -12,6 +12,7 @@ import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
 import AssignVehicle from '../Modals/AssignVehicle';
 import { ICreateBayan, ILocation, IProductType, IShippingInfo } from '@/interface/bayan';
 import { useCreateBayanMutation } from '@/services/bayan';
+import { useSelector } from 'react-redux';
 
 const Bayan = () => {
   const bayanData: IBayanItem[] = [
@@ -112,6 +113,7 @@ const Bayan = () => {
   const [locationType, setLocationType] = useState<string>('pickup');
   const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
   const [createBayan] = useCreateBayanMutation();
+  const showCreateBayan = useSelector((state: any) => state.session.isCompanyAccount);
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -125,7 +127,6 @@ const Bayan = () => {
   }
 
   const SubmitPickUpLocationInfo = (locationData: ILocation) => {
-    // console.log('pickup location data:', locationData);
 
     setBayanObject((prevItem) => ({
       ...prevItem,
@@ -138,7 +139,6 @@ const Bayan = () => {
   };
 
   const SubmitDeliveryLocationInfo = (locationData: ILocation) => {
-    // console.log('delivery location data:', locationData);
     setBayanObject((prevItem) => ({
       ...prevItem,
       recipientName: locationData.name,
@@ -151,7 +151,6 @@ const Bayan = () => {
   };
 
   const SubmitProductTypeInfo = (productData: IProductType) => {
-    // console.log('product type data :', productData);
 
     setBayanObject((prevItem) => ({
       ...prevItem,
@@ -181,7 +180,6 @@ const Bayan = () => {
   };
 
   const AssignVehicleToBayan = (id: number) => {
-    // console.log('Assigned vehicle Id:', id);
     setBayanObject((prevItem) => ({
       ...prevItem,
       vehicleId: id,
@@ -206,16 +204,18 @@ const Bayan = () => {
   }, [sendBayanCreateRequest]);
   return (
     <div className="table-container">
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button
-          className="add-item-btn"
-          id="create-bayan-btn"
-          onClick={() => {
-            setShowCreateBayanModal(true);
-          }}>
-          Create Bayan
-        </button>
-      </div>
+      {showCreateBayan && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            className="add-item-btn"
+            id="create-bayan-btn"
+            onClick={() => {
+              setShowCreateBayanModal(true);
+            }}>
+            Create Bayan
+          </button>
+        </div>
+      )}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
