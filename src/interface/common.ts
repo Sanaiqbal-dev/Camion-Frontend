@@ -195,3 +195,9 @@ export interface IPlateType {
   name: string;
   nameAr?: string|null;
 }
+export interface IShipmentType {
+  id: number;
+  name: string;
+  nameAr:string;
+  
+}
