@@ -85,6 +85,7 @@ const VehicleManagement = () => {
       driverId: id,
     }).unwrap();
     console.log(res);
+    refetch();
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
@@ -106,6 +107,7 @@ const VehicleManagement = () => {
   const submitCreateVehicleHandler = async (data: unknown) => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
+    refetch();
     console.log(resp);
   };
   const submitEditVehicleHandler = async (data: IDriver) => {
