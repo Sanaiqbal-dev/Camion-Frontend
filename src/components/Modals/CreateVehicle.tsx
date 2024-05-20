@@ -46,6 +46,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
   const [selectedFilePath, setSelectedFilePath] = useState('');
+  const [showFileError, setShowFileError] = useState(false);
 
   useEffect(() => {
     const uploadFiles = async () => {
@@ -58,6 +59,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
             setSelectedFilePath(response.data.message);
           }
           console.log(response);
+          setShowFileError(false);
         } catch (error) {
           console.error('Error uploading file:', error);
         }
@@ -68,6 +70,10 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   }, [selectedFile]);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
+    !selectedFile && setShowFileError(true);
+    if (!selectedFile) {
+      return;
+    }
     const { vehicleType, modelYear, ...rest } = data;
     const requestData = {
       ...rest,
@@ -173,7 +179,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 <Form.Control.Feedback type="invalid">{errors.imeiNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
+            <div className="tw-gap-5  tw-flex tw-flex-col">
               <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
                 <Form.Label className="tw-text-sm">Vehicle Registration</Form.Label>
                 <Form.Control
@@ -189,6 +195,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                   }}
                 />
               </Form.Group>
+              {showFileError && <div style={{ color: 'red' }}>Vehicle Registration is mendatory</div>}
             </div>
           </div>
           <Button variant="primary" type="submit">
