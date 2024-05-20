@@ -25,7 +25,7 @@ export function DataTable<TData, TValue>({ isAction, columns, data }: DataTableP
   return (
     <div className="table-contents" style={isAction ? { height: `calc(100vh - 250px)` } : { height: `calc(100vh - 200px)` }}>
       <Table className={tableColumnStyle}>
-        <TableHeader className="tw-border-none">
+        <TableHeader className="tw-border-none text-nowrap">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
