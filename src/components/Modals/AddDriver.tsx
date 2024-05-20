@@ -39,7 +39,7 @@ const schema = z.object({
   dob: z.string().min(4, 'Please enter your date of birth'),
   nationalityId: z.string().optional(),
   phoneNumber: z.string().min(6, 'please enter phone number'),
-  issueNumber: z.string().min(1, 'Please enter issue number'),
+  issueNumber: z.number().positive('Please enter a positive issue number').max(999, 'Issue number cannot exceed 999'),
   // fileName: z
   //   .any()
   //   .refine((file) => file, 'Iqama is require.')
@@ -250,12 +250,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Iqama Issue Count {formData?.issueNumber}</Form.Label>
                 <Form.Control
-                  type="string"
+                  type="number"
                   placeholder="Enter iqama issue count"
                   style={{ width: '560px', height: '59px' }}
-                  {...register('issueNumber')}
+                  {...register('issueNumber', { valueAsNumber: true })}
                   defaultValue={formData?.issueNumber}
-                  onChange={(e) => setFormData({ ...formData, issueNumber: e.target.value } as IDriver)}
+                  onChange={(e) => setFormData({ ...formData, issueNumber: e.target.value } as unknown as IDriver)}
                   isInvalid={!!errors.issueNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.issueNumber?.message}</Form.Control.Feedback>

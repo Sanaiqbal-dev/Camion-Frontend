@@ -89,7 +89,7 @@ const VehicleManagement = () => {
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
-      newvehicles[index].driver = selectedDriver.name;
+      newvehicles[index].driver.name = selectedDriver.name;
       setVehicles(newvehicles);
     }
     setVehicleIdfordriver(null);
@@ -108,7 +108,7 @@ const VehicleManagement = () => {
     const resp = await createVehicle(data).unwrap();
     console.log(resp);
   };
-  const submitEditVehicleHandler = async (data: any) => {
+  const submitEditVehicleHandler = async (data: IDriver) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
     refetch();
