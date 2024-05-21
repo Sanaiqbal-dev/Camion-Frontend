@@ -8,20 +8,23 @@ import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { IGoodType } from '@/interface/goodType';
 
 const schema = z.object({
-  numberOfBoxes: z.coerce.number().min(1, 'Please enter number of Boxes'),
-  weightPerItem: z.string().min(1, 'Please enter weight per item'),
+  quantity: z.coerce.number().int().min(1, 'Enter number of items'),
+  length: z.coerce.number().min(1, 'Enter length in centimeters'),
+  width: z.coerce.number().min(1, 'Enter width in centimeters'),
+  height: z.coerce.number().min(1, 'Enter height in centimeters'),
+  weightPerItem: z.coerce.number().min(1, 'Please enter weight per item'),
   isCargoItemsStackable: z.boolean().optional().default(false),
   isIncludingItemsARGood: z.boolean().optional().default(false),
-  goodTypeId: z.number({ invalid_type_error: 'Good Type is required.', required_error: 'Good Type is required.', message: 'Good Type is required.' }),
+  goodTypeId: z.string().min(1, 'Good Type is required.'),
 });
 
-interface IBoxForm {
+interface IShipmentForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
   // shipmentTypeId: number;
-  onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
+  onSubmitShipmentForm: (data: IShipmentDetails) => void;
 }
-const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
+const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
   const {
     register,
     handleSubmit,
@@ -36,23 +39,32 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
   useEffect(() => {
     if (isEdit && proposalObject) {
       const currentObj = {
-        numberOfBoxes: proposalObject.shipmentQuantity,
+        quantity: proposalObject.shipmentQuantity,
+        length: proposalObject.length,
+        width: proposalObject.width,
         // shipmentTypeId: proposalObject.shipmentTypeId,
         weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
       };
 
-      Object.entries(currentObj).forEach(([key, value]) => value && setValue(key as keyof IShipmentDetails, value));
+      Object.entries(currentObj).forEach(([key, value]) => {
+        const valueToUse = value !== null ? value : undefined;
+        setValue(key as keyof IShipmentDetails, valueToUse);
+      });
     }
-  }, [isEdit, setValue, proposalObject]);
+  }, [isEdit, setValue]);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
-    onSubmitShipmentForm(data, 'Box');
+    onSubmitShipmentForm(data);
+  };
+
+  const onerror = (error: any) => {
+    console.log('error is: ', error);
   };
   return (
     <Modal.Body>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
           <Form.Group className="mb-3">
             <Form.Label>Good Type</Form.Label>
@@ -62,13 +74,9 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
               style={{
                 width: '100%',
                 height: '59px',
-                // borderTop: 'none',
-                // borderRight: 'none',
-                // borderLeft: 'none',
               }}
               {...register('goodTypeId', { required: true })}
               isInvalid={!!errors.goodTypeId}
-              // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
               readOnly>
               <option value="">Select Good Type</option>
               {allGoodTypes &&
@@ -81,23 +89,73 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
             <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>No. of Box</Form.Label>
+            <Form.Label>Quantity</Form.Label>
             <Form.Control
               type="number"
+              min={1}
               placeholder="1"
               style={{
                 width: '560px',
                 height: '59px',
               }}
-              isInvalid={!!errors.numberOfBoxes}
-              {...register('numberOfBoxes')}
+              isInvalid={!!errors.quantity}
+              {...register('quantity')}
             />
-            <Form.Control.Feedback type="invalid">{errors.numberOfPallets?.message}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.quantity?.message}</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group className="mb-3 d-flex">
+            <Form.Control
+              type="text"
+              min={1}
+              placeholder="Length"
+              style={{
+                width: '164px',
+                height: '59px',
+              }}
+              isInvalid={!!errors.length}
+              {...register('length')}
+            />
+            <Form.Control
+              type="text"
+              min={1}
+              placeholder="Width"
+              style={{
+                width: '164px',
+                height: '59px',
+                margin: '0 -2px 0 -2px',
+              }}
+              isInvalid={!!errors.width}
+              {...register('width')}
+            />
+            <Form.Control
+              type="text"
+              min={1}
+              placeholder="Height"
+              style={{
+                width: '164px',
+                height: '59px',
+              }}
+              isInvalid={!!errors.height}
+              {...register('height')}
+            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '59px',
+                width: '68px',
+                backgroundColor: '#E0E0E0',
+                color: '#7A7A7A',
+              }}>
+              Cm
+            </div>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Weight per item</Form.Label>
             <Form.Control
-              type="text"
+              type="number"
+              min={1}
               placeholder="1"
               style={{
                 width: '560px',
@@ -107,6 +165,7 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
               {...register('weightPerItem')}
             />
             <Form.Control.Feedback type="invalid">{errors.weightPerItem?.message}</Form.Control.Feedback>
+
             <div
               style={{
                 display: 'flex',
@@ -134,4 +193,4 @@ const BoxForm: React.FC<IBoxForm> = ({ isEdit, proposalObject, onSubmitShipmentF
   );
 };
 
-export default BoxForm;
+export default ShipmentForm;

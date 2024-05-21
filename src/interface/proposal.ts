@@ -61,12 +61,11 @@ export interface ITruckTypes {
 export interface IShipmentDetails {
   goodTypeId: number;
   shipmentTypeId: number;
-  numberOfPallets?: number | undefined;
-  numberOfBoxes?: number | undefined;
+  quantity?: number | undefined;
   length?: number | undefined;
   width?: number | undefined;
   height?: number | undefined;
-  weightPerItem?: string | undefined;
+  weightPerItem?: number | undefined;
   shipmentTruckType?: IShipmentTruckType[] | undefined;
   otherType?: string | undefined;
   isCargoItemsStackable?: boolean | undefined;

@@ -119,7 +119,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           fileName: file ? file.name : 'no file uploaded.',
         }).unwrap();
         setShowToast(true);
-        reset();
       } else {
         await addNewDriver({
           name: data.name,
@@ -134,11 +133,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           fileName: file ? file.name : 'no file uploaded.',
         }).unwrap();
         setShowToast(true);
-        reset();
       }
-      handleCloseModal();
+      reset();
+
+      handleClose();
     } catch (error) {
-      setShowToast(false);
+      setShowToast(true);
     }
   };
   const getNationalityIdByName = (nationalityListData: INationality[], nationalityName?: string) => {
@@ -147,7 +147,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   };
   const handleCloseModal = () => {
     reset();
-    // handleClose();
+    handleClose();
   };
   return (
     <>
