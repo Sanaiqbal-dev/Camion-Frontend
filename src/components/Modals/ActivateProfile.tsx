@@ -293,7 +293,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               },
             ],
         userId: userId,
-      }).unwrap();
+      });
       console.log(newProfileResponse);
       setShowToast(true);
       handleClose();

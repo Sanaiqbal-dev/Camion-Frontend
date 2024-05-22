@@ -8,20 +8,6 @@ import { useUploadFileMutation } from '@/services/fileHandling';
 import { IDriver, IDriverModalForm } from '@/interface/carrier';
 import { Toast } from '../ui/toast';
 
-// interface IDriver {
-//   id?: number;
-//   name: string;
-//   iqamaId: string;
-//   licenseNumber: string;
-//   dob: string;
-//   nationalityId: number;
-//   nationality:string;
-//   phoneNumber: string;
-//   fileName: string;
-//   filePath: string;
-//   driverId: number;
-// }
-
 interface CreateUserModalProps {
   modal: IDriverModalForm;
   handleClose: () => void;
@@ -32,23 +18,21 @@ interface INationality {
   id: number;
   name: string;
 }
+
+const isAtLeast18YearsOld = (dateString: string) => {
+  const date = new Date(dateString);
+  const today = new Date();
+  const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+  return date <= eighteenYearsAgo;
+};
 const schema = z.object({
   name: z.string().min(3, 'Please enter driver name'),
   iqamaId: z.string().min(1, 'Please enter driver iqama number'),
   licenseNumber: z.string().min(5, 'Please enter lisence number'),
-  dob: z.string().min(4, 'Please enter your date of birth'),
+  dob: z.string().min(10, 'Please enter your date of birth').refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old'),
   nationalityId: z.string().optional(),
   phoneNumber: z.string().min(6, 'please enter phone number'),
-  issueNumber: z.number().positive('Please enter a positive issue number').max(999, 'Issue number cannot exceed 999'),
-  // fileName: z
-  //   .any()
-  //   .refine((file) => file, 'Iqama is require.')
-  //   .refine((file) => file?.size <= 3000000, `Max file size is 3MB.`)
-  //   .refine(
-  //     (file) =>
-  //       ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file?.type),
-  //     'Only .jpg, .jpeg, .png and .webp, .pdf, .docx formats are supported.',
-  //   ),
+  issueNumber: z.number().positive('Please enter a positive issue number').max(99, 'Issue number must be 1 to 99'),
 });
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
@@ -248,7 +232,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Iqama Issue Count {formData?.issueNumber}</Form.Label>
+                <Form.Label>Iqama Issue Count</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Enter iqama issue count"
