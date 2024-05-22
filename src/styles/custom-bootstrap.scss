@@ -836,12 +836,18 @@ body {
 
 .success {
   position: fixed !important;
-  z-index: 10000;
+  z-index: 100000;
   background-color: rgb(159, 242, 159);
 }
 
 .danger {
   position: fixed !important;
-  z-index: 10000;
+  z-index: 100000;
   background-color: lightcoral;
+}
+
+[role='alert'] {
+  .btn-close {
+    background-size: 0.75rem;
+  }
 }

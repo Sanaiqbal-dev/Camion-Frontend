@@ -314,9 +314,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
 
   return (
     <>
-      {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
-      {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+        {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+        {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
         <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
             <Image src={PropfileImage} style={{ height: '106px' }} />
