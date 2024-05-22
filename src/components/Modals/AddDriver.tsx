@@ -39,6 +39,7 @@ const schema = z.object({
   dob: z.string().min(4, 'Please enter your date of birth'),
   nationalityId: z.string().optional(),
   phoneNumber: z.string().min(6, 'please enter phone number'),
+  issueNumber: z.number().positive('Please enter a positive issue number').max(999, 'Issue number cannot exceed 999'),
   // fileName: z
   //   .any()
   //   .refine((file) => file, 'Iqama is require.')
@@ -113,6 +114,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           mobileNo: formData.phoneNumber,
           iqamaId: formData.iqamaId,
           driverId: formData.id,
+          issueNumber: formData.issueNumber,
           filePath: filePath,
           fileName: file ? file.name : 'no file uploaded.',
         }).unwrap();
@@ -126,6 +128,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           mobileNo: data.phoneNumber,
           iqamaId: data.iqamaId,
           driverId: 0,
+          issueNumber: data.issueNumber,
           filePath: filePath,
           fileName: file ? file.name : 'no file uploaded.',
         }).unwrap();
@@ -149,9 +152,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   return (
     <>
       {showToast && <Toast variant={isDriverAdded || isDriverUpdated || isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
-        <Modal.Header style={{ display: 'flex', flexDirection: 'column', gap: '10px' }} closeButton>
+        <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
           <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'} Driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -242,6 +246,19 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                   isInvalid={!!errors.phoneNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>Iqama Issue Count {formData?.issueNumber}</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Enter iqama issue count"
+                  style={{ width: '560px', height: '59px' }}
+                  {...register('issueNumber', { valueAsNumber: true })}
+                  defaultValue={formData?.issueNumber}
+                  onChange={(e) => setFormData({ ...formData, issueNumber: e.target.value } as unknown as IDriver)}
+                  isInvalid={!!errors.issueNumber}
+                />
+                <Form.Control.Feedback type="invalid">{errors.issueNumber?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="tw-flex tw-flex-col">
                 <Form.Label className="tw-text-sm">Upload Document Iqama/ID</Form.Label>

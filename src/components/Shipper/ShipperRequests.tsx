@@ -4,11 +4,10 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import FilterIcon from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
 import ShippementDetails from '../Modals/ShippementDetails';
-import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
+import { IProposalResponseData, IShipmentDetails, IShipmentType } from '@/interface/proposal';
 import { INewRequest, IRequestTable } from '@/interface/shipper';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
@@ -108,10 +107,8 @@ const ShipperRequests = () => {
   };
 
   const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
-    const shipmentDataAll: any = shipmentData.data;
-    const shipmentTypeId =
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType) &&
-      shipmentDataAll?.find((type: { shipmentTypeName: string }) => type.shipmentTypeName === shipmentType)?.id;
+    const shipmentDataAll: IShipmentType[] = shipmentData.data?.result;
+    const shipmentTypeId = shipmentDataAll?.find((type) => type.name === shipmentType) && shipmentDataAll?.find((type) => type.name === shipmentType)?.id;
 
     const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
     const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
@@ -131,11 +128,12 @@ const ShipperRequests = () => {
       isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
       shipmentTruckType: shipmentTruckTypeDefault,
       userId: userData.user.userId,
-      weight: itemWeight,
+      weight: Number(itemWeight),
       otherName: otherItemName,
       proposalId: isEditProposal ? selectedProposalItem : 0,
       FileName: '',
       FilePath: '',
+      goodTypeId: Number(data.goodTypeId),
     }));
 
     setSendProposalRequest(false);
@@ -248,12 +246,7 @@ const ShipperRequests = () => {
   return (
     <div className="table-container">
       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={FilterIcon} /> Filter
-          </button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
             Create new Request

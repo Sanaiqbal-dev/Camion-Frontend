@@ -22,6 +22,7 @@ export type IDriver = {
   action: string;
   iqamaId: string;
   fileName?: any;
+  issueNumber: number;
 };
 
 export interface IDriverModalForm {
@@ -44,7 +45,7 @@ export type IRequest = {
 
 export type IVehicle = {
   id: number;
-  driver: string;
+  driver: IDriver;
   vehicleType: { typeName: string };
   modelYear: string;
   vehicleNumber: string;

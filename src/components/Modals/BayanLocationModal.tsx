@@ -15,7 +15,7 @@ interface BayanLocationModalProps {
 }
 const schema = z.object({
   name: z.string().min(3, 'Enter name'),
-  phoneNumber: z.string().regex(/^\+?\d[\d\s]{10,}$/, 'Enter a valid contact number.'),
+  phoneNumber: z.string().regex(/^\+?\d[\d\s]{9,}$/, 'Enter a valid contact number.'),
   buildingNumber: z.string().min(1, 'Building number is required'),
   streetName: z.string().min(1, 'Enter street name'),
   districtId: z.string().min(1, 'Please enter your district name'),
@@ -25,7 +25,7 @@ const schema = z.object({
   unitNo: z.string(),
 });
 
-const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClose, handleNextStep, infoType='pickup'}) => {
+const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClose, handleNextStep, infoType = 'pickup' }) => {
   const {
     register,
     handleSubmit,
@@ -35,16 +35,17 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     resolver: zodResolver(schema),
   });
 
-  const { data: cityData } = useGetCityListQuery('');
-  const { data: districtData } = useGetDistrictListQuery('');
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
+
+  const { data: districtData } = useGetDistrictListQuery('');
+  const { data: cityData } = useGetCityListQuery(selectedDistrict);
 
   const onSubmit: SubmitHandler<ILocation> = async (data) => {
     const city_ = cityList?.find((item) => item.name === selectedCity)?.id || 0;
-    const district_ = districtList?.find((item) => item.name === selectedDistrict)?.id || 0;
+    const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id || 0;
     const locationObject = {
       name: data.name,
       phoneNumber: data.phoneNumber,
@@ -180,12 +181,12 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                   }}
                   {...register('districtId', { required: true })}
                   isInvalid={!!errors.districtId}
-                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                  onChange={(e) => setSelectedDistrict(Number(e.target.value))}
                   readOnly>
                   <option value="">Select District</option>
                   {districtList &&
                     districtList.map((district) => (
-                      <option key={district.id} value={district.name}>
+                      <option key={district.id} value={district.id}>
                         {district.name}
                       </option>
                     ))}

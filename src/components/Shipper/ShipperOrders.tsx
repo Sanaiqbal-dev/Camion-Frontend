@@ -4,7 +4,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-import FilterIcon from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import { useDeleteOrderMutation, useGetOrdersQuery } from '@/services/order';
 import { PAGER_SIZE } from '@/config/constant';
@@ -28,11 +27,14 @@ const ShipperOrders = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { data: currentData } = useGetOrdersQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    term: searchTerm,
-  });
+  const { data: currentData } = useGetOrdersQuery(
+    {
+      page: pager.page - 1,
+      pageCount: pager.pageSize,
+      term: searchTerm,
+    },
+    { refetchOnMountOrArgChange: true },
+  );
   const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
 
   const [orderItems, setOrderItems] = useState<IOrder[]>([]);
@@ -87,11 +89,11 @@ const ShipperOrders = () => {
     setShowConfirmationModal(true);
   };
   const onTrackOrder = (orderItemId: number) => {
-    console.log('Tracking order Id:', orderItemId);
+    console.log('Tracking order Id:', orderItemId, orderItems);
     navigate('/shipper/shippertracking', {
       replace: true,
       state: {
-        orderObject: orderItems.find((item) => item.id === orderItemId)?.orderDetail,
+        orderObject: orderItems.find((item) => item.id === orderItemId),
       },
     });
   };
@@ -137,13 +139,6 @@ const ShipperOrders = () => {
   return (
     <div className="table-container">
       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? 'success' : 'danger'} />}
-      <div className="search-and-entries-container">
-        <div>
-          <button className="filter-btn">
-            <img src={FilterIcon} /> Filter
-          </button>
-        </div>
-      </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">

@@ -13,9 +13,11 @@ import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import { Row, Col, InputGroup, Image, FormControl, Button } from 'react-bootstrap';
 import ConfirmationModal from '../Modals/ConfirmationModal';
+import { Toast } from '../ui/toast';
 
 const AdminUserManagement = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [showToast, setshowToast] = useState(false);
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -32,9 +34,9 @@ const AdminUserManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
-  const [createSubUser, { error }] = useCreateSubUserMutation();
-  const [deleteSubUser] = useDeleteSubUserMutation();
-  const [updateSubUserPassword] = useUpdateSubUserPasswordMutation();
+  const [createSubUser, { isSuccess: isUserCreated }] = useCreateSubUserMutation();
+  const [deleteSubUser, { isSuccess: isUserDeleted }] = useDeleteSubUserMutation();
+  const [updateSubUserPassword, { isSuccess: isUserPasswordUpdated }] = useUpdateSubUserPasswordMutation();
 
   useEffect(() => {
     if (companyUserData?.result.result) {
@@ -79,35 +81,42 @@ const AdminUserManagement = () => {
     setIsConfirmationModalOpen(true);
   };
   const onDeleteHandler = async () => {
-    setIsConfirmationModalOpen(false);
+    try {
+      setIsConfirmationModalOpen(false);
 
-    const resp = await deleteSubUser({
-      userId: edituser?.userId,
-      isDeleted: true,
-    });
-    console.log(resp);
-    const newUsers = users.filter((u) => u.userId !== edituser?.userId);
-    setUsers(newUsers);
+      await deleteSubUser({
+        userId: edituser?.userId,
+        isDeleted: true,
+      }).unwrap();
+      setshowToast(true);
+      const newUsers = users.filter((u) => u.userId !== edituser?.userId);
+      setUsers(newUsers);
+    } catch (e) {
+      setshowToast(true);
+    }
   };
   const submitCreateFormHandler = async (data: IUser) => {
     try {
-      const resp = await createSubUser(data).unwrap();
-      console.log(resp);
+      await createSubUser(data).unwrap();
+      setshowToast(true);
       refetch();
       setshowCreateUserModal(false);
     } catch (error) {
-      console.log(error);
+      setshowToast(true);
     }
   };
   const submitEditFormHandler = async (data: IPassword) => {
-    setshowUpdatePasswordModal(false);
-
-    const resp = await updateSubUserPassword({
-      password: data.newPassword,
-      confirmPassword: data.confirmPassword,
-      email: edituser?.email,
-    });
-    console.log(resp);
+    try {
+      await updateSubUserPassword({
+        password: data.newPassword,
+        confirmPassword: data.confirmPassword,
+        email: edituser?.email,
+      }).unwrap();
+      setshowUpdatePasswordModal(false);
+      setshowToast(true);
+    } catch (e) {
+      setshowToast(true);
+    }
   };
 
   const debouncedSearch = debounce((search: string) => {
@@ -124,6 +133,7 @@ const AdminUserManagement = () => {
 
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isUserCreated || isUserDeleted || isUserPasswordUpdated ? 'success' : 'danger'} />}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
           Create New User
@@ -176,7 +186,7 @@ const AdminUserManagement = () => {
         onSubmitForm={submitCreateFormHandler}
         handleClose={() => setshowCreateUserModal(false)}
         // showError={!isLoading && isError && error}
-        isSuccess={!error ? 'success' : ''}
+        isSuccess={isUserCreated ? 'success' : ''}
       />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
       <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />

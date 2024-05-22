@@ -1,4 +1,4 @@
-import { CommonSelect, IAPIResponse } from '@/interface/common';
+import { CommonSelect, IAPIResponse, IFile } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import { IOrder, IOrderSingle } from '@/interface/order';
 import baseApi from './baseApi';
@@ -58,6 +58,30 @@ export const orderApi = baseApi.injectEndpoints({
         body: { orderId, vehicleId },
       }),
     }),
+    createBayanFromOrder: builder.mutation<IAPIResponse<unknown>, { orderId: number }>({
+      query: (body) => ({
+        url: `/api/Bayan/CreateBayaanByOrderId?orderId=${body.orderId}`,
+        method: 'POST',
+        // body: body,
+      }),
+    }),
+    getBayanBill: builder.mutation<IAPIResponse<IFile>, string>({
+      query: (tripId) => ({
+        url: `/api/Bayan/PrintBayaanBill?tripId=${tripId}`,
+        method: 'GET',
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Bayan';
+          a.click();
+          URL.revokeObjectURL(url);
+          return response;
+        },
+        cache: 'no-cache',
+      }),
+    }),
   }),
 });
 
@@ -70,4 +94,6 @@ export const {
   useUpdateOrderMutation,
   useDeleteOrderMutation,
   useAssignVehicleToOrderMutation,
+  useCreateBayanFromOrderMutation,
+  useGetBayanBillMutation,
 } = orderApi;

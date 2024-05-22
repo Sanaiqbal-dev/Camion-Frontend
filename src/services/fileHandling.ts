@@ -17,7 +17,7 @@ export const fileHandling = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['ProposalQuotation'],
+      invalidatesTags: ['ProposalQuotation', 'Proposal'],
     }),
 
     downloadFile: builder.query<IAPIResponse<IFile>, string>({

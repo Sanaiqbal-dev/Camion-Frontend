@@ -29,7 +29,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
     resolver: zodResolver(schema),
   });
 
-  const { data } = useGetVehiclesQuery({});
+  const { data } = useGetVehiclesQuery({ orderVehicle: 1 });
 
   const [vehicleList, setVehicleList] = useState<IVehicle[]>(data?.result.result);
 

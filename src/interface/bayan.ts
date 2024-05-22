@@ -1,4 +1,3 @@
-import { ITruckTypes } from '@/interface/proposal';
 export interface IBayan {}
 export interface ILocation {
   name: string;
@@ -12,22 +11,48 @@ export interface ILocation {
   unitNo?: string;
 }
 
-export interface IShippingInfo{
-  temprature:string;
-  truckType:number;
+export interface IShippingInfo {
+  shipmentType: number;
   estimatedPickupDate: string;
-  estimatedDropOffDate:string;
-  fare:number;
+  estimatedDropOffDate: string;
+  fare: number;
 }
 export interface IProductType {
-  productType: IGoodsType;
-  name:string;
-  price:number;
-  quantity:number;
-  weight:string;
+  productTypeId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  weight: number;
+  length: number;
+  width: number;
+  height: number;
+  isCargoItemsStackable: boolean;
+  isIncludingItemsARGood: boolean;
 }
 
-export interface IGoodsType{
-  id:number;
-  name:string;
+export interface IGoodsType {
+  id: number;
+  nameEnglish: string;
+}
+
+export interface ICreateBayan {
+  receivedDate: string;
+  expectedDeliveryDate: string;
+  vehicleId: number;
+  fare: number;
+  tradable: boolean;
+  senderName: string;
+  senderPhone: string;
+  senderCityId: number;
+  senderAddress: string;
+  recipientName: string;
+  recipientPhone: string;
+  recipientCityId: number;
+  recipientAddress: string;
+  itemUnitId: number;
+  itemValid: boolean;
+  itemQuantity: number;
+  goodTypeId: number;
+  weight: number;
+  dimentions: string;
 }

@@ -8,13 +8,14 @@ import { useEffect, useState } from 'react';
 import { IOrderTable } from '../../interface/carrier';
 import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import { useAssignVehicleToOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 export interface StatusProps {
   id: string;
@@ -34,17 +35,18 @@ const Orders = () => {
     term: searchTerm,
   });
 
-  const [deleteOrder] = useDeleteOrderMutation();
+  const [deleteOrder, { isSuccess: isOrderDeleted, isLoading: isOrderDeleting }] = useDeleteOrderMutation();
   const [updateOrderStatus] = useUpdateOrderMutation();
-  const [assignVehicle] = useAssignVehicleToOrderMutation();
+  const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
+  const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
-
+  const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [selectedOrderItemId, setSelectedOrderItemId] = useState<number>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const onAssignVehicle = (orderItemId: number) => {
     setShowAssignVehicleForm(true);
     setSelectedOrderItemId(orderItemId);
@@ -57,8 +59,10 @@ const Orders = () => {
         vehicleId: vehicleTypeId,
       });
       console.log(response);
+      setShowToast(true);
     } catch (error) {
       console.log(error);
+      setShowToast(true);
     }
     setShowAssignVehicleForm(false);
   };
@@ -68,9 +72,16 @@ const Orders = () => {
 
     setShowDeleteForm(true);
   };
-  const onPrintBill = (orderItemId: number) => {
+  const onPrintBill = async (orderItemId: number) => {
     console.log('Print Bayan Bill is clicked on order: ', orderItemId);
-    navigate('/carrier/bayanBill');
+    // navigate('/carrier/bayanBill');
+    try {
+      const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
+      console.log('Bayan Bill', response);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
@@ -109,8 +120,10 @@ const Orders = () => {
     try {
       const result = await deleteOrder({ id: selectedOrderId });
       console.log('Proposal deleted successfully:', result);
+      setShowToast(true);
     } catch (error) {
       console.error('Error deleting proposal:', error);
+      setShowToast(true);
     }
   };
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
@@ -160,57 +173,61 @@ const Orders = () => {
   }, [currentData]);
 
   return (
-    <div className="table-container orders-table">
-      <div className="tw-flex tw-justify-between tw-items-center">
-        <Row className="tw-items-center">
-          <Col xs="auto" className="tw-text-secondary">
-            Show
-          </Col>
-          <Col xs="auto">
-            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
-              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
-                </button>
-                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
-                </button>
+    <>
+      {showToast && <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && isBayanCreated && <Toast showToast={showToast} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
+      <div className="table-container orders-table">
+        <div className="tw-flex tw-justify-between tw-items-center">
+          <Row className="tw-items-center">
+            <Col xs="auto" className="tw-text-secondary">
+              Show
+            </Col>
+            <Col xs="auto">
+              <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+                <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                  <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
+                  </button>
+                  <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
+                  </button>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col xs="auto" className="tw-text-secondary">
-            entries
-          </Col>
-        </Row>
-        <Row className="tw-mt-3">
-          <Col>
-            <InputGroup>
-              <InputGroup.Text>
-                <Image src={SearchIcon} />
-              </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
-            </InputGroup>
-          </Col>
-        </Row>
+            </Col>
+            <Col xs="auto" className="tw-text-secondary">
+              entries
+            </Col>
+          </Row>
+          <Row className="tw-mt-3">
+            <Col>
+              <InputGroup>
+                <InputGroup.Text>
+                  <Image src={SearchIcon} />
+                </InputGroup.Text>
+                <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              </InputGroup>
+            </Col>
+          </Row>
+        </div>
+        {orderTableData && <DataTable isAction={false} columns={columns} data={orderTableData} />}
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+          <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+            <img src={PreviousIcon} />
+          </Button>
+          <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+            <img src={NextIcon} />
+          </Button>
+        </div>
+        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
+        <ConfirmationModal
+          promptMessage={'Are you sure, you want to delete this order?'}
+          show={showDeleteForm}
+          handleClose={() => setShowDeleteForm(false)}
+          performOperation={() => DeleteOrder()}
+        />
       </div>
-      {orderTableData && <DataTable isAction={false} columns={columns} data={orderTableData} />}
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
-        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
-          <img src={PreviousIcon} />
-        </Button>
-        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
-          <img src={NextIcon} />
-        </Button>
-      </div>
-      <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
-      <ConfirmationModal
-        promptMessage={'Are you sure, you want to delete this order?'}
-        show={showDeleteForm}
-        handleClose={() => setShowDeleteForm(false)}
-        performOperation={() => DeleteOrder()}
-      />
-    </div>
+    </>
   );
 };
 

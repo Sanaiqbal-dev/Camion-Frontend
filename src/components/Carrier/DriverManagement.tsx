@@ -49,6 +49,7 @@ const DriverManagement = () => {
     phoneNumber: item.phoneNumber,
     fileName: item.fileName,
     viewIqama: item.iqamaId,
+    issueNumber: item.issueNumber,
     action: '',
   }));
 

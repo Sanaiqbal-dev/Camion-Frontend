@@ -4,13 +4,14 @@ import ShipperImage from '../assets/images/shipper-img.svg';
 import CamionLogo from '../assets/icons/ic-camion.svg';
 import Image from 'react-bootstrap/Image';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAspNetUserRegisterMutation } from '@/services/aspNetUserAuth';
+import { Toast } from '@/components/ui/toast';
 
 interface IRegisterFormInput {
   role: string;
@@ -24,10 +25,10 @@ interface IRegisterFormInput {
 
 const schema = z
   .object({
-    firstName: z.string().min(1, 'Enter first name.'),
-    lastName: z.string().min(1, 'Enter last name.'),
+    firstName: z.string().min(3, 'Enter first name, minimum 3 letters.'),
+    lastName: z.string().min(3, 'Enter last name, minimum 3 letters.'),
     email: z.string().email('Enter a valid email.'),
-    phoneNumber: z.string().regex(/^\+?\d[\d\s]{10,}$/, 'Enter a valid contact number.'),
+    phoneNumber: z.string().regex(/^\+?\d{10,}$/, 'Enter a valid contact number.'),
 
     password: z
       .string()
@@ -45,6 +46,7 @@ const schema = z
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const [isCarrier, setIsCarrier] = useState(true);
+  const [showToast, setshowToast] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -53,20 +55,32 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { isLoading }] = useAspNetUserRegisterMutation();
-  // const { dir, lang } = useAppSelector((state) => state.session);
+  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered }] = useAspNetUserRegisterMutation();
+
+  let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
-    values.role = isCarrier ? 'carrier' : 'shipper';
-    aspNetUserRegister(values).then((result: any) => {
-      if (result) {
-        console.log('Values are: ', values);
+    try {
+      values.role = isCarrier ? 'carrier' : 'shipper';
+      await aspNetUserRegister(values).unwrap();
+      setshowToast(true);
+
+      timeoutRef = setTimeout(() => {
         navigate('/Login');
-      }
-    });
+      }, 2000);
+    } catch (e) {
+      setshowToast(true);
+    }
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef) clearTimeout(timeoutRef);
+    };
+  }, [timeoutRef]);
 
   return (
     <div className="main-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={isCarrier ? CarrierImage : ShipperImage} />
@@ -193,6 +207,7 @@ const Register = () => {
                         // onChange={onChange}
                       />
                       {isLoading && <p>Loading ...</p>}
+                      {/* {isError && registerError.data && <p>{registerError.data.errors[0].description}</p>} */}
                       <div className="register-container">
                         <div>
                           <button type="submit" className="btn customRegisterButton">

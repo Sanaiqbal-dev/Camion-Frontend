@@ -3,7 +3,6 @@ import { Button, Col, FormControl, Image, InputGroup, Row } from 'react-bootstra
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
-// import IconFilter from '../../assets/icons/ic-filter.svg';
 import { useEffect, useState } from 'react';
 import { VehicleManagementColumns } from './TableColumns/VehicleManagementColumns';
 import { IDriver, IVehicle } from '../../interface/carrier';
@@ -15,7 +14,6 @@ import {
   useGetVehiclesQuery,
   useGetVehicleTypesQuery,
 } from '@/services/vahicles';
-// import { useGetDriversQuery } from "@/services/driver";
 import AssignDriverModal from '../Modals/AssignDriver';
 import CreateVehicleModal from '../Modals/CreateVehicle';
 import EditVehicleModal from '../Modals/EditVehicle';
@@ -50,7 +48,7 @@ const VehicleManagement = () => {
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
 
-  const { data, isLoading } = useGetVehiclesQuery({
+  const { data, isLoading, refetch } = useGetVehiclesQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
@@ -87,11 +85,12 @@ const VehicleManagement = () => {
       driverId: id,
     }).unwrap();
     console.log(res);
+    refetch();
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
-      newvehicles[index].driver = selectedDriver.name;
+      newvehicles[index].driver.name = selectedDriver.name;
       setVehicles(newvehicles);
     }
     setVehicleIdfordriver(null);
@@ -108,11 +107,13 @@ const VehicleManagement = () => {
   const submitCreateVehicleHandler = async (data: unknown) => {
     setShowCreateVehicle(false);
     const resp = await createVehicle(data).unwrap();
+    refetch();
     console.log(resp);
   };
-  const submitEditVehicleHandler = async (data: any) => {
+  const submitEditVehicleHandler = async (data: IDriver) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
+    refetch();
     console.log(resp);
   };
   const deleteVehicleHandler = async (id: number) => {
@@ -240,7 +241,7 @@ const VehicleManagement = () => {
             </Col>
           </Row>
         </div>
-        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <></>}
+        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>No Data found.</>}
         {data && (
           <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
             <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= data.result.total} onClick={() => updatePage(-1)}>

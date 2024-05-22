@@ -108,8 +108,7 @@ export interface IProposalForm {
 
 interface IFileDownload {
   filePath: string;
-  fileName: string;
-  fileType?: number;
+  fileName?: string;
 }
 export interface ICompanyProfile {
   firstName: string;
@@ -124,6 +123,7 @@ export interface ICompanyProfile {
   companyId?: number;
   deleteCompanyAccount?: boolean;
   fileDownload: IFileDownload[];
+  moiNumber: string;
   userId: string;
 }
 
@@ -139,6 +139,7 @@ export interface IDriver {
   fileName: string;
   filePath: string;
   driverId: number;
+  issueNumber: number;
 }
 export interface IAppUser {
   id: string;
@@ -188,4 +189,19 @@ export interface IPassword {
 export interface IVehicleType {
   id: number;
   typeName: string;
+}
+
+export interface IPlateType {
+  id: number;
+  name: string;
+  nameAr?: string | null;
+}
+export interface IMarkers {
+  id: number;
+  numberPlate: string;
+  driver: string;
+  imeiNumber: string;
+  longitude: number;
+  latitude: number;
+  lastUpdatedDate: string;
 }

@@ -36,13 +36,14 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     resolver: zodResolver(schema),
   });
 
-  const { data: cityData } = useGetCityListQuery('');
-  const { data: districtData } = useGetDistrictListQuery('');
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
+
+  const { data: districtData } = useGetDistrictListQuery('');
+  const { data: cityData } = useGetCityListQuery(selectedDistrict);
 
   useEffect(() => {
     if (isEdit) {
@@ -80,7 +81,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     const city_ = cityList?.find((item) => item.name === selectedCity)?.id;
-    const district_ = districtList?.find((item) => item.name === selectedDistrict)?.id;
+    const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id;
     console.log(city_, district_);
     const updatedObject = {
       buildingNumber: data.buildingNumber,
@@ -117,7 +118,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>Search your address to auto fill all the details</Form.Label>
               <Form.Control
                 type="text"
@@ -127,7 +128,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   height: '59px',
                 }}
               />
-            </Form.Group>
+            </Form.Group> */}
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
                 <Form.Label>Building number</Form.Label>
@@ -179,12 +180,12 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   }}
                   {...register('districtId', { required: true })}
                   isInvalid={!!errors.districtId}
-                  onChange={(e) => setSelectedDistrict(e.target.value)}
+                  onChange={(e) => setSelectedDistrict(Number(e.target.value))}
                   readOnly>
                   <option value="">Select District</option>
                   {districtList &&
                     districtList.map((district) => (
-                      <option key={district.id} value={district.name}>
+                      <option key={district.id} value={district.id}>
                         {district.name}
                       </option>
                     ))}

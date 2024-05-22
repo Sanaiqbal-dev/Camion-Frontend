@@ -2,6 +2,7 @@ import { CommonSelect, IAPIResponse } from '@/interface/common';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import { IPlacesResponseObject, IProposal, IProposalDetailResponse, IProposalResponseObject } from '@/interface/proposal';
 import baseApi from './baseApi';
+import { TGoodTypes } from '@/interface/goodType';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -53,13 +54,17 @@ export const proposalApi = baseApi.injectEndpoints({
     }),
 
     getCityList: builder.query<IAPIResponse<IPlacesResponseObject[]>, any>({
-      query: () => `api/Proposals/GetNationalityList`,
+      query: (selectedDistrict) => `api/Proposals/GetNationalityList?id=${selectedDistrict}`,
       providesTags: ['Proposal'],
     }),
 
     getDistrictList: builder.query<IAPIResponse<IProposalResponseObject[]>, any>({
       query: () => `api/Proposals/GetDistrictList`,
       providesTags: ['Proposal'],
+    }),
+    getAllGoodTypes: builder.query<IAPIResponse<TGoodTypes>, void>({
+      query: () => '/api/Bayan/GetAllGoodTypes',
+      keepUnusedDataFor: 10,
     }),
   }),
 });
@@ -74,4 +79,5 @@ export const {
   useDeleteProposalMutation,
   useGetCityListQuery,
   useGetDistrictListQuery,
+  useGetAllGoodTypesQuery,
 } = proposalApi;

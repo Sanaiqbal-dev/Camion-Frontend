@@ -13,6 +13,7 @@ import { QueryPager } from '@/interface/common';
 import { IOrderResponseData } from '@/interface/orderDetail';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -21,6 +22,7 @@ const OrderManagement = () => {
   });
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [showToast, setshowToast] = useState(false);
 
   const [totalPageCount, setTotalPageCount] = useState(0);
 
@@ -33,8 +35,8 @@ const OrderManagement = () => {
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [showDeleteForm, setShowDeleteForm] = useState(false);
 
-  const [deleteOrder] = useDeleteOrderMutation();
-  const [updateOrderStatus] = useUpdateOrderMutation();
+  const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
+  const [updateOrderStatus, { isSuccess: isOrderStatusUpdated }] = useUpdateOrderMutation();
 
   const [orderTableData, setOrderTableData] = useState<IOrder[]>([]);
 
@@ -61,13 +63,13 @@ const OrderManagement = () => {
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
-      const response = await updateOrderStatus({
+      await updateOrderStatus({
         orderId: id,
         orderStatusId: statusId,
-      });
-      console.log('status update:', response);
+      }).unwrap();
+      setshowToast(true);
     } catch (error) {
-      console.log('status update error: ', error);
+      setshowToast(true);
     }
   };
 
@@ -79,10 +81,10 @@ const OrderManagement = () => {
   const DeleteOrder = async () => {
     setShowDeleteForm(false);
     try {
-      const result = await deleteOrder({ id: selectedOrderId });
-      console.log('order deleted successfully:', result);
+      await deleteOrder({ id: selectedOrderId }).unwrap();
+      setshowToast(true);
     } catch (error) {
-      console.error('Error deleting order:', error);
+      setshowToast(true);
     }
   };
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
@@ -131,6 +133,7 @@ const OrderManagement = () => {
 
   return (
     <div className="table-container">
+      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isOrderDeleted || isOrderStatusUpdated ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">

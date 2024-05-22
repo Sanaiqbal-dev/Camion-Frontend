@@ -18,15 +18,16 @@ export const VehicleManagementColumns = ({
   onViewDocumentClick: (id: number) => void;
 }): ColumnDef<IVehicle>[] => [
   {
-    accessorKey: 'driverName',
+    accessorKey: 'name',
     header: 'Driver Name',
     cell: ({ row }) => {
+      const driver = row.original.driver;
       return (
         <div
           className={clsx({
-            'tw-text-red-600': !row.original.driver,
+            'tw-text-red-600': !driver?.name,
           })}>
-          {row.original.driver ?? 'Driver Not Assign'}
+          {row.original.driver ? "" : 'Driver Not Assign'}
         </div>
       );
     },

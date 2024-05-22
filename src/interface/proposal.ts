@@ -51,7 +51,7 @@ export interface IShipmentTruckType {
 }
 export interface IShipmentType {
   id: number;
-  shipmentTypeName: string;
+  name: string;
 }
 export interface ITruckTypes {
   id: number;
@@ -59,6 +59,8 @@ export interface ITruckTypes {
 }
 
 export interface IShipmentDetails {
+  goodTypeId: number;
+  shipmentTypeId: number;
   numberOfPallets?: number | undefined;
   numberOfBoxes?: number | undefined;
   length?: number | undefined;
