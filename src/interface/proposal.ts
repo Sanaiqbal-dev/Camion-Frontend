@@ -27,7 +27,7 @@ export interface IProposal {
   isCargoItemsStackable: boolean;
   isIncludingItemsARGood: boolean;
   weight: string | null;
-  createdBy: string | null;
+  // createdBy: string | null;
   createdDate?: Date | null;
   updatedBy: string | null;
   updatedDate: Date | null;
@@ -37,6 +37,7 @@ export interface IProposal {
   shipmentTruckType: IShipmentTruckType[];
   userId: string;
   proposalId: number;
+  goodTypeId:number;
 }
 
 export interface IProposalDetailResponseData extends IProposal {
@@ -61,12 +62,11 @@ export interface ITruckTypes {
 export interface IShipmentDetails {
   goodTypeId: number;
   shipmentTypeId: number;
-  numberOfPallets?: number | undefined;
-  numberOfBoxes?: number | undefined;
+  quantity?: number | undefined;
   length?: number | undefined;
   width?: number | undefined;
   height?: number | undefined;
-  weightPerItem?: string | undefined;
+  weightPerItem?: number | undefined;
   shipmentTruckType?: IShipmentTruckType[] | undefined;
   otherType?: string | undefined;
   isCargoItemsStackable?: boolean | undefined;
@@ -135,4 +135,6 @@ export interface IPlacesResponseObject {
 export interface IPlaces {
   id: number;
   name: string;
+  nameAr?:string|null;
+  districtId?:number;
 }

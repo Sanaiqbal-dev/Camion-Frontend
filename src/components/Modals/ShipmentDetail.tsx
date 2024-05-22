@@ -4,36 +4,52 @@ import BoxIcon from '../../assets/icons/ic-boxIcon.svg';
 import VehicleIcon from '../../assets/icons/ic-vehicle.svg';
 import OtherIcon from '../../assets/icons/ic-othersIcon.svg';
 import React, { useEffect, useState } from 'react';
-import PalletForm from './PalletForm';
-import BoxForm from './BoxForm';
-import AddTruckForm from './AddTruckForm';
-import OtherForm from './OtherForm';
-import { IShipmentDetails } from '@/interface/proposal';
+import { IShipmentDetails, IShipmentType } from '@/interface/proposal';
 import { useGetProposalQuery } from '@/services/proposal';
+import ShipmentForm from './ShipmentForm';
+import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 
-interface CreateNewRequestModalProps {
+interface ShipmentDetailModalProps {
   show: boolean;
   handleClose: () => void;
   isEdit: boolean;
   proposalId?: number;
 
-  handleFormDataSubmission: (data: IShipmentDetails, shipmentType: string) => void;
+  handleFormDataSubmission: (data: IShipmentDetails) => void;
 }
-const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({ show, handleClose, handleFormDataSubmission, isEdit, proposalId }) => {
+const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose, handleFormDataSubmission, isEdit, proposalId }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const { data: proposalItem } = useGetProposalQuery({ id: proposalId });
 
+  const shipmentData = useGetShipmentTypesQuery();
+  const [shipmentTypes, setShipmentTypes] = useState<IShipmentType[]>();
+  const [shipmentId, setShipmentId] = useState<number>();
+  useEffect(() => {
+    if (shipmentData.data?.result) {
+      setShipmentTypes(shipmentData.data.result);
+      setShipmentId(shipmentData.data.result[0].id);
+    }
+  }, [shipmentData]);
   const forms = [
-    { icon: PalletIcon, label: 'Pallet', component: PalletForm },
-    { icon: BoxIcon, label: 'Box', component: BoxForm },
-    { icon: VehicleIcon, label: 'Truck', component: AddTruckForm },
-    { icon: OtherIcon, label: 'Other', component: OtherForm },
+    { icon: PalletIcon, label: 'Pallet' },
+    { icon: BoxIcon, label: 'Box' },
+    { icon: VehicleIcon, label: 'Truck' },
+    { icon: OtherIcon, label: 'Other' },
   ];
 
-  const handleFormClick = (index: number) => {
+  const handleFormClick = (shipmentType: string, index: number) => {
+    const shipmentTypeItem = shipmentTypes?.find((item: IShipmentType) => item.name === shipmentType);
+    console.log(shipmentTypeItem?.id);
+    setShipmentId(shipmentTypeItem?.id);
     setActiveIndex(index);
   };
 
+  const handleSubmit = (data: IShipmentDetails) => {
+    if (shipmentId) {
+      const updatedData = { ...data, shipmentTypeId:shipmentId };
+      handleFormDataSubmission(updatedData);
+    }
+  };
   useEffect(() => {
     if (proposalItem) {
       console.log(proposalItem);
@@ -57,7 +73,7 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({ show, handleClose
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
-              onClick={() => handleFormClick(index)}>
+              onClick={() => handleFormClick(form.label, index)}>
               <div
                 style={{
                   display: 'flex',
@@ -78,14 +94,16 @@ const CreateNewUser: React.FC<CreateNewRequestModalProps> = ({ show, handleClose
       </Modal.Header>
 
       <Modal.Body>
-        {React.createElement(forms[activeIndex].component as any, {
-          isEdit: proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label,
-          proposalObject: proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label ? proposalItem.result : undefined,
-          onSubmitShipmentForm: handleFormDataSubmission,
-        })}
+        <ShipmentForm
+          isEdit={isEdit}
+          proposalObject={proposalItem?.result}
+          onSubmitShipmentForm={(data) => {
+            handleSubmit(data);
+          }}
+        />
       </Modal.Body>
     </Modal>
   );
 };
 
-export default CreateNewUser;
+export default ShipmentDetail;
