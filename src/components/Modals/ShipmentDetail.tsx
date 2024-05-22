@@ -15,7 +15,7 @@ interface ShipmentDetailModalProps {
   isEdit: boolean;
   proposalId?: number;
 
-  handleFormDataSubmission: (data: IShipmentDetails, shipmentTypeId_: number) => void;
+  handleFormDataSubmission: (data: IShipmentDetails) => void;
 }
 const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose, handleFormDataSubmission, isEdit, proposalId }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -37,14 +37,18 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
     { icon: OtherIcon, label: 'Other' },
   ];
 
-  const handleFormClick = (shipmentType: string) => {
+  const handleFormClick = (shipmentType: string, index: number) => {
     const shipmentTypeItem = shipmentTypes?.find((item: IShipmentType) => item.name === shipmentType);
     console.log(shipmentTypeItem?.id);
     setShipmentId(shipmentTypeItem?.id);
+    setActiveIndex(index);
   };
 
   const handleSubmit = (data: IShipmentDetails) => {
-    shipmentId && handleFormDataSubmission(data, shipmentId);
+    if (shipmentId) {
+      const updatedData = { ...data, shipmentTypeId:shipmentId };
+      handleFormDataSubmission(updatedData);
+    }
   };
   useEffect(() => {
     if (proposalItem) {
@@ -69,7 +73,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
-              onClick={() => handleFormClick(form.label)}>
+              onClick={() => handleFormClick(form.label, index)}>
               <div
                 style={{
                   display: 'flex',
@@ -91,8 +95,8 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
 
       <Modal.Body>
         <ShipmentForm
-          isEdit={proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label}
-          proposalObject={proposalItem?.result.shipmentTypes.shipmentTypeName === forms[activeIndex].label ? proposalItem.result : undefined}
+          isEdit={isEdit}
+          proposalObject={proposalItem?.result}
           onSubmitShipmentForm={(data) => {
             handleSubmit(data);
           }}

@@ -9,13 +9,13 @@ import { IGoodType } from '@/interface/goodType';
 
 const schema = z.object({
   quantity: z.coerce.number().int().min(1, 'Enter number of items'),
-  length: z.coerce.number().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().min(1, 'Enter width in centimeters'),
-  height: z.coerce.number().min(1, 'Enter height in centimeters'),
-  weightPerItem: z.coerce.number().min(1, 'Please enter weight per item'),
+  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
+  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
+  height: z.coerce.number().int().min(1, 'Enter height in centimeters'),
+  weightPerItem: z.coerce.number().int().min(1, 'Please enter weight per item'),
   isCargoItemsStackable: z.boolean().optional().default(false),
   isIncludingItemsARGood: z.boolean().optional().default(false),
-  goodTypeId: z.string().min(1, 'Good Type is required.'),
+  goodTypeId: z.coerce.number().min(1, 'Good Type is required.'),
 });
 
 interface IShipmentForm {
@@ -42,10 +42,11 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
         quantity: proposalObject.shipmentQuantity,
         length: proposalObject.length,
         width: proposalObject.width,
-        // shipmentTypeId: proposalObject.shipmentTypeId,
+        height: proposalObject.height,
         weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+        goodTypeId: proposalObject.goodTypeId,
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
@@ -53,7 +54,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
         setValue(key as keyof IShipmentDetails, valueToUse);
       });
     }
-  }, [isEdit, setValue]);
+  }, [isEdit, setValue, allGoodTypes]);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     onSubmitShipmentForm(data);
@@ -105,7 +106,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
           </Form.Group>
           <Form.Group className="mb-3 d-flex">
             <Form.Control
-              type="text"
+              type="number"
               min={1}
               placeholder="Length"
               style={{
@@ -116,7 +117,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               {...register('length')}
             />
             <Form.Control
-              type="text"
+              type="number"
               min={1}
               placeholder="Width"
               style={{
@@ -128,7 +129,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               {...register('width')}
             />
             <Form.Control
-              type="text"
+              type="number"
               min={1}
               placeholder="Height"
               style={{

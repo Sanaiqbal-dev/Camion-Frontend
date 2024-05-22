@@ -106,40 +106,39 @@ const ShipperRequests = () => {
     setShowShippementDetailsModal(true);
   };
 
-  const setShipmentDetails = async (data: IShipmentDetails, shipmentTypeId_: number) => {
-    console.log(data);
-    console.log(shipmentTypeId_);
+  const setShipmentDetails = async (requestShipmentData: IShipmentDetails) => {
+    console.log(requestShipmentData);
     // const shipmentDataAll: IShipmentType[] = shipmentData.data?.result;
     // const shipmentTypeId = shipmentDataAll?.find((type) => type.name === shipmentType) && shipmentDataAll?.find((type) => type.name === shipmentType)?.id;
 
-    // const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
+    const shipmentTruckTypeDefault =[{ noOfTrucks: 0, truckTypeId: 0 }];
     // const shipmentQuantityVal = shipmentType === 'Box' ? data.quantity : shipmentType === 'Pallet' ? data.quantity : 0;
 
     // const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
     // const itemHeight = shipmentType === 'Other' ? data.height : 0;
     // const otherItemName = shipmentType === 'Other' ? data.otherType : '';
 
-    // setProposalItem((prevItem?: any) => ({
-    //   ...prevItem,
-    //   shipmentTypeId: shipmentTypeId,
-    //   shipmentQuantity: shipmentQuantityVal,
-    //   length: data.length ? data.length : 0,
-    //   width: data.width ? data.width : 0,
-    //   height: itemHeight,
-    //   isCargoItemsStackable: data.isCargoItemsStackable ? data.isCargoItemsStackable : false,
-    //   isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
-    //   shipmentTruckType: shipmentTruckTypeDefault,
-    //   userId: userData.user.userId,
-    //   weight: Number(itemWeight),
-    //   otherName: otherItemName,
-    //   proposalId: isEditProposal ? selectedProposalItem : 0,
-    //   FileName: '',
-    //   FilePath: '',
-    //   goodTypeId: Number(data.goodTypeId),
-    // }));
+    setProposalItem((prevItem?: any) => ({
+      ...prevItem,  
+      shipmentTypeId: requestShipmentData.shipmentTypeId,
+      shipmentQuantity: requestShipmentData.quantity,
+      length: requestShipmentData.length,
+      width: requestShipmentData.width,
+      height: requestShipmentData.height,
+      isCargoItemsStackable: requestShipmentData.isCargoItemsStackable,
+      isIncludingItemsARGood: requestShipmentData.isIncludingItemsARGood,
+      shipmentTruckType: shipmentTruckTypeDefault,
+      userId: userData.user.userId,
+      weight: requestShipmentData.weightPerItem,
+      otherName: '',
+      proposalId: isEditProposal ? selectedProposalItem : 0,
+      FileName: '',
+      FilePath: '',
+      goodTypeId: Number(requestShipmentData.goodTypeId),
+    }));
 
-    // setSendProposalRequest(false);
-    // setShowConfirmationModal(true);
+    setSendProposalRequest(false);
+    setShowConfirmationModal(true);
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
