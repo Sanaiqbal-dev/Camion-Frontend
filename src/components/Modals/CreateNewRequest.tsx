@@ -18,8 +18,8 @@ interface CreateRequestModalProps {
 const schema = z.object({
   buildingNumber: z.string().min(1, 'Building number is required'),
   streetName: z.string().min(1, 'Enter street name'),
-  districtId: z.string().min(1, 'Please enter your district name'),
-  cityId: z.string().min(1, 'City name is required'),
+  districtId: z.coerce.number().min(1, 'Please enter your district name'),
+  cityId: z.coerce.number().min(1, 'City name is required'),
   zipCode: z.coerce.number().min(1, 'Zip code is required'),
   additionalNumber: z.coerce.number().min(1, 'Additional number is required'),
   unitNo: z.string().min(1, 'unit no is required'),
@@ -39,30 +39,29 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
   const { data: districtData } = useGetDistrictListQuery('');
   const { data: cityData } = useGetCityListQuery(selectedDistrict);
 
   useEffect(() => {
-    if (isEdit) {
-      if (proposalItem) {
+    if (isEdit && proposalItem) {
         const object = proposalItem.result;
+        setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
+
         const currentObj = {
           buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
           streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
-          districtId: infoType == 'origin' ? object.originDistrict.name : object.destinationDistrict.name,
-          cityId: infoType == 'origin' ? object.originCity.name : object.destinationCity.name,
+          districtId: infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id,
+          cityId: infoType == 'origin' ? object.originCity.id : object.destinationCity.id,
           zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
           additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
           unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
         };
-
         Object.entries(currentObj).forEach(([key, value]) => {
           setValue(key as keyof INewRequest, value);
         });
-      }
     } else if (!isEdit) {
       const currentObj = {
         buildingNumber: '',
@@ -77,10 +76,10 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
         setValue(key as keyof INewRequest, value);
       });
     }
-  }, [isEdit, setValue, proposalObject, proposalItem]);
+  }, [isEdit, setValue, proposalObject, proposalItem, cityList]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    const city_ = cityList?.find((item) => item.name === selectedCity)?.id;
+    const city_ = cityList?.find((item) => item.id === selectedCity)?.id;
     const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id;
     console.log(city_, district_);
     const updatedObject = {
@@ -92,6 +91,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       additionalNumber: data.additionalNumber,
       unitNo: data.unitNo,
     };
+    console.log('submitted object :', updatedObject);
     handleNextStep(updatedObject, '');
     reset();
   };
@@ -110,6 +110,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       console.log(districtData.result);
     }
   }, [cityData, districtData]);
+
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
@@ -206,12 +207,12 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   }}
                   {...register('cityId', { required: true })}
                   isInvalid={!!errors.cityId}
-                  onChange={(e) => setSelectedCity(e.target.value)}
+                  onChange={(e) => setSelectedCity(Number(e.target.value))}
                   readOnly>
                   <option value="">Select City</option>
                   {cityList &&
                     cityList.map((city) => (
-                      <option key={city.id} value={city.name}>
+                      <option key={city.id} value={city.id}>
                         {city.name}
                       </option>
                     ))}

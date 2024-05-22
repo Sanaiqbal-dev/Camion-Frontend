@@ -242,7 +242,7 @@ const VehicleManagement = () => {
           </Row>
         </div>
         {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>No Data found.</>}
-        {data && (
+        {vehicles && vehicles.length > 10 && (
           <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
             <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= data.result.total} onClick={() => updatePage(-1)}>
               <img src={PreviousIcon} />

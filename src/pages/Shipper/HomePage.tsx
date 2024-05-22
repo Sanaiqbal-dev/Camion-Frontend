@@ -55,7 +55,7 @@ const HomePage = () => {
             {showCreateCompanyNotification && (
               <div
                 style={{
-                  fontFamily: 'Inter',
+                  fontFamily: 'Roboto',
                   fontSize: '14px',
                   fontWeight: '400',
                   textAlign: 'left',
@@ -64,7 +64,7 @@ const HomePage = () => {
                   borderRadius: '45px',
                   padding: '4px',
                 }}>
-                To activate your profile please complete your profile details,
+                To activate your profile please complete your profile details,{' '}
                 <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
                   Click Here
                 </span>

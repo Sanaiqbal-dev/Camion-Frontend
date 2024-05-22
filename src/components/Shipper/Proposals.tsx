@@ -49,14 +49,8 @@ const Proposals = () => {
     try {
       const updatedQuotation = {
         id: quotation.id,
-        // trackingId: quotation.trackingId,
         status: quotation.status,
-        // origin: quotation.origin,
-        // destination: quotation.destination,
-        // weight: quotation.weight,
-        // dimentions: quotation.dimentions,
         proposalQuotationStatusId: isAccepted ? 1 : 0,
-        // amount: quotation.amount,
       };
       await updateQuotationStatus(updatedQuotation).unwrap();
       setShowToast(true);
