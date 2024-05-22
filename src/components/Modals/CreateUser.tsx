@@ -29,7 +29,7 @@ const schema = z
     path: ['confirmPassword'],
   });
 
-const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm, isSuccess }) => {
+const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -39,15 +39,19 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
+  const handleCloseModal = () => {
+    handleClose();
+    reset();
+  };
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     setIsLoading(true);
     onSubmitForm(data);
     setIsLoading(false);
-    isSuccess == 'success' && reset();
+    handleCloseModal();
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleCloseModal} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>Add a new user</Modal.Title>
       </Modal.Header>
