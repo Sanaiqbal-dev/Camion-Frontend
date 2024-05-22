@@ -32,41 +32,69 @@ const Login = () => {
 
   const { isLoggedIn, dir, lang, user } = useAppSelector((state) => state.session);
 
-  const [aspNetUserLogin, { isLoading, error, isSuccess }] = useAspNetUserLoginMutation();
+  const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = (values: AspNetUserLoginRequest) => {
-    aspNetUserLogin(values).then((result: any) => {
-      if (result.error) {
-        setShowToast(true);
-      } else {
-        console.log(result);
-        if (!error) {
-          dispatch(
-            setSession({
-              token: result.data.token,
-              isCompanyAccount: result.data.isCompanyAccount,
-              user: {
-                email: values.username,
-                role: result.data.role,
-                userId: result.data.userId,
-              },
-              isLoggedIn: true,
-              dir: dir,
-              lang: lang,
-            }),
-          );
-          const userRole = result.data.role;
+  const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (values: AspNetUserLoginRequest) => {
+    try {
+      const response = await aspNetUserLogin(values).unwrap();
+      dispatch(
+        setSession({
+          token: response.token,
+          isCompanyAccount: response.isCompanyAccount,
+          user: {
+            email: values.username,
+            role: response.role,
+            userId: response.userId,
+          },
+          isLoggedIn: true,
+          dir: dir,
+          lang: lang,
+        }),
+      );
 
-          userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
-        } else {
-          setShowToast(true);
-        }
+      if (response.role === 'Carrier') {
+        navigate('/carrier/dashboard', { replace: true });
+      } else if (response.role === 'Shipper') {
+        navigate('/shipper/shipperdashboard', { replace: true });
+      } else {
+        navigate('/admin/Profiles', { replace: true });
       }
-    });
+    } catch (e) {
+      console.log('getting here', e);
+      setShowToast(true);
+    }
+    // aspNetUserLogin(values).then((result: any) => {
+    //   if (result.error) {
+    //     setShowToast(true);
+    //   } else {
+    //     console.log(result);
+    //     if (!error) {
+    //       dispatch(
+    //         setSession({
+    //           token: result.data.token,
+    //           isCompanyAccount: result.data.isCompanyAccount,
+    //           user: {
+    //             email: values.username,
+    //             role: result.data.role,
+    //             userId: result.data.userId,
+    //           },
+    //           isLoggedIn: true,
+    //           dir: dir,
+    //           lang: lang,
+    //         }),
+    //       );
+    //       const userRole = result.data.role;
+
+    //       userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
+    //     } else {
+    //       setShowToast(true);
+    //     }
+    //   }
+    // });
   };
 
   useEffect(() => {
@@ -82,7 +110,7 @@ const Login = () => {
   }, []);
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isSuccess ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={ShipperImage} />

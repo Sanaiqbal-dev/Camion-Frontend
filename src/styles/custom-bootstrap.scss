@@ -6,7 +6,7 @@ $theme-colors: (
   'primary': #0060b8,
   'secondary': #7b7878,
 );
-$font-family-base: Inter, sans-serif;
+$font-family-base: 'Roboto', sans-serif;
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
@@ -836,12 +836,18 @@ body {
 
 .success {
   position: fixed !important;
-  z-index: 10000;
+  z-index: 100000;
   background-color: rgb(159, 242, 159);
 }
 
 .danger {
   position: fixed !important;
-  z-index: 10000;
+  z-index: 100000;
   background-color: lightcoral;
+}
+
+[role='alert'] {
+  .btn-close {
+    background-size: 0.75rem;
+  }
 }

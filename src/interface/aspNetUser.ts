@@ -51,6 +51,14 @@ export interface AspNetUserLoginResponse {
   token: string;
 }
 
+export interface ILoginResponse {
+  token: string;
+  expiration: string;
+  isCompanyAccount: boolean;
+  role: 'Admin' | 'Carrier' | 'Shipper';
+  userId: string;
+}
+
 export interface AspNetUserProfile {
   id: string;
   firstName: string;

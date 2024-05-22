@@ -44,7 +44,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
               height: '42px',
               borderRadius: '10px',
               backgroundColor: '#0060B8',
-              fontFamily: 'Inter',
+              fontFamily: 'Roboto',
               fontSize: '18px',
               fontWeight: '600',
               textAlign: 'center',
