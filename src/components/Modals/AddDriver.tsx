@@ -30,7 +30,7 @@ const schema = z.object({
   iqamaId: z.string().min(1, 'Please enter driver iqama number'),
   licenseNumber: z.string().min(5, 'Please enter lisence number'),
   dob: z.string().min(10, 'Please enter your date of birth').refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old'),
-  nationalityId: z.string().optional(),
+  nationalityId: z.string().min(1, 'Nationality is required'),
   phoneNumber: z.string().min(6, 'please enter phone number'),
   issueNumber: z.number().positive('Please enter a positive issue number').max(99, 'Issue number must be 1 to 99'),
 });
@@ -205,6 +205,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Label>Nationality</Form.Label>
                 <Form.Control
                   as="select"
+                  // required
+                  {...register('nationalityId')}
                   style={{ width: '560px', height: '50px' }}
                   onChange={(e) => setNationalityId(Number(e.target.value))}
                   defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name)}
