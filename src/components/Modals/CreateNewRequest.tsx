@@ -39,7 +39,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [cityList, setCityList] = useState<IPlaces[]>();
   const [districtList, setDistrictList] = useState<IPlaces[]>();
-  const [selectedCity, setSelectedCity] = useState<number>(null);
+  const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
   const { data: districtData } = useGetDistrictListQuery('');

@@ -6,9 +6,8 @@ import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
-import { IProposalResponseData, IShipmentDetails, IShipmentType } from '@/interface/proposal';
+import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
 import { INewRequest, IRequestTable } from '@/interface/shipper';
-import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
 import { useAppSelector } from '@/state';
 import { PAGER_SIZE } from '@/config/constant';
@@ -30,7 +29,6 @@ const ShipperRequests = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  const shipmentData = useGetShipmentTypesQuery();
   const [createNewProposal, { isSuccess: isProposalCreated }] = useCreateNewProposalMutation();
   const [updateProposal, { isSuccess: isProposalUpdated }] = useUpdateProposalMutation();
   const [deleteProposal, { isSuccess: isProposalDeleted }] = useDeleteProposalMutation();
@@ -108,16 +106,7 @@ const ShipperRequests = () => {
 
   const setShipmentDetails = async (requestShipmentData: IShipmentDetails) => {
     console.log(requestShipmentData);
-    // const shipmentDataAll: IShipmentType[] = shipmentData.data?.result;
-    // const shipmentTypeId = shipmentDataAll?.find((type) => type.name === shipmentType) && shipmentDataAll?.find((type) => type.name === shipmentType)?.id;
-
     const shipmentTruckTypeDefault =[{ noOfTrucks: 0, truckTypeId: 0 }];
-    // const shipmentQuantityVal = shipmentType === 'Box' ? data.quantity : shipmentType === 'Pallet' ? data.quantity : 0;
-
-    // const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
-    // const itemHeight = shipmentType === 'Other' ? data.height : 0;
-    // const otherItemName = shipmentType === 'Other' ? data.otherType : '';
-
     setProposalItem((prevItem?: any) => ({
       ...prevItem,  
       shipmentTypeId: requestShipmentData.shipmentTypeId,
@@ -211,7 +200,6 @@ const ShipperRequests = () => {
   const ProposalCreateOrUpdateRequest = async () => {
     try {
       const response = isEditProposal ? await updateProposal(proposalItem).unwrap() : await createNewProposal(proposalItem).unwrap();
-      // console.log('Create New Proposal response: ', response?.result?.result);
       FilterDataForTable(response?.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
