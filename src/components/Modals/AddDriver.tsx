@@ -51,7 +51,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
   const [showToast, setShowToast] = useState(false);
   const [nationalityId, setNationalityId] = useState<number | string>('');
-  const [formData, setFormData] = useState<IDriver>();
+  const [formData, setFormData] = useState<IDriver | null>();
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
   const [file, setFile] = useState<File>();
@@ -62,12 +62,13 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     inputRef.current?.click();
   };
   useEffect(() => {
-    setFormData(driverExistingData);
+    if (modal.mode === 'edit') setFormData(driverExistingData);
 
     return () => {
       reset();
+      setFormData(null);
     };
-  }, [driverExistingData, reset]);
+  }, [driverExistingData, modal.mode, reset]);
   useEffect(() => {
     const uploadFiles = async () => {
       if (file) {
@@ -131,6 +132,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   };
   const handleCloseModal = () => {
     reset();
+    setFormData(null);
     handleClose();
   };
   return (
