@@ -49,7 +49,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     if (isEdit && proposalItem) {
         const object = proposalItem.result;
         setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
-        // setSelectedCity(infoType == 'origin' ? object.originCity.id : object.destinationCity.id);
 
         const currentObj = {
           buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,

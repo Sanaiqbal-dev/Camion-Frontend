@@ -323,7 +323,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
             <Modal.Title>Company Profile</Modal.Title>
             <div
               style={{
-                fontFamily: 'Inter',
+                fontFamily: 'Roboto',
                 fontSize: '14px',
                 fontWeight: '400',
                 textAlign: 'left',
