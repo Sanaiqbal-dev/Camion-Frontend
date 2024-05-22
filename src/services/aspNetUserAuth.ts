@@ -1,9 +1,9 @@
-import { AspNetUserLoginRequest, AspNetUserLoginResponse, IAspNetUser } from '@/interface/aspNetUser';
+import { AspNetUserLoginRequest, AspNetUserLoginResponse, IAspNetUser, ILoginResponse } from '@/interface/aspNetUser';
 import baseApi from './baseApi';
 
 export const aspNetUserAuthApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    aspNetUserLogin: builder.mutation<AspNetUserLoginResponse, AspNetUserLoginRequest>({
+    aspNetUserLogin: builder.mutation<ILoginResponse, AspNetUserLoginRequest>({
       query: (body) => ({
         url: '/Account/Login',
         method: 'POST',
