@@ -12,7 +12,7 @@ export const VehicleManagementColumns = ({
   deleteVehicle,
   onViewDocumentClick,
 }: {
-  assignDriver: (id: number) => void;
+  assignDriver: (id: number, driverId: string) => void;
   editVehicle: (id: number) => void;
   deleteVehicle: (id: number) => void;
   onViewDocumentClick: (id: number) => void;
@@ -98,7 +98,7 @@ export const VehicleManagementColumns = ({
           <div
             id="assign-driver"
             onClick={() => {
-              assignDriver(row.original.id);
+              assignDriver(row.original.id, row.original.driver?.id);
             }}>
             <img src={IconDriver} />
             <span style={{ color: '#0060B8' }}>Assign Driver</span>
