@@ -341,12 +341,12 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
             <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>First Name</Form.Label>
+                  <Form.Label>First name</Form.Label>
                   <Form.Control type="text" placeholder="Enter first name" style={{ width: '270px', height: '50px' }} {...register('firstName')} isInvalid={!!errors.firstName} />
                   <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Last Name</Form.Label>
+                  <Form.Label>Last name</Form.Label>
                   <Form.Control type="text" placeholder="Enter your last name" style={{ width: '270px', height: '50px' }} {...register('lastName')} isInvalid={!!errors.lastName} />
                   <Form.Control.Feedback type="invalid">{errors.lastName?.message}</Form.Control.Feedback>
                 </Form.Group>
@@ -377,10 +377,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Label>Confirm password</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Confirm Password"
+                    placeholder="Confirm password"
                     style={{ width: '270px', height: '50px' }}
                     {...register('confirmPassword')}
                     isInvalid={!!errors.confirmPassword}
@@ -390,15 +390,15 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Company Name</Form.Label>
-                  <Form.Control type="text" placeholder="Company Name" style={{ width: '560px', height: '50px' }} {...register('companyName')} isInvalid={!!errors.companyName} />
+                  <Form.Label>Company name</Form.Label>
+                  <Form.Control type="text" placeholder="Company name" style={{ width: '560px', height: '50px' }} {...register('companyName')} isInvalid={!!errors.companyName} />
                   <Form.Control.Feedback type="invalid">{errors.companyName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Moi Number</Form.Label>
-                  <Form.Control type="text" placeholder="Moi Number" style={{ width: '560px', height: '50px' }} {...register('moiNumber')} isInvalid={!!errors.moiNumber} />
+                  <Form.Label>Moi number</Form.Label>
+                  <Form.Control type="text" placeholder="Moi number" style={{ width: '560px', height: '50px' }} {...register('moiNumber')} isInvalid={!!errors.moiNumber} />
                   <Form.Control.Feedback type="invalid">{errors.moiNumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>

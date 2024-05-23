@@ -47,21 +47,21 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
 
   useEffect(() => {
     if (isEdit && proposalItem) {
-        const object = proposalItem.result;
-        setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
+      const object = proposalItem.result;
+      setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
 
-        const currentObj = {
-          buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
-          streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
-          districtId: infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id,
-          cityId: infoType == 'origin' ? object.originCity.id : object.destinationCity.id,
-          zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
-          additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
-          unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
-        };
-        Object.entries(currentObj).forEach(([key, value]) => {
-          setValue(key as keyof INewRequest, value);
-        });
+      const currentObj = {
+        buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
+        streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
+        districtId: infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id,
+        cityId: infoType == 'origin' ? object.originCity.id : object.destinationCity.id,
+        zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
+        additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
+        unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
+      };
+      Object.entries(currentObj).forEach(([key, value]) => {
+        setValue(key as keyof INewRequest, value);
+      });
     } else if (!isEdit) {
       const currentObj = {
         buildingNumber: '',
@@ -183,7 +183,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   isInvalid={!!errors.districtId}
                   onChange={(e) => setSelectedDistrict(Number(e.target.value))}
                   readOnly>
-                  <option value="">Select District</option>
+                  <option value="">Select district</option>
                   {districtList &&
                     districtList.map((district) => (
                       <option key={district.id} value={district.id}>
@@ -209,7 +209,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   isInvalid={!!errors.cityId}
                   onChange={(e) => setSelectedCity(Number(e.target.value))}
                   readOnly>
-                  <option value="">Select City</option>
+                  <option value="">Select city</option>
                   {cityList &&
                     cityList.map((city) => (
                       <option key={city.id} value={city.id}>
