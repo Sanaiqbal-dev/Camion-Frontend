@@ -104,6 +104,17 @@ $grid-breakpoints: (
   width: 120px;
   background-color: #0060b8;
   border-radius: 5px;
+  color: white;
+
+  &:hover {
+    background-color: #00529c;
+    color: white;
+  }
+
+  &:active {
+    background-color: #00529c;
+    color: white;
+  }
 }
 
 .customRegisterButton {

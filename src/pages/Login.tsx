@@ -178,7 +178,7 @@ const Login = () => {
                         </Row>
                       </div>
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-                        <button type="submit" className="btn customRegisterButton w-100" disabled={isLoading}>
+                        <button type="submit" className="btn customLoginButton w-100" disabled={isLoading}>
                           Login
                         </button>
                         <div className="d-flex justify-content-start">

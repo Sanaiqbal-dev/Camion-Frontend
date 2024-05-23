@@ -182,7 +182,7 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Diapatched
+                Dispatched
               </div>
             </div>
             <div>
@@ -289,7 +289,7 @@ const ShipperDashboard = () => {
             textAlign: 'left',
             color: '#0060B8',
           }}>
-          Shippement details
+          Shipment details
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <h3 style={{ marginRight: '5px' }}>01</h3>
