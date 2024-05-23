@@ -26,13 +26,17 @@ const isAtLeast18YearsOld = (dateString: string) => {
   return date <= eighteenYearsAgo;
 };
 const schema = z.object({
-  name: z.string().min(3, 'Please enter driver name'),
-  iqamaId: z.string().min(1, 'Please enter driver iqama number'),
-  licenseNumber: z.string().min(5, 'Please enter lisence number'),
-  dob: z.string().min(10, 'Please enter your date of birth').refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old'),
-  nationalityId: z.string().min(1, 'Nationality is required'),
-  phoneNumber: z.string().min(6, 'please enter phone number'),
-  issueNumber: z.number().positive('Please enter a positive issue number').max(99, 'Issue number must be 1 to 99'),
+  name: z.string().min(3, "Please enter driver's name."),
+  iqamaId: z.string().min(1, "Please enter driver's iqama number."),
+  licenseNumber: z.string().min(5, "Please enter driver's license number."),
+  dob: z.string().min(10, "Please enter driver's date of birth.").refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old.'),
+  nationalityId: z.string().min(1, "Please enter driver's nationality"),
+  phoneNumber: z.string().min(6, "Please enter driver's phone number."),
+  issueNumber: z
+    .number()
+    .min(1, "Please enter driver's issue number.")
+    .positive('Please enter a positive issue number.')
+    .max(99, 'Issue number must be between 1 and 99 inclusive.'),
 });
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
@@ -142,7 +146,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
-          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'} Driver</Modal.Title>
+          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'}Driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +155,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Label>Driver's Name</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter Driver's name"
+                  placeholder="Enter driver's name"
                   style={{ width: '560px', height: '59px' }}
                   {...register('name')}
                   defaultValue={formData?.name}
@@ -164,7 +168,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Label>Driver's ID/Iqama</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter number"
+                  placeholder="Enter ID/Iqama number"
                   style={{ width: '560px', height: '59px' }}
                   {...register('iqamaId')}
                   defaultValue={formData?.iqamaId}
@@ -175,10 +179,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>License number</Form.Label>
+                <Form.Label>License Number</Form.Label>
                 <Form.Control
                   type="string"
-                  placeholder="Enter License number"
+                  placeholder="Enter license number"
                   style={{ width: '560px', height: '59px' }}
                   {...register('licenseNumber')}
                   defaultValue={formData?.licenseNumber}
@@ -212,7 +216,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                   defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name)}
                   isInvalid={!!errors.nationalityId}>
                   <option value="" disabled>
-                    Select Nationality
+                    Select nationality
                   </option>
                   {nationalityListData.map((nationality: INationality) => (
                     <option key={nationality.id} value={nationality.id} selected={nationality.id === driverExistingData?.nationalityId}>
@@ -261,7 +265,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                       display: 'flex',
                       alignItems: 'center',
                     }}>
-                    {file ? file.name : 'Upload the document'}
+                    {file ? file.name : 'Upload Document'}
                   </Button>
                 </div>
                 <Form.Control

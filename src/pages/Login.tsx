@@ -119,7 +119,7 @@ const Login = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
+                <div className="auth-form-container">
                   <Image src={CamionLogo} />
 
                   <div className="mt-4">
