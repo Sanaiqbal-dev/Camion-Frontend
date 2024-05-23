@@ -126,7 +126,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
               <Form.Group
                 className="mb-3"
                 controlId="formBasicEmail">
-                <Form.Label>Palte Type</Form.Label>
+                <Form.Label>Plate Type</Form.Label>
                 <Form.Control
                   style={{ width: '270px', height: '50px' }}
                   as="select"
