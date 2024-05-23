@@ -15,7 +15,7 @@ interface BayanLocationModalProps {
 }
 const schema = z.object({
   name: z.string().min(3, 'Enter name'),
-  phoneNumber: z.string().regex(/^\+?\d[\d\s]{10,}$/, 'Enter a valid contact number.'),
+  phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
   buildingNumber: z.string().min(1, 'Building number is required'),
   streetName: z.string().min(1, 'Enter street name'),
   districtId: z.string().min(1, 'Please enter your district name'),
@@ -124,6 +124,7 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                     borderRight: 'none',
                     borderLeft: 'none',
                   }}
+                  defaultValue="+966"
                   {...register('phoneNumber')}
                   isInvalid={!!errors.phoneNumber}
                 />

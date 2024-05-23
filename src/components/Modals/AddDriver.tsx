@@ -31,7 +31,7 @@ const schema = z.object({
   licenseNumber: z.string().min(5, 'Please enter lisence number'),
   dob: z.string().min(10, 'Please enter your date of birth').refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old'),
   nationalityId: z.string().min(1, 'Nationality is required'),
-  phoneNumber: z.string().min(6, 'please enter phone number'),
+  phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
   issueNumber: z.number().positive('Please enter a positive issue number').max(99, 'Issue number must be 1 to 99'),
 });
 
@@ -41,6 +41,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<IDriver>({
     resolver: zodResolver(schema),
     defaultValues: driverExistingData,
@@ -135,6 +136,9 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     setFormData(null);
     handleClose();
   };
+  useEffect(() => {
+    setValue('phoneNumber', formData?.phoneNumber || '+966');
+  }, [formData, setValue]);
   return (
     <>
       {showToast && <Toast variant={isDriverAdded || isDriverUpdated || isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
@@ -230,7 +234,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                   style={{ width: '560px', height: '50px' }}
                   {...register('phoneNumber')}
                   defaultValue={formData?.phoneNumber}
-                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value } as IDriver)}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    if (value.startsWith('+966') && value.length <= 13 && /^[+]?[0-9]*$/.test(value)) {
+                      setFormData({ ...formData, phoneNumber: value } as IDriver);
+                    }
+                  }}
                   isInvalid={!!errors.phoneNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>

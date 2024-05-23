@@ -28,7 +28,7 @@ const schema = z
     firstName: z.string().min(3, 'Enter first name, minimum 3 letters.'),
     lastName: z.string().min(3, 'Enter last name, minimum 3 letters.'),
     email: z.string().email('Enter a valid email.'),
-    phoneNumber: z.string().regex(/^\+?\d{10,}$/, 'Enter a valid contact number.'),
+    phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
 
     password: z
       .string()
@@ -170,6 +170,7 @@ const Register = () => {
                             <Form.Control
                               type="text"
                               className="form-control customInput"
+                              defaultValue="+966"
                               {...register('phoneNumber')}
                               isInvalid={!!errors.phoneNumber}
                               placeholder="Enter contact number"
