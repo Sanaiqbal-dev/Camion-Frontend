@@ -57,6 +57,7 @@ export interface ILoginResponse {
   isCompanyAccount: boolean;
   role: 'Admin' | 'Carrier' | 'Shipper';
   userId: string;
+  message: string;
 }
 
 export interface AspNetUserProfile {

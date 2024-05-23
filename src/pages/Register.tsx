@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAspNetUserRegisterMutation } from '@/services/aspNetUserAuth';
 import { Toast } from '@/components/ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 interface IRegisterFormInput {
   role: string;
@@ -55,7 +56,7 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered }] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered, error }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
@@ -80,7 +81,7 @@ const Register = () => {
 
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={isCarrier ? CarrierImage : ShipperImage} />

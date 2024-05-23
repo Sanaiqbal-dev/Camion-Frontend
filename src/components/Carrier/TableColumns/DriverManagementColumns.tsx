@@ -44,8 +44,13 @@ export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqam
       const driverId = row.original.id;
 
       return (
-        <div onClick={() => onIqamaDownloadClick(parseInt(driverId))}>
-          <Link to={''}>View Iqama/ID</Link>
+        <div
+          onClick={() => {
+            if (row.original.fileName !== 'no file uploaded.') onIqamaDownloadClick(parseInt(driverId));
+          }}>
+          <Link to={''} className={`${row.original.fileName === 'no file uploaded.' ? 'tw-text-gray-400 tw-cursor-default' : ''}`}>
+            View Iqama/ID
+          </Link>
         </div>
       );
     },

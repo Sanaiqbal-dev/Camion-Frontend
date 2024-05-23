@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { IPlaces } from '@/interface/proposal';
+import React, { useState } from 'react';
+// import { IPlaces } from '@/interface/proposal';
 import { useGetCityListQuery, useGetDistrictListQuery } from '@/services/proposal';
 import { ILocation } from '@/interface/bayan';
 
@@ -35,8 +35,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     resolver: zodResolver(schema),
   });
 
-  const [cityList, setCityList] = useState<IPlaces[]>();
-  const [districtList, setDistrictList] = useState<IPlaces[]>();
+  // const [cityList, setCityList] = useState<IPlaces[]>();
+  // const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
@@ -44,8 +44,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
   const { data: cityData } = useGetCityListQuery(selectedDistrict);
 
   const onSubmit: SubmitHandler<ILocation> = async (data) => {
-    const city_ = cityList?.find((item) => item.name === selectedCity)?.id || 0;
-    const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id || 0;
+    const city_ = cityData?.result?.find((item) => item.name === selectedCity)?.id || 0;
+    const district_ = districtData?.result?.find((item) => item.id === selectedDistrict)?.id || 0;
     const locationObject = {
       name: data.name,
       phoneNumber: data.phoneNumber,
@@ -65,16 +65,16 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     console.error('Form errors', error);
   };
 
-  useEffect(() => {
-    if (cityData) {
-      setCityList(cityData.result);
-      console.log(cityData.result);
-    }
-    if (districtData) {
-      setDistrictList(districtData.result);
-      console.log(districtData.result);
-    }
-  }, [cityData, districtData]);
+  // useEffect(() => {
+  //   if (cityData) {
+  //     setCityList(cityData.result);
+  //     console.log(cityData.result);
+  //   }
+  //   if (districtData) {
+  //     setDistrictList(districtData.result);
+  //     console.log(districtData.result);
+  //   }
+  // }, [cityData, districtData]);
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
@@ -185,8 +185,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                   onChange={(e) => setSelectedDistrict(Number(e.target.value))}
                   readOnly>
                   <option value="">Select District</option>
-                  {districtList &&
-                    districtList.map((district) => (
+                  {districtData &&
+                    districtData.result.map((district) => (
                       <option key={district.id} value={district.id}>
                         {district.name}
                       </option>
@@ -211,8 +211,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                   onChange={(e) => setSelectedCity(e.target.value)}
                   readOnly>
                   <option value="">Select City</option>
-                  {cityList &&
-                    cityList.map((city) => (
+                  {cityData &&
+                    cityData.result.map((city) => (
                       <option key={city.id} value={city.name}>
                         {city.name}
                       </option>
