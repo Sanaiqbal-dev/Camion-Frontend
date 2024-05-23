@@ -38,9 +38,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: withSuspense(<LazyLogin />),
-    // element: withSuspense(<LazyCarrierHome />),
-    // element: withSuspense(<LazyShipperHome />),
-    // element: withSuspense(<LazyAdminHome />),
   },
   {
     path: '/carrier',

@@ -11,7 +11,7 @@ const ConfirmationModal: React.FC<IConfirmationModal> = ({ promptMessage, show, 
   return (
     <Modal show={show} onHide={handleClose} centered style={{ minWidth: '500px', boxShadow: '0px 20px 50px 0px #dce0f980', border: 'none' }}>
       <Modal.Header>
-        <Modal.Title>Confirm the action</Modal.Title>
+        <Modal.Title>Confirm The Action</Modal.Title>
       </Modal.Header>
       <Modal.Body className="tw-flex tw-flex-col tw-gap-5">
         <p style={{ minWidth: '400px', fontSize: '18px', fontWeight: '700' }}>{promptMessage}</p>
