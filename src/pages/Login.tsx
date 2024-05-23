@@ -13,6 +13,7 @@ import { setSession } from '@/state/slice/sessionSlice';
 import { useAppSelector } from '@/state';
 import { useEffect, useState } from 'react';
 import { Toast } from '@/components/ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 const schema = z.object({
   username: z.string().email('Enter a valid email.'),
@@ -64,7 +65,8 @@ const Login = () => {
         navigate('/admin/Profiles', { replace: true });
       }
     } catch (e) {
-      console.log('getting here', e);
+      // console.log('getting here', e);
+      // console.log('data', error);
       setShowToast(true);
     }
     // aspNetUserLogin(values).then((result: any) => {
@@ -110,7 +112,7 @@ const Login = () => {
   }, []);
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={ShipperImage} />
