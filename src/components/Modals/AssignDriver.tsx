@@ -9,6 +9,7 @@ import { IDriver } from '@/interface/carrier';
 interface AssignVehicleModalProps {
   show: boolean;
   drivers: IDriver[];
+  assignedDriverId?: string;
   handleClose: () => void;
   onAssignDriver: (id: number) => void;
 }
@@ -19,7 +20,9 @@ export const schema = z.object({
   driver: z.string().min(1, 'Select Driver'),
 });
 
-const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, handleClose, onAssignDriver }) => {
+const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assignedDriverId, handleClose, onAssignDriver }) => {
+  // console.log('Assign Driver', assignedDriverId);
+
   const {
     register,
     handleSubmit,
@@ -36,7 +39,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, handle
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Assign Vehicle</Modal.Title>
+        <Modal.Title>Assign Driver</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -50,7 +53,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, handle
               <option value="">Select a driver</option>
               {drivers.map((d, index) => {
                 return (
-                  <option key={'driverOption_' + index} value={d.id}>
+                  <option selected={d.id === assignedDriverId} key={'driverOption_' + index} value={d.id}>
                     {d.name}
                   </option>
                 );

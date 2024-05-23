@@ -68,7 +68,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
       <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
           <Form.Group className="mb-3">
-            <Form.Label>Good Type</Form.Label>
+            <Form.Label>Good type</Form.Label>
             <Form.Control
               as="select"
               placeholder="Select district"
@@ -79,7 +79,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               {...register('goodTypeId', { required: true })}
               isInvalid={!!errors.goodTypeId}
               readOnly>
-              <option value="">Select Good Type</option>
+              <option value="">Select good type</option>
               {allGoodTypes &&
                 allGoodTypes.result.map((goodType: IGoodType) => (
                   <option key={goodType.id} value={goodType.id}>

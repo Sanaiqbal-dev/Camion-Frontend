@@ -22,6 +22,7 @@ import UserManagementShipper from '../components/Shipper/UserManagementShipper';
 import UserManagement from '../components/Carrier/UserManagement';
 import BayanBill from '../components/Carrier/BayanBill';
 import PrivateRoute from './PrivateRoute';
+import { Loading } from '@/components/Modals/Loading';
 
 const LazyCarrierHome = lazy(() => import('../pages/Carrier/CarrierHomePage'));
 const LazyAdminHome = lazy(() => import('../pages/Admin/AdminHomePage'));
@@ -31,15 +32,12 @@ const LazyRegister = lazy(() => import('../pages/Register'));
 const LazyCompanyVerification = lazy(() => import('../pages/CompanyVerification'));
 const LazyForgotPassword = lazy(() => import('../pages/ForgetPassword'));
 
-const withSuspense = (Component: ReactElement, fallback: ReactElement = <div>Loading...</div>): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
+const withSuspense = (Component: ReactElement, fallback: ReactElement = <Loading size={100} />): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: withSuspense(<LazyLogin />),
-    // element: withSuspense(<LazyCarrierHome />),
-    // element: withSuspense(<LazyShipperHome />),
-    // element: withSuspense(<LazyAdminHome />),
   },
   {
     path: '/carrier',
@@ -166,18 +164,18 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: withSuspense(<LazyLogin />, <div>Loading Login...</div>),
+    element: withSuspense(<LazyLogin />, <Loading size={100} />),
   },
   {
     path: '/register',
-    element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
+    element: withSuspense(<LazyRegister />, <Loading size={100} />),
   },
   {
     path: '/companyVerification',
-    element: withSuspense(<LazyCompanyVerification />, <div>Loading...</div>),
+    element: withSuspense(<LazyCompanyVerification />, <Loading size={100} />),
   },
   {
     path: '/forgotPassword',
-    element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
+    element: withSuspense(<LazyForgotPassword />, <Loading size={100} />),
   },
 ]);

@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAspNetUserRegisterMutation } from '@/services/aspNetUserAuth';
 import { Toast } from '@/components/ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 interface IRegisterFormInput {
   role: string;
@@ -28,7 +29,7 @@ const schema = z
     firstName: z.string().min(3, 'Enter first name, minimum 3 letters.'),
     lastName: z.string().min(3, 'Enter last name, minimum 3 letters.'),
     email: z.string().email('Enter a valid email.'),
-    phoneNumber: z.string().regex(/^\+?\d{10,}$/, 'Enter a valid contact number.'),
+    phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
 
     password: z
       .string()
@@ -55,7 +56,7 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered }] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered, error }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
@@ -80,7 +81,7 @@ const Register = () => {
 
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={isCarrier ? CarrierImage : ShipperImage} />
@@ -170,6 +171,7 @@ const Register = () => {
                             <Form.Control
                               type="text"
                               className="form-control customInput"
+                              defaultValue="+966"
                               {...register('phoneNumber')}
                               isInvalid={!!errors.phoneNumber}
                               placeholder="Enter contact number"

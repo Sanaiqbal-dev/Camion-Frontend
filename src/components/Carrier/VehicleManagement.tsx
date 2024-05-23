@@ -40,7 +40,7 @@ const VehicleManagement = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
   const [drivers, setDrivers] = useState<IDriver[]>([]);
-  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
+  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<{ id: number; driverId: string } | null>(null);
 
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
@@ -81,12 +81,12 @@ const VehicleManagement = () => {
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
     const res = await assignDriver({
-      vehicleId: vehicleIdfordriver,
+      vehicleId: vehicleIdfordriver?.id,
       driverId: id,
     }).unwrap();
     console.log(res);
     refetch();
-    const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
+    const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver?.id);
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
@@ -95,8 +95,8 @@ const VehicleManagement = () => {
     }
     setVehicleIdfordriver(null);
   };
-  const assignDriverClickHandler = (id: number) => {
-    setVehicleIdfordriver(id);
+  const assignDriverClickHandler = (id: number, driverId: string) => {
+    setVehicleIdfordriver({ id: id, driverId: driverId });
     setShowDriverModal(true);
   };
   const editVehicleHandler = (id: number) => {
@@ -258,10 +258,18 @@ const VehicleManagement = () => {
           </div>
         )}
       </div>
-      <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
+      {showDriverModal && (
+        <AssignDriverModal
+          show={showDriverModal}
+          drivers={drivers}
+          assignedDriverId={vehicleIdfordriver?.driverId}
+          handleClose={() => setShowDriverModal(false)}
+          onAssignDriver={assignDriverHandler}
+        />
+      )}
       <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />
       <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure, you want to delete this vehicle?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
     </>
   );
 };

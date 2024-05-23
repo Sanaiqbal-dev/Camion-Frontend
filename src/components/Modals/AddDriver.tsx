@@ -26,13 +26,17 @@ const isAtLeast18YearsOld = (dateString: string) => {
   return date <= eighteenYearsAgo;
 };
 const schema = z.object({
-  name: z.string().min(3, 'Please enter driver name'),
-  iqamaId: z.string().min(1, 'Please enter driver iqama number'),
-  licenseNumber: z.string().min(5, 'Please enter lisence number'),
-  dob: z.string().min(10, 'Please enter your date of birth').refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old'),
-  nationalityId: z.string().min(1, 'Nationality is required'),
-  phoneNumber: z.string().min(6, 'please enter phone number'),
-  issueNumber: z.number().positive('Please enter a positive issue number').max(99, 'Issue number must be 1 to 99'),
+  name: z.string().min(3, "Please enter driver's name."),
+  iqamaId: z.string().min(1, "Please enter driver's iqama number."),
+  licenseNumber: z.string().min(5, "Please enter driver's license number."),
+  dob: z.string().min(10, "Please enter driver's date of birth.").refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old.'),
+  nationalityId: z.string().min(1, "Please enter driver's nationality"),
+  phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits').min(1, "Please enter driver's phone number."),
+  issueNumber: z
+    .number()
+    .min(1, "Please enter driver's issue number.")
+    .positive('Please enter a positive issue number.')
+    .max(99, 'Issue number must be between 1 and 99 inclusive.'),
 });
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
@@ -41,6 +45,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<IDriver>({
     resolver: zodResolver(schema),
     defaultValues: driverExistingData,
@@ -135,14 +140,17 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     setFormData(null);
     handleClose();
   };
+  useEffect(() => {
+    setValue('phoneNumber', formData?.phoneNumber || '+966');
+  }, [formData, setValue]);
   return (
     <>
-      {showToast && <Toast variant={isDriverAdded || isDriverUpdated || isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
-          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'} Driver</Modal.Title>
+          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'}Driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +159,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Label>Driver's Name</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter Driver's name"
+                  placeholder="Enter driver's name"
                   style={{ width: '560px', height: '59px' }}
                   {...register('name')}
                   defaultValue={formData?.name}
@@ -164,7 +172,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 <Form.Label>Driver's ID/Iqama</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter number"
+                  placeholder="Enter ID/Iqama number"
                   style={{ width: '560px', height: '59px' }}
                   {...register('iqamaId')}
                   defaultValue={formData?.iqamaId}
@@ -175,10 +183,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>License number</Form.Label>
+                <Form.Label>License Number</Form.Label>
                 <Form.Control
                   type="string"
-                  placeholder="Enter License number"
+                  placeholder="Enter license number"
                   style={{ width: '560px', height: '59px' }}
                   {...register('licenseNumber')}
                   defaultValue={formData?.licenseNumber}
@@ -212,7 +220,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                   defaultValue={getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name)}
                   isInvalid={!!errors.nationalityId}>
                   <option value="" disabled>
-                    Select Nationality
+                    Select nationality
                   </option>
                   {nationalityListData.map((nationality: INationality) => (
                     <option key={nationality.id} value={nationality.id} selected={nationality.id === driverExistingData?.nationalityId}>
@@ -230,7 +238,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                   style={{ width: '560px', height: '50px' }}
                   {...register('phoneNumber')}
                   defaultValue={formData?.phoneNumber}
-                  onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value } as IDriver)}
+                  onChange={(e) => {
+                    const { value } = e.target;
+                    if (value.startsWith('+966') && value.length <= 13 && /^[+]?[0-9]*$/.test(value)) {
+                      setFormData({ ...formData, phoneNumber: value } as IDriver);
+                    }
+                  }}
                   isInvalid={!!errors.phoneNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
@@ -261,7 +274,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                       display: 'flex',
                       alignItems: 'center',
                     }}>
-                    {file ? file.name : 'Upload the document'}
+                    {file ? file.name : 'Upload Document'}
                   </Button>
                 </div>
                 <Form.Control

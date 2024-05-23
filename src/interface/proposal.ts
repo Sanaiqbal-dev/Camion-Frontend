@@ -37,7 +37,7 @@ export interface IProposal {
   shipmentTruckType: IShipmentTruckType[];
   userId: string;
   proposalId: number;
-  goodTypeId:number;
+  goodTypeId: number;
 }
 
 export interface IProposalDetailResponseData extends IProposal {
@@ -135,6 +135,16 @@ export interface IPlacesResponseObject {
 export interface IPlaces {
   id: number;
   name: string;
-  nameAr?:string|null;
-  districtId?:number;
+  nameAr: string;
+  districtId: number;
+}
+
+export interface IDistrict {
+  id: number;
+  name: string;
+}
+
+export interface IDistrictAndCityResponse<T> {
+  result: T;
+  statusCode: number;
 }

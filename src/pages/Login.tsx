@@ -13,6 +13,7 @@ import { setSession } from '@/state/slice/sessionSlice';
 import { useAppSelector } from '@/state';
 import { useEffect, useState } from 'react';
 import { Toast } from '@/components/ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 const schema = z.object({
   username: z.string().email('Enter a valid email.'),
@@ -64,7 +65,8 @@ const Login = () => {
         navigate('/admin/Profiles', { replace: true });
       }
     } catch (e) {
-      console.log('getting here', e);
+      // console.log('getting here', e);
+      // console.log('data', error);
       setShowToast(true);
     }
     // aspNetUserLogin(values).then((result: any) => {
@@ -110,7 +112,7 @@ const Login = () => {
   }, []);
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={ShipperImage} />
@@ -119,7 +121,7 @@ const Login = () => {
           <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
-                <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
+                <div className="auth-form-container">
                   <Image src={CamionLogo} />
 
                   <div className="mt-4">
@@ -176,7 +178,7 @@ const Login = () => {
                         </Row>
                       </div>
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-                        <button type="submit" className="btn customRegisterButton w-100" disabled={isLoading}>
+                        <button type="submit" className="btn customLoginButton w-100" disabled={isLoading}>
                           Login
                         </button>
                         <div className="d-flex justify-content-start">

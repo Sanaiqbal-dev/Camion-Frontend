@@ -22,7 +22,7 @@ export const ProfileColumns = ({
 }: ProfileActionProps): ColumnDef<Iprofiles>[] => [
   {
     accessorKey: 'profileType',
-    header: 'ProfileType',
+    header: 'Profile Type',
   },
   {
     accessorKey: 'firstName',
