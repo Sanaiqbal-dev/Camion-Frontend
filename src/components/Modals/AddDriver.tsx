@@ -137,7 +137,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   };
   return (
     <>
-      {showToast && <Toast variant={isDriverAdded || isDriverUpdated || isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>

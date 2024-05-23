@@ -45,7 +45,7 @@ export const VehicleManagementColumns = ({
   },
   {
     accessorKey: 'numberPlate',
-    header: 'Vehihcle Number',
+    header: 'Vehicle Number',
     cell: ({ row }) => {
       return <div>{row.original.numberPlate}</div>;
     },

@@ -13,9 +13,9 @@ const HomePage = () => {
   const currentPageTitle = useLocation();
   const pageTitleMap = [
     { pathname: '/shipper/shipperdashboard', title: 'Dashboard' },
-    { pathname: '/shipper/shipperrequests', title: 'Requests' },
+    { pathname: '/Shipper/shipperrequests', title: 'Requests' },
     { pathname: '/shipper/shipperorders', title: 'Orders' },
-    { pathname: '/shipper/userManagement', title: 'User Management' },
+    { pathname: '/shipper/usermanagement', title: 'User Management' },
     { pathname: '/shipper/proposals', title: 'Proposals' },
     { pathname: '/shipper/proposalssecond', title: 'Proposals' },
     { pathname: '/shipper/shippertracking', title: 'Tracking' },
@@ -23,7 +23,6 @@ const HomePage = () => {
 
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentPageTitle.pathname);
-
     return pageObject?.title ? pageObject.title : '';
   };
 

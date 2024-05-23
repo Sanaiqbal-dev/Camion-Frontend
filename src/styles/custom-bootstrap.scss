@@ -301,11 +301,13 @@ tr {
   padding: 0%;
 }
 .accordion-button.collapsed::after {
-  --bs-accordion-btn-icon-transform: rotate(-180);
+  // --bs-accordion-btn-icon-transform: rotate(0deg);
+  rotate: 180deg;
 }
 
 .accordion-button:not(.collapsed)::after {
   --bs-accordion-btn-active-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
+  rotate: 180deg;
 }
 
 .dashboard-item .accordion-button::after,
@@ -626,9 +628,9 @@ tr {
   border-spacing: 0 10px;
   overflow-y: auto;
 }
-.data-table tbody tr:hover {
-  background-color: #dbd9d9;
-}
+// .data-table tbody tr:hover {
+//   background-color: #dbd9d9;
+// }
 .data-table tr td:first-child,
 thead th:first-child {
   border-top-left-radius: 8px;

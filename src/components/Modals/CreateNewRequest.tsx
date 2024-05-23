@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { INewRequest } from '@/interface/shipper';
-import { IPlaces } from '@/interface/proposal';
+// import { IPlaces } from '@/interface/proposal';
 import { useGetCityListQuery, useGetDistrictListQuery, useGetProposalQuery } from '@/services/proposal';
 
 interface CreateRequestModalProps {
@@ -37,8 +37,8 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   });
 
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
-  const [cityList, setCityList] = useState<IPlaces[]>();
-  const [districtList, setDistrictList] = useState<IPlaces[]>();
+  // const [cityList, setCityList] = useState<IPlaces[]>();
+  // const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
@@ -47,41 +47,42 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
 
   useEffect(() => {
     if (isEdit && proposalItem) {
-        const object = proposalItem.result;
-        setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
+      const object = proposalItem.result;
+      setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
 
-        const currentObj = {
-          buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
-          streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
-          districtId: infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id,
-          cityId: infoType == 'origin' ? object.originCity.id : object.destinationCity.id,
-          zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
-          additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
-          unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
-        };
-        Object.entries(currentObj).forEach(([key, value]) => {
-          setValue(key as keyof INewRequest, value);
-        });
-    } else if (!isEdit) {
       const currentObj = {
-        buildingNumber: '',
-        streetName: '',
-        districtId: '',
-        cityId: '',
-        zipCode: '',
-        additionalNumber: '',
-        unitNo: '',
+        buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
+        streetName: infoType == 'origin' ? object.originStreetName : object.destinationStreetName,
+        districtId: infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id,
+        cityId: infoType == 'origin' ? object.originCity.id : object.destinationCity.id,
+        zipCode: infoType == 'origin' ? object.originZipCode : object.destinationZipCode,
+        additionalNumber: infoType == 'origin' ? object.originAdditionalNo : object.destinationAdditionalNo,
+        unitNo: infoType == 'origin' ? object.originUnitNo : object.destinationUnitNo,
       };
       Object.entries(currentObj).forEach(([key, value]) => {
         setValue(key as keyof INewRequest, value);
       });
     }
-  }, [isEdit, setValue, proposalObject, proposalItem, cityList]);
+    // else if (!isEdit) {
+    //   const currentObj = {
+    //     buildingNumber: '',
+    //     streetName: '',
+    //     districtId: '',
+    //     cityId: '',
+    //     zipCode: '',
+    //     additionalNumber: '',
+    //     unitNo: '',
+    //   };
+    //   Object.entries(currentObj).forEach(([key, value]) => {
+    //     setValue(key as keyof INewRequest, value);
+    //   });
+    // }
+  }, [isEdit, setValue, infoType, proposalItem]);
 
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
-    const city_ = cityList?.find((item) => item.id === selectedCity)?.id;
-    const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id;
-    console.log(city_, district_);
+    const city_ = cityData?.result?.find((item) => item.id === selectedCity)?.id;
+    const district_ = districtData?.result?.find((item) => item.id === selectedDistrict)?.id;
+    // console.log(city_, district_);
     const updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
@@ -91,7 +92,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       additionalNumber: data.additionalNumber,
       unitNo: data.unitNo,
     };
-    console.log('submitted object :', updatedObject);
+    // console.log('submitted object :', updatedObject);
     handleNextStep(updatedObject, '');
     reset();
   };
@@ -100,19 +101,28 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     console.error('Form errors', error);
   };
 
-  useEffect(() => {
-    if (cityData) {
-      setCityList(cityData.result);
-      console.log(cityData.result);
-    }
-    if (districtData) {
-      setDistrictList(districtData.result);
-      console.log(districtData.result);
-    }
-  }, [cityData, districtData]);
+  // useEffect(() => {
+  //   if (cityData) {
+  //     setCityList(cityData.result);
+  //     console.log('rerendering', cityData.result);
+  //   }
+  //   if (districtData) {
+  //     setDistrictList(districtData.result);
+  //     console.log(districtData.result);
+  //   }
+  // }, [cityData, districtData]);
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal
+      show={show}
+      onHide={() => {
+        handleClose();
+        reset();
+      }}
+      centered
+      size={'sm'}
+      backdrop="static"
+      keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>Fill in the {infoType} information</Modal.Title>
       </Modal.Header>
@@ -179,13 +189,16 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                     borderRight: 'none',
                     borderLeft: 'none',
                   }}
-                  {...register('districtId', { required: true })}
-                  isInvalid={!!errors.districtId}
-                  onChange={(e) => setSelectedDistrict(Number(e.target.value))}
-                  readOnly>
+                  {...register('districtId', {
+                    required: true,
+                    onChange(event) {
+                      setSelectedDistrict(Number(event.target.value));
+                    },
+                  })}
+                  isInvalid={!!errors.districtId}>
                   <option value="">Select District</option>
-                  {districtList &&
-                    districtList.map((district) => (
+                  {districtData &&
+                    districtData.result.map((district) => (
                       <option key={district.id} value={district.id}>
                         {district.name}
                       </option>
@@ -207,11 +220,10 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                   }}
                   {...register('cityId', { required: true })}
                   isInvalid={!!errors.cityId}
-                  onChange={(e) => setSelectedCity(Number(e.target.value))}
-                  readOnly>
+                  onChange={(e) => setSelectedCity(Number(e.target.value))}>
                   <option value="">Select City</option>
-                  {cityList &&
-                    cityList.map((city) => (
+                  {cityData &&
+                    cityData.result.map((city) => (
                       <option key={city.id} value={city.id}>
                         {city.name}
                       </option>

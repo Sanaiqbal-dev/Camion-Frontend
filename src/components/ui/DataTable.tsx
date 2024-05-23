@@ -41,7 +41,7 @@ export function DataTable<TData, TValue>({ isAction, columns, data }: DataTableP
         <TableBody className="gap-10">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm hover:tw-cursor-pointer" key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm" key={row.id} data-state={row.getIsSelected() && 'selected'}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell className="tw-border-none" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
