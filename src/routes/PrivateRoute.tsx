@@ -6,6 +6,11 @@ const PrivateRoute = ({ allowedRoles }: { allowedRoles: [string] }) => {
   if (!user) {
     return <Navigate to="/login" />;
   }
+
+  // if (!user.isCompanyAccount) {
+  //   return <Navigate to="/" />;
+  // }
+
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     if (user.role === 'Carrier') {
       return <Navigate to="/carrier/dashboard" />;

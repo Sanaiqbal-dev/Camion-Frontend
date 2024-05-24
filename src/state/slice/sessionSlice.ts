@@ -9,6 +9,7 @@ export interface SessionState {
   dir: 'rtl' | 'ltr';
   isLoggedIn: boolean;
   isCompanyAccount?: boolean;
+  isSubUser: boolean;
 }
 
 const initialState: SessionState = {
@@ -18,6 +19,7 @@ const initialState: SessionState = {
   dir: 'ltr',
   isLoggedIn: false,
   isCompanyAccount: false,
+  isSubUser: false,
 };
 
 const sessionSlice = createSlice({
@@ -29,6 +31,7 @@ const sessionSlice = createSlice({
       state.token = action.payload.token;
       state.isLoggedIn = action.payload.token !== null;
       state.isCompanyAccount = action.payload.isCompanyAccount;
+      state.isSubUser = action.payload.isSubUser;
       return state;
     },
     setLanguage(state, action: PayloadAction<ILanguage>) {
