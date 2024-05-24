@@ -1,6 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
 import IconDelete from '../../../assets/icons/ic-delete.svg';
-import IconDown from '../../../assets/icons/ic-down.svg';
 import { IOrder } from '../../../interface/admin';
 import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 import { DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@radix-ui/react-dropdown-menu';
@@ -41,34 +40,32 @@ export const OrderColumns = ({ onDelete, onUpdateStatus }: OrderActionsProps): C
     header: 'Status',
     cell: ({ row }) => {
       const item = row.original;
-      const noItemSeleted = (
-        <>
-          Select Status <img src={IconDown} />
-        </>
-      );
+     
       const { data: orderStatuses } = useGetOrderStatusesQuery();
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">{item.status ? item.status : noItemSeleted}</span>
+              {/* <span className="sr-only tw-flex tw-gap-1">{item.status ? item.status : noItemSeleted}</span> */}
+              {item.status}
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
-            {orderStatuses &&
-              orderStatuses.result.map((statusItem: any) => {
-                return (
-                  <DropdownMenuItem
-                    defaultValue={item.status && item.status}
-                    className="hover:tw-bg-black hover:tw-text-white"
-                    onClick={() => onUpdateStatus(item.id, statusItem.id)}>
-                    {statusItem.description}
-                  </DropdownMenuItem>
-                );
-              })}
-          </DropdownMenuContent>
+              {orderStatuses &&
+                orderStatuses.result.map((statusItem: any) => {
+                  return (
+                    <DropdownMenuItem
+                      key={statusItem.id}
+                      defaultValue={item.status && item.status}
+                      className="hover:tw-bg-black hover:tw-text-white"
+                      onClick={() => onUpdateStatus(item.id, statusItem.id)}>
+                      {statusItem.description}
+                    </DropdownMenuItem>
+                  );
+                })}
+            </DropdownMenuContent>
         </DropdownMenu>
       );
     },
