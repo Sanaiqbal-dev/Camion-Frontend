@@ -23,6 +23,7 @@ import UserManagement from '../components/Carrier/UserManagement';
 import BayanBill from '../components/Carrier/BayanBill';
 import PrivateRoute from './PrivateRoute';
 import { Loading } from '@/components/Modals/Loading';
+import { ProfilePage } from '@/components/ProfilePage';
 
 const LazyCarrierHome = lazy(() => import('../pages/Carrier/CarrierHomePage'));
 const LazyAdminHome = lazy(() => import('../pages/Admin/AdminHomePage'));
@@ -177,5 +178,13 @@ export const router = createBrowserRouter([
   {
     path: '/forgotPassword',
     element: withSuspense(<LazyForgotPassword />, <Loading size={100} />),
+  },
+  {
+    path: '/shipper/profile',
+    element: <ProfilePage />,
+  },
+  {
+    path: '/carrier/profile',
+    element: <ProfilePage />,
   },
 ]);

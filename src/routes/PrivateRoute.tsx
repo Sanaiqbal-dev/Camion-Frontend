@@ -2,22 +2,30 @@ import { useAppSelector } from '@/state';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = ({ allowedRoles }: { allowedRoles: [string] }) => {
-  const { user } = useAppSelector((state) => state.session);
-  if (!user) {
-    return <Navigate to="/login" replace/>;
+  const session = useAppSelector((state) => state.session);
+  if (!session?.user) {
+    return <Navigate to="/login" replace />;
   }
 
-  // if (!user.isCompanyAccount) {
-  //   return <Navigate to="/" />;
-  // }
+  if (!session?.isCompanyAccount && !location.pathname.includes('/profile')) {
+    return <Navigate to={`/${session.user.role.toLowerCase()}/profile`} />;
+  }
 
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    if (user.role === 'Carrier') {
+  if (allowedRoles && !allowedRoles.includes(session?.user.role)) {
+    if (session?.user.role === 'Carrier') {
       return <Navigate to="/carrier/dashboard" />;
-    } else if (user.role === 'Shipper') {
+    } else if (session?.user.role === 'Shipper') {
       return <Navigate to="/shipper/shipperdashboard" />;
     } else {
       return <Navigate to="/admin/Profiles" />;
+    }
+  }
+
+  if (session?.IsSubUser && location.pathname.includes(`${session?.user.role.toLowerCase()}/userManagement`)) {
+    if (session?.user.role === 'Carrier') {
+      return <Navigate to="/carrier/dashboard" />;
+    } else {
+      return <Navigate to="/shipper/shipperdashboard" />;
     }
   }
 
