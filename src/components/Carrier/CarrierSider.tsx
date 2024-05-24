@@ -9,13 +9,18 @@ import IconFleetManagment from '../../assets/icons/ic-fleet.svg';
 import IconDriverManagment from '../../assets/icons/ic-driver-management.svg';
 import IconVehicleManagment from '../../assets/icons/ic-vehicle-management.svg';
 import IconBayan from '../../assets/icons/ic-bayan.svg';
+import IconSettings from '../../assets/icons/ic-settings.svg';
 
 import LogoutIcon from '../../assets/icons/ic-logoutIcon.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '@/state/slice/sessionSlice';
+import ActivateProfile from '../Modals/ActivateProfile';
+import { useState } from 'react';
 
 const CarrierSider = () => {
+  const [showActivateProfile, setShowActivateProfile] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
@@ -119,6 +124,10 @@ const CarrierSider = () => {
         </Accordion>
       </div>
       <div className="sidebar-admin">
+        <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
+          <Image src={IconSettings} />
+          Settings
+        </div>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />
@@ -126,6 +135,9 @@ const CarrierSider = () => {
           </div>
         </NavLink>
       </div>
+      {showActivateProfile && (
+        <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
+      )}
     </div>
   );
 };

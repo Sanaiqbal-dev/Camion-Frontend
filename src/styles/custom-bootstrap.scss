@@ -821,14 +821,15 @@ thead th:last-child {
   overflow-y: auto;
 }
 
-body *::-webkit-scrollbar {
-  display: none;
-}
+// body *::-webkit-scrollbar {
+//   width: 50px;
+//   display: block;
+// }
 
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+// // body {
+// //   -ms-overflow-style: ;
+// //   scrollbar-width: auto;
+// // }
 .menu-toggle {
   background-color: transparent;
   border: none;

@@ -38,7 +38,7 @@ export const OrderColumns = ({ onDelete, onUpdateStatus }: OrderActionsProps): C
 
   {
     accessorKey: 'status',
-    header: 'status',
+    header: 'Status',
     cell: ({ row }) => {
       const item = row.original;
       const noItemSeleted = (
@@ -60,7 +60,10 @@ export const OrderColumns = ({ onDelete, onUpdateStatus }: OrderActionsProps): C
             {orderStatuses &&
               orderStatuses.result.map((statusItem: any) => {
                 return (
-                  <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
+                  <DropdownMenuItem
+                    defaultValue={item.status && item.status}
+                    className="hover:tw-bg-black hover:tw-text-white"
+                    onClick={() => onUpdateStatus(item.id, statusItem.id)}>
                     {statusItem.description}
                   </DropdownMenuItem>
                 );

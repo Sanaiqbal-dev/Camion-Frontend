@@ -3,7 +3,11 @@ import TrendDownIcon from '../../assets/icons/ic-trend-down.svg';
 import { Image } from 'react-bootstrap';
 import FleetStatus from '../ui/FleetStatus';
 import FleetUsage from '../ui/FleetUsage';
+import { useGetCarrierDashboardOrderListQuery } from '@/services/dashboard';
 const Dashboard = () => {
+  const carrierDashboardData = useGetCarrierDashboardOrderListQuery('');
+  const ordersCount = carrierDashboardData.currentData?.result;
+  console.log('Data', ordersCount);
   return (
     <div
       className="tw-flex tw-flex-col tw-gap-5"
@@ -14,7 +18,7 @@ const Dashboard = () => {
       }}>
       <div className="row main-stats">
         <div className="col stats-item border-right">
-          <span className="stats-value">450</span>
+          <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
           <span className="stats-label">Total Orders</span>
           <div className="tw-flex tw-flex-row tw-gap-2">
             <span>
@@ -25,7 +29,7 @@ const Dashboard = () => {
         </div>
 
         <div className="col stats-item border-right">
-          <span className="stats-value">78</span>
+          <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
           <span className="stats-label">Active Orders</span>
           <div className="tw-flex tw-flex-row tw-gap-2">
             <span>
@@ -36,7 +40,7 @@ const Dashboard = () => {
         </div>
 
         <div className="col stats-item border-right">
-          <span className="stats-value">55</span>
+          <span className="stats-value">{ordersCount && ordersCount.onRoute}</span>
           <span className="stats-label">On Route</span>
           <div className="tw-flex tw-flex-row tw-gap-2">
             <span>
@@ -47,7 +51,7 @@ const Dashboard = () => {
         </div>
 
         <div className="col stats-item border-right">
-          <span className="stats-value">33</span>
+          <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
           <span className="stats-label">Orders this month</span>
           <div className="tw-flex tw-flex-row tw-gap-2">
             <span>
@@ -58,11 +62,11 @@ const Dashboard = () => {
         </div>
 
         <div className="col stats-item border-right">
-          <span className="stats-value">52</span>
+          <span className="stats-value">{ordersCount && ordersCount.totalVehicles}</span>
           <span className="stats-label">Total Vehicles</span>
         </div>
         <div className="col stats-item">
-          <span className="stats-value">52</span>
+          <span className="stats-value">{ordersCount && ordersCount.totalDrivers}</span>
           <span className="stats-label">Total Drivers</span>
         </div>
       </div>

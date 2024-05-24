@@ -38,7 +38,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
 
   {
     accessorKey: 'status',
-    header: 'status',
+    header: 'Status',
     cell: ({ row }) => {
       const item = row.original;
       const noItemSeleted = (

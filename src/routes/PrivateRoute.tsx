@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 const PrivateRoute = ({ allowedRoles }: { allowedRoles: [string] }) => {
   const { user } = useAppSelector((state) => state.session);
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace/>;
   }
 
   // if (!user.isCompanyAccount) {

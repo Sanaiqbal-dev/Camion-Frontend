@@ -8,8 +8,9 @@ import { thunk } from 'redux-thunk';
 
 import { ENVIRONMENT, PERSIST_STORE_NAME } from '@/config/app';
 import reducer from './reducer';
+import authMiddleware from '@/services/authMiddleware';
 
-const middlewares = [thunk, baseApi.middleware];
+const middlewares = [thunk, baseApi.middleware, authMiddleware];
 
 const persistConfig = {
   key: PERSIST_STORE_NAME,
