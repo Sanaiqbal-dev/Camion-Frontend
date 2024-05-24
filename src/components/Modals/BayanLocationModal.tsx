@@ -115,7 +115,7 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>{infoType == 'pickup' ? "Sender's" : "Reciever's"} Phone Number</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="string"
                   placeholder="Enter Phone Number"
                   style={{
                     width: '270px',

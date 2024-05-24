@@ -1,7 +1,5 @@
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import NotificationIcon from '../../assets/icons/ic-notification.svg';
-import MenuIcon from '../../assets/icons/ic-menu.svg';
 import { Image } from 'react-bootstrap';
 import ShipperSider from '../../components/Shipper/ShipperSider';
 import ActivateProfile from '../../components/Modals/ActivateProfile';
@@ -49,8 +47,6 @@ const HomePage = () => {
             <Link to="/shipper/usermanagement">
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
-            <Image className="notification-icon" src={NotificationIcon} alt="Notifications" width="22" height="22" />
-            <Image className="menu-icon" src={MenuIcon} alt="Menu" width="22" height="22" />
             {showCreateCompanyNotification && (
               <div
                 style={{

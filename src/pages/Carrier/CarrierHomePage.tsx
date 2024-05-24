@@ -1,11 +1,9 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import CarrierSider from '../../components/Carrier/CarrierSider';
 import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import NotificationIcon from '../../assets/icons/ic-notification.svg';
-import MenuIcon from '../../assets/icons/ic-menu.svg';
-import { Button, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { DropdownMenu, DropdownMenuContent } from '@radix-ui/react-dropdown-menu';
 import ActivateProfile from '@/components/Modals/ActivateProfile';
 import { useState } from 'react';
 const CarrierHomePage = () => {
@@ -56,14 +54,7 @@ const CarrierHomePage = () => {
             <Link to={'/carrier/userManagement'}>
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
-            <Image className="notification-icon" src={NotificationIcon} alt="Notifications" width="22" height="22" />
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  <Image className="menu-icon" src={MenuIcon} alt="Menu" width="22" height="22" />
-                </Button>
-              </DropdownMenuTrigger>
-
               {showCreateCompanyNotification && (
                 <div
                   style={{
