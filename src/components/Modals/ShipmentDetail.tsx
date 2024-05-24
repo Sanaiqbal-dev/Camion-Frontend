@@ -1,10 +1,13 @@
 import { Modal, Image } from 'react-bootstrap';
 import PalletIcon from '../../assets/icons/ic-pallet.svg';
 import BoxIcon from '../../assets/icons/ic-boxIcon.svg';
-import VehicleIcon from '../../assets/icons/ic-vehicle.svg';
-import OtherIcon from '../../assets/icons/ic-othersIcon.svg';
+import CaseIcon from '../../assets/icons/ic-suitcase.svg';
+import EachIcon from '../../assets/icons/ic-each.svg';
+import ContainerIcon from '../../assets/icons/ic-container.svg';
+import KGIcon from '../../assets/icons/ic-kilo.svg';
+import TonIcon from '../../assets/icons/ic-ton.svg';
 import React, { useEffect, useState } from 'react';
-import { IShipmentDetails, IShipmentType } from '@/interface/proposal';
+import { IShipmentDetails } from '@/interface/proposal';
 import { useGetProposalQuery } from '@/services/proposal';
 import ShipmentForm from './ShipmentForm';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
@@ -22,25 +25,25 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
   const { data: proposalItem } = useGetProposalQuery({ id: proposalId });
 
   const shipmentData = useGetShipmentTypesQuery();
-  const [shipmentTypes, setShipmentTypes] = useState<IShipmentType[]>();
   const [shipmentId, setShipmentId] = useState<number>();
   useEffect(() => {
     if (shipmentData.data?.result) {
-      setShipmentTypes(shipmentData.data.result);
       setShipmentId(shipmentData.data.result[0].id);
     }
   }, [shipmentData]);
   const forms = [
-    { icon: PalletIcon, label: 'Pallet' },
-    { icon: BoxIcon, label: 'Box' },
-    { icon: VehicleIcon, label: 'Truck' },
-    { icon: OtherIcon, label: 'Other' },
+    { icon: PalletIcon, label: 'Pallet', shipmentId: 3 },
+    { icon: BoxIcon, label: 'Box', shipmentId: 4 },
+    { icon: CaseIcon, label: 'Case', shipmentId: 6 },
+    { icon: EachIcon, label: 'Each', shipmentId: 1 },
+    { icon: ContainerIcon, label: 'Container', shipmentId: 7},
+    { icon: KGIcon, label: 'KG', shipmentId: 5 },
+    { icon: TonIcon, label: 'Ton', shipmentId: 2 },
   ];
 
-  const handleFormClick = (shipmentType: string, index: number) => {
-    const shipmentTypeItem = shipmentTypes?.find((item: IShipmentType) => item.name === shipmentType);
-    console.log(shipmentTypeItem?.id);
-    setShipmentId(shipmentTypeItem?.id);
+  const handleFormClick = (shipmentType: number, index: number) => {
+    
+    setShipmentId(shipmentType);
     setActiveIndex(index);
   };
 
@@ -64,7 +67,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <div style={{ display: 'flex', gap: '20px', marginLeft: '-35%' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           {forms.map((form, index) => (
             <div
               key={index}
@@ -73,7 +76,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
                 flexDirection: 'column',
                 alignItems: 'center',
               }}
-              onClick={() => handleFormClick(form.label, index)}>
+              onClick={() => handleFormClick(form.shipmentId, index)}>
               <div
                 style={{
                   display: 'flex',
@@ -81,7 +84,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
                   width: '71px',
                   height: '69px',
                   borderRadius: '8px',
-                  border: activeIndex === index ? '1px solid blue' : '1px #7B787880 solid',
+                  border: activeIndex === index ? '1px solid #0060B8' : '1px #7B787880 solid',
                   padding: '20px',
                 }}>
                 <Image src={form.icon} />
