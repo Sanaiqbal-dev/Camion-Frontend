@@ -5,13 +5,18 @@ import IconOrderManagment from '../../assets/icons/ic-order-management.svg';
 import IconRequest from '../../assets/icons/ic-request.svg';
 import IconOrder from '../../assets/icons/ic-orders.svg';
 import LogoutIcon from '../../assets/icons/ic-logoutIcon.svg';
+import IconSettings from '../../assets/icons/ic-settings.svg';
 
 import { NavLink } from 'react-router-dom';
 import { setLogout } from '@/state/slice/sessionSlice';
 import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import ActivateProfile from '../Modals/ActivateProfile';
 
 const ShipperSider = () => {
   const dispatch = useDispatch();
+
+  const [showActivateProfile, setShowActivateProfile] = useState(false);
 
   const handleReplaceNavigate = () => {
     dispatch(setLogout());
@@ -76,6 +81,10 @@ const ShipperSider = () => {
       </div>
 
       <div className="sidebar-admin">
+        <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
+          <Image src={IconSettings} />
+          Settings
+        </div>
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />
@@ -83,6 +92,9 @@ const ShipperSider = () => {
           </div>
         </NavLink>
       </div>
+      {showActivateProfile && (
+        <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
+      )}
     </div>
   );
 };
