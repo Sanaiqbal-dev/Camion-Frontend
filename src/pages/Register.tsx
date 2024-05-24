@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CarrierImage from '../assets/images/carrier-img.svg';
 import ShipperImage from '../assets/images/shipper-img.svg';
 import CamionLogo from '../assets/icons/ic-camion.svg';
 import Image from 'react-bootstrap/Image';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -46,6 +45,8 @@ const schema = z
 
 const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaResponseRef = useRef<string | null>(null);
   const [isCarrier, setIsCarrier] = useState(true);
   const [showToast, setshowToast] = useState(false);
   const navigate = useNavigate();
@@ -60,6 +61,11 @@ const Register = () => {
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
+    if (!recaptchaResponseRef.current) {
+      alert('Please verify that you are not a robot.');
+      return;
+    }
+
     try {
       values.role = isCarrier ? 'carrier' : 'shipper';
       await aspNetUserRegister(values).unwrap();
@@ -69,7 +75,10 @@ const Register = () => {
         navigate('/Login');
       }, 2000);
     } catch (e) {
-      setshowToast(true);
+      // setshowToast(true);
+      recaptchaRef.current?.reset();
+      recaptchaResponseRef.current = null; // Reset the reCAPTCHA ref
+      throw e;
     }
   };
 
@@ -78,6 +87,10 @@ const Register = () => {
       if (timeoutRef) clearTimeout(timeoutRef);
     };
   }, [timeoutRef]);
+
+  function onReCAPTCHAChange(token: string | null): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className="main-container">
@@ -204,12 +217,8 @@ const Register = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      <ReCAPTCHA
-                        sitekey={siteKey}
-                        // onChange={onChange}
-                      />
+                      <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={onReCAPTCHAChange} />
                       {isLoading && <p>Loading ...</p>}
-                      {/* {isError && registerError.data && <p>{registerError.data.errors[0].description}</p>} */}
                       <div className="register-container">
                         <div>
                           <button type="submit" className="btn customRegisterButton">

@@ -37,8 +37,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   });
 
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
-  // const [cityList, setCityList] = useState<IPlaces[]>();
-  // const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
@@ -49,6 +47,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     if (isEdit && proposalItem) {
       const object = proposalItem.result;
       setSelectedDistrict(infoType == 'origin' ? object.originDistrict.id : object.destinationDistrict.id);
+      setSelectedCity(infoType == 'origin' ? object.originCity.id : object.destinationCity.id);
 
       const currentObj = {
         buildingNumber: infoType == 'origin' ? object.originBuildingNo : object.destinationBuildingNo,
@@ -79,6 +78,9 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
     // }
   }, [isEdit, setValue, infoType, proposalItem]);
 
+  useEffect(() => {
+    setValue('cityId', infoType == 'origin' ? proposalItem?.result.originCity.id : proposalItem?.result.destinationCity.id);
+  }, [cityData]);
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     const city_ = cityData?.result?.find((item) => item.id === selectedCity)?.id;
     const district_ = districtData?.result?.find((item) => item.id === selectedDistrict)?.id;
@@ -218,9 +220,15 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                     borderRight: 'none',
                     borderLeft: 'none',
                   }}
-                  {...register('cityId', { required: true })}
+                  {...register('cityId', {
+                    required: true,
+                    onChange(event) {
+                      setSelectedCity(Number(event.target.value));
+                    },
+                  })}
                   isInvalid={!!errors.cityId}
-                  onChange={(e) => setSelectedCity(Number(e.target.value))}>
+                  // onChange={(e) => setSelectedCity(Number(e.target.value))}
+                >
                   <option value="">Select City</option>
                   {cityData &&
                     cityData.result.map((city) => (
