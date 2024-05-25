@@ -1,5 +1,5 @@
 import baseApi from './baseApi';
-import { IAPIResponse, IFile, IProposalForm, IUploadFile } from '@/interface/common';
+import { IAPIResponse, IFile, IUploadFile } from '@/interface/common';
 
 export const fileHandling = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +11,7 @@ export const fileHandling = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['FileUpload'],
     }),
-    addNewProposal: builder.mutation<IAPIResponse<IFile>, IProposalForm>({
+    addNewProposal: builder.mutation<IAPIResponse<IFile>, FormData>({
       query: (body) => ({
         url: '/api/ProposalQuotations/AddNewProposalQuotation',
         method: 'POST',

@@ -4,7 +4,7 @@ import { IAPIResponse, ICompanyProfile, IFile } from '@/interface/common';
 
 export const companyProfile = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    createCompanyProfile: builder.mutation<IAPIResponse<IFile>, ICompanyProfile>({
+    createCompanyProfile: builder.mutation<IAPIResponse<IFile>, FormData>({
       query: (body) => ({
         url: '/Account/VerifyUserForCompanyAccount',
         method: 'POST',

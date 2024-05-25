@@ -236,7 +236,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
               <Form.Group className="mb-3">
                 <Form.Label>Zip code</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   placeholder="15618"
                   style={{
                     width: '270px',
@@ -253,7 +253,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
               <Form.Group className="mb-3">
                 <Form.Label>Additional number</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   placeholder="121212"
                   style={{
                     width: '270px',
