@@ -218,9 +218,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 borderRadius: '45px',
                 padding: '4px 15px',
               }}>
-								{profile && profile.companyName && <span>On updating company information, your account will require admin approval again.</span>}
+								{profile && profile.companyName && profile.isCompanyAccountActive && <span>On updating company information, your account will require admin approval again.</span>}
 								{profile && !profile.companyName && <span>To activate your profile please complete your profile details.</span>}
-              
+								{profile && !profile.isCompanyAccountActive && <span>Your profile is currently under review.</span>}
             </div>
           </div>
         </Modal.Header>
