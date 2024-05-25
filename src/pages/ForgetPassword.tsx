@@ -52,6 +52,7 @@ const ForgetPassword = () => {
         dispatch(
           setSession({
             token: result.data.token,
+            isSubUser: result.data.IsSubUser,
             user: {
               email: values.email,
               role: result.data.role,

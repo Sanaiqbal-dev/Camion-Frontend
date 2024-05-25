@@ -58,6 +58,15 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1; // getMonth() returns month from 0 to 11
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+  };
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
@@ -70,7 +79,7 @@ const ShipperOrders = () => {
           weight: currentOrderObject.weight,
           type: currentOrderObject.type,
           status: currentOrderObject.status ? currentOrderObject.status : '-',
-          ETA: currentOrderObject.estimatedDeliveryTime,
+          ETA: formatDate(currentOrderObject.estimatedDeliveryTime),
           action: '',
         }));
 

@@ -1,13 +1,13 @@
-import { Outlet, useLocation, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import ProfileIcon from '../../assets/icons/ic-profile.svg';
 import { Image } from 'react-bootstrap';
 import ShipperSider from '../../components/Shipper/ShipperSider';
-import ActivateProfile from '../../components/Modals/ActivateProfile';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+// import ActivateProfile from '../../components/Modals/ActivateProfile';
+// import { useState } from 'react';
+// import { useSelector } from 'react-redux';
 
 const HomePage = () => {
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  // const [showProfileModal, setShowProfileModal] = useState(false);
   const currentPageTitle = useLocation();
   const pageTitleMap = [
     { pathname: '/shipper/shipperdashboard', title: 'Dashboard' },
@@ -25,7 +25,8 @@ const HomePage = () => {
   };
 
   const toggleSidebar = () => {};
-  const showCreateCompanyNotification = useSelector((state: any) => !state.session.isCompanyAccount) && currentPageTitle.pathname === '/shipper/shipperdashboard';
+  // const session = useSelector((state: any) => state.session);
+  // const showCreateCompanyNotification = !isCompanyRegistered && currentPageTitle.pathname === '/shipper/shipperdashboard';
 
   return (
     <div className="wrapper" style={{ backgroundColor: '#F3F3F3' }}>
@@ -42,9 +43,17 @@ const HomePage = () => {
         </div>
         <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
           <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
-
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to="/shipper/usermanagement">
+              <Image className="profile-img" src={ProfileIcon} />
+            </Link>
+          </div>
+        </header>
+        {/* <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
+          <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
+
+          <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
+            <Link to={`${isCompanyRegistered ? '/shipper/usermanagement' : '#'}`}>
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
             {showCreateCompanyNotification && (
@@ -67,7 +76,7 @@ const HomePage = () => {
             )}
           </div>
         </header>
-        <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} />
+        <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} /> */}
         <div className="mt-4">
           <Outlet />
         </div>

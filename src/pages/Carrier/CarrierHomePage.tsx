@@ -9,7 +9,7 @@ import { useState } from 'react';
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useSelector((state: any) => state.session.token);
-  const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
+  // const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
   const currentRouteLocation = useLocation();
 
   const pageTitleMap = [
@@ -33,7 +33,7 @@ const CarrierHomePage = () => {
   if (!token) {
     return <Navigate to="/login" state={{ from: { currentRouteLocation } }} replace />;
   }
-  const showCreateCompanyNotification = hasNoCompanyRegistered && currentRouteLocation.pathname === '/carrier/dashboard';
+  // const showCreateCompanyNotification = hasNoCompanyRegistered && currentRouteLocation.pathname === '/carrier/dashboard';
   return (
     <div className="wrapper">
       <CarrierSider />
@@ -51,11 +51,11 @@ const CarrierHomePage = () => {
           <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Link to={'/carrier/userManagement'}>
+            <Link to="/carrier/userManagement">
               <Image className="profile-img" src={ProfileIcon} />
             </Link>
             <DropdownMenu>
-              {showCreateCompanyNotification && (
+              {/* {showCreateCompanyNotification && (
                 <div
                   style={{
                     fontFamily: 'Roboto',
@@ -72,7 +72,7 @@ const CarrierHomePage = () => {
                     Click Here
                   </span>
                 </div>
-              )}
+              )} */}
 
               <DropdownMenuContent align="end">
                 {/* <DropdownMenuItem onClick={() => onLogoutClick()}>
