@@ -53,6 +53,7 @@ const ForgetPassword = () => {
           setSession({
             token: result.data.token,
             isSubUser: result.data.IsSubUser,
+            profileImage: result.data.profileImage,
             user: {
               email: values.email,
               role: result.data.role,

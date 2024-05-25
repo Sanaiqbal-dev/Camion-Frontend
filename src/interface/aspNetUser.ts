@@ -56,6 +56,7 @@ export interface ILoginResponse {
   expiration: string;
   isCompanyAccount: boolean;
   IsSubUser: boolean;
+  profileImage: string;
   role: 'Admin' | 'Carrier' | 'Shipper';
   userId: string;
   message: string;
