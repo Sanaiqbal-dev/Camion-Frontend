@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { useUploadFileMutation } from '@/services/fileHandling';
+import React, {useState } from 'react';
+// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
 
@@ -31,7 +31,8 @@ const schema = z.object({
   registrationNumber: z.string().min(1, 'Enter registration number.'),
   numberPlate: z
     .string()
-    .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
+    // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
+		.regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
     .min(1, 'Enter valid number plate.'),
   modelYear: z.string().min(1, 'Enter model year.'),
   vehicleType: z.string().min(1, 'Select vehicle type.'),
@@ -47,47 +48,34 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
-  const [uploadFile] = useUploadFileMutation();
+  // const [uploadFile] = useUploadFileMutation();
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
-  const [selectedFilePath, setSelectedFilePath] = useState('');
+  // const [selectedFilePath, setSelectedFilePath] = useState('');
   const [showFileError, setShowFileError] = useState(false);
 
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (selectedFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', selectedFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setSelectedFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowFileError(false);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [selectedFile]);
-
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
-    !selectedFile && setShowFileError(true);
+
+
+		const formData = new FormData();
+		formData.append('PlateTypeId', data.PlateTypeId.toString());
+		formData.append('Color', data.color);
+		// formData.append('FileName', data.fileName);
+		// formData.append('FilePath', data.filePath);
+		formData.append('ImeiNumber', data.imeiNumber);
+		formData.append('ModelYear', data.modelYear.toString());
+		formData.append('NumberPlate', data.numberPlate);
+		formData.append('RegistrationNumber', data.registrationNumber);
+		formData.append('VehicleTypeId', data.vehicleType.toString());
+
+		if (selectedFile) {
+			formData.append('UploadFile', selectedFile);
+		}
     if (!selectedFile) {
+			setShowFileError(true);
       return;
     }
-    const { vehicleType, modelYear, ...rest } = data;
-    const requestData = {
-      ...rest,
-      modelYear: modelYear,
-      fileName: selectedFile ? selectedFile.name : 'no file selected',
-      filePath: selectedFilePath,
-      vehicleTypeId: vehicleType,
-    };
-    onSubmitForm(requestData);
+    onSubmitForm(formData);
     reset();
   };
 

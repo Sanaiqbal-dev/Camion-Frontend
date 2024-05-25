@@ -105,15 +105,13 @@ const VehicleManagement = () => {
     seteditedVehicle(veh);
     setShowEditVehicle(true);
   };
-  const submitCreateVehicleHandler = async (data: unknown) => {
-		
-
+  const submitCreateVehicleHandler = async (data: FormData) => {
     setShowCreateVehicle(false);		
     const resp = await createVehicle(data).unwrap();
     refetch();
     console.log(resp);
   };
-  const submitEditVehicleHandler = async (data: IDriver) => {
+  const submitEditVehicleHandler = async (data: FormData) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
     refetch();
