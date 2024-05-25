@@ -96,7 +96,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               min={1}
               placeholder="1"
               style={{
-                width: '560px',
+                width: '100%',
                 height: '59px',
               }}
               isInvalid={!!errors.quantity}
@@ -110,7 +110,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               min={1}
               placeholder="Length"
               style={{
-                width: '164px',
+                width: 'auto',
                 height: '59px',
               }}
               isInvalid={!!errors.length}
@@ -121,7 +121,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               min={1}
               placeholder="Width"
               style={{
-                width: '164px',
+                width: 'auto',
                 height: '59px',
                 margin: '0 -2px 0 -2px',
               }}
@@ -133,7 +133,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               min={1}
               placeholder="Height"
               style={{
-                width: '164px',
+                width: 'auto',
                 height: '59px',
               }}
               isInvalid={!!errors.height}
@@ -159,7 +159,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               min={1}
               placeholder="1"
               style={{
-                width: '560px',
+                width: '100%',
                 height: '59px',
               }}
               isInvalid={!!errors.weightPerItem}

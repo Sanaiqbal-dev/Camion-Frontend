@@ -32,32 +32,31 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
     }
   }, [shipmentData]);
   const forms = [
+    { icon: EachIcon, label: 'Each', shipmentId: 1 },
+    { icon: TonIcon, label: 'Ton', shipmentId: 2 },
     { icon: PalletIcon, label: 'Pallet', shipmentId: 3 },
     { icon: BoxIcon, label: 'Box', shipmentId: 4 },
-    { icon: CaseIcon, label: 'Case', shipmentId: 6 },
-    { icon: EachIcon, label: 'Each', shipmentId: 1 },
-    { icon: ContainerIcon, label: 'Container', shipmentId: 7},
     { icon: KGIcon, label: 'KG', shipmentId: 5 },
-    { icon: TonIcon, label: 'Ton', shipmentId: 2 },
+    { icon: CaseIcon, label: 'Case', shipmentId: 6 },
+    { icon: ContainerIcon, label: 'Container', shipmentId: 7 },
   ];
 
   const handleFormClick = (shipmentType: number, index: number) => {
-    
     setShipmentId(shipmentType);
     setActiveIndex(index);
   };
 
   const handleSubmit = (data: IShipmentDetails) => {
     if (shipmentId) {
-      const updatedData = { ...data, shipmentTypeId:shipmentId };
+      const updatedData = { ...data, shipmentTypeId: shipmentId };
       handleFormDataSubmission(updatedData);
     }
   };
   useEffect(() => {
     if (proposalItem) {
       console.log(proposalItem);
-      const shipmentTypeName = proposalItem.result.shipmentTypes.shipmentTypeName;
-      const index = forms.findIndex((form) => form.label === shipmentTypeName);
+      const shipmentTypeId = proposalItem.result.shipmentTypeId;
+      const index = forms.findIndex((form) => form.shipmentId === shipmentTypeId);
       if (index !== -1) {
         setActiveIndex(index);
       }
