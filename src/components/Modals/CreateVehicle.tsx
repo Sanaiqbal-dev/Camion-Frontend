@@ -19,8 +19,10 @@ interface IVehicle {
 
 interface CreateUserModalProps {
   show: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vehicleTypes: any;
   handleClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmitForm: (requestData: any) => void;
 }
 const schema = z.object({
