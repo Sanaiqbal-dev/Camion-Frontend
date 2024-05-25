@@ -4,26 +4,23 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import PropfileImage from '../../assets/icons/ic-profile.svg';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCreateCompanyProfileMutation } from '@/services/companyProfile';
 import { useAppSelector } from '@/state';
-import { useUploadFileMutation } from '@/services/fileHandling';
 import { Toast } from '../ui/toast';
-interface IFileDownload {
-  filePath?: string;
-  fileName?: string;
-}
+
 interface IUser {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  confirmPassword: string;
-  companyName: string;
-  fileDownload: IFileDownload[];
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  PhoneNumber: string;
+  Password: string;
+  ConfirmPassword: string;
+  CompanyName: string;
+  MOINumber: string;
   userId: string;
-  moiNumber: string;
+  FileTypes: number[];
+  UploadFiles: string[];
 }
 
 interface CreateUserModalProps {
@@ -33,16 +30,21 @@ interface CreateUserModalProps {
 }
 const schema = z
   .object({
-    firstName: z.string().min(3, 'Please enter your first name'),
-    lastName: z.string().min(1, 'Please enter your Second name'),
-    email: z.string().email('Enter email address'),
-    phoneNumber: z.string().min(7, 'Please enter your phone number'),
-    password: z.string().min(6, 'Password must be at least 6 characters.'),
-    confirmPassword: z.string().min(6, 'Confirm your password.'),
-    companyName: z.string().min(6, 'Company name should be atleast 5 characters.'),
-    moiNumber: z.string().min(4, 'Moi should be atleast 4 characters.'),
+    FirstName: z.string().min(3, 'Please enter your first name'),
+    LastName: z.string().min(1, 'Please enter your Second name'),
+    Email: z.string().email('Enter email address'),
+    PhoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
+    Password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters.')
+      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
+        message: 'Password must include a special character (including _), a capital letter, a lowercase letter, and a number',
+      }),
+    ConfirmPassword: z.string().min(6, 'Confirm your password.'),
+    CompanyName: z.string().min(6, 'Company name should be atleast 5 characters.'),
+    MOINumber: z.string().min(4, 'Moi should be atleast 4 characters.'),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.Password === data.ConfirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword'],
   });
@@ -56,34 +58,27 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
-  const userId = useAppSelector((state) => state.session?.user?.userId);
   const userRole = useAppSelector((state) => state.session?.user?.role);
   const isShipper = userRole === 'Shipper';
   const [createCompanyProfile, { isSuccess: isProfileCreated, isLoading: isCreatingProfile }] = useCreateCompanyProfileMutation();
-  const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
+
   const [showVatFileError, setShowVatFileError] = useState(false);
   const [vatFile, setVatFile] = useState<File>();
-  const [vatFilePath, setVatFilePath] = useState('');
 
   const [showCrFileError, setShowCrFileError] = useState(false);
   const [crFile, setCrFile] = useState<File>();
-  const [crFilePath, setCrFilePath] = useState('');
 
   const [showtlFileError, setShowtlFileError] = useState(false);
   const [tlFile, setTlFile] = useState<File>();
-  const [tlFilePath, setTlFilePath] = useState('');
 
   const [showCliFileError, setShowCliFileError] = useState(false);
   const [cliFile, setCliFile] = useState<File>();
-  const [cliFilePath, setcliFilePath] = useState('');
 
   const [showclFileError, setShowclFileError] = useState(false);
   const [clFile, setClFile] = useState<File>();
-  const [clFilePath, setClFilePath] = useState('');
 
   const [showBrFileError, setShowBrFileError] = useState(false);
   const [brFile, setBrFile] = useState<File>();
-  const [brFilePath, setBrFilePath] = useState('');
   const [showToast, setShowToast] = useState(false);
 
   const vatFileInputRef = useRef<HTMLInputElement>(null);
@@ -92,144 +87,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const cliFileInputRef = useRef<HTMLInputElement>(null);
   const clFileInputRef = useRef<HTMLInputElement>(null);
   const brFileInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (vatFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', vatFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setVatFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowToast(true);
-          setShowVatFileError(false);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [vatFile]);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (crFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', crFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setCrFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowToast(true);
-          setShowCrFileError(false);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [crFile]);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (tlFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', tlFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setTlFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowtlFileError(false);
-          setShowToast(true);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [tlFile]);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (cliFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', cliFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setcliFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowCliFileError(false);
-          setShowToast(true);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [cliFile]);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (clFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', clFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setClFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowToast(true);
-          setShowclFileError(false);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [clFile]);
-
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (brFile) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', brFile);
-          const response = await uploadFile(formData);
-          if ('data' in response) {
-            setBrFilePath(response.data.message);
-          }
-          console.log(response);
-          setShowBrFileError(false);
-          setShowToast(true);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-          setShowToast(true);
-        }
-      }
-    };
-
-    uploadFiles();
-  }, [brFile]);
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     {
@@ -254,46 +111,64 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
       return;
     }
     try {
-      const newProfileResponse = await createCompanyProfile({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-        moiNumber: data.moiNumber,
-        companyName: data.companyName,
-        fileDownload: isShipper
-          ? [
-              {
-                filePath: vatFilePath,
-                fileName: vatFile && vatFile.name,
-              },
-              {
-                filePath: crFilePath,
-                fileName: crFile && crFile.name,
-              },
-            ]
-          : [
-              {
-                filePath: tlFilePath,
-                fileName: tlFile && tlFile.name,
-              },
-              {
-                filePath: cliFilePath,
-                fileName: cliFile && cliFile.name,
-              },
-              {
-                filePath: clFilePath,
-                fileName: clFile && clFile.name,
-              },
-              {
-                filePath: brFilePath,
-                fileName: brFile && brFile.name,
-              },
-            ],
-        userId: userId,
-      });
+      // const uploadFiles = isShipper ? [vatFile, crFile] : [tlFile, cliFile, clFile, brFile];
+
+      // Filter out undefined values from the array
+      // const filteredUploadFiles = uploadFiles.filter((file): file is string => file !== undefined);
+      // const newProfileResponse = await createCompanyProfile({
+      //   FirstName: data.FirstName,
+      //   LastName: data.LastName,
+      //   Email: data.Email,
+      //   PhoneNumber: data.PhoneNumber,
+      //   Password: data.Password,
+      //   ConfirmPassword: data.ConfirmPassword,
+      //   MOINumber: data.MOINumber,
+      //   CompanyName: data.CompanyName,
+      //   // UploadFile: filteredUploadFiles,
+      //   FileTypes: isShipper ? [1, 2] : [3, 4, 5, 6],
+      // });
+
+      const formData = new FormData();
+      if (isShipper) {
+        if (vatFile) {
+          formData.append('uploadFiles', vatFile);
+          formData.append('FileTypes', '5');
+        }
+        if (crFile) {
+          formData.append('uploadFiles', crFile);
+          formData.append('FileTypes', '6');
+        }
+      } else {
+        if (tlFile) {
+          formData.append('uploadFiles', tlFile);
+          formData.append('FileTypes', '1');
+        }
+        if (cliFile) {
+          formData.append('uploadFiles', cliFile);
+          formData.append('FileTypes', '2');
+        }
+        if (clFile) {
+          formData.append('uploadFiles', clFile);
+          formData.append('FileTypes', '3');
+        }
+        if (brFile) {
+          formData.append('uploadFiles', brFile);
+          formData.append('FileTypes', '4');
+        }
+      }
+
+      formData.append('FirstName', data.FirstName);
+      formData.append('LastName', data.LastName);
+      formData.append('Email', data.Email);
+      formData.append('PhoneNumber', data.PhoneNumber);
+      formData.append('Password', data.Password);
+      formData.append('ConfirmPassword', data.ConfirmPassword);
+      formData.append('MOINumber', data.MOINumber);
+      formData.append('CompanyName', data.CompanyName);
+      formData.append('MOINumber', data.MOINumber);
+
+      const newProfileResponse = await createCompanyProfile(formData);
+
       console.log(newProfileResponse);
       setShowToast(true);
       handleClose();
@@ -316,7 +191,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
     <>
       <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
         {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
-        {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
         <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
             <Image src={PropfileImage} style={{ height: '106px' }} />
@@ -342,20 +216,20 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>First name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter first name" style={{ width: '270px', height: '50px' }} {...register('firstName')} isInvalid={!!errors.firstName} />
-                  <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
+                  <Form.Control type="text" placeholder="Enter first name" style={{ width: '270px', height: '50px' }} {...register('FirstName')} isInvalid={!!errors.FirstName} />
+                  <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Last name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your last name" style={{ width: '270px', height: '50px' }} {...register('lastName')} isInvalid={!!errors.lastName} />
-                  <Form.Control.Feedback type="invalid">{errors.lastName?.message}</Form.Control.Feedback>
+                  <Form.Control type="text" placeholder="Enter your last name" style={{ width: '270px', height: '50px' }} {...register('LastName')} isInvalid={!!errors.LastName} />
+                  <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email address" style={{ width: '270px', height: '50px' }} {...register('email')} isInvalid={!!errors.email} />
-                  <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
+                  <Form.Control type="email" placeholder="Enter email address" style={{ width: '270px', height: '50px' }} {...register('Email')} isInvalid={!!errors.Email} />
+                  <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Contact number</Form.Label>
@@ -363,17 +237,18 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                     type="text"
                     placeholder="Enter your phone number"
                     style={{ width: '270px', height: '50px' }}
-                    {...register('phoneNumber')}
-                    isInvalid={!!errors.phoneNumber}
+                    defaultValue="+966"
+                    {...register('PhoneNumber')}
+                    isInvalid={!!errors.PhoneNumber}
                   />
-                  <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">{errors.PhoneNumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" style={{ width: '270px', height: '50px' }} {...register('password')} isInvalid={!!errors.password} />
-                  <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
+                  <Form.Control type="password" placeholder="Password" style={{ width: '270px', height: '50px' }} {...register('Password')} isInvalid={!!errors.Password} />
+                  <Form.Control.Feedback type="invalid">{errors.Password?.message}</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -382,24 +257,24 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                     type="password"
                     placeholder="Confirm password"
                     style={{ width: '270px', height: '50px' }}
-                    {...register('confirmPassword')}
-                    isInvalid={!!errors.confirmPassword}
+                    {...register('ConfirmPassword')}
+                    isInvalid={!!errors.ConfirmPassword}
                   />
-                  <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
+                  <Form.Control.Feedback type="invalid">{errors.ConfirmPassword?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Company name</Form.Label>
-                  <Form.Control type="text" placeholder="Company name" style={{ width: '560px', height: '50px' }} {...register('companyName')} isInvalid={!!errors.companyName} />
-                  <Form.Control.Feedback type="invalid">{errors.companyName?.message}</Form.Control.Feedback>
+                  <Form.Control type="text" placeholder="Company name" style={{ width: '560px', height: '50px' }} {...register('CompanyName')} isInvalid={!!errors.CompanyName} />
+                  <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Moi number</Form.Label>
-                  <Form.Control type="text" placeholder="Moi number" style={{ width: '560px', height: '50px' }} {...register('moiNumber')} isInvalid={!!errors.moiNumber} />
-                  <Form.Control.Feedback type="invalid">{errors.moiNumber?.message}</Form.Control.Feedback>
+                  <Form.Control type="text" placeholder="Moi number" style={{ width: '560px', height: '50px' }} {...register('MOINumber')} isInvalid={!!errors.MOINumber} />
+                  <Form.Control.Feedback type="invalid">{errors.MOINumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               {isShipper ? (
@@ -598,7 +473,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 </>
               )}
             </div>
-            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated || isUploadingFile}>
+            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated}>
               Update profile
             </Button>
           </Form>
