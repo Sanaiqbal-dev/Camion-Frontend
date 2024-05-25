@@ -66,7 +66,7 @@ export const ProfileColumns = ({
       };
 
       return (
-        <select onChange={handleChange}>
+        <select onChange={handleChange} style={{ maxWidth: '130px' }}>
           <option value="">Select Document</option>
           {renderOptions()}
         </select>
