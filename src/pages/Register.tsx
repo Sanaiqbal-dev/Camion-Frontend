@@ -63,7 +63,7 @@ const Register = () => {
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
     if (!recaptchaResponseRef.current) {
-      alert('Please verify that you are not a robot.');
+      alert('Please verify that you are not a robot by checking recaptcha');
       return;
     }
 
@@ -89,9 +89,9 @@ const Register = () => {
     };
   }, [timeoutRef]);
 
-  function onReCAPTCHAChange(token: string | null): void {
-    throw new Error('Function not implemented.');
-  }
+   const onReCAPTCHAChange = (token: string | null) => {
+     recaptchaResponseRef.current = token;
+   };
 
   return (
     <div className="main-container">
