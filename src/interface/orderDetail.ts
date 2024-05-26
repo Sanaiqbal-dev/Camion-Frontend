@@ -70,6 +70,7 @@ export interface IOrderResponseData {
   origin: string;
   status: string;
   trackingId: string;
+  vehicleId: number;
   type: string;
   weight: string;
 }

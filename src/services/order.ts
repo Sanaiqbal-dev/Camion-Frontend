@@ -57,12 +57,13 @@ export const orderApi = baseApi.injectEndpoints({
         method: 'PUT',
         body: { orderId, vehicleId },
       }),
+      invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
     createBayanFromOrder: builder.mutation<IAPIResponse<unknown>, { orderId: number }>({
       query: (body) => ({
-        url: `/api/Bayan/CreateBayaanByOrderId?orderId=${body.orderId}`,
+        url: `/api/Bayan/CreateBayaanByOrderId`,
         method: 'POST',
-        // body: body,
+        body: body,
       }),
     }),
     getBayanBill: builder.mutation<IAPIResponse<IFile>, string>({

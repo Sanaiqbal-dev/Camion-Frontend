@@ -34,7 +34,6 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
   const [vehicleList, setVehicleList] = useState<IVehicle[]>(data?.result.result);
 
   const onSubmit: SubmitHandler<IVehicleType> = async (data) => {
-    console.log(data);
     onAssignVehicleToOrderItem(data.vehicleTypeId);
   };
 
@@ -45,6 +44,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
   useEffect(() => {
     if (data) {
       setVehicleList(data.result.result);
+      console.log('data', data);
     }
   }, [data]);
   return (

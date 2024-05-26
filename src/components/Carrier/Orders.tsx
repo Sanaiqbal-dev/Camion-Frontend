@@ -139,6 +139,7 @@ const Orders = () => {
             dimentions: currentOrderObject.dimentions ? currentOrderObject.dimentions : '-',
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
+            vehicleId:currentOrderObject.vehicleId,
             action: '',
           };
         });

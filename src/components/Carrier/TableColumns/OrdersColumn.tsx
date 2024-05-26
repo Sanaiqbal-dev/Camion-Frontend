@@ -74,6 +74,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
     accessorKey: 'action',
     header: 'Action',
     cell: ({ row }) => {
+      console.log('row', row.original);
       return (
         <div className="action-container" style={{ justifyContent: 'start' }}>
           <div onClick={() => onDelete(row.original.id)}>
@@ -82,7 +83,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
           </div>
           <div onClick={() => onAssignVehicle(row.original.id)}>
             <img src={IconAssignVehicle} />
-            <span style={{ color: '#0060B8' }}>Assign Vehicle</span>
+            <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
           </div>
           <div style={{ marginLeft: '10px' }} onClick={() => onPrintBill(row.original.id)}>
             <img src={IconPrintBill} />
