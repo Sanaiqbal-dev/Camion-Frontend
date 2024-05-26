@@ -59,7 +59,7 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
-    createBayanFromOrder: builder.mutation<IAPIResponse<unknown>, { orderId: number }>({
+    createBayanFromOrder: builder.mutation<{message: string, bayanCreated: boolean, statusCode: number}, { orderId: number }>({
       query: (body) => ({
         url: `/api/Bayan/CreateBayaanByOrderId`,
         method: 'POST',

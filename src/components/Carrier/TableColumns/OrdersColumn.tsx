@@ -6,15 +6,19 @@ import IconDown from '../../../assets/icons/ic-down.svg';
 import { IOrderTable } from '../../../interface/carrier';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../../../@/components/ui/dropdown-menu';
 import { Button } from '../../../../@/components/ui/button';
-import { useGetOrderStatusesQuery } from '@/services/orderStatus';
+import { IAPIResponse } from '@/interface/common';
+import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
 
+// import { useGetOrderStatusesQuery } from '@/services/orderStatus';
+// const { data: orderStatuses } = useGetOrderStatusesQuery();
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItemId: number) => void;
   onPrintBill: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
+  orderStatuses: IAPIResponse <IOrderStatusResponseObject[]> | undefined
 }
-export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateStatus }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
+export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {
     accessorKey: 'origin',
     header: 'Origin',
@@ -46,7 +50,6 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
           Select Status <img src={IconDown} />
         </>
       );
-      const { data: orderStatuses } = useGetOrderStatusesQuery();
 
       return (
         <DropdownMenu>
@@ -58,7 +61,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
 
           <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
             {orderStatuses &&
-              orderStatuses.result.map((statusItem: any) => {
+              orderStatuses.result.map((statusItem: IOrderStatus ) => {
                 return (
                   <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
                     {statusItem.description}
@@ -74,7 +77,6 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
     accessorKey: 'action',
     header: 'Action',
     cell: ({ row }) => {
-      console.log('row', row.original);
       return (
         <div className="action-container" style={{ justifyContent: 'start' }}>
           <div onClick={() => onDelete(row.original.id)}>
@@ -87,7 +89,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
           </div>
           <div style={{ marginLeft: '10px' }} onClick={() => onPrintBill(row.original.id)}>
             <img src={IconPrintBill} />
-            <span style={{ color: '#F48031' }}>Print Bayan Bill</span>
+            <span style={{ color: '#F48031' }}>{row.original.bayanId  && <>Bayan Created </>}{!row.original.bayanId  && <>Creat Bayan</>}</span>
           </div>
         </div>
       );

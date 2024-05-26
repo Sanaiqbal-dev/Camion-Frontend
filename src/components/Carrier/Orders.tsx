@@ -16,6 +16,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 
 export interface StatusProps {
   id: string;
@@ -39,6 +40,7 @@ const Orders = () => {
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
   const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
+  const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
@@ -75,13 +77,23 @@ const Orders = () => {
   const onPrintBill = async (orderItemId: number) => {
     console.log('Print Bayan Bill is clicked on order: ', orderItemId);
     // navigate('/carrier/bayanBill');
-    try {
-      const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
-      console.log('Bayan Bill', response);
+    createBayanFromOrder({ orderId: orderItemId })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .then((response:any) => {
+      console.log('Bayan Bill', response.error.data.message);
+      setShowToast(true);      
+    }).catch((error) => {
+      console.log('Error', error.data.message);
       setShowToast(true);
-    } catch (e) {
-      setShowToast(true);
-    }
+    });
+
+    // try {
+    //   const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
+    //   console.log('Bayan Bill', response);
+    //   setShowToast(true);
+    // } catch (e) {
+    //   setShowToast(true);
+    // }
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
@@ -99,6 +111,7 @@ const Orders = () => {
     onAssignVehicle,
     onPrintBill,
     onUpdateStatus,
+    orderStatuses
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -140,6 +153,7 @@ const Orders = () => {
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
             vehicleId:currentOrderObject.vehicleId,
+            bayanId : currentOrderObject.bayanId,
             action: '',
           };
         });
