@@ -54,7 +54,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
               {drivers.map((d, index) => {
                 return (
                   <option selected={d.id === assignedDriverId} key={'driverOption_' + index} value={d.id}>
-                    {d.name}
+                    {d.name +",  Iqama Id:"+ d.iqamaId}
                   </option>
                 );
               })}

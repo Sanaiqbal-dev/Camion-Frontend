@@ -46,6 +46,7 @@ const UserManagementShipper = () => {
   }, [companyUserData]);
   const [showCreateUserModal, setshowCreateUserModal] = useState(false);
   const [showUpdatePasswordModal, setshowUpdatePasswordModal] = useState(false);
+  const [requestFailedMessage, setRequestFailedMessage] = useState('');
 
   const values = [10, 20, 30, 40, 50];
   let currentIndex = 0;
@@ -88,7 +89,9 @@ const UserManagementShipper = () => {
       setShowToast(true);
       const newUsers = users.filter((u) => u.userId !== edituser?.userId);
       setUsers(newUsers);
-    } catch (err) {
+      setRequestFailedMessage('');
+    } catch (error: any) {
+      setRequestFailedMessage(error.error ? error.error : error.data?.message);
       setShowToast(true);
     }
   };
@@ -98,7 +101,9 @@ const UserManagementShipper = () => {
       setShowToast(true);
       refetch();
       setshowCreateUserModal(false);
-    } catch (error) {
+      setRequestFailedMessage('');
+    } catch (error: any) {
+      setRequestFailedMessage(error.error ? error.error : error.data?.message);
       setShowToast(true);
     }
   };
@@ -115,8 +120,11 @@ const UserManagementShipper = () => {
       }).unwrap();
 
       setShowToast(true);
+      setRequestFailedMessage('');
+
       setshowUpdatePasswordModal(false);
-    } catch (e) {
+    } catch (error: any) {
+      setRequestFailedMessage(error.error ? error.error : error.data?.error);
       setShowToast(true);
     }
   };
@@ -133,7 +141,9 @@ const UserManagementShipper = () => {
   });
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? 'success' : 'danger'} />}
+      {showToast && (
+        <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? 'success' : 'danger'} message={requestFailedMessage} />
+      )}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
           Create New User

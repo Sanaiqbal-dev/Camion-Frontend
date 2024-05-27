@@ -32,6 +32,7 @@ const ShipperRequests = () => {
   const [createNewProposal, { isSuccess: isProposalCreated }] = useCreateNewProposalMutation();
   const [updateProposal, { isSuccess: isProposalUpdated }] = useUpdateProposalMutation();
   const [deleteProposal, { isSuccess: isProposalDeleted }] = useDeleteProposalMutation();
+  const [requestFailedMessage, setRequestFailedMessage] = useState('');
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -106,9 +107,9 @@ const ShipperRequests = () => {
 
   const setShipmentDetails = async (requestShipmentData: IShipmentDetails) => {
     console.log(requestShipmentData);
-    const shipmentTruckTypeDefault =[{ noOfTrucks: 0, truckTypeId: 0 }];
+    const shipmentTruckTypeDefault = [{ noOfTrucks: 0, truckTypeId: 0 }];
     setProposalItem((prevItem?: any) => ({
-      ...prevItem,  
+      ...prevItem,
       shipmentTypeId: requestShipmentData.shipmentTypeId,
       shipmentQuantity: requestShipmentData.quantity,
       length: requestShipmentData.length,
@@ -131,8 +132,9 @@ const ShipperRequests = () => {
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
-    setRequestTableData([]);
     if (requestItems) {
+      setRequestTableData([]);
+
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
         origin: currentRequestObject.origin,
@@ -171,9 +173,11 @@ const ShipperRequests = () => {
     try {
       await deleteProposal({ id: deleteItemId }).unwrap();
       setShowToast(true);
-    } catch (error) {
+    } catch (error: any) {
+      setRequestFailedMessage(error?.error);
       setShowToast(true);
     }
+    setIsDeleteProposal(false);
   };
 
   const updatePage = (action: number) => {
@@ -207,7 +211,10 @@ const ShipperRequests = () => {
       setProposalItem({} as any);
       setSendProposalRequest(false);
       setShowToast(true);
-    } catch (e) {
+      setRequestFailedMessage('');
+    } catch (e: any) {
+      setRequestFailedMessage(isEditProposal? e.data?.message : e.error);
+      isEditProposal && setIsEditProposal(false);
       setShowToast(true);
     }
   };
@@ -234,7 +241,14 @@ const ShipperRequests = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
+      {showToast && (
+        <Toast
+          showToast={showToast}
+          setShowToast={setShowToast}
+          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'}
+          message={requestFailedMessage}
+        />
+      )}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
