@@ -6,11 +6,13 @@ import { IProposalResponseObject } from '@/interface/proposal';
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getOrders: builder.query<IAPIResponse<IProposalResponseObject[]>, any>({
       query: (queryParams) => `api/Orders/GetAllOrders${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Order'],
     }),
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getSelectOrders: builder.query<IAPIResponse<CommonSelect[]>, any>({
       query: (queryParams) => `order/select${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Order'],
@@ -34,6 +36,7 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     updateOrder: builder.mutation<IAPIResponse<IOrder>, any>({
       query: ({ orderId, ...rest }) => ({
         url: `api/Orders/UpdateOrderStatus`,
@@ -43,6 +46,7 @@ export const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deleteOrder: builder.mutation<IAPIResponse<void>, any>({
       query: ({ id }) => ({
         url: `api/Orders/DeleteOrder?orderId=${id}`,
@@ -51,19 +55,22 @@ export const orderApi = baseApi.injectEndpoints({
       invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assignVehicleToOrder: builder.mutation<IAPIResponse<any>, any>({
       query: ({ orderId, vehicleId }) => ({
         url: `api/Orders/AssignVehicleToOrder`,
         method: 'PUT',
         body: { orderId, vehicleId },
       }),
+      invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
-    createBayanFromOrder: builder.mutation<IAPIResponse<unknown>, { orderId: number }>({
+    createBayanFromOrder: builder.mutation<{message: string, bayanCreated: boolean, statusCode: number}, { orderId: number }>({
       query: (body) => ({
-        url: `/api/Bayan/CreateBayaanByOrderId?orderId=${body.orderId}`,
+        url: `/api/Bayan/CreateBayaanByOrderId`,
         method: 'POST',
-        // body: body,
+        body: body,
       }),
+      invalidatesTags: ['Order', 'OrderDetail', 'OrderVehicleTracking'],
     }),
     getBayanBill: builder.mutation<IAPIResponse<IFile>, string>({
       query: (tripId) => ({
@@ -75,6 +82,23 @@ export const orderApi = baseApi.injectEndpoints({
           const a = document.createElement('a');
           a.href = url;
           a.download = 'Bayan';
+          a.click();
+          URL.revokeObjectURL(url);
+          return response;
+        },
+        cache: 'no-cache',
+      }),
+    }),
+    getBayanFromBayanId: builder.mutation<IAPIResponse<IFile>, number>({
+      query: (bayanId) => ({
+        url: `/api/Bayan/PrintBayanFromBayanId?bayanId=${bayanId}`,
+        method: 'GET',
+        responseHandler: async (response) => {
+          const blob = await response.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Bayan-${bayanId}`;
           a.click();
           URL.revokeObjectURL(url);
           return response;
@@ -96,4 +120,5 @@ export const {
   useAssignVehicleToOrderMutation,
   useCreateBayanFromOrderMutation,
   useGetBayanBillMutation,
+  useGetBayanFromBayanIdMutation,
 } = orderApi;

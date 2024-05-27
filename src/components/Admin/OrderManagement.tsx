@@ -14,6 +14,7 @@ import { IOrderResponseData } from '@/interface/orderDetail';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 
 const OrderManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -37,6 +38,7 @@ const OrderManagement = () => {
 
   const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
   const [updateOrderStatus, { isSuccess: isOrderStatusUpdated }] = useUpdateOrderMutation();
+  const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrder[]>([]);
 
@@ -76,6 +78,7 @@ const OrderManagement = () => {
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,
+    orderStatuses,
   });
 
   const DeleteOrder = async () => {

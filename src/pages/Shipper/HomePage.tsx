@@ -1,12 +1,14 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import { Image } from 'react-bootstrap';
 import ShipperSider from '../../components/Shipper/ShipperSider';
+import { useAppSelector } from '@/state';
+import { RxAvatar } from 'react-icons/rx';
 // import ActivateProfile from '../../components/Modals/ActivateProfile';
 // import { useState } from 'react';
 // import { useSelector } from 'react-redux';
 
 const HomePage = () => {
+  const profileImage = useAppSelector((state) => state.session?.profileImage);
+
   // const [showProfileModal, setShowProfileModal] = useState(false);
   const currentPageTitle = useLocation();
   const pageTitleMap = [
@@ -45,7 +47,13 @@ const HomePage = () => {
           <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to="/shipper/usermanagement">
-              <Image className="profile-img" src={ProfileIcon} />
+              <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {profileImage !== '' ? (
+                  <img src={profileImage} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
+                ) : (
+                  <RxAvatar style={{ height: '100%', width: '100%' }} />
+                )}
+              </div>
             </Link>
           </div>
         </header>

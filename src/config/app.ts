@@ -2,6 +2,7 @@ import { ILanguage } from '../interface/common';
 
 const appConfig = {
   BASE_URL: 'https://camionapi.azurewebsites.net',
+  // BASE_URL: 'https://localhost:7282',
   IMAGE_PATH: 'http://localhost:8088/public/',
   ENVIRONMENT: 'development',
   PERSIST_STORE_NAME: 'boilerplate',

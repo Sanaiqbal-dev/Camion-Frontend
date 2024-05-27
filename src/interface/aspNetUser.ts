@@ -24,11 +24,11 @@ export interface IAspNetUser {
 
 export interface IAspNetUserIndex extends IAspNetUser {
   aspNetUserLabel: string;
-  companyLabel?: any;
+  companyLabel?: string;
 }
 
 export interface IAspNetUserSingle extends IAspNetUser {
-  companyLabel?: any;
+  companyLabel?: string;
 }
 
 export interface AspNetUserPager extends Pager {
@@ -56,6 +56,7 @@ export interface ILoginResponse {
   expiration: string;
   isCompanyAccount: boolean;
   IsSubUser: boolean;
+  profileImage: string;
   role: 'Admin' | 'Carrier' | 'Shipper';
   userId: string;
   message: string;
@@ -81,4 +82,22 @@ export interface AspNetUserProfile {
   phoneNumberConfirmed: boolean;
   lockoutEnabled: boolean;
   accessFailedCount: number;
+}
+
+export interface IProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  isManager: boolean;
+  moiNumber: string;
+  companyName: string;
+  profileImagePath: string;
+  isCompanyAccountActive: boolean;
+}
+
+export interface IGetProfileResponse {
+  statusCode: number;
+  result: IProfile;
 }

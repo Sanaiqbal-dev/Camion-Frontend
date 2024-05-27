@@ -3,9 +3,13 @@ import { CreateQueryParams } from '@/util/PrepareQueryParams';
 import baseApi from './baseApi';
 import { ICreateSubUserResponse, ISubUser } from '@/interface/admin';
 import { IAPIResponse } from '@/interface/common';
+import { IGetProfileResponse } from '@/interface/aspNetUser';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+		getProfile: builder.query<IGetProfileResponse, void>({
+      query: () => '/Account/GetProfile',
+    }),
     getCompanyUsers: builder.query<IAPIResponse<ISubUser>, any>({
       query: (queryParams) => `/Account/GetCompanySubUsers${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
     }),
@@ -41,4 +45,4 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation } = proposalApi;
+export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation, useGetProfileQuery } = proposalApi;

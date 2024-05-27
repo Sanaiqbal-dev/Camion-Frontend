@@ -47,6 +47,7 @@ const Login = () => {
           token: response.token,
           isCompanyAccount: response.isCompanyAccount,
           isSubUser: response.IsSubUser,
+          profileImage: response.profileImage,
           user: {
             email: values.username,
             role: response.role,

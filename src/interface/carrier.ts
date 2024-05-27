@@ -1,9 +1,10 @@
 export type IBayanItem = {
-  id: string;
-  origin: string;
-  destination: string;
-  weight: string;
-  type: string;
+  id: number;
+  tripId: number;
+  senderName: string;
+  senderFullAddress: string;
+  recipientName: string;
+  recipientFullAddress: string;
   ETA: string;
   action: string;
 };
@@ -21,7 +22,7 @@ export type IDriver = {
   mobileNo: string;
   action: string;
   iqamaId: string;
-  fileName?: any;
+  fileName?: string;
   issueNumber: number;
 };
 
@@ -66,5 +67,7 @@ export type IOrderTable = {
   dimentions: string;
   ETA: string;
   status: string;
+  vehicleId: number;
+  bayanId: number;
   action: string;
 };

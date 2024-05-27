@@ -10,12 +10,20 @@ import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
 // import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import {
+  useAssignVehicleToOrderMutation,
+  useCreateBayanFromOrderMutation,
+  useDeleteOrderMutation,
+  useGetBayanFromBayanIdMutation,
+  useGetOrdersQuery,
+  useUpdateOrderMutation,
+} from '@/services/order';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 
 export interface StatusProps {
   id: string;
@@ -39,23 +47,24 @@ const Orders = () => {
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
   const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
+  const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation();
+  const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [selectedOrderItemId, setSelectedOrderItemId] = useState<number>();
-  // const navigate = useNavigate();
-  const onAssignVehicle = (orderItemId: number) => {
+  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
+  const onAssignVehicle = (orderItem: IOrderTable) => {
     setShowAssignVehicleForm(true);
-    setSelectedOrderItemId(orderItemId);
+    setSelectedOrderItem(orderItem);
   };
 
   const onAssignVehicleToOrderItem = async (vehicleTypeId: number) => {
     try {
       const response = await assignVehicle({
-        orderId: selectedOrderItemId,
+        orderId: selectedOrderItem?.id,
         vehicleId: vehicleTypeId,
       });
       console.log(response);
@@ -72,11 +81,18 @@ const Orders = () => {
 
     setShowDeleteForm(true);
   };
-  const onPrintBill = async (orderItemId: number) => {
-    console.log('Print Bayan Bill is clicked on order: ', orderItemId);
-    // navigate('/carrier/bayanBill');
+  const onCreateBayan = async (orderItemId: number) => {
     try {
       const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
+      console.log('Bayan Bill', response);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
+  };
+  const onPrintBayan = async (bayanId: number) => {
+    try {
+      const response = await createBayanFromBayanId(bayanId).unwrap();
       console.log('Bayan Bill', response);
       setShowToast(true);
     } catch (e) {
@@ -97,8 +113,11 @@ const Orders = () => {
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onAssignVehicle,
-    onPrintBill,
+    // onPrintBill,
+    onCreateBayan,
+    onPrintBayan,
     onUpdateStatus,
+    orderStatuses,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -139,6 +158,8 @@ const Orders = () => {
             dimentions: currentOrderObject.dimentions ? currentOrderObject.dimentions : '-',
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
+            vehicleId: currentOrderObject.vehicleId,
+            bayanId: currentOrderObject.bayanId,
             action: '',
           };
         });
@@ -174,7 +195,9 @@ const Orders = () => {
 
   return (
     <>
-      {showToast && <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && (isOrderDeleted || isOrderDeleting || isDriverAssigned) && (
+        <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />
+      )}
       {showToast && isBayanCreated && <Toast showToast={showToast} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
       <div className="table-container orders-table">
         <div className="tw-flex tw-justify-between tw-items-center">
@@ -219,7 +242,7 @@ const Orders = () => {
             <img src={NextIcon} />
           </Button>
         </div>
-        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
+        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} assignedVehicle={selectedOrderItem?.vehicleId} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
         <ConfirmationModal
           promptMessage={'Are you sure, you want to delete this order?'}
           show={showDeleteForm}

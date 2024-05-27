@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMutation } from '@/services/drivers';
-import { useUploadFileMutation } from '@/services/fileHandling';
+// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IDriver, IDriverModalForm } from '@/interface/carrier';
 import { Toast } from '../ui/toast';
 
@@ -52,7 +52,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   });
   const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver }] = useAddNewDriverMutation();
   const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver }] = useUpdateDriverMutation();
-  const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
+  // const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
 
   const [showToast, setShowToast] = useState(false);
   const [nationalityId, setNationalityId] = useState<number | string>('');
@@ -60,7 +60,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
   const [file, setFile] = useState<File>();
-  const [filePath, setFilePath] = useState('');
+  // const [filePath, setFilePath] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileInputClick = (inputRef: React.RefObject<HTMLInputElement>) => {
@@ -74,54 +74,56 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
       setFormData(null);
     };
   }, [driverExistingData, modal.mode, reset]);
-  useEffect(() => {
-    const uploadFiles = async () => {
-      if (file) {
-        try {
-          const formData = new FormData();
-          formData.append('UploadFile', file);
-          const response = await uploadFile(formData).unwrap();
-          setFilePath(response.message);
-          setShowToast(true);
-        } catch (error) {
-          setShowToast(true);
-        }
-      }
-    };
 
-    uploadFiles();
-  }, [file]);
-
-  const onSubmit: SubmitHandler<IDriver> = async (data) => {
+  const onSubmit: SubmitHandler<IDriver> = async (data) => { 
     try {
-      if (modal.mode === 'edit' && formData) {
-        // If driverExistingData is present, it's an edit operation, so use updateDriver mutation
-        await updateDriver({
-          name: formData.name,
-          licenseNumber: formData.licenseNumber,
-          dob: formData.dob,
-          nationalityId: nationalityId ? nationalityId : getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name),
-          mobileNo: formData.phoneNumber,
-          iqamaId: formData.iqamaId,
-          driverId: formData.id,
-          issueNumber: formData.issueNumber,
-          filePath: filePath,
-          fileName: file ? file.name : 'no file uploaded.',
-        }).unwrap();
+      if (modal.mode === 'edit' && data) {
+
+				const formDataToSend = new FormData();
+				formDataToSend.append('Name', data.name);
+				formDataToSend.append('LicenseNumber', data.licenseNumber);
+				formDataToSend.append('Dob', data.dob);
+				
+				// Check if nationalityId is provided, otherwise get it by name
+				const nationalityIdToSend = nationalityId 
+					? nationalityId 
+					: getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name);
+				formDataToSend.append('NationalityId', nationalityIdToSend as string);
+				
+				formDataToSend.append('MobileNo', data.phoneNumber as string);
+				formDataToSend.append('IqamaId', data.iqamaId);
+				formDataToSend.append('DriverId', `${formData?.id}`);
+				formDataToSend.append('FilePath', `${formData?.fileName}`);
+				formDataToSend.append('FileName', `${formData?.fileName}`);
+				formDataToSend.append('IssueNumber', `${data.issueNumber}`);
+
+				
+				if (file) {
+					formDataToSend.append('UploadFile', file);
+				}
+				
+				console.log([...formDataToSend.values()]);
+				await updateDriver(formDataToSend).unwrap();
+				
+
         setShowToast(true);
       } else {
-        await addNewDriver({
-          name: data.name,
-          licenseNumber: data.licenseNumber,
-          dob: data.dob,
-          nationalityId: nationalityId,
-          mobileNo: data.phoneNumber,
-          iqamaId: data.iqamaId,
-          driverId: 0,
-          issueNumber: data.issueNumber,
-          filePath: filePath,
-          fileName: file ? file.name : 'no file uploaded.',
-        }).unwrap();
+				const formData = new FormData();
+
+				formData.append('Name', data.name);
+				formData.append('LicenseNumber', data.licenseNumber);
+				formData.append('Dob', data.dob);
+				formData.append('NationalityId', nationalityId as string);
+				formData.append('MobileNo', data.phoneNumber as string);
+				formData.append('IqamaId', data.iqamaId);
+				formData.append('IssueNumber', `${data.issueNumber}`);
+				
+				if (file) {
+					formData.append('UploadFile', file);
+				}
+				
+				await addNewDriver(formData).unwrap();
+
         setShowToast(true);
       }
       reset();
@@ -146,7 +148,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   return (
     <>
       {showToast && <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
-      {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {/* {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />} */}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
@@ -291,7 +293,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                 />
               </Form.Group>
             </div>
-            <Button variant="primary" type="submit" disabled={isAddingDriver || isUpdatingDriver || isUploadingFile}>
+            <Button variant="primary" type="submit" disabled={isAddingDriver || isUpdatingDriver}>
               {modal.mode === 'edit' ? 'Update Driver' : 'Add Driver'}
             </Button>
           </Form>

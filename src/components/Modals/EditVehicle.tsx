@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { useUploadFileMutation } from '@/services/fileHandling';
+// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
 
@@ -20,9 +20,12 @@ interface IVehicle {
 interface EditUserModalProps {
   show: boolean;
   handleClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vehicle: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vehicleTypes: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmitForm: (requestData: any) => void;
 }
 
@@ -32,8 +35,10 @@ const schema = z.object({
   registrationNumber: z.string().min(1, 'Enter registration number.'),
   numberPlate: z
     .string()
-    .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
-    .min(1, 'Enter valid number plate.'),
+    // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
+		// .regex(/^[\u0600-\u06FF]{3} \d{1,4}$/, 'e.g. ثلاث 1234')
+		.regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
+		.min(1, 'Enter valid number plate.'),
   modelYear: z.string().min(1, 'Enter model year.'),
   vehicleType: z.string().min(1, 'Select vehicle type.'),
   PlateTypeId: z.string().min(1, 'Select plate type.'),
@@ -52,36 +57,54 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
     reset();
   }, [vehicle]);
 
-  const fileType = 4;
-  const [uploadFile] = useUploadFileMutation();
+  // const fileType = 4;
+  // const [uploadFile] = useUploadFileMutation();
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
 
-  useEffect(() => {
-    if (selectedFile) {
-      try {
-        const response = uploadFile({
-          fileType,
-          uploadFile: selectedFile.name,
-        });
-        console.log('File uploaded successfully:', response);
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      }
-    }
-  }, [fileType, selectedFile, uploadFile]);
+  // useEffect(() => {
+  //   if (selectedFile) {
+  //     try {
+  //       const response = uploadFile({
+  //         fileType,
+  //         uploadFile: selectedFile.name,
+  //       });
+  //       console.log('File uploaded successfully:', response);
+  //     } catch (error) {
+  //       console.error('Error uploading file:', error);
+  //     }
+  //   }
+  // }, [fileType, selectedFile, uploadFile]);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
-    const { vehicleType, modelYear, ...rest } = data;
-    const requestData = {
-      ...rest,
-      modelYear: modelYear,
-      fileName: selectedFile ? selectedFile.name : null,
-      filePath: 'This has to be a path when The file upload Api is completed',
-      vehicleTypeId: vehicleType,
-      vehicleId: vehicle?.id,
-    };
-    onSubmitForm(requestData);
+    // const { vehicleType, modelYear, ...rest } = data;
+    // const requestData = {
+    //   ...rest,
+    //   modelYear: modelYear,
+    //   fileName: selectedFile ? selectedFile.name : null,
+    //   filePath: 'This has to be a path when The file upload Api is completed',
+    //   vehicleTypeId: vehicleType,
+    //   vehicleId: vehicle?.id,
+    // };
+
+
+		const formData = new FormData();
+		formData.append('PlateTypeId', data.PlateTypeId.toString());
+		formData.append('Color', data.color);
+		formData.append('VehicleId', vehicle.id);
+		formData.append('FileName', vehicle.fileName);
+		formData.append('FilePath', vehicle.filePath);
+		formData.append('ImeiNumber', data.imeiNumber);
+		formData.append('ModelYear', data.modelYear.toString());
+		formData.append('NumberPlate', data.numberPlate);
+		formData.append('RegistrationNumber', data.registrationNumber);
+		formData.append('VehicleTypeId', data.vehicleType.toString());
+
+		if (selectedFile) {
+			formData.append('UploadFile', selectedFile);
+		}
+
+    onSubmitForm(formData);
     reset();
   };
 

@@ -87,6 +87,7 @@ const VehicleManagement = () => {
     console.log(res);
     refetch();
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver?.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
@@ -104,13 +105,13 @@ const VehicleManagement = () => {
     seteditedVehicle(veh);
     setShowEditVehicle(true);
   };
-  const submitCreateVehicleHandler = async (data: unknown) => {
-    setShowCreateVehicle(false);
+  const submitCreateVehicleHandler = async (data: FormData) => {
+    setShowCreateVehicle(false);		
     const resp = await createVehicle(data).unwrap();
     refetch();
     console.log(resp);
   };
-  const submitEditVehicleHandler = async (data: IDriver) => {
+  const submitEditVehicleHandler = async (data: FormData) => {
     setShowEditVehicle(false);
     const resp = await editVehicle(data).unwrap();
     refetch();
