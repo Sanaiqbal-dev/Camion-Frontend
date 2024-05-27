@@ -12,18 +12,22 @@ export const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session.isCompanyAccount) {
-      if (session?.user.role === 'Carrier') {
-        navigate('/carrier/dashboard');
-      } else if (session?.user.role === 'Shipper') {
-        navigate('/shipper/shipperdashboard');
-      } else {
-        navigate('/admin/Profiles');
+    if (session.user.role !== 'Admin') {
+      if (session.isCompanyAccount) {
+        if (session?.user.role === 'Carrier') {
+          navigate('/carrier/dashboard');
+        } else if (session?.user.role === 'Shipper') {
+          navigate('/shipper/shipperdashboard');
+        } else {
+          navigate('/admin/Profiles');
+        }
       }
-    }
 
-    if (!session.isCompanyAccount && !location.pathname.includes(`${session?.user.role.toLowerCase()}/profile`)) {
-      navigate(`${session?.user.role.toLowerCase()}/profile`);
+      if (!session.isCompanyAccount && !location.pathname.includes(`${session?.user.role.toLowerCase()}/profile`)) {
+        navigate(`${session?.user.role.toLowerCase()}/profile`);
+      }
+    } else {
+      navigate('/admin/Profiles');
     }
   }, []);
 

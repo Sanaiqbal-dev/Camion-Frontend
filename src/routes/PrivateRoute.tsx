@@ -7,8 +7,10 @@ const PrivateRoute = ({ allowedRoles }: { allowedRoles: [string] }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (!session?.isCompanyAccount && !location.pathname.includes('/profile')) {
-    return <Navigate to={`/${session.user.role.toLowerCase()}/profile`} />;
+  if (session.user.role !== 'Admin') {
+    if (!session?.isCompanyAccount && !location.pathname.includes('/profile')) {
+      return <Navigate to={`/${session.user.role.toLowerCase()}/profile`} />;
+    }
   }
 
   if (allowedRoles && !allowedRoles.includes(session?.user.role)) {
