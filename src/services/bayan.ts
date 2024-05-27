@@ -1,5 +1,4 @@
 import { ICreateBayan } from '@/interface/bayan';
-import { IAPIResponse } from '@/interface/common';
 import { IAPIResponse, IFile } from '@/interface/common';
 import baseApi from './baseApi';
 import { CreateQueryParams } from '@/util/PrepareQueryParams';
