@@ -212,7 +212,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 <img src={uploadedImage && URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
               ) : (
                 <div style={{ height: '106px', width: '106px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {profileImage !== '' ? <img src={profileImage} style={{ height: '106px', width: '106px', borderRadius: '50%' }} /> : <span>Avatar</span>}
+                  {profile?.profileImagePath !== '' ? <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} /> : <span>Avatar</span>}
                 </div>
               )}
               <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }}>

@@ -93,6 +93,7 @@ export interface IProfile {
   isManager: boolean;
   moiNumber: string;
   companyName: string;
+  profileImagePath: string;
   isCompanyAccountActive: boolean;
 }
 
