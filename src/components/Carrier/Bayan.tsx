@@ -10,98 +10,27 @@ import BayanLocationModal from '../Modals/BayanLocationModal';
 import ProductTypeModal from '../Modals/ProductTypeModal';
 import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
 import AssignVehicle from '../Modals/AssignVehicle';
-import { ICreateBayan, ILocation, IProductType, IShippingInfo } from '@/interface/bayan';
-import { useCreateBayanMutation } from '@/services/bayan';
+import { ICreateBayan, ILocation, IProductType, IShippingInfo, TripData } from '@/interface/bayan';
+import { useCreateBayanMutation, useGetBayansQuery, useGetPrintBayanMutation } from '@/services/bayan';
+import { QueryPager } from '@/interface/common';
+import { PAGER_SIZE } from '@/config/constant';
+import { ColumnDef } from '@tanstack/react-table';
 
 const Bayan = () => {
-  const bayanData: IBayanItem[] = [
-    {
-      id: '728ed52f',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-    {
-      id: '489e1d42',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-
-    {
-      id: '489e1e742',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-
-    {
-      id: '9e19od42',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-
-    {
-      id: '56te1d42',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-    {
-      id: '7tf5d52f',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-    {
-      id: '720ui72f',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-    {
-      id: '728eb92f',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-    {
-      id: '72ted52f',
-      origin: 'Riyadh, KSA',
-      destination: 'Riyadh, KSA',
-      weight: '82.5 kg',
-      type: 'flatbed',
-      ETA: '3/25/2024',
-      action: '',
-    },
-  ];
+  // const bayanData: IBayanItem[] = [
+  //   {
+  //     id: '728ed52f',
+  //     origin: 'Riyadh, KSA',
+  //     destination: 'Riyadh, KSA',
+  //     weight: '82.5 kg',
+  //     type: 'flatbed',
+  //     ETA: '3/25/2024',
+  //     action: '',
+  //   },
+  // ];
 
   const values = [10, 20, 30, 40, 50];
+  const [bayanData, setBayanData] = useState<IBayanItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
   const [showCreateBayanModal, setShowCreateBayanModal] = useState(false);
@@ -111,7 +40,16 @@ const Bayan = () => {
   const [bayanObject, setBayanObject] = useState<ICreateBayan>({} as ICreateBayan);
   const [locationType, setLocationType] = useState<string>('pickup');
   const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
+	const [getPrintBayan] = useGetPrintBayanMutation();
   const [createBayan] = useCreateBayanMutation();
+
+  const [pager, setPager] = useState<QueryPager>({
+    page: 1,
+    pageSize: PAGER_SIZE ,
+  });
+
+
+	const {currentData: bayans} = useGetBayansQuery({ page: pager.page - 1,pageCount: pager.pageSize});
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -123,6 +61,32 @@ const Bayan = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+	useEffect(()=>{
+     console.log('bayan', bayans?.result.result)
+
+		if(bayans?.result.result){
+		//map 	bayans?.result.result to bayanData
+		const bayanItems = bayans?.result.result.map((item: TripData) => {
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const data:TripData = JSON.parse(item.data);
+			console.log('data', item.tripId, data)
+			return {
+				id: item.id,
+				tripId: item.tripId,
+				senderName: data.Waybills[0].SenderName,
+				senderFullAddress: data.Waybills[0].SenderFullAddress,
+				recipientName: data.Waybills[0].RecipientName,
+				recipientFullAddress: data.Waybills[0].RecipientFullAddress,
+				action: '',
+			}
+		});
+
+		setBayanData(bayanItems);
+	}
+
+	}, [bayans])
 
   const SubmitPickUpLocationInfo = (locationData: ILocation) => {
     // console.log('pickup location data:', locationData);
@@ -204,6 +168,32 @@ const Bayan = () => {
       }
     }
   }, [sendBayanCreateRequest]);
+
+
+	const onPrintBayan = async (tripId: number) => {
+		console.log('Print is clicked on :', tripId);
+    try {
+      const response = await getPrintBayan(tripId).unwrap();
+      console.log('Bayan Bill', response);
+    } catch (e) {
+			console.log('Bayan Bill ERROR', e);
+    }
+
+
+    // try {
+    //   const response = await createBayanFromBayanId(bayanId).unwrap();
+    //   console.log('Bayan Bill', response);
+    //   // setShowToast(true);
+    // } catch (e) {
+    //   setShowToast(true);
+    // }
+  };
+
+  const columns: ColumnDef<IBayanItem>[] = BayanColumns({
+    onPrintBayan,
+  });
+
+
   return (
     <div className="table-container">
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -249,7 +239,7 @@ const Bayan = () => {
           </Col>
         </Row>
       </div>
-      {bayanData && <DataTable isAction={true} columns={BayanColumns} data={bayanData} />}
+      {bayanData && <DataTable isAction={true} columns={columns} data={bayanData} />}
       <BayanLocationModal
         show={showCreateBayanModal}
         infoType={locationType}

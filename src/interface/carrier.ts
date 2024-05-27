@@ -1,9 +1,10 @@
 export type IBayanItem = {
-  id: string;
-  origin: string;
-  destination: string;
-  weight: string;
-  type: string;
+  id: number;
+  tripId: number;
+  senderName: string;
+  senderFullAddress: string;
+  recipientName: string;
+  recipientFullAddress: string;
   ETA: string;
   action: string;
 };
