@@ -1,17 +1,17 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import CarrierSider from '../../components/Carrier/CarrierSider';
-import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import { Image } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { DropdownMenu, DropdownMenuContent } from '@radix-ui/react-dropdown-menu';
 import ActivateProfile from '@/components/Modals/ActivateProfile';
 import { useState } from 'react';
+import { useAppSelector } from '@/state';
+import { RxAvatar } from 'react-icons/rx';
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useSelector((state: any) => state.session.token);
   // const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
   const currentRouteLocation = useLocation();
-
+  const profileImage = useAppSelector((state) => state.session?.profileImage);
   const pageTitleMap = [
     { pathname: '/carrier/dashboard', title: 'Dashboard' },
     { pathname: '/carrier/tracking', title: 'Tracking' },
@@ -52,7 +52,13 @@ const CarrierHomePage = () => {
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to="/carrier/userManagement">
-              <Image className="profile-img" src={ProfileIcon} />
+              <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {profileImage !== '' ? (
+                  <img src={profileImage} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
+                ) : (
+                  <RxAvatar style={{ height: '100%', width: '100%' }} />
+                )}
+              </div>
             </Link>
             <DropdownMenu>
               {/* {showCreateCompanyNotification && (

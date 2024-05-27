@@ -11,6 +11,7 @@ import { Toast } from '../ui/toast';
 import { useGetProfileQuery } from '@/services/user';
 import { FaCamera } from 'react-icons/fa';
 import { IProfile } from '@/interface/aspNetUser';
+import { RxAvatar } from 'react-icons/rx';
 
 interface IUser {
   FirstName: string;
@@ -96,6 +97,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const [showToast, setShowToast] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<File>();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleImageUpload = (event: any) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -175,7 +177,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
         formData.append('ProfileImageFile', uploadedImage);
       }
 
-      const newProfileResponse = await createCompanyProfile(formData);
+      const newProfileResponse = await createCompanyProfile(formData).unwrap();
 
       console.log(newProfileResponse);
       setShowToast(true);
@@ -212,7 +214,11 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 <img src={uploadedImage && URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
               ) : (
                 <div style={{ height: '106px', width: '106px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {profile?.profileImagePath !== '' ? <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} /> : <span>Avatar</span>}
+                  {profile?.profileImagePath !== '' ? (
+                    <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
+                  ) : (
+                    <RxAvatar style={{ height: '100%', width: '100%' }} />
+                  )}
                 </div>
               )}
               <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }}>
