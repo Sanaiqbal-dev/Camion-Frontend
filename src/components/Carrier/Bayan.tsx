@@ -12,7 +12,7 @@ import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
 import AssignVehicle from '../Modals/AssignVehicle';
 import { ICreateBayan, ILocation, IProductType, IShippingInfo, TripData } from '@/interface/bayan';
 import { useCreateBayanMutation, useGetBayansQuery, useGetPrintBayanMutation } from '@/services/bayan';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { ColumnDef } from '@tanstack/react-table';
@@ -45,7 +45,7 @@ const Bayan = () => {
   const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
   const [getPrintBayan] = useGetPrintBayanMutation();
   const [createBayan] = useCreateBayanMutation();
-  const showCreateBayan = useSelector((state: any) => state.session.isCompanyAccount);
+  // const showCreateBayan = useSelector((state: any) => state.session.isCompanyAccount);
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
