@@ -16,8 +16,14 @@ interface CreateRequestModalProps {
   handleNextStep: (requestObj: INewRequest, requestType: string) => void;
 }
 const schema = z.object({
-  buildingNumber: z.string().min(1, 'Building number is required'),
-  streetName: z.string().min(1, 'Enter street name'),
+  buildingNumber: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
+    .min(1, 'Building number is required'),
+  streetName: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Street name must contain only alphabets and numbers.')
+    .min(1, 'Enter street name'),
   districtId: z.coerce.number().min(1, 'Please enter your district name'),
   cityId: z.coerce.number().min(1, 'City name is required'),
   zipCode: z.coerce.number().min(1, 'Zip code is required'),

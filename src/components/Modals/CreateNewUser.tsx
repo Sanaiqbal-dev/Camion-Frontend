@@ -23,8 +23,14 @@ interface CreateUserModalProps {
 }
 const schema = z.object({
   address: z.string().min(1, 'Please enter your address'),
-  buildingNumber: z.string().min(1, 'Building number is required'),
-  streetName: z.string().email('Enter street name'),
+  buildingNumber: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
+    .min(1, 'Building number is required'),
+  streetName: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
+    .email('Enter street name'),
   districtName: z.string().min(1, 'Please enter your district name'),
   cityName: z.string().min(1, 'City name is required'),
   zipCode: z.string().min(1, 'ZIp code is required'),

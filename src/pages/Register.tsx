@@ -48,6 +48,7 @@ const Register = () => {
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const recaptchaResponseRef = useRef<string | null>(null);
+  const [recaptchaError, setRecaptchaError] = useState('');
   const [isCarrier, setIsCarrier] = useState(true);
   const [showToast, setshowToast] = useState(false);
   const navigate = useNavigate();
@@ -63,7 +64,8 @@ const Register = () => {
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
     if (!recaptchaResponseRef.current) {
-      alert('Please verify that you are not a robot by checking recaptcha');
+      setRecaptchaError('Please verify that you are not a robot by checking recaptcha');
+      // alert('Please verify that you are not a robot by checking recaptcha');
       return;
     }
 
@@ -76,7 +78,7 @@ const Register = () => {
         navigate('/Login');
       }, 2000);
     } catch (e) {
-      // setshowToast(true);
+      setshowToast(true);
       recaptchaRef.current?.reset();
       recaptchaResponseRef.current = null; // Reset the reCAPTCHA ref
       throw e;
@@ -89,9 +91,10 @@ const Register = () => {
     };
   }, [timeoutRef]);
 
-   const onReCAPTCHAChange = (token: string | null) => {
-     recaptchaResponseRef.current = token;
-   };
+  const onReCAPTCHAChange = (token: string | null) => {
+    recaptchaResponseRef.current = token;
+    if (token) setRecaptchaError('');
+  };
 
   return (
     <div className="main-container">
@@ -219,6 +222,7 @@ const Register = () => {
                         </Row>
                       </div>
                       <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={onReCAPTCHAChange} />
+                      {recaptchaError && <span className="tw-text-red-700">{recaptchaError}</span>}
                       {isLoading && <p>Loading ...</p>}
                       <div className="register-container">
                         <div>

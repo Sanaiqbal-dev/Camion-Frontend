@@ -16,8 +16,14 @@ interface BayanLocationModalProps {
 const schema = z.object({
   name: z.string().min(3, 'Enter name'),
   phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
-  buildingNumber: z.string().min(1, 'Building number is required'),
-  streetName: z.string().min(1, 'Enter street name'),
+  buildingNumber: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
+    .min(1, 'Building number is required'),
+  streetName: z
+    .string()
+    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
+    .min(1, 'Enter street name'),
   districtId: z.string().min(1, 'Please enter your district name'),
   cityId: z.string().min(1, 'City name is required'),
   zipCode: z.coerce.number().min(1, 'Zip code is required'),
