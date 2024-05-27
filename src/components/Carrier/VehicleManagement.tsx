@@ -23,6 +23,8 @@ import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { useGetDriversListQuery } from '@/services/drivers';
+import { Toast } from '../ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -45,6 +47,7 @@ const VehicleManagement = () => {
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
 
@@ -56,7 +59,7 @@ const VehicleManagement = () => {
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
-  const [createVehicle] = useCreateVehicleMutation();
+  const [createVehicle, { isSuccess: isVehicleAdded, error }] = useCreateVehicleMutation();
   const [editVehicle] = useEditVehicleMutation();
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
@@ -106,10 +109,17 @@ const VehicleManagement = () => {
     setShowEditVehicle(true);
   };
   const submitCreateVehicleHandler = async (data: FormData) => {
-    setShowCreateVehicle(false);		
-    const resp = await createVehicle(data).unwrap();
-    refetch();
-    console.log(resp);
+    // setShowCreateVehicle(false);
+    try {
+      const resp = await createVehicle(data).unwrap();
+      setShowToast(true);
+
+      console.log(resp);
+    } catch (e) {
+      setShowToast(true);
+      throw e;
+    }
+    refetch(); //
   };
   const submitEditVehicleHandler = async (data: FormData) => {
     setShowEditVehicle(false);
@@ -191,6 +201,7 @@ const VehicleManagement = () => {
 
   return (
     <>
+      <Toast variant={isVehicleAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />
       <div className="table-container">
         <div className="search-and-entries-container">
           <div>

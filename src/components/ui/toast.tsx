@@ -11,7 +11,7 @@ interface IAlertProps {
 }
 
 export const Toast = (props: IAlertProps) => {
-  const { showToast, variant, setShowToast, autoClose = true, duration = 1500, message } = props;
+  const { showToast, variant, setShowToast, autoClose = true, duration = 10000, message } = props;
 
   const handleCloseAlert = useCallback(() => {
     setShowToast(false);

@@ -23,7 +23,7 @@ const PrivateRoute = ({ allowedRoles }: { allowedRoles: [string] }) => {
     }
   }
 
-  if (session?.IsSubUser && location.pathname.includes(`${session?.user.role.toLowerCase()}/userManagement`)) {
+  if (session?.isSubUser && location.pathname.includes(`${session?.user.role.toLowerCase()}/userManagement`)) {
     if (session?.user.role === 'Carrier') {
       return <Navigate to="/carrier/dashboard" />;
     } else {

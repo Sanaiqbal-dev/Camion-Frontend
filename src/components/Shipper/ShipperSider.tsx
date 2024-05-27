@@ -28,7 +28,7 @@ const ShipperSider = () => {
     <div className="text-light pt-5 sidebar  sidebar-admin" id="sidebar-container">
       <div>
         <Image src={CamionLogo} alt="logo" height={27} style={{ width: '80%', margin: '0 auto' }} />
-        {session?.isCompanyAccount && (
+        {session?.isCompanyAccount && !session.isSubUser && (
           <Accordion defaultActiveKey="0" id="accordionExample">
             <NavLink key={'Dashboard'} to={'/shipper/shipperdashboard'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
               <Accordion.Item className="dashboard-item" eventKey="0">

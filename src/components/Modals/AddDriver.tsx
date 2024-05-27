@@ -7,6 +7,7 @@ import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMut
 // import { useUploadFileMutation } from '@/services/fileHandling';
 import { IDriver, IDriverModalForm } from '@/interface/carrier';
 import { Toast } from '../ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 interface CreateUserModalProps {
   modal: IDriverModalForm;
@@ -31,7 +32,10 @@ const schema = z.object({
   licenseNumber: z.string().min(5, "Please enter driver's license number."),
   dob: z.string().min(10, "Please enter driver's date of birth.").refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old.'),
   nationalityId: z.string().min(1, "Please enter driver's nationality"),
-  phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits').min(1, "Please enter driver's phone number."),
+  phoneNumber: z
+    .string()
+    .regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits')
+    .min(1, "Please enter driver's phone number."),
   issueNumber: z
     .number()
     .min(1, "Please enter driver's issue number.")
@@ -50,7 +54,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     resolver: zodResolver(schema),
     defaultValues: driverExistingData,
   });
-  const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver }] = useAddNewDriverMutation();
+  const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver, error }] = useAddNewDriverMutation();
   const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver }] = useUpdateDriverMutation();
   // const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
 
@@ -75,62 +79,58 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     };
   }, [driverExistingData, modal.mode, reset]);
 
-  const onSubmit: SubmitHandler<IDriver> = async (data) => { 
+  const onSubmit: SubmitHandler<IDriver> = async (data) => {
     try {
       if (modal.mode === 'edit' && data) {
+        const formDataToSend = new FormData();
+        formDataToSend.append('Name', data.name);
+        formDataToSend.append('LicenseNumber', data.licenseNumber);
+        formDataToSend.append('Dob', data.dob);
 
-				const formDataToSend = new FormData();
-				formDataToSend.append('Name', data.name);
-				formDataToSend.append('LicenseNumber', data.licenseNumber);
-				formDataToSend.append('Dob', data.dob);
-				
-				// Check if nationalityId is provided, otherwise get it by name
-				const nationalityIdToSend = nationalityId 
-					? nationalityId 
-					: getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name);
-				formDataToSend.append('NationalityId', nationalityIdToSend as string);
-				
-				formDataToSend.append('MobileNo', data.phoneNumber as string);
-				formDataToSend.append('IqamaId', data.iqamaId);
-				formDataToSend.append('DriverId', `${formData?.id}`);
-				formDataToSend.append('FilePath', `${formData?.fileName}`);
-				formDataToSend.append('FileName', `${formData?.fileName}`);
-				formDataToSend.append('IssueNumber', `${data.issueNumber}`);
+        // Check if nationalityId is provided, otherwise get it by name
+        const nationalityIdToSend = nationalityId ? nationalityId : getNationalityIdByName(nationalityListData, driverExistingData?.driverNationality.name);
+        formDataToSend.append('NationalityId', nationalityIdToSend as string);
 
-				
-				if (file) {
-					formDataToSend.append('UploadFile', file);
-				}
-				
-				console.log([...formDataToSend.values()]);
-				await updateDriver(formDataToSend).unwrap();
-				
+        formDataToSend.append('MobileNo', data.phoneNumber as string);
+        formDataToSend.append('IqamaId', data.iqamaId);
+        formDataToSend.append('DriverId', `${formData?.id}`);
+        formDataToSend.append('FilePath', `${formData?.fileName}`);
+        formDataToSend.append('FileName', `${formData?.fileName}`);
+        formDataToSend.append('IssueNumber', `${data.issueNumber}`);
+
+        if (file) {
+          formDataToSend.append('UploadFile', file);
+        }
+
+        console.log([...formDataToSend.values()]);
+        await updateDriver(formDataToSend).unwrap();
 
         setShowToast(true);
       } else {
-				const formData = new FormData();
+        const formData = new FormData();
 
-				formData.append('Name', data.name);
-				formData.append('LicenseNumber', data.licenseNumber);
-				formData.append('Dob', data.dob);
-				formData.append('NationalityId', nationalityId as string);
-				formData.append('MobileNo', data.phoneNumber as string);
-				formData.append('IqamaId', data.iqamaId);
-				formData.append('IssueNumber', `${data.issueNumber}`);
-				
-				if (file) {
-					formData.append('UploadFile', file);
-				}
-				
-				await addNewDriver(formData).unwrap();
+        formData.append('Name', data.name);
+        formData.append('LicenseNumber', data.licenseNumber);
+        formData.append('Dob', data.dob);
+        formData.append('NationalityId', nationalityId as string);
+        formData.append('MobileNo', data.phoneNumber as string);
+        formData.append('IqamaId', data.iqamaId);
+        formData.append('IssueNumber', `${data.issueNumber}`);
+
+        if (file) {
+          formData.append('UploadFile', file);
+        }
+
+        await addNewDriver(formData).unwrap();
 
         setShowToast(true);
       }
       reset();
 
       handleClose();
-    } catch (error) {
+    } catch (e) {
       setShowToast(true);
+      throw e;
     }
   };
   const getNationalityIdByName = (nationalityListData: INationality[], nationalityName?: string) => {
@@ -147,7 +147,9 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   }, [formData, setValue]);
   return (
     <>
-      {showToast && <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && (
+        <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />
+      )}
       {/* {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />} */}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
