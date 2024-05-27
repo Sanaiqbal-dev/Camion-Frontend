@@ -28,6 +28,7 @@ const CarrierSider = () => {
   const handleReplaceNavigate = () => {
     dispatch(setLogout());
   };
+
   return (
     <div className="text-light pt-5 sidebar  sidebar-admin" id="sidebar-container">
       <div>
@@ -128,7 +129,7 @@ const CarrierSider = () => {
         )}
       </div>
       <div className="sidebar-admin">
-        {session.isCompanyAccount && (
+        {session.isCompanyAccount && !session.isSubUser && (
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
             <Image src={IconSettings} />
             Settings

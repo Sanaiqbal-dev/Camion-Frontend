@@ -46,7 +46,7 @@ const Login = () => {
         setSession({
           token: response.token,
           isCompanyAccount: response.isCompanyAccount,
-          isSubUser: response.IsSubUser,
+          isSubUser: response.isSubUser,
           profileImage: response.profileImage,
           user: {
             email: values.username,

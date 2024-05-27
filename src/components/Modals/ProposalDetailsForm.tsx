@@ -6,6 +6,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Toast } from '../ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
 
 interface IProposalForm {
   Amount: string;
@@ -53,7 +54,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   const userId = useAppSelector((state) => state.session.user.userId);
 
   const [showToast, setShowToast] = useState(false);
-  const [addNewProposal, { isSuccess: isProposalSubmitted, isLoading: isSubmittingProposal }] = useAddNewProposalMutation();
+  const [addNewProposal, { isSuccess: isProposalSubmitted, isLoading: isSubmittingProposal, error }] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSeletedFile] = useState<File>();
 
@@ -90,7 +91,14 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
 
   return (
     <>
-      {showToast && <Toast variant={isProposalSubmitted || isSubmittingProposal ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && (
+        <Toast
+          variant={isProposalSubmitted || isSubmittingProposal ? 'success' : 'danger'}
+          message={error ? getErrorMessage(error) : ''}
+          showToast={showToast}
+          setShowToast={setShowToast}
+        />
+      )}
       <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Proposal Details</Modal.Title>

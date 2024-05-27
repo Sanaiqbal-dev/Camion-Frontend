@@ -17,6 +17,7 @@ import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { debounce } from '@/util/debounce';
+import { Toast } from '../ui/toast';
 
 const Bayan = () => {
   // const bayanData: IBayanItem[] = [
@@ -53,7 +54,10 @@ const Bayan = () => {
     pageSize: PAGER_SIZE,
   });
 
-  const { currentData: bayans } = useGetBayansQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  const { currentData: bayans, isSuccess: isByanCreated } = useGetBayansQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -157,14 +161,13 @@ const Bayan = () => {
     setSendBayanCreateRequest(true);
   };
 
-  
   const debouncedSearch = debounce((search: string) => {
     setSearchTerm(() => search);
   }, 1000);
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(event.target.value);
   };
-  
+
   useEffect(() => {
     if (sendBayanCreateRequest) {
       try {
@@ -172,6 +175,8 @@ const Bayan = () => {
         console.log('Create bayan response:', response);
         setSendBayanCreateRequest(false);
       } catch (error) {
+        setToastMessage(error as string);
+        setShowToast(true);
         console.log('Create bayan error:', error);
       }
     }
@@ -204,8 +209,10 @@ const Bayan = () => {
   };
 
   return (
-    <div className="table-container">
-      {showCreateBayan && (
+    <>
+      {showToast && <Toast variant={isByanCreated ? 'success' : 'danger'} message={toastMessage} showToast={showToast} setShowToast={setShowToast} />}
+
+      <div className="table-container">
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button
             className="add-item-btn"
@@ -216,81 +223,81 @@ const Bayan = () => {
             Create Bayan
           </button>
         </div>
-      )}
-      <div className="tw-flex tw-justify-between tw-items-center">
-        <Row className="tw-items-center">
-          <Col xs="auto" className="tw-text-secondary">
-            Show
-          </Col>
-          <Col xs="auto">
-            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
-              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
-                </button>
-                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
-                </button>
+        <div className="tw-flex tw-justify-between tw-items-center">
+          <Row className="tw-items-center">
+            <Col xs="auto" className="tw-text-secondary">
+              Show
+            </Col>
+            <Col xs="auto">
+              <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+                <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                  <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
+                  </button>
+                  <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
+                  </button>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col xs="auto" className="tw-text-secondary">
-            entries
-          </Col>
-        </Row>
-        <Row className="tw-mt-3">
-          <Col>
-            <InputGroup>
-              <InputGroup.Text>
-                <Image src={SearchIcon} />
-              </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
-            </InputGroup>
-          </Col>
-        </Row>
+            </Col>
+            <Col xs="auto" className="tw-text-secondary">
+              entries
+            </Col>
+          </Row>
+          <Row className="tw-mt-3">
+            <Col>
+              <InputGroup>
+                <InputGroup.Text>
+                  <Image src={SearchIcon} />
+                </InputGroup.Text>
+                <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              </InputGroup>
+            </Col>
+          </Row>
+        </div>
+        {bayanData && <DataTable isAction={true} columns={columns} data={bayanData} />}
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+          <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+            <img src={PreviousIcon} />
+          </Button>
+          <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+            <img src={NextIcon} />
+          </Button>
+        </div>
+        <BayanLocationModal
+          show={showCreateBayanModal}
+          infoType={locationType}
+          handleClose={() => setShowCreateBayanModal(false)}
+          handleNextStep={(data) => {
+            locationType == 'pickup' ? SubmitPickUpLocationInfo(data) : SubmitDeliveryLocationInfo(data);
+          }}
+        />
+        <ProductTypeModal
+          show={showProductTypeModal}
+          handleClose={() => setShowProductTypeModal(false)}
+          handleNextStep={(data) => {
+            SubmitProductTypeInfo(data);
+          }}
+        />
+        <BayanShippingInfoModal
+          show={showShippingInfoModal}
+          handleClose={() => setShowShippingInfoModal(false)}
+          handleNextStep={(data) => {
+            SubmitShippingInfo(data);
+          }}
+        />
+        <AssignVehicle
+          show={showAssignVehicleModal}
+          handleClose={() => {
+            setShowAssignVehicleModal(false);
+          }}
+          onAssignVehicleToOrderItem={(vehicleId) => {
+            AssignVehicleToBayan(vehicleId);
+          }}
+        />
       </div>
-      {bayanData && <DataTable isAction={true} columns={columns} data={bayanData} />}
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
-        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
-          <img src={PreviousIcon} />
-        </Button>
-        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
-          <img src={NextIcon} />
-        </Button>
-      </div>
-      <BayanLocationModal
-        show={showCreateBayanModal}
-        infoType={locationType}
-        handleClose={() => setShowCreateBayanModal(false)}
-        handleNextStep={(data) => {
-          locationType == 'pickup' ? SubmitPickUpLocationInfo(data) : SubmitDeliveryLocationInfo(data);
-        }}
-      />
-      <ProductTypeModal
-        show={showProductTypeModal}
-        handleClose={() => setShowProductTypeModal(false)}
-        handleNextStep={(data) => {
-          SubmitProductTypeInfo(data);
-        }}
-      />
-      <BayanShippingInfoModal
-        show={showShippingInfoModal}
-        handleClose={() => setShowShippingInfoModal(false)}
-        handleNextStep={(data) => {
-          SubmitShippingInfo(data);
-        }}
-      />
-      <AssignVehicle
-        show={showAssignVehicleModal}
-        handleClose={() => {
-          setShowAssignVehicleModal(false);
-        }}
-        onAssignVehicleToOrderItem={(vehicleId) => {
-          AssignVehicleToBayan(vehicleId);
-        }}
-      />
-    </div>
+    </>
   );
 };
 export default Bayan;
