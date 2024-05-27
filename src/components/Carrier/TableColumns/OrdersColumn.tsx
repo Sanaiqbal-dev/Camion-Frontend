@@ -8,9 +8,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '../../../../@/components/ui/button';
 import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
-
-// import { useGetOrderStatusesQuery } from '@/services/orderStatus';
-// const { data: orderStatuses } = useGetOrderStatusesQuery();
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItemId: number) => void;

@@ -13,6 +13,7 @@ interface IVehicleType {
 interface AssignVehicleModalProps {
   show: boolean;
   handleClose: () => void;
+  assignedVehicle:number;
   onAssignVehicleToOrderItem: (vehicleTypeId: number) => void;
 }
 // eslint-disable-next-line react-refresh/only-export-components
@@ -20,7 +21,7 @@ export const schema = z.object({
   vehicleTypeId: z.coerce.number().min(1, 'select a vehicle'),
 });
 
-const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, onAssignVehicleToOrderItem }) => {
+const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose,assignedVehicle, onAssignVehicleToOrderItem }) => {
   const {
     register,
     handleSubmit,
@@ -66,7 +67,7 @@ const AssignVehicle: React.FC<AssignVehicleModalProps> = ({ show, handleClose, o
               </option>
               {vehicleList &&
                 vehicleList.map((vehicle: IVehicle) => (
-                  <option key={vehicle.id} value={vehicle.id}>
+                  <option key={vehicle.id} value={vehicle.id} selected={vehicle.id === assignedVehicle}>
                     <div>
                       {`Number Plate: ${vehicle.numberPlate}`}
                       {` Registration Number: ${vehicle.registrationNumber}`}
