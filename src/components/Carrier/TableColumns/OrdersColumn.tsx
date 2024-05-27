@@ -17,7 +17,7 @@ interface OrderActionsProps {
   onCreateBayan: (orderItemId: number) => void;
   onPrintBayan: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
-  orderStatuses: IAPIResponse <IOrderStatusResponseObject[]> | undefined
+  orderStatuses: IAPIResponse<IOrderStatusResponseObject[]> | undefined;
 }
 export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {
@@ -56,13 +56,21 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">{item.status ? item.status : noItemSeleted}</span>
+              <span className="sr-only tw-flex tw-gap-1">
+                {item.status ? (
+                  <>
+                    {item.status} <img src={IconDown} />
+                  </>
+                ) : (
+                  noItemSeleted
+                )}
+              </span>
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
             {orderStatuses &&
-              orderStatuses.result.map((statusItem: IOrderStatus ) => {
+              orderStatuses.result.map((statusItem: IOrderStatus) => {
                 return (
                   <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
                     {statusItem.description}
@@ -88,14 +96,18 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
             <img src={IconAssignVehicle} />
             <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
           </div>
-          {row.original.bayanId  && <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
-            <img src={IconPrintBill} />
-            <span style={{ color: '#F48031' }}>Print Bayan</span>
-          </div>}
-          {!row.original.bayanId  && <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
-            <img src={IconPrintBill} />
-            <span style={{ color: '#F48031' }}>Create Bayan</span>
-          </div>}
+          {row.original.bayanId && (
+            <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
+              <img src={IconPrintBill} />
+              <span style={{ color: '#F48031' }}>Print Bayan</span>
+            </div>
+          )}
+          {!row.original.bayanId && (
+            <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+              <img src={IconPrintBill} />
+              <span style={{ color: '#F48031' }}>Create Bayan</span>
+            </div>
+          )}
         </div>
       );
     },

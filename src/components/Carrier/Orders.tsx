@@ -10,8 +10,14 @@ import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
 // import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation,
-    useDeleteOrderMutation, useGetBayanFromBayanIdMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import {
+  useAssignVehicleToOrderMutation,
+  useCreateBayanFromOrderMutation,
+  useDeleteOrderMutation,
+  useGetBayanFromBayanIdMutation,
+  useGetOrdersQuery,
+  useUpdateOrderMutation,
+} from '@/services/order';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
@@ -41,7 +47,7 @@ const Orders = () => {
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
   const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
-  const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation ();
+  const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation();
   const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
@@ -112,7 +118,7 @@ const Orders = () => {
     onCreateBayan,
     onPrintBayan,
     onUpdateStatus,
-    orderStatuses
+    orderStatuses,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -153,8 +159,8 @@ const Orders = () => {
             dimentions: currentOrderObject.dimentions ? currentOrderObject.dimentions : '-',
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
-            vehicleId:currentOrderObject.vehicleId,
-            bayanId : currentOrderObject.bayanId,
+            vehicleId: currentOrderObject.vehicleId,
+            bayanId: currentOrderObject.bayanId,
             action: '',
           };
         });
@@ -190,7 +196,9 @@ const Orders = () => {
 
   return (
     <>
-      {showToast && <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && (isOrderDeleted || isOrderDeleting || isDriverAssigned) && (
+        <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />
+      )}
       {showToast && isBayanCreated && <Toast showToast={showToast} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
       <div className="table-container orders-table">
         <div className="tw-flex tw-justify-between tw-items-center">
