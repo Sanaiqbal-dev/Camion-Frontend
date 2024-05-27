@@ -21,7 +21,7 @@ export type IDriver = {
   mobileNo: string;
   action: string;
   iqamaId: string;
-  fileName?: any;
+  fileName?: string;
   issueNumber: number;
 };
 
@@ -66,5 +66,7 @@ export type IOrderTable = {
   dimentions: string;
   ETA: string;
   status: string;
+  vehicleId: number;
+  bayanId: number;
   action: string;
 };

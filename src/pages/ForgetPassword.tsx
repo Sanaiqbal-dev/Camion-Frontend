@@ -7,9 +7,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAspNetUserResetPasswordMutation } from '@/services/aspNetUserAuth';
-import { useDispatch } from 'react-redux';
-import { setSession } from '@/state/slice/sessionSlice';
-import { useAppSelector } from '@/state';
 
 interface IForgetPassword {
   email: string;
@@ -43,27 +40,11 @@ const ForgetPassword = () => {
 
   const navigate = useNavigate();
   const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
-  const dispatch = useDispatch();
-  const { dir, lang } = useAppSelector((state) => state.session);
   const onSubmit: SubmitHandler<IForgetPassword> = async (values: IForgetPassword) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     aspNetUserResetPassword(values).then((result: any) => {
       if (result) {
-        dispatch(
-          setSession({
-            token: result.data.token,
-            isSubUser: result.data.IsSubUser,
-            user: {
-              email: values.email,
-              role: result.data.role,
-              userId: result.data.userId,
-            },
-            isLoggedIn: true,
-            dir: dir,
-            lang: lang,
-          }),
-        );
-        console.log('Values are: ', values);
+        console.log('Password reset successful', values);
       }
     });
 

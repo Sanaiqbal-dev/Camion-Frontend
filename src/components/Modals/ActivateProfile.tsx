@@ -4,10 +4,12 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Image } from 'react-bootstrap';
 import PropfileImage from '../../assets/icons/ic-profile.svg';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCreateCompanyProfileMutation } from '@/services/companyProfile';
 import { useAppSelector } from '@/state';
 import { Toast } from '../ui/toast';
+import { useGetProfileQuery } from '@/services/user';
+import { IProfile } from '@/interface/aspNetUser';
 
 interface IUser {
   FirstName: string;
@@ -62,7 +64,18 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const isShipper = userRole === 'Shipper';
   const [createCompanyProfile, { isSuccess: isProfileCreated, isLoading: isCreatingProfile }] = useCreateCompanyProfileMutation();
 
+	const { currentData: profileResponse , isLoading: isProfileLoading }  = useGetProfileQuery();
+
   const [showVatFileError, setShowVatFileError] = useState(false);
+  const [profile, setProfile] = useState<IProfile>();
+
+	useEffect(()=>{
+		if(profileResponse){
+			setProfile(profileResponse.result);
+		}
+	}, [profileResponse])
+
+
   const [vatFile, setVatFile] = useState<File>();
 
   const [showCrFileError, setShowCrFileError] = useState(false);
@@ -165,7 +178,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
       formData.append('ConfirmPassword', data.ConfirmPassword);
       formData.append('MOINumber', data.MOINumber);
       formData.append('CompanyName', data.CompanyName);
-      formData.append('MOINumber', data.MOINumber);
 
       const newProfileResponse = await createCompanyProfile(formData);
 
@@ -204,31 +216,34 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 color: '#000000',
                 backgroundColor: '#F9090973',
                 borderRadius: '45px',
-                padding: '4px',
+                padding: '4px 15px',
               }}>
-              To activate your profile please complete your profile details
+								{profile && profile.companyName && profile.isCompanyAccountActive && <span>On updating company information, your account will require admin approval again.</span>}
+								{profile && !profile.companyName && <span>To activate your profile please complete your profile details.</span>}
+								{profile && !profile.isCompanyAccountActive && <span>Your profile is currently under review.</span>}
             </div>
           </div>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit(onSubmit, onerror)}>
+          {profile && <Form onSubmit={handleSubmit(onSubmit, onerror)}>
             <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>First name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter first name" style={{ width: '270px', height: '50px' }} {...register('FirstName')} isInvalid={!!errors.FirstName} />
+                  <Form.Control type="text" placeholder="Enter first name" 																	
+									defaultValue={profile?.firstName} style={{ width: '270px', height: '50px' }} {...register('FirstName')} isInvalid={!!errors.FirstName} />
                   <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Last name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your last name" style={{ width: '270px', height: '50px' }} {...register('LastName')} isInvalid={!!errors.LastName} />
+                  <Form.Control type="text" placeholder="Enter your last name" defaultValue={profile?.lastName} style={{ width: '270px', height: '50px' }} {...register('LastName')} isInvalid={!!errors.LastName} />
                   <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email address" style={{ width: '270px', height: '50px' }} {...register('Email')} isInvalid={!!errors.Email} />
+                  <Form.Control type="email" placeholder="Enter email address" defaultValue={profile?.email} style={{ width: '270px', height: '50px' }} {...register('Email')} isInvalid={!!errors.Email} />
                   <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -237,7 +252,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                     type="text"
                     placeholder="Enter your phone number"
                     style={{ width: '270px', height: '50px' }}
-                    defaultValue="+966"
+                    defaultValue={profile ? profile.phoneNumber : '+966'}
                     {...register('PhoneNumber')}
                     isInvalid={!!errors.PhoneNumber}
                   />
@@ -266,14 +281,14 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Company name</Form.Label>
-                  <Form.Control type="text" placeholder="Company name" style={{ width: '560px', height: '50px' }} {...register('CompanyName')} isInvalid={!!errors.CompanyName} />
+                  <Form.Control type="text"  defaultValue={profile?.companyName} placeholder="Company name" style={{ width: '560px', height: '50px' }} {...register('CompanyName')} isInvalid={!!errors.CompanyName} />
                   <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
                   <Form.Label>Moi number</Form.Label>
-                  <Form.Control type="text" placeholder="Moi number" style={{ width: '560px', height: '50px' }} {...register('MOINumber')} isInvalid={!!errors.MOINumber} />
+                  <Form.Control type="text"  defaultValue={profile?.moiNumber} placeholder="Moi number" style={{ width: '560px', height: '50px' }} {...register('MOINumber')} isInvalid={!!errors.MOINumber} />
                   <Form.Control.Feedback type="invalid">{errors.MOINumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
@@ -473,10 +488,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 </>
               )}
             </div>
-            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated}>
+            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated || isProfileLoading}>
               Update profile
             </Button>
-          </Form>
+          </Form>}
         </Modal.Body>
       </Modal>
     </>
