@@ -55,8 +55,8 @@ const Orders = () => {
   const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderResponseData>();
-  const onAssignVehicle = (orderItem: IOrderResponseData) => {
+  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
+  const onAssignVehicle = (orderItem: IOrderTable) => {
     setShowAssignVehicleForm(true);
     setSelectedOrderItem(orderItem);
   };

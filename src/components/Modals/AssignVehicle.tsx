@@ -13,7 +13,7 @@ interface IVehicleType {
 interface AssignVehicleModalProps {
   show: boolean;
   handleClose: () => void;
-  assignedVehicle:number;
+  assignedVehicle?:number;
   onAssignVehicleToOrderItem: (vehicleTypeId: number) => void;
 }
 // eslint-disable-next-line react-refresh/only-export-components

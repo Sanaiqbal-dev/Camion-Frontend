@@ -10,7 +10,7 @@ import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
-  onAssignVehicle: (orderItemId: number) => void;
+  onAssignVehicle: (orderItem: IOrderTable) => void;
   onCreateBayan: (orderItemId: number) => void;
   onPrintBayan: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
@@ -89,7 +89,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
             <img src={IconDelete} />
             <span style={{ color: '#EB5757' }}>Delete</span>
           </div>
-          <div onClick={() => onAssignVehicle(row.original.id)}>
+          <div onClick={() => onAssignVehicle(row.original)}>
             <img src={IconAssignVehicle} />
             <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
           </div>
