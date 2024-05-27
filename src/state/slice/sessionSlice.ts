@@ -10,6 +10,7 @@ export interface SessionState {
   isLoggedIn: boolean;
   isCompanyAccount?: boolean;
   isSubUser: boolean;
+  profileImage: string;
 }
 
 const initialState: SessionState = {
@@ -20,6 +21,7 @@ const initialState: SessionState = {
   isLoggedIn: false,
   isCompanyAccount: false,
   isSubUser: false,
+  profileImage: '',
 };
 
 const sessionSlice = createSlice({
@@ -32,6 +34,7 @@ const sessionSlice = createSlice({
       state.isLoggedIn = action.payload.token !== null;
       state.isCompanyAccount = action.payload.isCompanyAccount;
       state.isSubUser = action.payload.isSubUser;
+      state.profileImage = action.payload.profileImage;
       return state;
     },
     setLanguage(state, action: PayloadAction<ILanguage>) {
