@@ -76,7 +76,7 @@ const Register = () => {
         navigate('/Login');
       }, 2000);
     } catch (e) {
-      // setshowToast(true);
+      setshowToast(true);
       recaptchaRef.current?.reset();
       recaptchaResponseRef.current = null; // Reset the reCAPTCHA ref
       throw e;

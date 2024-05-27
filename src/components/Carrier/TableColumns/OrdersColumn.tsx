@@ -8,16 +8,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '../../../../@/components/ui/button';
 import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
-
-// import { useGetOrderStatusesQuery } from '@/services/orderStatus';
-// const { data: orderStatuses } = useGetOrderStatusesQuery();
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItemId: number) => void;
   onCreateBayan: (orderItemId: number) => void;
   onPrintBayan: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
-  orderStatuses: IAPIResponse <IOrderStatusResponseObject[]> | undefined
+  orderStatuses: IAPIResponse<IOrderStatusResponseObject[]> | undefined;
 }
 export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {

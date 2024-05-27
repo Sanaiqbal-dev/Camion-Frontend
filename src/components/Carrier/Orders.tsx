@@ -49,17 +49,16 @@ const Orders = () => {
   const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [selectedOrderItemId, setSelectedOrderItemId] = useState<number>();
-  // const navigate = useNavigate();
-  const onAssignVehicle = (orderItemId: number) => {
+  const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderResponseData>();
+  const onAssignVehicle = (orderItem: IOrderResponseData) => {
     setShowAssignVehicleForm(true);
-    setSelectedOrderItemId(orderItemId);
+    setSelectedOrderItem(orderItem);
   };
 
   const onAssignVehicleToOrderItem = async (vehicleTypeId: number) => {
     try {
       const response = await assignVehicle({
-        orderId: selectedOrderItemId,
+        orderId: selectedOrderItem?.id,
         vehicleId: vehicleTypeId,
       });
       console.log(response);
@@ -235,7 +234,7 @@ const Orders = () => {
             <img src={NextIcon} />
           </Button>
         </div>
-        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
+        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} assignedVehicle={selectedOrderItem?.vehicleId} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
         <ConfirmationModal
           promptMessage={'Are you sure, you want to delete this order?'}
           show={showDeleteForm}
