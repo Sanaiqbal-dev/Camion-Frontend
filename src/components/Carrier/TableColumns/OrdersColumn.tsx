@@ -14,11 +14,12 @@ import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatu
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItemId: number) => void;
-  onPrintBill: (orderItemId: number) => void;
+  onCreateBayan: (orderItemId: number) => void;
+  onPrintBayan: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
   orderStatuses: IAPIResponse <IOrderStatusResponseObject[]> | undefined
 }
-export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
+export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
   {
     accessorKey: 'origin',
     header: 'Origin',
@@ -87,10 +88,14 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onPrintBill, onUpdateS
             <img src={IconAssignVehicle} />
             <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
           </div>
-          <div style={{ marginLeft: '10px' }} onClick={() => onPrintBill(row.original.id)}>
+          {row.original.bayanId  && <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
             <img src={IconPrintBill} />
-            <span style={{ color: '#F48031' }}>{row.original.bayanId  && <>Bayan Created </>}{!row.original.bayanId  && <>Creat Bayan</>}</span>
-          </div>
+            <span style={{ color: '#F48031' }}>Print Bayan</span>
+          </div>}
+          {!row.original.bayanId  && <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+            <img src={IconPrintBill} />
+            <span style={{ color: '#F48031' }}>Create Bayan</span>
+          </div>}
         </div>
       );
     },

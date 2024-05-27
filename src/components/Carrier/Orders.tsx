@@ -10,7 +10,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
 // import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
-import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation, useDeleteOrderMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
+import { useAssignVehicleToOrderMutation, useCreateBayanFromOrderMutation,
+    useDeleteOrderMutation, useGetBayanFromBayanIdMutation, useGetOrdersQuery, useUpdateOrderMutation } from '@/services/order';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { IOrderResponseData } from '@/interface/orderDetail';
@@ -40,6 +41,7 @@ const Orders = () => {
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
   const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
+  const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation ();
   const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
@@ -74,26 +76,23 @@ const Orders = () => {
 
     setShowDeleteForm(true);
   };
-  const onPrintBill = async (orderItemId: number) => {
-    console.log('Print Bayan Bill is clicked on order: ', orderItemId);
-    // navigate('/carrier/bayanBill');
-    createBayanFromOrder({ orderId: orderItemId })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .then((response:any) => {
-      console.log('Bayan Bill', response.error.data.message);
-      setShowToast(true);      
-    }).catch((error) => {
-      console.log('Error', error.data.message);
+  const onCreateBayan = async (orderItemId: number) => {
+    try {
+      const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
+      console.log('Bayan Bill', response);
       setShowToast(true);
-    });
-
-    // try {
-    //   const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
-    //   console.log('Bayan Bill', response);
-    //   setShowToast(true);
-    // } catch (e) {
-    //   setShowToast(true);
-    // }
+    } catch (e) {
+      setShowToast(true);
+    }
+  };
+  const onPrintBayan = async (bayanId: number) => {
+    try {
+      const response = await createBayanFromBayanId(bayanId).unwrap();
+      console.log('Bayan Bill', response);
+      setShowToast(true);
+    } catch (e) {
+      setShowToast(true);
+    }
   };
   const onUpdateStatus = async (id: number, statusId: number) => {
     try {
@@ -109,7 +108,9 @@ const Orders = () => {
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onAssignVehicle,
-    onPrintBill,
+    // onPrintBill,
+    onCreateBayan,
+    onPrintBayan,
     onUpdateStatus,
     orderStatuses
   });
