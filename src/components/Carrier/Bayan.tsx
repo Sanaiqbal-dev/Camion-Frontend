@@ -17,6 +17,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { ColumnDef } from '@tanstack/react-table';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const Bayan = () => {
   // const bayanData: IBayanItem[] = [
@@ -51,6 +52,7 @@ const Bayan = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const { t } = useTranslation(['bayan']);
 
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -213,7 +215,6 @@ const Bayan = () => {
   return (
     <>
       {showToast && <Toast variant={isByanCreated ? 'success' : 'danger'} message={toastMessage} showToast={showToast} setShowToast={setShowToast} />}
-
       <div className="table-container">
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button
@@ -222,13 +223,13 @@ const Bayan = () => {
             onClick={() => {
               setShowCreateBayanModal(true);
             }}>
-            Create Bayan
+            {t('createBayan')}
           </button>
         </div>
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
             <Col xs="auto" className="tw-text-secondary">
-              Show
+              {t('show')}
             </Col>
             <Col xs="auto">
               <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -244,7 +245,7 @@ const Bayan = () => {
               </div>
             </Col>
             <Col xs="auto" className="tw-text-secondary">
-              entries
+              {t('entries')}
             </Col>
           </Row>
           <Row className="tw-mt-3">
@@ -253,7 +254,7 @@ const Bayan = () => {
                 <InputGroup.Text>
                   <Image src={SearchIcon} />
                 </InputGroup.Text>
-                <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+                <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
               </InputGroup>
             </Col>
           </Row>
@@ -272,7 +273,7 @@ const Bayan = () => {
           infoType={locationType}
           handleClose={() => setShowCreateBayanModal(false)}
           handleNextStep={(data) => {
-            locationType == 'pickup' ? SubmitPickUpLocationInfo(data) : SubmitDeliveryLocationInfo(data);
+            locationType === 'pickup' ? SubmitPickUpLocationInfo(data) : SubmitDeliveryLocationInfo(data);
           }}
         />
         <ProductTypeModal

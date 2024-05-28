@@ -1,0 +1,10 @@
+{
+  "createUser": "Create new user",
+  "show": "Show",
+  "entries": "entries",
+  "search": "Search",
+  "noUsersFound": "No Users Found!",
+  "previous": "Previous",
+  "next": "Next",
+  "confirmationMessage": "Are you sure?"
+}

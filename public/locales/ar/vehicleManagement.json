@@ -1,0 +1,13 @@
+{
+  "toastSuccess": "success",
+  "toastDanger": "danger",
+  "filter": "Filter",
+  "addVehicle": "Add Vehicle",
+  "show": "Show",
+  "entries": "entries",
+  "search": "Search",
+  "noDataFound": "No Data found.",
+  "previous": "Previous",
+  "next": "Next",
+  "deleteVehicleConfirmation": "Are you sure, you want to delete this vehicle?"
+}
