@@ -13,7 +13,7 @@ export const proposalApi = baseApi.injectEndpoints({
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
     }),
-   
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assignDriver: builder.mutation<any, any>({
       query: (body) => ({

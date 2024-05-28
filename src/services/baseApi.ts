@@ -19,7 +19,7 @@ export const baseApi = createApi({
     },
   }),
   tagTypes: [
-		'Bayan',
+    'Bayan',
     'Vehicle',
     'AspNetUser',
     'Driver',

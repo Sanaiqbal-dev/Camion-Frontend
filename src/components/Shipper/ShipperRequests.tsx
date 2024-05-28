@@ -106,9 +106,9 @@ const ShipperRequests = () => {
 
   const setShipmentDetails = async (requestShipmentData: IShipmentDetails) => {
     console.log(requestShipmentData);
-    const shipmentTruckTypeDefault =[{ noOfTrucks: 0, truckTypeId: 0 }];
+    const shipmentTruckTypeDefault = [{ noOfTrucks: 0, truckTypeId: 0 }];
     setProposalItem((prevItem?: any) => ({
-      ...prevItem,  
+      ...prevItem,
       shipmentTypeId: requestShipmentData.shipmentTypeId,
       shipmentQuantity: requestShipmentData.quantity,
       length: requestShipmentData.length,

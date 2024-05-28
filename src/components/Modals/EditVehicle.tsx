@@ -36,9 +36,9 @@ const schema = z.object({
   numberPlate: z
     .string()
     // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
-		// .regex(/^[\u0600-\u06FF]{3} \d{1,4}$/, 'e.g. ثلاث 1234')
-		.regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
-		.min(1, 'Enter valid number plate.'),
+    // .regex(/^[\u0600-\u06FF]{3} \d{1,4}$/, 'e.g. ثلاث 1234')
+    .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
+    .min(1, 'Enter valid number plate.'),
   modelYear: z.string().min(1, 'Enter model year.'),
   vehicleType: z.string().min(1, 'Select vehicle type.'),
   PlateTypeId: z.string().min(1, 'Select plate type.'),
@@ -87,22 +87,21 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
     //   vehicleId: vehicle?.id,
     // };
 
+    const formData = new FormData();
+    formData.append('PlateTypeId', data.PlateTypeId.toString());
+    formData.append('Color', data.color);
+    formData.append('VehicleId', vehicle.id);
+    formData.append('FileName', vehicle.fileName);
+    formData.append('FilePath', vehicle.filePath);
+    formData.append('ImeiNumber', data.imeiNumber);
+    formData.append('ModelYear', data.modelYear.toString());
+    formData.append('NumberPlate', data.numberPlate);
+    formData.append('RegistrationNumber', data.registrationNumber);
+    formData.append('VehicleTypeId', data.vehicleType.toString());
 
-		const formData = new FormData();
-		formData.append('PlateTypeId', data.PlateTypeId.toString());
-		formData.append('Color', data.color);
-		formData.append('VehicleId', vehicle.id);
-		formData.append('FileName', vehicle.fileName);
-		formData.append('FilePath', vehicle.filePath);
-		formData.append('ImeiNumber', data.imeiNumber);
-		formData.append('ModelYear', data.modelYear.toString());
-		formData.append('NumberPlate', data.numberPlate);
-		formData.append('RegistrationNumber', data.registrationNumber);
-		formData.append('VehicleTypeId', data.vehicleType.toString());
-
-		if (selectedFile) {
-			formData.append('UploadFile', selectedFile);
-		}
+    if (selectedFile) {
+      formData.append('UploadFile', selectedFile);
+    }
 
     onSubmitForm(formData);
     reset();
@@ -149,9 +148,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
               </Form.Group>
             </div>
             <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group
-                className="mb-3"
-                controlId="formBasicEmail">
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Plate Type</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.plateType?.id}

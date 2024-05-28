@@ -242,7 +242,12 @@ const Orders = () => {
             <img src={NextIcon} />
           </Button>
         </div>
-        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} assignedVehicle={selectedOrderItem?.vehicleId} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
+        <AssignVehicle
+          show={showAssignVehicleForm}
+          handleClose={() => setShowAssignVehicleForm(false)}
+          assignedVehicle={selectedOrderItem?.vehicleId}
+          onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
+        />
         <ConfirmationModal
           promptMessage={'Are you sure, you want to delete this order?'}
           show={showDeleteForm}

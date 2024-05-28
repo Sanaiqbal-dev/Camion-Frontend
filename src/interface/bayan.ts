@@ -57,7 +57,6 @@ export interface ICreateBayan {
   dimentions: string;
 }
 
-
 export interface TripData {
   id: number;
   tripId: number;
