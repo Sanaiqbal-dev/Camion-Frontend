@@ -14,6 +14,7 @@ import { useAppSelector } from '@/state';
 import { useEffect, useState } from 'react';
 import { Toast } from '@/components/ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   username: z.string().email('Enter a valid email.'),
@@ -21,6 +22,7 @@ const schema = z.object({
 });
 
 const Login = () => {
+  const { t } = useTranslation(['login']);
   const [showToast, setShowToast] = useState(false);
 
   const {
@@ -67,38 +69,8 @@ const Login = () => {
         navigate('/admin/Profiles', { replace: true });
       }
     } catch (e) {
-      // console.log('getting here', e);
-      // console.log('data', error);
       setShowToast(true);
     }
-    // aspNetUserLogin(values).then((result: any) => {
-    //   if (result.error) {
-    //     setShowToast(true);
-    //   } else {
-    //     console.log(result);
-    //     if (!error) {
-    //       dispatch(
-    //         setSession({
-    //           token: result.data.token,
-    //           isCompanyAccount: result.data.isCompanyAccount,
-    //           user: {
-    //             email: values.username,
-    //             role: result.data.role,
-    //             userId: result.data.userId,
-    //           },
-    //           isLoggedIn: true,
-    //           dir: dir,
-    //           lang: lang,
-    //         }),
-    //       );
-    //       const userRole = result.data.role;
-
-    //       userRole == 'Shipper' ? navigate('/shipper/shipperdashboard') : userRole == 'Carrier' ? navigate('/carrier/dashboard') : navigate('/admin/Profiles');
-    //     } else {
-    //       setShowToast(true);
-    //     }
-    //   }
-    // });
   };
 
   useEffect(() => {
@@ -111,7 +83,8 @@ const Login = () => {
         navigate('/admin/Profiles');
       }
     }
-  }, []);
+  }, [isLoggedIn, user?.role, navigate]);
+
   return (
     <div className="main-container">
       {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
@@ -127,11 +100,9 @@ const Login = () => {
                   <Image src={CamionLogo} />
 
                   <div className="mt-4">
-                    <h1 className="h1 mb-3 main_heading">Login your account</h1>
+                    <h1 className="h1 mb-3 main_heading">{t('loginTitle')}</h1>
                     <p className="sub_heading mb-4">
-                      Log in to a serviced account and create and manage your
-                      <br />
-                      shipments the way that suits you best
+                      {t('loginSubtitle')}
                     </p>
                   </div>
                   <div className="form-container">
@@ -139,13 +110,13 @@ const Login = () => {
                       <div>
                         <Row className="form-group mb-4">
                           <Form.Group as={Col}>
-                            <Form.Label className="customLabel">Email</Form.Label>
+                            <Form.Label className="customLabel">{t('emailLabel')}</Form.Label>
                             <Form.Control
                               type="email"
                               className="form-control customInput"
                               {...register('username')}
                               isInvalid={!!errors.username}
-                              placeholder="Enter email address"
+                              placeholder={t('emailPlaceholder')}
                               disabled={isLoading}
                             />
                             <Form.Control.Feedback type="invalid">{errors.username?.message}</Form.Control.Feedback>
@@ -153,11 +124,11 @@ const Login = () => {
                         </Row>
                         <Row className="form-group">
                           <Form.Group as={Col} controlId="validationCustom05">
-                            <Form.Label className="customLabel">Password</Form.Label>
+                            <Form.Label className="customLabel">{t('passwordLabel')}</Form.Label>
                             <Form.Control
                               type="password"
                               className="form-control customInput"
-                              placeholder="Enter password"
+                              placeholder={t('passwordPlaceholder')}
                               {...register('password')}
                               isInvalid={!!errors.password}
                               disabled={isLoading}
@@ -173,7 +144,7 @@ const Login = () => {
                                   textDecoration: 'none',
                                   marginLeft: '30px',
                                 }}>
-                                Forgot your Password?
+                                {t('forgotPassword')}
                               </Link>
                             </div>
                           </Form.Group>
@@ -181,10 +152,10 @@ const Login = () => {
                       </div>
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
                         <button type="submit" className="btn customLoginButton w-100" disabled={isLoading}>
-                          Login
+                          {t('login')}
                         </button>
                         <div className="d-flex justify-content-start">
-                          <div>Don’t have an account?</div>
+                          <div>{t('noAccount')}</div>
                           <div>
                             <Link
                               to="/Register"
@@ -195,7 +166,7 @@ const Login = () => {
                                 textDecoration: 'none',
                                 marginLeft: '30px',
                               }}>
-                              Register your account
+                              {t('registerAccount')}
                             </Link>
                           </div>
                         </div>
