@@ -126,7 +126,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
         setShowToast(true);
       }
       reset();
-
+      setFile(undefined);
+      setFormData(null);
       handleClose();
     } catch (e) {
       setShowToast(true);
@@ -140,6 +141,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   const handleCloseModal = () => {
     reset();
     setFormData(null);
+    setFile(undefined);
     handleClose();
   };
   useEffect(() => {
@@ -277,6 +279,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                       height: '50px',
                       display: 'flex',
                       alignItems: 'center',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
                     }}>
                     {file ? file.name : 'Upload Document'}
                   </Button>

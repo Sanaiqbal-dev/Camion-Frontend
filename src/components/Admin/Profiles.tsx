@@ -28,7 +28,7 @@ const Profiles = () => {
 
   const companyProfiles = useGetCompanyProfilesListQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
   // const [selectedFile, setSelectedFile] = useState<any>();
-  const [downloadFile, { isSuccess: isFileDownlaoded }] = useLazyDownloadFileQuery();
+  const [downloadFile] = useLazyDownloadFileQuery();
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
@@ -64,7 +64,7 @@ const Profiles = () => {
         }).unwrap();
         setshowToast(true);
       } catch (e) {
-        setshowToast(true);
+        console.log(e);
       }
     }
   };
@@ -128,7 +128,6 @@ const Profiles = () => {
     }
   };
   const onSelectFile = (file: any) => {
-    // setSelectedFile(file);
     downloadSelectedFile(file);
   };
 
@@ -173,7 +172,7 @@ const Profiles = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isFileDownlaoded || isCoumpanyAccountUpdated ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isCoumpanyAccountUpdated ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
