@@ -9,8 +9,8 @@ interface IConfirmationModal {
 }
 const ConfirmationModal: React.FC<IConfirmationModal> = ({ promptMessage, show, handleClose, performOperation }) => {
   return (
-    <Modal show={show} onHide={handleClose} centered style={{ minWidth: '500px', boxShadow: '0px 20px 50px 0px #dce0f980', border: 'none' }}>
-      <Modal.Header>
+    <Modal show={show} onHide={handleClose} centered style={{ minWidth: '500px', boxShadow: '0px 20px 50px 0px #dce0f980', border: 'none' }} backdrop="static" keyboard={false}>
+      <Modal.Header closeButton>
         <Modal.Title>Confirm The Action</Modal.Title>
       </Modal.Header>
       <Modal.Body className="tw-flex tw-flex-col tw-gap-5">

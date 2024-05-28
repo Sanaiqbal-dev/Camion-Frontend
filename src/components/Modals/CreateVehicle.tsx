@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 // import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
@@ -32,7 +32,7 @@ const schema = z.object({
   numberPlate: z
     .string()
     // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
-		.regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
+    .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
     .min(1, 'Enter valid number plate.'),
   modelYear: z.string().min(1, 'Enter model year.'),
   vehicleType: z.string().min(1, 'Select vehicle type.'),
@@ -55,24 +55,22 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   const [showFileError, setShowFileError] = useState(false);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
+    const formData = new FormData();
+    formData.append('PlateTypeId', data.PlateTypeId.toString());
+    formData.append('Color', data.color);
+    // formData.append('FileName', data.fileName);
+    // formData.append('FilePath', data.filePath);
+    formData.append('ImeiNumber', data.imeiNumber);
+    formData.append('ModelYear', data.modelYear.toString());
+    formData.append('NumberPlate', data.numberPlate);
+    formData.append('RegistrationNumber', data.registrationNumber);
+    formData.append('VehicleTypeId', data.vehicleType.toString());
 
-
-		const formData = new FormData();
-		formData.append('PlateTypeId', data.PlateTypeId.toString());
-		formData.append('Color', data.color);
-		// formData.append('FileName', data.fileName);
-		// formData.append('FilePath', data.filePath);
-		formData.append('ImeiNumber', data.imeiNumber);
-		formData.append('ModelYear', data.modelYear.toString());
-		formData.append('NumberPlate', data.numberPlate);
-		formData.append('RegistrationNumber', data.registrationNumber);
-		formData.append('VehicleTypeId', data.vehicleType.toString());
-
-		if (selectedFile) {
-			formData.append('UploadFile', selectedFile);
-		}
+    if (selectedFile) {
+      formData.append('UploadFile', selectedFile);
+    }
     if (!selectedFile) {
-			setShowFileError(true);
+      setShowFileError(true);
       return;
     }
     onSubmitForm(formData);
@@ -82,7 +80,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Add A New Vehicle</Modal.Title>
+        <Modal.Title>Add a new vehicle</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -113,9 +111,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
               </Form.Group>
             </div>
             <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group
-                className="mb-3"
-                controlId="formBasicEmail">
+              <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Plate Type</Form.Label>
                 <Form.Control
                   style={{ width: '270px', height: '50px' }}
