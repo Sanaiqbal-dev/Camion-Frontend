@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 // import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
+import { useTranslation } from 'react-i18next';
 
 interface IVehicle {
   color: string;
@@ -48,18 +49,15 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
-  // const [uploadFile] = useUploadFileMutation();
+  const { t } = useTranslation(['createVehicle']);
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
-  // const [selectedFilePath, setSelectedFilePath] = useState('');
   const [showFileError, setShowFileError] = useState(false);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
     const formData = new FormData();
     formData.append('PlateTypeId', data.PlateTypeId.toString());
     formData.append('Color', data.color);
-    // formData.append('FileName', data.fileName);
-    // formData.append('FilePath', data.filePath);
     formData.append('ImeiNumber', data.imeiNumber);
     formData.append('ModelYear', data.modelYear.toString());
     formData.append('NumberPlate', data.numberPlate);
@@ -80,22 +78,22 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Add A New Vehicle</Modal.Title>
+        <Modal.Title>{t('addNewVehicle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-col  tw-mb-10">
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Vehicle Type</Form.Label>
+          <div className="tw-flex tw-flex-col tw-mb-10">
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formVehicleType">
+                <Form.Label>{t('vehicleType')}</Form.Label>
                 <Form.Control
                   style={{ width: '270px', height: '50px' }}
                   as="select"
                   isInvalid={!!errors.vehicleType}
                   {...register('vehicleType', {
-                    required: 'Vehicle type is required',
+                    required: t('vehicleTypeRequired'),
                   })}>
-                  <option value="">Select vehicle type</option>
+                  <option value="">{t('selectVehicleType')}</option>
                   {vehicleTypes?.map((vType: IVehicleType, index: number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
@@ -104,24 +102,30 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.vehicleType?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Model Year</Form.Label>
-                <Form.Control type="number" placeholder="Enter model year" style={{ width: '270px', height: '50px' }} {...register('modelYear')} isInvalid={!!errors.modelYear} />
+              <Form.Group className="mb-3" controlId="formModelYear">
+                <Form.Label>{t('modelYear')}</Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder={t('enterModelYear')}
+                  style={{ width: '270px', height: '50px' }}
+                  {...register('modelYear')}
+                  isInvalid={!!errors.modelYear}
+                />
                 <Form.Control.Feedback type="invalid">{errors.modelYear?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Plate Type</Form.Label>
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formPlateType">
+                <Form.Label>{t('plateType')}</Form.Label>
                 <Form.Control
                   style={{ width: '270px', height: '50px' }}
                   as="select"
                   {...register('PlateTypeId', {
-                    required: 'Vehicle type is required',
+                    required: t('plateTypeRequired'),
                   })}
                   isInvalid={!!errors.PlateTypeId}>
-                  <option value="">Select plate type</option>
-                  {plateTypes?.result.map((plateType, index: number) => (
+                  <option value="">{t('selectPlateType')}</option>
+                  {plateTypes?.result.map((plateType, index) => (
                     <option key={'type_' + index} value={plateType.id}>
                       {plateType.name}
                     </option>
@@ -129,11 +133,11 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.PlateTypeId?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Number Plate</Form.Label>
+              <Form.Group className="mb-3" controlId="formNumberPlate">
+                <Form.Label>{t('numberPlate')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter number plate"
+                  placeholder={t('enterNumberPlate')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('numberPlate')}
                   isInvalid={!!errors.numberPlate}
@@ -141,17 +145,17 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                 <Form.Control.Feedback type="invalid">{errors.numberPlate?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Color</Form.Label>
-                <Form.Control type="text" placeholder="Enter color" style={{ width: '270px', height: '50px' }} {...register('color')} isInvalid={!!errors.color} />
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formColor">
+                <Form.Label>{t('color')}</Form.Label>
+                <Form.Control type="text" placeholder={t('enterColor')} style={{ width: '270px', height: '50px' }} {...register('color')} isInvalid={!!errors.color} />
                 <Form.Control.Feedback type="invalid">{errors.color?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Registration Number</Form.Label>
+              <Form.Group className="mb-3" controlId="formRegistrationNumber">
+                <Form.Label>{t('registrationNumber')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter registration number"
+                  placeholder={t('enterRegistrationNumber')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('registrationNumber')}
                   isInvalid={!!errors.registrationNumber}
@@ -160,18 +164,24 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
               </Form.Group>
             </div>
             <div className="tw-gap-5 tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>IMEI Number</Form.Label>
-                <Form.Control type="text" placeholder="Enter IMEI number" style={{ width: '270px', height: '50px' }} {...register('imeiNumber')} isInvalid={!!errors.imeiNumber} />
+              <Form.Group className="mb-3" controlId="formIMEINumber">
+                <Form.Label>{t('imeiNumber')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={t('enterIMEINumber')}
+                  style={{ width: '270px', height: '50px' }}
+                  {...register('imeiNumber')}
+                  isInvalid={!!errors.imeiNumber}
+                />
                 <Form.Control.Feedback type="invalid">{errors.imeiNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-col">
+            <div className="tw-gap-5 tw-flex tw-flex-col">
               <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
-                <Form.Label>Vehicle Registration</Form.Label>
+                <Form.Label>{t('vehicleRegistration')}</Form.Label>
                 <Form.Control
                   type="file"
-                  placeholder="Select File"
+                  placeholder={t('selectFile')}
                   style={{ width: '560px', height: '40px' }}
                   onChange={(e) => {
                     const files = (e.target as HTMLInputElement).files;
@@ -182,11 +192,11 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
                   }}
                 />
               </Form.Group>
-              {showFileError && <div style={{ color: 'red' }}>Vehicle registration is mendatory</div>}
+              {showFileError && <div style={{ color: 'red' }}>{t('vehicleRegistrationMandatory')}</div>}
             </div>
           </div>
           <Button variant="primary" type="submit">
-            Add Vehicle
+            {t('addVehicle')}
           </Button>
         </Form>
       </Modal.Body>

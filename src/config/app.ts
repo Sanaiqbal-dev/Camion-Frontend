@@ -11,7 +11,7 @@ const appConfig = {
 
 export const AVAILABLE_LANGUAGES: ILanguage[] = [
   {
-    code: 'en',
+    code: 'ar',
     dir: 'ltr',
   },
 ];

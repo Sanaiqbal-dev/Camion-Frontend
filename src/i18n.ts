@@ -1,19 +1,16 @@
-import { ILanguage } from "@/interface/common";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import { ILanguage } from '@/interface/common';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import {setLanguage } from "@/state/slice/sessionSlice";
-import HttpBackend from 'i18next-http-backend'
-
-
-
+import { setLanguage } from '@/state/slice/sessionSlice';
+import HttpBackend from 'i18next-http-backend';
 
 i18n
   .use(HttpBackend) // Use HttpBackend for loading translations
   .use(initReactI18next) // Initialize i18next for React
   .init({
-    lng: 'en',
-    fallbackLng: 'en',
+    lng: 'ar',
+    fallbackLng: 'ar',
     keySeparator: false,
     interpolation: {
       escapeValue: false,
@@ -27,7 +24,6 @@ i18n
       useSuspense: false, // Set to true if you want to use React Suspense for loading translations
     },
   });
-
 
 export const useLocale = () => {
   const dispatch = useAppDispatch();

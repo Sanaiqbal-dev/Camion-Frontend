@@ -1,0 +1,25 @@
+{
+  "modalTitle": {
+    "addNew": "Add A New Driver",
+    "update": "Update"
+  },
+  "driverNameLabel": "Driver's Name",
+  "driverIdLabel": "Driver's ID/Iqama",
+  "licenseNumberLabel": "License Number",
+  "dobLabel": "Date of Birth",
+  "nationalityLabel": "Nationality",
+  "selectNationalityPlaceholder": "Select nationality",
+  "mobileNumberLabel": "Mobile Number",
+  "iqamaIssueCountLabel": "Iqama Issue Count",
+  "uploadDocumentLabel": "Upload Document Iqama/ID",
+  "uploadButtonLabel": "Upload Document",
+  "addDriverButton": "Add Driver",
+  "updateDriverButton": "Update Driver",
+  "driverNameErrorMessage": "Driver's Name is required",
+  "driverIdErrorMessage": "Driver's ID/Iqama number is required",
+  "licenseNumberErrorMessage": "License Number is required",
+  "dobErrorMessage": "Date of Birth is required",
+  "nationalityErrorMessage": "Nationality is required",
+  "mobileNumberErrorMessage": "Mobile Number is required",
+  "iqamaIssueCountErrorMessage": "Iqama Issue Count is required"
+}

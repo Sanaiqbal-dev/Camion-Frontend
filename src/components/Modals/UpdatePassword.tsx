@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React from 'react';
 import { IPassword } from '@/interface/common';
+import { useTranslation } from 'react-i18next';
 
 interface UpdatePasswordModalProps {
   show: boolean;
@@ -36,40 +37,24 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
   } = useForm<IPassword>({
     resolver: zodResolver(schema),
   });
+  const { t } = useTranslation(['updatePassword']);
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
     onSubmitForm(data);
-
-    //    try {
-    //      const loginResponse = await login(data).unwrap();
-    //      dispatch(
-    //        setAuthSession({
-    //          username: data.username,
-    //          token: loginResponse.token,
-    //          role: loginResponse.role,
-    //          status: "active",
-    //        })
-    //      );
-    //      // console.log("Recieved Token is :", loginResponse);
-    //      // navigate("/carrier/dashboard");
-    //      navigate("/admin/profiles");
-    //    } catch (error) {
-    //      console.error("Login failed:", error);
-    //    }
   };
 
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Update Password</Modal.Title>
+        <Modal.Title>{t('updatePassword')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
             <Form.Group className="mb-3" controlId="formBasicCurrentPassword">
-              <Form.Label>Current Password</Form.Label>
+              <Form.Label>{t('currentPassword')}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Enter current password"
+                placeholder={t('enterCurrentPassword')}
                 style={{ width: '270px', height: '50px' }}
                 {...register('currentPassword')}
                 isInvalid={!!errors.currentPassword}
@@ -78,10 +63,10 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicNewPassword">
-              <Form.Label>New Password</Form.Label>
+              <Form.Label>{t('newPassword')}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Enter New Password"
+                placeholder={t('enterNewPassword')}
                 style={{ width: '270px', height: '50px' }}
                 {...register('newPassword')}
                 isInvalid={!!errors.newPassword}
@@ -92,10 +77,10 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
+              <Form.Label>{t('confirmPassword')}</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Confirm Password"
+                placeholder={t('enterConfirmPassword')}
                 style={{ width: '270px', height: '50px' }}
                 {...register('confirmPassword')}
                 isInvalid={!!errors.confirmPassword}
@@ -104,7 +89,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            Update Password
+            {t('update')}
           </Button>
         </Form>
       </Modal.Body>

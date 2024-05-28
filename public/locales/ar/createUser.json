@@ -1,0 +1,12 @@
+{
+  "addNewUser": "Add a new user Arabic",
+  "firstName": "First Name",
+  "enterFirstName": "Enter first name",
+  "emailAddress": "Email address",
+  "enterEmailAddress": "Enter email address",
+  "password": "Password",
+  "enterPassword": "Password",
+  "confirmPassword": "Confirm Password",
+  "enterConfirmPassword": "Confirm password",
+  "addNewUserButton": "Add New User"
+}

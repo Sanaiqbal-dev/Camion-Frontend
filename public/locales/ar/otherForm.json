@@ -1,0 +1,15 @@
+{
+  "otherType": "Other Type",
+  "enterOtherShipmentType": "Enter other shipment type",
+  "goodType": "Good Type",
+  "selectGoodType": "Select Good Type",
+  "length": "Length",
+  "width": "Width",
+  "height": "Height",
+  "cm": "Cm",
+  "weightPerItem": "Weight per Item",
+  "kg": "Kg",
+  "cargoItemsStackable": "Cargo items are stackable",
+  "includingADRGoods": "Including ADR goods",
+  "submit": "Submit"
+}

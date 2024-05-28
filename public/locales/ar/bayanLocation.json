@@ -1,0 +1,20 @@
+{
+  "modalTitlePickup": "Pick Up Location",
+  "modalTitleDelivery": "Delivery Location",
+  "addressSearchLabel": "Search your address to auto fill all the details",
+  "startWithStreetNamePlaceholder": "Start with street name",
+  "senderNameLabel": "Sender's Name",
+  "receiverNameLabel": "Receiver's Name",
+  "phoneNumberLabelPickup": "Sender's Phone Number",
+  "phoneNumberLabelDelivery": "Receiver's Phone Number",
+  "enterNamePlaceholder": "Enter name",
+  "enterPhoneNumberPlaceholder": "Enter Phone Number",
+  "buildingNumberLabel": "Building number",
+  "streetNameLabel": "Street name",
+  "selectDistrictPlaceholder": "Select district",
+  "selectCityPlaceholder": "Select city",
+  "zipCodeLabel": "Zip code",
+  "additionalNumberLabel": "Additional number",
+  "unitNumberLabel": "Unit no",
+  "submitButton": "Next"
+}

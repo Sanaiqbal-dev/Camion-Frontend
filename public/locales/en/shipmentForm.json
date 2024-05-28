@@ -1,0 +1,13 @@
+{
+  "goodType": "Good type",
+  "selectGoodType": "Select good type",
+  "quantity": "Quantity",
+  "length": "Length",
+  "width": "Width",
+  "height": "Height",
+  "cm": "Cm",
+  "weightPerItem": "Weight per item",
+  "stackableCargo": "Cargo items are stackable",
+  "includingADR": "Including ADR goods",
+  "submit": "Submit"
+}

@@ -1,0 +1,18 @@
+{
+  "fillInInfoTitle": "Fill in the {{infoType}} information",
+  "buildingNumberLabel": "Building number",
+  "enterBuildingNumber": "12345",
+  "streetNameLabel": "Street name",
+  "enterStreetName": "Any street name",
+  "districtNameLabel": "District name",
+  "selectDistrict": "Select District",
+  "cityNameLabel": "City name",
+  "selectCity": "Select City",
+  "zipCodeLabel": "Zip code",
+  "enterZipCode": "15618",
+  "additionalNumberLabel": "Additional number",
+  "enterAdditionalNumber": "121212",
+  "unitNoLabel": "Unit no",
+  "enterUnitNo": "121212",
+  "nextButton": "Next"
+}

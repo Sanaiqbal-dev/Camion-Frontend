@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Toast } from '../ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 interface IProposalForm {
   Amount: string;
@@ -51,6 +52,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   } = useForm<IProposalForm>({
     resolver: zodResolver(schema),
   });
+  const { t } = useTranslation(['proposalDetailsForm']);
   const userId = useAppSelector((state) => state.session.user.userId);
 
   const [showToast, setShowToast] = useState(false);
@@ -101,24 +103,24 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
       )}
       <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Proposal Details</Modal.Title>
+          <Modal.Title>{t('proposalDetails')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-              <div className="singleLineControl tw-flex  tw-gap-5">
+              <div className="singleLineControl tw-flex tw-gap-5">
                 <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
-                  <Form.Label className="tw-text-sm">Amount</Form.Label>
-                  <Form.Control type="string" className="form-control customInput" {...register('Amount')} isInvalid={!!errors.Amount} placeholder="Enter amount" />
+                  <Form.Label className="tw-text-sm">{t('amount')}</Form.Label>
+                  <Form.Control type="string" className="form-control customInput" {...register('Amount')} isInvalid={!!errors.Amount} placeholder={t('enterAmount')} />
                   <Form.Control.Feedback type="invalid">{errors.Amount?.message}</Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
-                  <Form.Label className="tw-text-sm">Expected Delivery Date</Form.Label>
+                  <Form.Label className="tw-text-sm">{t('expectedDeliveryDate')}</Form.Label>
                   <Form.Control
                     type="date"
                     min={new Date().toISOString().split('T')[0]}
-                    placeholder="Select a date"
+                    placeholder={t('selectDate')}
                     style={{ width: '270px', height: '50px' }}
                     {...register('DelievryDate')}
                     isInvalid={!!errors.DelievryDate}
@@ -127,16 +129,16 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
                 </Form.Group>
               </div>
               <Form.Group controlId="formBasicOtherDetails">
-                <Form.Label className="tw-text-sm">Other Details</Form.Label>
-                <Form.Control as="textarea" rows={5} placeholder="Enter text here" style={{ width: '100%' }} {...register('OtherDetails')} isInvalid={!!errors.OtherDetails} />
+                <Form.Label className="tw-text-sm">{t('otherDetails')}</Form.Label>
+                <Form.Control as="textarea" rows={5} placeholder={t('enterText')} style={{ width: '100%' }} {...register('OtherDetails')} isInvalid={!!errors.OtherDetails} />
                 <Form.Control.Feedback type="invalid">{errors.OtherDetails?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
-                <Form.Label className="tw-text-sm">Upload Document (if any)</Form.Label>
+                <Form.Label className="tw-text-sm">{t('uploadDocument')}</Form.Label>
                 <div className="tw-flex">
                   <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
-                    Upload the document
+                    {t('uploadTheDocument')}
                   </Button>
                   <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
                 </div>
@@ -156,7 +158,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
               </Form.Group>
             </div>
             <Button variant="primary" type="submit" disabled={isSubmittingProposal}>
-              Submit Proposal
+              {t('submitProposal')}
             </Button>
           </Form>
         </Modal.Body>

@@ -65,16 +65,6 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     console.error('Form errors', error);
   };
 
-  // useEffect(() => {
-  //   if (cityData) {
-  //     setCityList(cityData.result);
-  //     console.log(cityData.result);
-  //   }
-  //   if (districtData) {
-  //     setDistrictList(districtData.result);
-  //     console.log(districtData.result);
-  //   }
-  // }, [cityData, districtData]);
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>

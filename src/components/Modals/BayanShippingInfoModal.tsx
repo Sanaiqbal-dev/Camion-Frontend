@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 interface BayanShippingInfoModalProps {
@@ -31,7 +32,7 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
   } = useForm<IShippingInfo>({
     resolver: zodResolver(schema),
   });
-
+  const { t } = useTranslation(['bayanShippingInfo']);
   const shipmentData = useGetShipmentTypesQuery();
   const [shipmentTypes, setShipmentTypes] = useState<IShipmentType[]>();
 
@@ -50,17 +51,17 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Shipping Info</Modal.Title>
+        <Modal.Title>{t('modalTitle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Shipment Type</Form.Label>
+                <Form.Label>{t('shipmentTypeLabel')}</Form.Label>
                 <Form.Control
                   as="select"
-                  placeholder="Select shipment type"
+                  placeholder={t('selectShipmentTypePlaceholder')}
                   style={{
                     width: '560px',
                     height: '59px',
@@ -78,11 +79,11 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Estimated Pickup Date</Form.Label>
+                <Form.Label>{t('estimatedPickupDateLabel')}</Form.Label>
                 <Form.Control
                   type="date"
                   min={new Date().toISOString().split('T')[0]}
-                  placeholder="Select pickup date"
+                  placeholder={t('selectPickupDatePlaceholder')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -96,10 +97,10 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
                 <Form.Control.Feedback type="invalid">{errors.estimatedPickupDate?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Estimated Drop Off Date</Form.Label>
+                <Form.Label>{t('estimatedDropOffDateLabel')}</Form.Label>
                 <Form.Control
                   type="date"
-                  placeholder="Select drop off date"
+                  placeholder={t('selectDropOffDatePlaceholder')}
                   min={new Date().toISOString().split('T')[0]}
                   style={{
                     width: '270px',
@@ -116,10 +117,10 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Fare</Form.Label>
+                <Form.Label>{t('fareLabel')}</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter fare"
+                  placeholder={t('enterFarePlaceholder')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -135,7 +136,7 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
             </div>
           </div>
           <Button variant="primary" type="submit">
-            Next
+            {t('submitButton')}
           </Button>
         </Form>
       </Modal.Body>

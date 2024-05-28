@@ -1,0 +1,21 @@
+{
+  "addNewVehicle": "Add a new vehicle",
+  "vehicleType": "Vehicle Type",
+  "selectVehicleType": "Select vehicle type",
+  "modelYear": "Model Year",
+  "enterModelYear": "Enter model year",
+  "plateType": "Plate Type",
+  "selectPlateType": "Select plate type",
+  "numberPlate": "Number Plate",
+  "enterNumberPlate": "Enter number plate",
+  "color": "Color",
+  "enterColor": "Enter color",
+  "registrationNumber": "Registration Number",
+  "enterRegistrationNumber": "Enter registration number",
+  "imeiNumber": "IMEI Number",
+  "enterIMEINumber": "Enter IMEI number",
+  "vehicleRegistration": "Vehicle Registration",
+  "selectFile": "Select file",
+  "addVehicle": "Add Vehicle",
+  "vehicleRegistrationMandatory": "Vehicle registration is mandatory"
+}

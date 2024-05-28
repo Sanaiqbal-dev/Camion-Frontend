@@ -6,6 +6,7 @@ import { IProposalDetailResponseData, IShipmentDetails } from '@/interface/propo
 import { useEffect } from 'react';
 import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { IGoodType } from '@/interface/goodType';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   quantity: z.coerce.number().int().min(1, 'Enter number of items'),
@@ -33,6 +34,8 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
   } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
+
+  const { t } = useTranslation(['shipmentForm']);
 
   const { data: allGoodTypes } = useGetAllGoodTypesQuery();
 
@@ -68,10 +71,10 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
       <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
           <Form.Group className="mb-3">
-            <Form.Label>Good type</Form.Label>
+            <Form.Label>{t('goodType')}</Form.Label>
             <Form.Control
               as="select"
-              placeholder="Select district"
+              placeholder={t('selectGoodType')}
               style={{
                 width: '100%',
                 height: '59px',
@@ -79,7 +82,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               {...register('goodTypeId', { required: true })}
               isInvalid={!!errors.goodTypeId}
               readOnly>
-              <option value="">Select good type</option>
+              <option value="">{t('selectGoodType')}</option>
               {allGoodTypes &&
                 allGoodTypes.result.map((goodType: IGoodType) => (
                   <option key={goodType.id} value={goodType.id}>
@@ -90,7 +93,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Quantity</Form.Label>
+            <Form.Label>{t('quantity')}</Form.Label>
             <Form.Control
               type="number"
               min={1}
@@ -108,7 +111,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Length"
+              placeholder={t('length')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -119,7 +122,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Width"
+              placeholder={t('width')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -131,7 +134,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Height"
+              placeholder={t('height')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -149,11 +152,11 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
                 backgroundColor: '#E0E0E0',
                 color: '#7A7A7A',
               }}>
-              Cm
+              {t('cm')}
             </div>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Weight per item</Form.Label>
+            <Form.Label>{t('weightPerItem')}</Form.Label>
             <Form.Control
               type="number"
               min={1}
@@ -176,17 +179,17 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               }}>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
-                <label className="form-check-label">Cargo item are stackable</label>
+                <label className="form-check-label">{t('stackableCargo')}</label>
               </div>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
-                <label>Including ADR goods</label>
+                <label>{t('includingADR')}</label>
               </div>
             </div>
           </Form.Group>
 
           <Button className="tw-ml-auto tw-mr-auto" variant="primary" type="submit">
-            Submit
+            {t('submit')}
           </Button>
         </div>
       </Form>
