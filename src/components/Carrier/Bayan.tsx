@@ -52,10 +52,11 @@ const Bayan = () => {
     pageSize: PAGER_SIZE,
   });
 
-  const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
 
   const { currentData: bayans, isSuccess: isByanCreated } = useGetBayansQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
+  const bayanErrorMessage =
+    'Please ensure that your driver and vehicle information is correct to avoid any issues. Accurate details are crucial for a smooth and efficient service.';
 
   function handleChangeValue(direction: number) {
     setCurrentIndex(currentIndex + direction);
@@ -81,10 +82,10 @@ const Bayan = () => {
         return {
           id: item.id,
           tripId: item.tripId,
-					senderName: data.Waybills?.[0]?.SenderName ?? '',
-					senderFullAddress: data.Waybills?.[0]?.SenderFullAddress ?? '',
-					recipientName: data.Waybills?.[0]?.RecipientName ?? '',
-					recipientFullAddress: data.Waybills?.[0]?.RecipientFullAddress ?? '',
+          senderName: data.Waybills?.[0]?.SenderName ?? '',
+          senderFullAddress: data.Waybills?.[0]?.SenderFullAddress ?? '',
+          recipientName: data.Waybills?.[0]?.RecipientName ?? '',
+          recipientFullAddress: data.Waybills?.[0]?.RecipientFullAddress ?? '',
           action: '',
         };
       });
@@ -170,17 +171,37 @@ const Bayan = () => {
     debouncedSearch(event.target.value);
   };
 
+  // useEffect(() => {
+  //   if (sendBayanCreateRequest) {
+  //     try {
+  //       const response = createBayan(bayanObject).unwrap();
+  //       console.log('Create bayan response:', response);
+  //       setSendBayanCreateRequest(false);
+  //     } catch (error) {
+  //       setShowToast(true);
+  //       console.log('Create bayan error:', error);
+  //     }
+  //   }
+  // }, [sendBayanCreateRequest]);
+
   useEffect(() => {
     if (sendBayanCreateRequest) {
-      try {
-        const response = createBayan(bayanObject).unwrap();
-        console.log('Create bayan response:', response);
-        setSendBayanCreateRequest(false);
-      } catch (error) {
-        setToastMessage(error as string);
-        setShowToast(true);
-        console.log('Create bayan error:', error);
-      }
+      const createBayanAsync = async () => {
+        try {
+          const response = await createBayan(bayanObject).unwrap();
+          console.log('Create bayan response:', response);
+          setSendBayanCreateRequest(false);
+
+          // Only close modal if creation is successful
+          setShowAssignVehicleModal(false);
+        } catch (error) {
+          console.error('Create bayan error:', error);
+          setShowToast(true);
+          setSendBayanCreateRequest(false);
+        }
+      };
+
+      createBayanAsync();
     }
   }, [sendBayanCreateRequest]);
 
@@ -209,10 +230,12 @@ const Bayan = () => {
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };
-
+  // {showToast && (
+  //   <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} duration={1000} variant={error ? 'danger' : 'success'} />
+  // )}
   return (
     <>
-      {showToast && <Toast variant={isByanCreated ? 'success' : 'danger'} message={toastMessage} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && <Toast variant={isByanCreated ? 'success' : 'danger'} message={bayanErrorMessage} duration={10000} showToast={showToast} setShowToast={setShowToast} />}
 
       <div className="table-container">
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

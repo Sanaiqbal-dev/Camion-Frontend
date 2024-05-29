@@ -204,6 +204,7 @@ const VehicleManagement = () => {
       <Toast variant={isVehicleAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} duration={4000} showToast={showToast} setShowToast={setShowToast} />
       <div className="table-container">
         <div className="search-and-entries-container">
+          <div></div>
           <div>
             <button
               className="add-item-btn"

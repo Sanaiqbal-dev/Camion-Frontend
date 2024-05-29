@@ -52,10 +52,13 @@ const Orders = () => {
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
+  const [selectedStatusId, setSelectedStatusId] = useState<number>();
   const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
   const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
+
   const onAssignVehicle = (orderItem: IOrderTable) => {
     setShowAssignVehicleForm(true);
     setSelectedOrderItem(orderItem);
@@ -75,12 +78,14 @@ const Orders = () => {
     }
     setShowAssignVehicleForm(false);
   };
+
   const onDelete = (orderId: number) => {
     console.log('Delete is clicked on :', orderId);
     setSelectedOrderId(orderId);
 
     setShowDeleteForm(true);
   };
+
   const onCreateBayan = async (orderItemId: number) => {
     try {
       const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
@@ -90,6 +95,7 @@ const Orders = () => {
       setShowToast(true);
     }
   };
+
   const onPrintBayan = async (bayanId: number) => {
     try {
       const response = await createBayanFromBayanId(bayanId).unwrap();
@@ -99,17 +105,13 @@ const Orders = () => {
       setShowToast(true);
     }
   };
+
   const onUpdateStatus = async (id: number, statusId: number) => {
-    try {
-      const response = await updateOrderStatus({
-        orderId: id,
-        orderStatusId: statusId,
-      });
-      console.log('status update:', response);
-    } catch (error) {
-      console.log('status update error: ', error);
-    }
+    setSelectedOrderId(id);
+    setSelectedStatusId(statusId);
+    setShowStatusConfirmationModal(true);
   };
+
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onAssignVehicle,
@@ -119,6 +121,7 @@ const Orders = () => {
     onUpdateStatus,
     orderStatuses,
   });
+
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);
@@ -145,6 +148,22 @@ const Orders = () => {
       setShowToast(true);
     }
   };
+
+  const UpdateStatus = async () => {
+    setShowStatusConfirmationModal(false);
+    try {
+      const response = await updateOrderStatus({
+        orderId: selectedOrderId,
+        orderStatusId: selectedStatusId,
+      }).unwrap();
+      console.log('status update:', response);
+      setShowToast(true);
+    } catch (error) {
+      console.log('status update error: ', error);
+      setShowToast(true);
+    }
+  };
+
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
@@ -178,9 +197,11 @@ const Orders = () => {
   const debouncedSearch = debounce((search: string) => {
     setSearchTerm(() => search);
   }, 1000);
+
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(event.target.value);
   };
+
   useEffect(() => {
     setPager({ page: 1, pageSize: entriesValue });
   }, [entriesValue]);
@@ -242,12 +263,23 @@ const Orders = () => {
             <img src={NextIcon} />
           </Button>
         </div>
-        <AssignVehicle show={showAssignVehicleForm} handleClose={() => setShowAssignVehicleForm(false)} assignedVehicle={selectedOrderItem?.vehicleId} onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)} />
+        <AssignVehicle
+          show={showAssignVehicleForm}
+          handleClose={() => setShowAssignVehicleForm(false)}
+          assignedVehicle={selectedOrderItem?.vehicleId}
+          onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
+        />
         <ConfirmationModal
           promptMessage={'Are you sure, you want to delete this order?'}
           show={showDeleteForm}
           handleClose={() => setShowDeleteForm(false)}
           performOperation={() => DeleteOrder()}
+        />
+        <ConfirmationModal
+          promptMessage={'Are you sure, you want to update the status?'}
+          show={showStatusConfirmationModal}
+          handleClose={() => setShowStatusConfirmationModal(false)}
+          performOperation={() => UpdateStatus()}
         />
       </div>
     </>
