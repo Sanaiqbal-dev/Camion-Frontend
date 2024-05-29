@@ -17,7 +17,7 @@ import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
 
 const UserManagementShipper = () => {
-        const { t } = useTranslation(['userManagementShipper']);
+  const { t } = useTranslation(['userManagementShipper']);
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -144,7 +144,14 @@ const UserManagementShipper = () => {
   });
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? t('successToast') : t('dangerToast')} />}
+      {showToast && (
+        <Toast
+          showToast={showToast}
+          setShowToast={setShowToast}
+          variant={isUserCreated || isUserDeleted || isUserUpdated ? t('successToast') : t('dangerToast')}
+          message={requestFailedMessage}
+        />
+      )}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
           {t('createNewUser')}

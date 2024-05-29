@@ -13,7 +13,7 @@ interface shipmentDetailsProps {
 }
 
 const ShippementDetails = (props: shipmentDetailsProps) => {
-    const { t } = useTranslation(['shipmentDetails']);
+  const { t } = useTranslation(['shipmentDetails']);
 
   const { orderNumber, trackingId, amount, origin, destination, dimension, weight, status } = props;
   return (

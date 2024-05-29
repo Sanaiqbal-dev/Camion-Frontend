@@ -98,7 +98,6 @@ const Bayan = () => {
   }, [bayans]);
 
   const SubmitPickUpLocationInfo = (locationData: ILocation) => {
-
     setBayanObject((prevItem) => ({
       ...prevItem,
       senderName: locationData.name,
@@ -122,7 +121,6 @@ const Bayan = () => {
   };
 
   const SubmitProductTypeInfo = (productData: IProductType) => {
-
     setBayanObject((prevItem) => ({
       ...prevItem,
       goodTypeId: productData.productTypeId,

@@ -121,7 +121,6 @@ export const router = createBrowserRouter([
             path: 'proposals',
             element: <Proposals />,
           },
-          
         ],
       },
     ],

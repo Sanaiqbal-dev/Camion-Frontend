@@ -16,7 +16,7 @@ import { useAppSelector } from '@/state';
 import { useTranslation } from 'react-i18next';
 
 const ShipperSider = () => {
-    const { t } = useTranslation(['shipperSider']);
+  const { t } = useTranslation(['shipperSider']);
 
   const dispatch = useDispatch();
   const session = useAppSelector((state) => state.session);

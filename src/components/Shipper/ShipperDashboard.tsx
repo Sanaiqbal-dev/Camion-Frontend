@@ -8,7 +8,7 @@ import { IProposalQuotation } from '@/interface/proposalQuotation';
 import { useTranslation } from 'react-i18next';
 
 const ShipperDashboard = () => {
-    const { t } = useTranslation(['shipperDashboard']);
+  const { t } = useTranslation(['shipperDashboard']);
 
   const shipperDashboardData = useGetShipperDashboardOrderListQuery('');
   const proposalQuotation = useGetProposalQuotationsQuery('');

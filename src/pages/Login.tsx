@@ -103,9 +103,7 @@ const Login = () => {
 
                   <div className="mt-4">
                     <h1 className="h1 mb-3 main_heading">{t('loginTitle')}</h1>
-                    <p className="sub_heading mb-4">
-                      {t('loginSubtitle')}
-                    </p>
+                    <p className="sub_heading mb-4">{t('loginSubtitle')}</p>
                   </div>
                   <div className="form-container">
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>

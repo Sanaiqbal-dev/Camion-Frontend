@@ -12,7 +12,7 @@ import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
 
 const Proposals = () => {
-    const { t } = useTranslation(['proposal']);
+  const { t } = useTranslation(['proposal']);
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,

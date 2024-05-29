@@ -12,7 +12,7 @@ interface IShipperTracking {
 }
 
 const ShipperTracking: React.FC<IShipperTracking> = () => {
-      const { t } = useTranslation(['shipperTracking']);
+  const { t } = useTranslation(['shipperTracking']);
 
   const [mapApiKey, setMapApiKey] = useState('');
   const location = useLocation();
@@ -114,40 +114,42 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
           <div>{orderObject ? orderObject.estimatedDeliveryTime : '-'}</div>
         </div>
       </div>
-      {mapApiKey && <APIProvider apiKey={mapApiKey}>
-        <Map
-          defaultCenter={position}
-          defaultZoom={13}
-          mapId="9b0a2c44ded1af0e"
-          style={{
-            width: '100vw',
-            height: '100vh',
-            zIndex: '0',
-            position: 'relative',
-          }}>
-          {markers.map((item) => (
-            <MapMarker
-              key={item.id} // Assuming each marker has a unique id
-              lat={item.latitude}
-              lng={item.longitude}
-              shipperTrackingInfo={
-                <div
-                  style={{
-                    height: '40px',
-                    width: '140px',
-                    backgroundColor: '#FFF',
-                    borderRadius: '30px',
-                    justifyContent: 'center',
-                    padding: '10px',
-                  }}>
-                  {item.driver}
-                  <br /> {item.numberPlate}
-                </div>
-              }
-            />
-          ))}
-        </Map>
-      </APIProvider>}
+      {mapApiKey && (
+        <APIProvider apiKey={mapApiKey}>
+          <Map
+            defaultCenter={position}
+            defaultZoom={13}
+            mapId="9b0a2c44ded1af0e"
+            style={{
+              width: '100vw',
+              height: '100vh',
+              zIndex: '0',
+              position: 'relative',
+            }}>
+            {markers.map((item) => (
+              <MapMarker
+                key={item.id} // Assuming each marker has a unique id
+                lat={item.latitude}
+                lng={item.longitude}
+                shipperTrackingInfo={
+                  <div
+                    style={{
+                      height: '40px',
+                      width: '140px',
+                      backgroundColor: '#FFF',
+                      borderRadius: '30px',
+                      justifyContent: 'center',
+                      padding: '10px',
+                    }}>
+                    {item.driver}
+                    <br /> {item.numberPlate}
+                  </div>
+                }
+              />
+            ))}
+          </Map>
+        </APIProvider>
+      )}
     </div>
   );
 };

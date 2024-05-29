@@ -216,7 +216,7 @@ const ShipperRequests = () => {
       setShowToast(true);
       setRequestFailedMessage('');
     } catch (e: any) {
-      setRequestFailedMessage(isEditProposal? e.data?.message : e.error);
+      setRequestFailedMessage(isEditProposal ? e.data?.message : e.error);
       isEditProposal && setIsEditProposal(false);
       setShowToast(true);
     }
@@ -245,7 +245,12 @@ const ShipperRequests = () => {
   return (
     <div className="table-container">
       {showToast && (
-        <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? t('successToast') : t('dangerToast')} />
+        <Toast
+          showToast={showToast}
+          setShowToast={setShowToast}
+          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? t('successToast') : t('dangerToast')}
+          message={requestFailedMessage}
+        />
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
