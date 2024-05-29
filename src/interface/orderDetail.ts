@@ -69,6 +69,7 @@ export interface IOrderResponseData {
   dimentions: string;
   origin: string;
   status: string;
+	statusId: number;
   trackingId: string;
   vehicleId: number;
   type: string;

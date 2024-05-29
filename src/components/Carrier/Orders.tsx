@@ -158,6 +158,7 @@ const Orders = () => {
             dimentions: currentOrderObject.dimentions ? currentOrderObject.dimentions : '-',
             ETA: currentOrderObject.estimatedDeliveryTime,
             status: currentOrderObject.status,
+						statusId:currentOrderObject.statusId,
             vehicleId: currentOrderObject.vehicleId,
             bayanId: currentOrderObject.bayanId,
             action: '',

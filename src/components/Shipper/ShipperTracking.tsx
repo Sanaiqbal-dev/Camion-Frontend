@@ -11,7 +11,7 @@ interface IShipperTracking {
 }
 
 const ShipperTracking: React.FC<IShipperTracking> = () => {
-  const [mapApiKey, setMapApiKey] = useState('');
+  const [mapApiKey, setMapApiKey] = useState(undefined);
   const location = useLocation();
   const { orderObject } = location.state || {};
   console.log(orderObject, location);
@@ -111,7 +111,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
           <div>{orderObject ? orderObject.estimatedDeliveryTime : '-'}</div>
         </div>
       </div>
-      <APIProvider apiKey={mapApiKey}>
+      {mapApiKey && <APIProvider apiKey={mapApiKey}>
         <Map
           defaultCenter={position}
           defaultZoom={13}
@@ -143,7 +143,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             />
           ))}
         </Map>
-      </APIProvider>
+      </APIProvider>}
     </div>
   );
 };
