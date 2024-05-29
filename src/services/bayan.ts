@@ -6,7 +6,7 @@ import { TripData } from '@/interface/bayan';
 
 export const bayanApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createBayan: builder.mutation<IAPIResponse<any>, Partial<ICreateBayan>>({
       query: (body) => ({
         url: 'api/Bayan/CreateBayaan',
@@ -15,12 +15,12 @@ export const bayanApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Proposal', 'Order'],
     }),
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		getBayans: builder.query<IAPIResponse<TripData[]>, any>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getBayans: builder.query<IAPIResponse<TripData[]>, any>({
       query: (queryParams) => `api/Bayan/GetBayans${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Bayan'],
     }),
-		getPrintBayan: builder.mutation<IAPIResponse<IFile>, number>({
+    getPrintBayan: builder.mutation<IAPIResponse<IFile>, number>({
       query: (tripId) => ({
         url: `/api/Bayan/PrintBayaanBill?tripId=${tripId}`,
         method: 'GET',

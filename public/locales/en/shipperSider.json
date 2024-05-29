@@ -1,0 +1,9 @@
+{
+    "dashboard": "Dashboard",
+    "orderManagement": "Order Management",
+    "orders": "Orders",
+    "requests": "Requests",
+    "proposals": "Proposals",
+    "settings": "Settings",
+    "logout": "Logout"
+}

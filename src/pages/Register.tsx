@@ -89,9 +89,9 @@ const Register = () => {
     };
   }, [timeoutRef]);
 
-   const onReCAPTCHAChange = (token: string | null) => {
-     recaptchaResponseRef.current = token;
-   };
+  const onReCAPTCHAChange = (token: string | null) => {
+    recaptchaResponseRef.current = token;
+  };
 
   return (
     <div className="main-container">

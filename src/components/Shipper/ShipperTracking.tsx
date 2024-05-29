@@ -5,13 +5,16 @@ import { IOrderDetail } from '@/interface/orderDetail';
 import { useLocation } from 'react-router-dom';
 import { useGetShipperOrderTrackingsQuery } from '@/services/tracking';
 import { IMarkers } from '@/interface/common';
+import { useTranslation } from 'react-i18next';
 
 interface IShipperTracking {
   orderObject?: IOrderDetail;
 }
 
 const ShipperTracking: React.FC<IShipperTracking> = () => {
-  const [mapApiKey, setMapApiKey] = useState(undefined);
+      const { t } = useTranslation(['shipperTracking']);
+
+  const [mapApiKey, setMapApiKey] = useState('');
   const location = useLocation();
   const { orderObject } = location.state || {};
   console.log(orderObject, location);
@@ -53,7 +56,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             textAlign: 'left',
             color: '#0060B8',
           }}>
-          Order Details
+          {t('orderDetails')}
         </span>
         <div
           style={{
@@ -62,7 +65,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             fontSize: '16px',
             marginTop: '20px',
           }}>
-          <div style={{ fontWeight: '600' }}>Order number</div>
+          <div style={{ fontWeight: '600' }}>{t('orderNumber')}</div>
           <div>{orderObject && orderObject.id}</div>
         </div>
         <div
@@ -71,7 +74,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             justifyContent: 'space-between',
             fontSize: '16px',
           }}>
-          <div style={{ fontWeight: '600' }}>Origin:</div>
+          <div style={{ fontWeight: '600' }}>{t('origin')}:</div>
           <div>{orderObject && orderObject.origin}</div>
         </div>
         <div
@@ -80,7 +83,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             justifyContent: 'space-between',
             fontSize: '16px',
           }}>
-          <div style={{ fontWeight: '600' }}>Distination:</div>
+          <div style={{ fontWeight: '600' }}>{t('destination')}:</div>
           <div>{orderObject && orderObject.destination}</div>
         </div>
         <div
@@ -89,7 +92,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             justifyContent: 'space-between',
             fontSize: '16px',
           }}>
-          <div style={{ fontWeight: '600' }}>Weight</div>
+          <div style={{ fontWeight: '600' }}>{t('weight')}</div>
           <div>{orderObject && orderObject.weight}</div>
         </div>
         <div
@@ -98,8 +101,8 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             justifyContent: 'space-between',
             fontSize: '16px',
           }}>
-          <div style={{ fontWeight: '600' }}>Dimensions:</div>
-          <div>{orderObject && orderObject.dimentions}</div>
+          <div style={{ fontWeight: '600' }}>{t('dimensions')}:</div>
+          <div>{orderObject && orderObject.dimensions}</div>
         </div>
         <div
           style={{
@@ -107,7 +110,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
             justifyContent: 'space-between',
             fontSize: '16px',
           }}>
-          <div style={{ fontWeight: '600' }}>Estimated Delivery Date:</div>
+          <div style={{ fontWeight: '600' }}>{t('estimatedDeliveryDate')}:</div>
           <div>{orderObject ? orderObject.estimatedDeliveryTime : '-'}</div>
         </div>
       </div>
@@ -124,6 +127,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
           }}>
           {markers.map((item) => (
             <MapMarker
+              key={item.id} // Assuming each marker has a unique id
               lat={item.latitude}
               lng={item.longitude}
               shipperTrackingInfo={

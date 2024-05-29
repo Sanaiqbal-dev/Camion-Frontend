@@ -1,0 +1,17 @@
+{
+    "totalOrders": "Total Orders",
+    "orderIncrease": "Order Increase",
+    "activeOrders": "Active Orders",
+    "shipped": "Shipped",
+    "ordersThisMonth": "Orders this month",
+    "orderDecrease": "Order decrease",
+    "pending": "Pending",
+    "assigned": "Assigned",
+    "unassigned": "Unassigned",
+    "inProgress": "In progress",
+    "dispatched": "Dispatched",
+    "atPickUp": "At pick up",
+    "inTransit": "At transit",
+    "delivered": "Delivered",
+    "shipmentDetails": "Shipment details"
+}

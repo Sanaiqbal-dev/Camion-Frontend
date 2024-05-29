@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
 import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
+  const { t } = useTranslation(['proposalColumns', 'common']);
+
   return (
     <div style={{ marginBottom: '10px', marginTop: '20px' }}>
       <div
@@ -33,7 +36,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
               alignItems: 'center',
               marginLeft: '10px',
             }}>
-            <img src={CompanyLogo} />
+            <img src={CompanyLogo} alt="Company Logo" />
           </div>
           <div
             style={{
@@ -66,7 +69,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Tracking ID:
+              {t('trackingId')}
             </div>
             <div
               style={{
@@ -89,7 +92,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Status
+              {t('common:statusHeader')}
             </div>
             <div
               style={{
@@ -112,7 +115,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Origin
+              {t('common:originHeader')}
             </div>
             <div
               style={{
@@ -135,7 +138,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Destination
+              {t('common:destinationHeader')}
             </div>
             <div
               style={{
@@ -158,7 +161,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Weight
+              {t('common:weightHeader')}
             </div>
             <div
               style={{
@@ -181,7 +184,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Dimension
+              {t('common:dimensionHeader')}
             </div>
             <div
               style={{
@@ -206,19 +209,19 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                   fontWeight: '600px',
                 }}
                 onClick={() => onClick(quotation, true)}>
-                Accept
+                {t('accept')}
               </button>
               <button
                 style={{
                   height: '30px',
                   width: '82px',
                   backgroundColor: '#EB575733',
-                  color: '##EB5757',
+                  color: '#EB5757',
                   borderRadius: '5px',
                   fontWeight: '600px',
                 }}
                 onClick={() => onClick(quotation, false)}>
-                Reject
+                {t('reject')}
               </button>
             </div>
           </div>

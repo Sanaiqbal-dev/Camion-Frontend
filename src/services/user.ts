@@ -7,7 +7,7 @@ import { IGetProfileResponse } from '@/interface/aspNetUser';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-		getProfile: builder.query<IGetProfileResponse, void>({
+    getProfile: builder.query<IGetProfileResponse, void>({
       query: () => '/Account/GetProfile',
     }),
     getCompanyUsers: builder.query<IAPIResponse<ISubUser>, any>({
@@ -45,4 +45,5 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation, useGetProfileQuery } = proposalApi;
+export const { useUpdateSubUserMutation, useGetCompanyUsersQuery, useCreateSubUserMutation, useUpdateSubUserPasswordMutation, useDeleteSubUserMutation, useGetProfileQuery } =
+  proposalApi;
