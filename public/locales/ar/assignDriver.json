@@ -1,7 +1,7 @@
 {
-  "modalTitle": "Assign Driver",
-  "driversLabel": "Drivers",
-  "selectDriverPlaceholder": "Select a driver",
-  "assignDriverButton": "Assign Driver",
-  "driverRequiredMessage": "Driver is required"
+  "modalTitle": "تعيين سائق",  
+  "driversLabel": "السائقين",  
+  "selectDriverPlaceholder": "اختر سائقًا",  
+  "assignDriverButton": "تعيين سائق",  
+  "driverRequiredMessage": "السائق مطلوب"
 }

@@ -1,18 +1,18 @@
 {
-  "fillInInfoTitle": "Fill in the {{infoType}} information",
-  "buildingNumberLabel": "Building number",
+  "fillInInfoTitle": "املأ معلومات {{infoType}}",
+  "buildingNumberLabel": "رقم المبنى",
   "enterBuildingNumber": "12345",
-  "streetNameLabel": "Street name",
-  "enterStreetName": "Any street name",
-  "districtNameLabel": "District name",
-  "selectDistrict": "Select District",
-  "cityNameLabel": "City name",
-  "selectCity": "Select City",
-  "zipCodeLabel": "Zip code",
+  "streetNameLabel": "اسم الشارع",
+  "enterStreetName": "أي اسم شارع",
+  "districtNameLabel": "اسم الحي",
+  "selectDistrict": "اختر الحي",
+  "cityNameLabel": "اسم المدينة",
+  "selectCity": "اختر المدينة",
+  "zipCodeLabel": "الرمز البريدي",
   "enterZipCode": "15618",
-  "additionalNumberLabel": "Additional number",
+  "additionalNumberLabel": "رقم إضافي",
   "enterAdditionalNumber": "121212",
-  "unitNoLabel": "Unit no",
+  "unitNoLabel": "رقم الوحدة",
   "enterUnitNo": "121212",
-  "nextButton": "Next"
-}
+  "nextButton": "التالي"
+  }

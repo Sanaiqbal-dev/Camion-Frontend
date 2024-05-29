@@ -1,11 +1,11 @@
 {
-  "loginTitle": "Login your account",
-  "loginSubtitle": "Log in to a serviced account and create and manage your shipments the way that suits you best",
-  "emailLabel": "Email",
-  "emailPlaceholder": "Enter email address",
-  "passwordLabel": "Password",
-  "passwordPlaceholder": "Enter password",
-  "forgotPassword": "Forgot your Password?",
-  "noAccount": "Don’t have an account?",
-  "registerAccount": "Register your account"
-}
+  "loginTitle": "تسجيل الدخول إلى حسابك",  
+  "loginSubtitle": "سجّل الدخول إلى حساب مخدوم وقم بإنشاء وإدارة شحناتك بالطريقة التي تناسبك على أفضل وجه", 
+  "emailLabel": "البريد الإلكتروني",  
+  "emailPlaceholder": "أدخل البريد الإلكتروني",  
+  "passwordLabel": "كلمة المرور",  
+  "passwordPlaceholder": "أدخل كلمة المرور",  
+  "forgotPassword": "نسيت كلمة المرور؟",  
+  "noAccount": "ليس لديك حساب؟",  
+  "registerAccount": "سجل حسابك"  
+  }

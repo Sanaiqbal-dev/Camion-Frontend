@@ -1,13 +1,13 @@
 {
-  "modalTitleUpdate": "Update Profile",
-  "modalTitleAdd": "Add Profile",
-  "firstNameLabel": "First Name",
-  "lastNameLabel": "Last Name",
-  "emailLabel": "Email Address",
-  "phoneNumberLabel": "Phone Number",
-  "passwordLabel": "Password",
-  "confirmPasswordLabel": "Confirm Password",
-  "companyNameLabel": "Company Name",
-  "moiNumberLabel": "MOI Number",
-  "updateProfileButton": "Update Profile"
+  "modalTitleUpdate": "تحديث الملف",
+  "modalTitleAdd": "اضافة ملف",
+  "firstNameLabel": "الإسم الأول",
+  "lastNameLabel": "اللقب",
+  "emailLabel": "البريد الإلكتروني",
+  "phoneNumberLabel": "رقم الجوال",
+  "passwordLabel": "كلمة المرور",
+  "confirmPasswordLabel": "تأكيد كلمة المرور",
+  "companyNameLabel": "اسم الشركة",
+  "moiNumberLabel": "رقم وزارة الداخلية",
+  "updateProfileButton": "تحديث الملف"
 }

@@ -1,6 +1,6 @@
 {
-  "modal.confirmAction.title": "Confirm The Action",
-  "modal.confirmAction.message": "Are you sure you want to perform this action?",
-  "modal.confirmAction.okButton": "Ok",
-  "modal.confirmAction.cancelButton": "Cancel"
-}
+  "modal.confirmAction.title": "تأكيد الإجراء",
+  "modal.confirmAction.message": "هل أنت متأكد من أنك تريد تنفيذ هذا الإجراء؟",
+  "modal.confirmAction.okButton": "موافق",
+  "modal.confirmAction.cancelButton": "إلغاء"
+  }

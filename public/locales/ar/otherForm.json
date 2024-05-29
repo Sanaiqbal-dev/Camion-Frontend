@@ -1,15 +1,15 @@
 {
-  "otherType": "Other Type",
-  "enterOtherShipmentType": "Enter other shipment type",
-  "goodType": "Good Type",
-  "selectGoodType": "Select Good Type",
-  "length": "Length",
-  "width": "Width",
-  "height": "Height",
-  "cm": "Cm",
-  "weightPerItem": "Weight per Item",
-  "kg": "Kg",
-  "cargoItemsStackable": "Cargo items are stackable",
-  "includingADRGoods": "Including ADR goods",
-  "submit": "Submit"
-}
+  "otherType": "نوع آخر",
+  "enterOtherShipmentType": "أدخل نوع شحنة آخر",
+  "goodType": "نوع البضاعة",
+  "selectGoodType": "اختر نوع البضاعة",
+  "length": "الطول",
+  "width": "العرض",
+  "height": "الارتفاع",
+  "cm": "سم",
+  "weightPerItem": "الوزن لكل قطعة",
+  "kg": "كجم",
+  "cargoItemsStackable": "يمكن تكديس عناصر الشحنة",
+  "includingADRGoods": "بما في ذلك بضائع ADR",
+  "submit": "إرسال"
+  }

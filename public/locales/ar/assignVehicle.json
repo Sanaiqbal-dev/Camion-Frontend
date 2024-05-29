@@ -1,7 +1,7 @@
 {
-  "modalTitle": "Assign Vehicle",
-  "vehiclesLabel": "Vehicles",
-  "selectVehiclePlaceholder": "Select a Vehicle",
-  "assignVehicleButton": "Assign Vehicle",
-  "vehicleTypeRequiredMessage": "Vehicle type is required"
+  "modalTitle": "تعيين مركبة", 
+  "vehiclesLabel": "المركبات",  
+  "selectVehiclePlaceholder": "اختر مركبة", 
+  "assignVehicleButton": "تعيين مركبة",  
+  "vehicleTypeRequiredMessage": "نوع المركبة مطلوب"  
 }

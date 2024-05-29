@@ -1,12 +1,12 @@
 {
-  "proposalDetails": "Proposal Details Arabic",
-  "amount": "Amount",
-  "enterAmount": "Enter amount",
-  "expectedDeliveryDate": "Expected Delivery Date",
-  "selectDate": "Select a date",
-  "otherDetails": "Other Details",
-  "enterText": "Enter text here",
-  "uploadDocument": "Upload Document (if any)",
-  "uploadTheDocument": "Upload the document",
-  "submitProposal": "Submit Proposal"
-}
+  "proposalDetails": "تفاصيل العرض",
+  "amount": "المبلغ",
+  "enterAmount": "أدخل المبلغ",
+  "expectedDeliveryDate": "تاريخ التسليم المتوقع",
+  "selectDate": "اختر تاريخًا",
+  "otherDetails": "تفاصيل أخرى",
+  "enterText": "أدخل النص هنا",
+  "uploadDocument": "تحميل وثيقة (إن وجدت)",
+  "uploadTheDocument": "تحميل الوثيقة",
+  "submitProposal": "إرسال العرض"
+  }

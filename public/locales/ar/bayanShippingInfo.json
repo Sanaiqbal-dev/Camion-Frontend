@@ -1,12 +1,12 @@
 {
-  "modalTitle": "Shipping Info",
-  "shipmentTypeLabel": "Shipment Type",
-  "selectShipmentTypePlaceholder": "Select shipment type",
-  "estimatedPickupDateLabel": "Estimated Pickup Date",
-  "selectPickupDatePlaceholder": "Select pickup date",
-  "estimatedDropOffDateLabel": "Estimated Drop Off Date",
-  "selectDropOffDatePlaceholder": "Select drop off date",
-  "fareLabel": "Fare",
-  "enterFarePlaceholder": "Enter fare",
-  "submitButton": "Next"
-}
+  "modalTitle": "معلومات الشحن",
+  "shipmentTypeLabel": "نوع الشحنة",
+  "selectShipmentTypePlaceholder": "اختر نوع الشحنة",
+  "estimatedPickupDateLabel": "تاريخ الاستلام التقديري",
+  "selectPickupDatePlaceholder": "اختر تاريخ الاستلام",
+  "estimatedDropOffDateLabel": "تاريخ التسليم التقديري",
+  "selectDropOffDatePlaceholder": "اختر تاريخ التسليم",
+  "fareLabel": "الأجرة",
+  "enterFarePlaceholder": "أدخل الأجرة",
+  "submitButton": "التالي"
+  }
