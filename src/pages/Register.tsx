@@ -223,7 +223,7 @@ const Register = () => {
                       </div>
                       <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={onReCAPTCHAChange} />
                       {recaptchaError && <span className="tw-text-red-700">{recaptchaError}</span>}
-                      {isLoading && <p>Loading ...</p>}
+                      {/* {isLoading && <p>Loading ...</p>} */}
                       <div className="register-container">
                         <div>
                           <button type="submit" className="btn customRegisterButton">

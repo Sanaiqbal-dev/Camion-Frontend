@@ -18,8 +18,11 @@ import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
 import ShipmentDetail from '../Modals/ShipmentDetail';
+import { useTranslation } from 'react-i18next';
 
 const ShipperRequests = () => {
+  const { t } = useTranslation(['shipperRequests']);
+
   const userData = useAppSelector((state) => state.session);
   const [sendProposalRequest, setSendProposalRequest] = useState(false);
 
@@ -42,7 +45,7 @@ const ShipperRequests = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const [isEditProposal, setIsEditProposal] = useState(false);
-  const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
+  const [isDeleteProposal, setIsDeleteProposal] = useState(false);
 
   const [deleteItemId, setDeleteItemId] = useState<number>();
   const { data: currentData, error } = useGetProposalsQuery({
@@ -242,24 +245,19 @@ const ShipperRequests = () => {
   return (
     <div className="table-container">
       {showToast && (
-        <Toast
-          showToast={showToast}
-          setShowToast={setShowToast}
-          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'}
-          message={requestFailedMessage}
-        />
+        <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? t('successToast') : t('dangerToast')} />
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
-            Create new Request
+            {t('createNewRequest')}
           </button>
         </div>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('showLabel')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -275,7 +273,7 @@ const ShipperRequests = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entriesLabel')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -284,7 +282,7 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -334,18 +332,12 @@ const ShipperRequests = () => {
         handleFormDataSubmission={setShipmentDetails}
       />
       <ConfirmationModal
-        promptMessage={
-          isEditProposal
-            ? 'Are you sure, you want to update this request?'
-            : isDeletePropoasl
-              ? 'Are you sure, you want to delete this request?'
-              : 'Are you sure, you want to create new request?'
-        }
+        promptMessage={isEditProposal ? t('updateRequestConfirmation') : isDeleteProposal ? t('deleteRequestConfirmation') : t('createNewRequestConfirmation')}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {
           setShowConfirmationModal(false);
-          isDeletePropoasl ? DeleteProposal() : setSendProposalRequest(true);
+          isDeleteProposal ? DeleteProposal() : setSendProposalRequest(true);
         }}
       />
     </div>

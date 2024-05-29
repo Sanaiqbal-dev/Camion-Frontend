@@ -67,6 +67,7 @@ export type IOrderTable = {
   dimentions: string;
   ETA: string;
   status: string;
+  statusId: number;
   vehicleId: number;
   bayanId: number;
   action: string;

@@ -15,8 +15,11 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const ShipperOrders = () => {
+  const { t } = useTranslation(['shipperOrder']);
+
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -147,11 +150,11 @@ const ShipperOrders = () => {
   }, [currentData]);
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isOrderDeleted ? t('successToast') : t('dangerToast')} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('showLabel')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -167,7 +170,7 @@ const ShipperOrders = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entriesLabel')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -176,7 +179,7 @@ const ShipperOrders = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -191,7 +194,7 @@ const ShipperOrders = () => {
         </Button>
       </div>
       <ConfirmationModal
-        promptMessage={isDeleteOrder ? 'Are you sure, you want to delete this order?' : ''}
+        promptMessage={isDeleteOrder ? t('confirmationMessage') : ''}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {

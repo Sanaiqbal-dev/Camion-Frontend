@@ -117,14 +117,20 @@ $grid-breakpoints: (
 
 .customLoginButton:hover,
 .customRegisterButton:hover {
-  background-color: #00529c;
-  color: white;
+  background-color: #00529c !important;
+  color: white !important;
 }
 
 .customLoginButton:active,
 .customRegisterButton:active {
-  background-color: #00529c;
-  color: white;
+  background-color: #00529c !important;
+  color: white !important;
+}
+
+.customLoginButton:disabled,
+.customRegisterButton:disabled {
+  background-color: #00529c !important;
+  color: white !important;
 }
 .btn-container > div {
   display: flex;

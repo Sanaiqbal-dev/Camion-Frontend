@@ -5,8 +5,11 @@ import { useGetShipperDashboardOrderListQuery } from '@/services/dashboard';
 import { useGetProposalQuotationsQuery } from '@/services/ProposalQuotation';
 import ShippementDetails from './ShippementDetails';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
+import { useTranslation } from 'react-i18next';
 
 const ShipperDashboard = () => {
+    const { t } = useTranslation(['shipperDashboard']);
+
   const shipperDashboardData = useGetShipperDashboardOrderListQuery('');
   const proposalQuotation = useGetProposalQuotationsQuery('');
   const ordersCount = shipperDashboardData.currentData?.result;
@@ -18,9 +21,9 @@ const ShipperDashboard = () => {
       <div className="row main-stats">
         <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
           <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
-          <span className="stats-label">Total Orders</span>
+          <span className="stats-label">{t('totalOrders')}</span>
           <div style={{ display: 'flex' }}>
-            Order Increase
+            {t('orderIncrease')}
             <span
               style={{
                 color: '#0ebc93',
@@ -35,10 +38,10 @@ const ShipperDashboard = () => {
 
         <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
           <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
-          <span className="stats-label">Active Orders</span>
+          <span className="stats-label">{t('activeOrders')}</span>
 
           <div style={{ display: 'flex' }}>
-            Order Increase
+            {t('orderIncrease')}
             <span
               style={{
                 color: '#0ebc93',
@@ -50,16 +53,17 @@ const ShipperDashboard = () => {
             </span>
           </div>
         </div>
+
         <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
           <span className="stats-value">{ordersCount && ordersCount.shipped}</span>
-          <span className="stats-label">Shipped</span>
+          <span className="stats-label">{t('shipped')}</span>
         </div>
 
         <div className="col stats-item">
           <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
-          <span className="stats-label">Orders this month</span>
+          <span className="stats-label">{t('ordersThisMonth')}</span>
           <div style={{ display: 'flex' }}>
-            Order decrease
+            {t('orderDecrease')}
             <span
               style={{
                 color: '#FF3939',
@@ -72,6 +76,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',
@@ -98,7 +103,7 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            Pending
+            {t('pending')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -121,7 +126,7 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Assigned
+                {t('assigned')}
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -144,11 +149,12 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Unassigned
+                {t('unassigned')}
               </div>
             </div>
           </div>
         </div>
+
         <div
           style={{
             display: 'flex',
@@ -168,7 +174,7 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            In progress
+            {t('inProgress')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -191,7 +197,7 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Dispatched
+                {t('dispatched')}
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -214,7 +220,7 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                At pick up
+                {t('atPickUp')}
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -237,11 +243,12 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                At transit
+                {t('inTransit')}
               </div>
             </div>
           </div>
         </div>
+
         <div
           style={{
             display: 'flex',
@@ -259,7 +266,7 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            Delivered
+            {t('delivered')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
             <div>
@@ -277,6 +284,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',
@@ -298,16 +306,16 @@ const ShipperDashboard = () => {
             textAlign: 'left',
             color: '#0060B8',
           }}>
-          Shipment details
+          {t('shipmentDetails')}
         </div>
-        {proposalQuotation &&
-          proposalQuotationsData?.map((data: IProposalQuotation, index: number) => (
+        {proposalQuotationsData &&
+          proposalQuotationsData.map((data: IProposalQuotation, index: number) => (
             <ShippementDetails
               orderNumber={index + 1}
               trackingId={data.trackingId}
-              ammount={data.amount}
+              amount={data.amount}
               origin={data.origin}
-              distination={data.destination}
+              destination={data.destination}
               dimension={data.dimentions}
               weight={data.weight}
               status={data.status}

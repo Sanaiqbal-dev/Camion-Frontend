@@ -16,7 +16,6 @@ import ShipperDashboard from '../components/Shipper/ShipperDashboard';
 import ShipperOrders from '../components/Shipper/ShipperOrders';
 import ShipperRequests from '../components/Shipper/ShipperRequests';
 import Proposals from '../components/Shipper/Proposals';
-import ProposalsSecond from '../components/Shipper/ProposalsSecond';
 import ShipperTracking from '../components/Shipper/ShipperTracking';
 import UserManagementShipper from '../components/Shipper/UserManagementShipper';
 import UserManagement from '../components/Carrier/UserManagement';
@@ -122,10 +121,7 @@ export const router = createBrowserRouter([
             path: 'proposals',
             element: <Proposals />,
           },
-          {
-            path: 'proposalssecond',
-            element: <ProposalsSecond />,
-          },
+          
         ],
       },
     ],

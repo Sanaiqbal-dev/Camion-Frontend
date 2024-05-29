@@ -7,7 +7,7 @@ interface BayanActionProps {
   onPrintBayan: (tripId: number) => void;
 }
 export const BayanColumns = ({ onPrintBayan }: BayanActionProps): ColumnDef<IBayanItem>[] => [
-	{
+  {
     accessorKey: 'tripId',
     header: 'Trip',
   },
@@ -37,7 +37,7 @@ export const BayanColumns = ({ onPrintBayan }: BayanActionProps): ColumnDef<IBay
             <img src={IconShare} />
             <span style={{ color: '#27AE60' }}>Share</span>
           </div>
-          <div style={{ marginLeft: '10px' }}  onClick={() => onPrintBayan(row.original.tripId)}>
+          <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.tripId)}>
             <img src={IconPrint} />
             <span style={{ color: '#F48031' }}>Print Bayan Bill</span>
           </div>

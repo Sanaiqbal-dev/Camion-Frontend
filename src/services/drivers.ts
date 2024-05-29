@@ -4,7 +4,7 @@ import { IAPIResponse, IDriver } from '@/interface/common';
 
 export const Drivers = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     addNewDriver: builder.mutation<IAPIResponse<FormData>, any>({
       query: (body) => ({
         url: '/api/Drivers/AddNewDriver',
@@ -13,7 +13,7 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Driver'],
     }),
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getDriversList: builder.query<IAPIResponse<IDriver[]>, any>({
       query: (queryParams) => `/api/Drivers/GetDriverList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Driver'],

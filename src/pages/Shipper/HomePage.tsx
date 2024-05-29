@@ -17,7 +17,6 @@ const HomePage = () => {
     { pathname: '/shipper/shipperorders', title: 'Orders' },
     { pathname: '/shipper/usermanagement', title: 'User Management' },
     { pathname: '/shipper/proposals', title: 'Proposals' },
-    { pathname: '/shipper/proposalssecond', title: 'Proposals' },
     { pathname: '/shipper/shippertracking', title: 'Tracking' },
   ];
 

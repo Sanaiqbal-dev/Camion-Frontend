@@ -1,0 +1,11 @@
+{
+    "trackingIdLabel": "Tracking ID:",
+    "amountLabel": "Amount",
+    "amountCurrency": "SAR:",
+    "originLabel": "Origin",
+    "destinationLabel": "Destination",
+    "weightLabel": "Weight",
+    "dimensionLabel": "Dimension",
+    "statusLabel": "Status",
+    "trackButton": "Track"
+}
