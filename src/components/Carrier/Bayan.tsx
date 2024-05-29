@@ -81,10 +81,10 @@ const Bayan = () => {
         return {
           id: item.id,
           tripId: item.tripId,
-          senderName: data.Waybills[0].SenderName,
-          senderFullAddress: data.Waybills[0].SenderFullAddress,
-          recipientName: data.Waybills[0].RecipientName,
-          recipientFullAddress: data.Waybills[0].RecipientFullAddress,
+					senderName: data.Waybills?.[0]?.SenderName ?? '',
+					senderFullAddress: data.Waybills?.[0]?.SenderFullAddress ?? '',
+					recipientName: data.Waybills?.[0]?.RecipientName ?? '',
+					recipientFullAddress: data.Waybills?.[0]?.RecipientFullAddress ?? '',
           action: '',
         };
       });
