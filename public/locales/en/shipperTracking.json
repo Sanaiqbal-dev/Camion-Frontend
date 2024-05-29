@@ -1,0 +1,9 @@
+{
+    "orderDetails": "Order Details",
+    "orderNumber": "Order number",
+    "origin": "Origin",
+    "destination": "Destination",
+    "weight": "Weight",
+    "dimensions": "Dimensions",
+    "estimatedDeliveryDate": "Estimated Delivery Date"
+}

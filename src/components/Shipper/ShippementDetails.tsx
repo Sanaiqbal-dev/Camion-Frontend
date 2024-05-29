@@ -1,18 +1,21 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 interface shipmentDetailsProps {
   orderNumber: number;
   trackingId: string;
-  ammount: string;
+  amount: string;
   origin: string;
-  distination: string;
+  destination: string;
   dimension: string;
   weight: string;
   status: string;
 }
 
 const ShippementDetails = (props: shipmentDetailsProps) => {
-  const { orderNumber, trackingId, ammount, origin, distination, dimension, weight, status } = props;
+    const { t } = useTranslation(['shipmentDetails']);
+
+  const { orderNumber, trackingId, amount, origin, destination, dimension, weight, status } = props;
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <h3 style={{ marginRight: '5px' }}>{orderNumber}</h3>
@@ -35,7 +38,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Tracking ID:
+              {t('trackingIdLabel')}
             </div>
             <div
               style={{
@@ -58,7 +61,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Ammount
+              {t('amountLabel')}
             </div>
             <div
               style={{
@@ -68,7 +71,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 lineHeight: '18.75px',
                 textAlign: 'left',
               }}>
-              SAR : {ammount}
+              {t('amountCurrency')} {amount}
             </div>
           </div>
           <div className="col-sm">
@@ -81,7 +84,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Origin
+              {t('originLabel')}
             </div>
             <div
               style={{
@@ -105,7 +108,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Destination
+              {t('destinationLabel')}
             </div>
             <div
               style={{
@@ -116,7 +119,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 whiteSpace: 'nowrap',
               }}>
-              {distination}
+              {destination}
             </div>
           </div>
           <div className="col-sm">
@@ -129,7 +132,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Weight
+              {t('weightLabel')}
             </div>
             <div
               style={{
@@ -152,7 +155,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Dimension
+              {t('dimensionLabel')}
             </div>
             <div
               style={{
@@ -175,7 +178,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Status
+              {t('statusLabel')}
             </div>
             <div
               style={{
@@ -199,7 +202,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                   backgroundColor: '#0060B8',
                   borderRadius: '10px',
                 }}>
-                Track
+                {t('trackButton')}
               </button>
             </Link>
           </div>

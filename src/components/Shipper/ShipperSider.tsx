@@ -13,8 +13,11 @@ import { useDispatch } from 'react-redux';
 import { useState } from 'react';
 import ActivateProfile from '../Modals/ActivateProfile';
 import { useAppSelector } from '@/state';
+import { useTranslation } from 'react-i18next';
 
 const ShipperSider = () => {
+    const { t } = useTranslation(['shipperSider']);
+
   const dispatch = useDispatch();
   const session = useAppSelector((state) => state.session);
 
@@ -25,7 +28,7 @@ const ShipperSider = () => {
   };
 
   return (
-    <div className="text-light pt-5 sidebar  sidebar-admin" id="sidebar-container">
+    <div className="text-light pt-5 sidebar sidebar-admin" id="sidebar-container">
       <div>
         <Image src={CamionLogo} alt="logo" height={27} style={{ width: '80%', margin: '0 auto' }} />
         {session?.isCompanyAccount && !session.isSubUser && (
@@ -35,7 +38,7 @@ const ShipperSider = () => {
                 <Accordion.Header>
                   <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                     <Image src={IconDashboard} />
-                    Dashboard
+                    {t('dashboard')}
                   </div>
                 </Accordion.Header>
               </Accordion.Item>
@@ -44,7 +47,7 @@ const ShipperSider = () => {
               <Accordion.Header>
                 <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                   <Image src={IconOrderManagment} />
-                  Order Management
+                  {t('orderManagement')}
                 </div>
               </Accordion.Header>
               <Accordion.Body>
@@ -53,7 +56,7 @@ const ShipperSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconOrder} />
-                        <span>Orders</span>
+                        {t('orders')}
                       </div>
                     </h2>
                   </div>
@@ -63,7 +66,7 @@ const ShipperSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconRequest} />
-                        <span>Requests</span>
+                        {t('requests')}
                       </div>
                     </h2>
                   </div>
@@ -73,7 +76,7 @@ const ShipperSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconRequest} />
-                        <span>Proposals</span>
+                        {t('proposals')}
                       </div>
                     </h2>
                   </div>
@@ -88,14 +91,14 @@ const ShipperSider = () => {
         {session?.isCompanyAccount && (
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
             <Image src={IconSettings} />
-            Settings
+            {t('settings')}
           </div>
         )}
 
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />
-            <span style={{ color: '#FF3939' }}>Logout</span>
+            <span style={{ color: '#FF3939' }}>{t('logout')}</span>
           </div>
         </NavLink>
       </div>
