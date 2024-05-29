@@ -67,7 +67,7 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
 
           <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
             {orderStatuses &&
-              orderStatuses.result.map((statusItem: IOrderStatus) => {
+              orderStatuses.result.filter((x:IOrderStatus)=>x.id >= item.statusId).map((statusItem: IOrderStatus) => {
                 return (
                   <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
                     {statusItem.description}

@@ -5,13 +5,14 @@ import { useGetOrderTrackingsQuery } from '@/services/tracking';
 import { IMarkers } from '@/interface/common';
 
 const Tracking = () => {
-  const [mapApiKey, setMapApiKey] = useState('');
+  const [mapApiKey, setMapApiKey] = useState(undefined);
   const [markers, setMarkers] = useState<IMarkers[]>([]);
   const [position, setPosition] = useState({ lat: 24.686111, lng: 46.827661 });
 
   const { data: orderTracking, isLoading: isLoadingOrderTracking } = useGetOrderTrackingsQuery({});
   useEffect(() => {
     setMapApiKey(import.meta.env.VITE_GOOGLE_MAP_API_KEY);
+		console.log('import.meta.env.VITE_GOOGLE_MAP_API_KEY', import.meta.env.VITE_GOOGLE_MAP_API_KEY)
   }, []);
   useEffect(() => {
     if (!isLoadingOrderTracking) {
@@ -23,7 +24,7 @@ const Tracking = () => {
   }, [isLoadingOrderTracking]);
 
   return (
-    <APIProvider apiKey={mapApiKey}>
+    <>{mapApiKey && <APIProvider apiKey={mapApiKey}>
       <Map
         defaultCenter={position}
         defaultZoom={13}
@@ -39,7 +40,7 @@ const Tracking = () => {
           <MapMarker lat={item.latitude} lng={item.longitude} driver={item.driver} numberPlate={item.numberPlate} />
         ))}
       </Map>
-    </APIProvider>
+    </APIProvider>}</>
   );
 };
 
