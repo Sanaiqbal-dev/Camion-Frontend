@@ -14,8 +14,10 @@ import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { Toast } from '../ui/toast';
 import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
+import { useTranslation } from 'react-i18next';
 
 const Profiles = () => {
+  const { t } = useTranslation(['reportManagement']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showToast, setshowToast] = useState(false);
   const [pager, setPager] = useState<QueryPager>({
@@ -177,7 +179,7 @@ const Profiles = () => {
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -193,7 +195,7 @@ const Profiles = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -202,7 +204,7 @@ const Profiles = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

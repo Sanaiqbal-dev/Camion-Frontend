@@ -14,8 +14,10 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import { Row, Col, InputGroup, Image, FormControl, Button } from 'react-bootstrap';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const AdminUserManagement = () => {
+  const { t } = useTranslation(['adminUserManagement']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showToast, setshowToast] = useState(false);
 
@@ -136,13 +138,13 @@ const AdminUserManagement = () => {
       {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isUserCreated || isUserDeleted || isUserPasswordUpdated ? 'success' : 'danger'} />}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
-          Create New User
+          {t('createNewUser')}
         </button>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -158,7 +160,7 @@ const AdminUserManagement = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -167,12 +169,12 @@ const AdminUserManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {users.length > 0 ? <DataTable isAction={true} columns={columns} data={users} /> : <span>No Users Found!</span>}
+      {users.length > 0 ? <DataTable isAction={true} columns={columns} data={users} /> : <span>{t('noUsersFound')}</span>}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
@@ -181,15 +183,14 @@ const AdminUserManagement = () => {
           <img src={NextIcon} />
         </Button>
       </div>
-      <CreateUser
-        show={showCreateUserModal}
-        onSubmitForm={submitCreateFormHandler}
-        handleClose={() => setshowCreateUserModal(false)}
-        // showError={!isLoading && isError && error}
-        isSuccess={isUserCreated ? 'success' : ''}
-      />
+      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} isSuccess={isUserCreated ? 'success' : ''} />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage={t('confirmationPrompt')}
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
     </div>
   );
 };
