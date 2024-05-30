@@ -61,25 +61,6 @@ const CarrierHomePage = () => {
               </div>
             </Link>
             <DropdownMenu>
-              {/* {showCreateCompanyNotification && (
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '14px',
-                    fontWeight: '400',
-                    textAlign: 'left',
-                    color: '#000000',
-                    backgroundColor: '#F9090973',
-                    borderRadius: '45px',
-                    padding: '4px',
-                  }}>
-                  To activate your profile please complete your profile details,{' '}
-                  <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
-                    Click Here
-                  </span>
-                </div>
-              )} */}
-
               <DropdownMenuContent align="end">
                 {/* <DropdownMenuItem onClick={() => onLogoutClick()}>
                   <Button variant="primary">Logout</Button>
