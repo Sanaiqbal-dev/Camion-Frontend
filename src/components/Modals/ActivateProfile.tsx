@@ -112,6 +112,11 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const clFileInputRef = useRef<HTMLInputElement>(null);
   const brFileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!show) {
+      reset();
+    }
+  }, [show, reset]);
 
   const onSubmit: SubmitHandler<IUser> = async (data) => {
     {
