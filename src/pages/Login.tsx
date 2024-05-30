@@ -95,7 +95,7 @@ const Login = () => {
 					<img
 						src={ShipperImage}
 						alt="Camion"
-						className="img-fluid h-100 w-100"
+						className="img-fluid max-vh-100 w-100"
 					/>
 				</div>
 			</Col>
