@@ -7,8 +7,10 @@ import IconLogout from '../../assets/icons/ic-logout.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '@/state/slice/sessionSlice';
+import { useTranslation } from 'react-i18next';
 
 const AdminSider = () => {
+  const { t } = useTranslation(['adminSider']);
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
@@ -23,19 +25,19 @@ const AdminSider = () => {
           <NavLink key={'User Profiles'} to={'/admin/profiles'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
             <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
               <Image src={IconUser} />
-              User Profiles
+              {t('userProfiles')}
             </div>
           </NavLink>
           <NavLink key={'Order Management'} to={'/admin/orderManagement'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
             <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
               <Image src={IconOrderManagement} />
-              Order Management
+              {t('orderManagement')}
             </div>
           </NavLink>
           <NavLink key={'Report Management'} to={'/admin/reportManagement'} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
             <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
               <Image src={IconReportManagement} />
-              Report Management
+              {t('reportManagement')}
             </div>
           </NavLink>
         </div>
@@ -44,7 +46,7 @@ const AdminSider = () => {
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={IconLogout} />
-            <span style={{ color: '#FF3939' }}>Logout</span>
+            <span style={{ color: '#FF3939' }}>{t('logout')}</span>
           </div>
         </NavLink>
       </div>

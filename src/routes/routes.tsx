@@ -11,7 +11,6 @@ import Profiles from '../components/Admin/Profiles';
 import OrderManagement from '../components/Admin/OrderManagement';
 import ReportManagement from '../components/Admin/ReportManagement';
 import AdminUserManagement from '../components/Admin/AdminUserManagement';
-import Settings from '../components/Admin/Settings';
 import ShipperDashboard from '../components/Shipper/ShipperDashboard';
 import ShipperOrders from '../components/Shipper/ShipperOrders';
 import ShipperRequests from '../components/Shipper/ShipperRequests';
@@ -154,10 +153,6 @@ export const router = createBrowserRouter([
           {
             path: 'adminUserManagement',
             element: <AdminUserManagement />,
-          },
-          {
-            path: 'settings',
-            element: <Settings />,
           },
         ],
       },
