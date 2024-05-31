@@ -236,7 +236,7 @@
   background-color: #262a35;
   z-index: 1000;
   position: fixed;
-  right: 0;
+  left: 0;
   width: 270px;
   height: 100vh;
   box-sizing: border-box;
@@ -266,18 +266,6 @@ tr {
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 10px;
-  --bs-accordion-color: white;
-  --bs-accordion-bg: transparent;
-  --bs-accordion-border-color: transparent;
-  --bs-accordion-border-width: 0px;
-  --bs-accordion-border-radius: 10px;
-  --bs-accordion-inner-border-radius: 0px;
-  --bs-accordion-btn-focus-box-shadow: 0 0 0 0rem rgba(13, 110, 253, 0.25);
-  --bs-accordion-btn-color: white;
-  --bs-accordion-btn-bg: transparent;
-  --bs-accordion-active-color: white;
-  --bs-accordion-active-bg: transparent;
-  --bs-accordion-btn-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
 }
 
 .accordion-not-collapsing-item {
@@ -484,7 +472,7 @@ tr {
 }
 
 .border-right {
-  border-right: 1px solid #dee2e6;
+  border-right: 1px solid rgba(0, 96, 184, 0.4);
 }
 
 .fleet-status-container {
@@ -879,8 +867,8 @@ div[dir="rtl"] .sidebar {
 }
 
 div[dir="rtl"] .accordion {
-  margin-right: 20px;
-  margin-left: auto;
+  margin-left: 20px;
+  margin-right: initial;
 }
 
 div[dir="rtl"] .data-table tr td:first-child,
@@ -897,4 +885,27 @@ div[dir="rtl"] thead th:last-child {
 
 div[dir="rtl"] .img-prev, div[dir="rtl"] .img-next {
   transform: rotate(180deg);
+}
+
+div[dir="rtl"] .accordion-header .accordion-button {
+  padding: 0;
+}
+
+div[dir="rtl"] .accordion-header .accordion-button::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+div[dir="rtl"] .dashboard-item .accordion-button::after {
+  display: none;
+}
+
+div[dir="rtl"] .border-right {
+  border-right: none;
+  border-left: 1px solid rgba(0, 96, 184, 0.4);
 }

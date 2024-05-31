@@ -1,6 +1,5 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import CarrierSider from '../../components/Carrier/CarrierSider';
-import { useSelector } from 'react-redux';
 import { DropdownMenu, DropdownMenuContent } from '@radix-ui/react-dropdown-menu';
 import ActivateProfile from '@/components/Modals/ActivateProfile';
 import { useState } from 'react';
@@ -8,7 +7,7 @@ import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
 const CarrierHomePage = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const token = useSelector((state: any) => state.session.token);
+  const token = useAppSelector((state) => state.session.token);
   // const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
   const currentRouteLocation = useLocation();
   const profileImage = useAppSelector((state) => state.session?.profileImage);

@@ -16,7 +16,7 @@ const ShipperDashboard = () => {
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="row main-stats">
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
+        <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
           <span className="stats-label">Total Orders</span>
           <div style={{ display: 'flex' }}>
@@ -33,7 +33,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
 
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
+        <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
           <span className="stats-label">Active Orders</span>
 
@@ -50,7 +50,7 @@ const ShipperDashboard = () => {
             </span>
           </div>
         </div>
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
+        <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.shipped}</span>
           <span className="stats-label">Shipped</span>
         </div>
@@ -80,11 +80,11 @@ const ShipperDashboard = () => {
           boxShadow: '#DCE0F980',
         }}>
         <div
+				className='border-right'
           style={{
             display: 'flex',
             padding: '10px',
             flexDirection: 'column',
-            borderRight: 'solid 1px #0060B866',
             width: '30%',
           }}>
           <div
@@ -150,11 +150,11 @@ const ShipperDashboard = () => {
           </div>
         </div>
         <div
+					className='border-right'
           style={{
             display: 'flex',
             padding: '10px',
             flexDirection: 'column',
-            borderRight: 'solid 1px #0060B866',
             width: '45%',
           }}>
           <div

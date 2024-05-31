@@ -1,10 +1,10 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import AdminSider from '../../components/Admin/AdminSider';
 import { RxAvatar } from 'react-icons/rx';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/state/hooks';
 
 const AdminHomePage = () => {
-  const token = useSelector((state: any) => state.session.token);
+  const token = useAppSelector((state) => state.session.token);
   const currentRouteLocation = useLocation();
   const pageTitleMap = [
     { pathname: '/admin/profiles', title: 'Profiles' },

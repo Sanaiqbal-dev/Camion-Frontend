@@ -205,7 +205,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+      <Modal show={show} onHide={handleClose} centered size='lg' backdrop="static" keyboard={false}>
         {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
         <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
