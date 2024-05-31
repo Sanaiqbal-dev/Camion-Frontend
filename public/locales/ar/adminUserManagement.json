@@ -1,9 +1,9 @@
 {
-  "show": "Show",
-  "entries": "entries",
-  "searchPlaceholder": "Search",
-  "deleteOrderPrompt": "Are you sure, you want to delete this order?",
-  "createNewUser": "Create New User",
-  "noUsersFound": "No Users Found",
-  "confirmationPrompt": "Are you sure?"
+  "show": "عرض",
+  "entries": "إدخالات",
+  "searchPlaceholder": "بحث",
+  "deleteOrderPrompt": "هل أنت متأكد أنك تريد حذف هذا الطلب؟",
+  "createNewUser": "إنشاء مستخدم جديد",
+  "noUsersFound": "لم يتم العثور على مستخدمين",
+  "confirmationPrompt": "هل أنت متأكد؟"
 }
