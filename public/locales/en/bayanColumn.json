@@ -1,0 +1,10 @@
+{
+  "trip": "Trip",
+  "sender": "Sender",
+  "senderAddress": "Sender Address",
+  "recipient": "Recipient",
+  "recipientAddress": "Recipient Address",
+  "action": "Action",
+  "share": "Share",
+  "printBayanBill": "Print Bayan Bill"
+}

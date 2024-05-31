@@ -8,6 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '../../../../@/components/ui/button';
 import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
+import { useTranslation } from 'react-i18next';
+
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItem: IOrderTable) => void;
@@ -16,97 +18,101 @@ interface OrderActionsProps {
   onUpdateStatus: (id: number, statusId: number) => void;
   orderStatuses: IAPIResponse<IOrderStatusResponseObject[]> | undefined;
 }
-export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
-  {
-    accessorKey: 'origin',
-    header: 'Origin',
-  },
-  {
-    accessorKey: 'destination',
-    header: 'Destination',
-  },
-  {
-    accessorKey: 'weight',
-    header: 'Weight',
-  },
-  {
-    accessorKey: 'dimentions',
-    header: 'Dimensions',
-  },
-  {
-    accessorKey: 'ETA',
-    header: 'ETA',
-  },
 
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const item = row.original;
-      const noItemSeleted = (
-        <>
-          Select Status <img src={IconDown} />
-        </>
-      );
+export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => {
+  const { t } = useTranslation(['orderColum']);
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">
-                {item.status ? (
-                  <>
-                    {item.status} <img src={IconDown} />
-                  </>
-                ) : (
-                  noItemSeleted
-                )}
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
-            {orderStatuses &&
-              orderStatuses.result.map((statusItem: IOrderStatus) => {
-                return (
-                  <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
-                    {statusItem.description}
-                  </DropdownMenuItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+  return [
+    {
+      accessorKey: 'origin',
+      header: t('origin'),
     },
-  },
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => {
-      return (
-        <div className="action-container" style={{ justifyContent: 'start' }}>
-          <div onClick={() => onDelete(row.original.id)}>
-            <img src={IconDelete} />
-            <span style={{ color: '#EB5757' }}>Delete</span>
-          </div>
-          <div onClick={() => onAssignVehicle(row.original)}>
-            <img src={IconAssignVehicle} />
-            <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
-          </div>
-          {row.original.bayanId && (
-            <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
-              <img src={IconPrintBill} />
-              <span style={{ color: '#F48031' }}>Print Bayan</span>
-            </div>
-          )}
-          {!row.original.bayanId && (
-            <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
-              <img src={IconPrintBill} />
-              <span style={{ color: '#F48031' }}>Create Bayan</span>
-            </div>
-          )}
-        </div>
-      );
+    {
+      accessorKey: 'destination',
+      header: t('destination'),
     },
-  },
-];
+    {
+      accessorKey: 'weight',
+      header: t('weight'),
+    },
+    {
+      accessorKey: 'dimentions',
+      header: t('dimensions'),
+    },
+    {
+      accessorKey: 'ETA',
+      header: t('eta'),
+    },
+    {
+      accessorKey: 'status',
+      header: t('status'),
+      cell: ({ row }) => {
+        const item = row.original;
+        const noItemSelected = (
+          <>
+            {t('selectStatus')} <img src={IconDown} />
+          </>
+        );
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only tw-flex tw-gap-1">
+                  {item.status ? (
+                    <>
+                      {item.status} <img src={IconDown} />
+                    </>
+                  ) : (
+                    noItemSelected
+                  )}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
+              {orderStatuses &&
+                orderStatuses.result.map((statusItem: IOrderStatus) => {
+                  return (
+                    <DropdownMenuItem key={statusItem.id} className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
+                      {statusItem.description}
+                    </DropdownMenuItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
+      accessorKey: 'action',
+      header: t('action'),
+      cell: ({ row }) => {
+        return (
+          <div className="action-container" style={{ justifyContent: 'start' }}>
+            <div onClick={() => onDelete(row.original.id)}>
+              <img src={IconDelete} />
+              <span style={{ color: '#EB5757' }}>{t('delete')}</span>
+            </div>
+            <div onClick={() => onAssignVehicle(row.original)}>
+              <img src={IconAssignVehicle} />
+              <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? t('vehicleAssigned') : t('assignVehicle')}</span>
+            </div>
+            {row.original.bayanId && (
+              <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
+                <img src={IconPrintBill} />
+                <span style={{ color: '#F48031' }}>{t('printBayan')}</span>
+              </div>
+            )}
+            {!row.original.bayanId && (
+              <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+                <img src={IconPrintBill} />
+                <span style={{ color: '#F48031' }}>{t('createBayan')}</span>
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+  ];
+};

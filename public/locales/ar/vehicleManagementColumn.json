@@ -1,0 +1,16 @@
+{
+  "driverName": "Driver Name",
+  "driverNotAssigned": "Driver Not Assign",
+  "vehicleType": "Vehicle Type",
+  "modelYear": "Model Year",
+  "vehicleNumber": "Vehicle Number",
+  "color": "Color",
+  "registrationNumber": "Registration Number",
+  "imeiNumber": "IMEI Number",
+  "vehicleRegistration": "Vehicle Registration",
+  "viewDocument": "View Document",
+  "action": "Action",
+  "edit": "Edit",
+  "delete": "Delete",
+  "assignDriver": "Assign Driver"
+}
