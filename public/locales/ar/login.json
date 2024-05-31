@@ -4,6 +4,7 @@
   "emailLabel": "البريد الإلكتروني",  
   "emailPlaceholder": "أدخل البريد الإلكتروني",  
   "passwordLabel": "كلمة المرور",  
+	"login": "الدخول",
   "passwordPlaceholder": "أدخل كلمة المرور",  
   "forgotPassword": "نسيت كلمة المرور؟",  
   "noAccount": "ليس لديك حساب؟",  

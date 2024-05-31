@@ -1,7 +1,7 @@
 import ShipperImage from '../assets/images/shipper-img.svg';
 import CamionLogo from '../assets/icons/ic-camion.svg';
 import Image from 'react-bootstrap/Image';
-import { Form,Container, Row, Col } from 'react-bootstrap';
+import { Form,Container, Row, Col, Button } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -92,16 +92,17 @@ const Login = () => {
 		<Row className="h-100">
 			<Col xs={12} md={6} className="d-none d-md-block p-0">
 				<div className="image-container">
-					<img
+				<Image className="background-img"
 						src={ShipperImage}
 						alt="Camion"
-						className="img-fluid max-vh-100 w-100"
 					/>
 				</div>
 			</Col>
-			<Col xs={12} md={6} className="p-3">
-						<Row className="justify-content-md-center mt-3">
-								<Col md="auto"><LanguageSwitcher /></Col>								
+			<Col xs={12} md={6}>
+										<Row className="justify-content-md-center">
+								<Col md="auto" className="position-relative custom-col">
+									<LanguageSwitcher />
+								</Col>
 							</Row>
 							<div className="login d-flex align-items-center py-5">
             <div className="container">
@@ -161,9 +162,9 @@ const Login = () => {
                         </Row>
                       </div>
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-                        <button type="submit" className="btn customLoginButton w-100" disabled={isLoading}>
+                        <Button type="submit" variant="primary" className="btn customLoginButton w-100" disabled={isLoading}>
                           {t('login')}
-                        </button>
+                        </Button>
                         <div className="d-flex justify-content-start">
                           <div>{t('noAccount')}</div>
                           <div>

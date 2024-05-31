@@ -11,9 +11,9 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
 		<>
-		<ButtonGroup className="me-2" aria-label="First group">
+		<ButtonGroup className="me-2" aria-label="First group" style={{ position: 'absolute', top: '35px', left: '50%', transform: 'translate(-50%, -50%)'}}>
 		{AVAILABLE_LANGUAGES.length > 1 && AVAILABLE_LANGUAGES.map((lang) => (
-				<Button variant={language === lang.code ?  'primary' : 'default'} type='button' onClick={() => changeLanguage(lang)}>{t(lang.code)}</Button>
+				<Button variant={language === lang.code ?  'primary' : 'outline-primary'} onClick={() => changeLanguage(lang)}>{t(lang.code)}</Button>
 			)
 			)}
 			</ButtonGroup>

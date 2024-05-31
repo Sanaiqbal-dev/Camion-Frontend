@@ -9,8 +9,8 @@ i18n
   .use(HttpBackend) // Use HttpBackend for loading translations
   .use(initReactI18next) // Initialize i18next for React
   .init({
-    lng: 'ar',
-    fallbackLng: 'ar',
+    lng: 'en',
+    fallbackLng: 'en',
     keySeparator: false,
     interpolation: {
       escapeValue: false,

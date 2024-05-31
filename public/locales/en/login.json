@@ -4,6 +4,7 @@
   "emailLabel": "Email",
   "emailPlaceholder": "Enter email address",
   "passwordLabel": "Password",
+  "login": "Login",
   "passwordPlaceholder": "Enter password",
   "forgotPassword": "Forgot your Password?",
   "noAccount": "Don’t have an account?",
