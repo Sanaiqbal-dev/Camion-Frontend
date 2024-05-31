@@ -1,13 +1,13 @@
 {
-  "dashboard": "Dashboard",
-  "tracking": "Tracking",
-  "orderManagement": "Order Management",
-  "requests": "Requests",
-  "orders": "Orders",
-  "fleetManagement": "Fleet Management",
-  "driverManagement": "Driver Management",
-  "vehicleManagement": "Vehicle Management",
-  "bayan": "Bayan",
-  "settings": "Settings",
-  "logout": "Logout"
+  "dashboard": "لوحة التحكم",
+  "tracking": "تتبع",
+  "orderManagement": "إدارة الطلبات",
+  "requests": "الطلبات",
+  "orders": "الطلبات",
+  "fleetManagement": "إدارة الأسطول",
+  "driverManagement": "إدارة السائقين",
+  "vehicleManagement": "إدارة المركبات",
+  "bayan": "بيان",
+  "settings": "الإعدادات",
+  "logout": "تسجيل الخروج"
 }

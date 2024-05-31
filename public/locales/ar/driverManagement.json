@@ -1,7 +1,7 @@
 {
-  "show": "Show",
-  "entries": "entries",
-  "search": "Search",
-  "addDriver": "Add Driver",
-  "deleteDriverConfirmation": "Are you sure, you want to delete this driver?"
+  "show": "عرض",
+  "entries": "إدخالات",
+  "search": "بحث",
+  "addDriver": "إضافة سائق",
+  "deleteDriverConfirmation": "هل أنت متأكد أنك تريد حذف هذا السائق؟"
 }

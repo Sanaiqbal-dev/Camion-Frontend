@@ -1,13 +1,13 @@
 {
-  "toastSuccess": "success",
-  "toastDanger": "danger",
-  "filter": "Filter",
-  "addVehicle": "Add Vehicle",
-  "show": "Show",
-  "entries": "entries",
-  "search": "Search",
-  "noDataFound": "No Data found.",
-  "previous": "Previous",
-  "next": "Next",
-  "deleteVehicleConfirmation": "Are you sure, you want to delete this vehicle?"
+  "toastSuccess": "نجح",
+  "toastDanger": "خطأ",
+  "filter": "تصفية",
+  "addVehicle": "إضافة مركبة",
+  "show": "عرض",
+  "entries": "إدخالات",
+  "search": "بحث",
+  "noDataFound": "لم يتم العثور على بيانات.",
+  "previous": "السابق",
+  "next": "التالي",
+  "deleteVehicleConfirmation": "هل أنت متأكد أنك تريد حذف هذه المركبة؟"
 }

@@ -2,11 +2,11 @@
   "modalTitle": "معلومات الشحن",
   "shipmentTypeLabel": "نوع الشحنة",
   "selectShipmentTypePlaceholder": "اختر نوع الشحنة",
-  "estimatedPickupDateLabel": "تاريخ الاستلام التقديري",
+  "estimatedPickupDateLabel": "تاريخ الاستلام المتوقع",
   "selectPickupDatePlaceholder": "اختر تاريخ الاستلام",
-  "estimatedDropOffDateLabel": "تاريخ التسليم التقديري",
+  "estimatedDropOffDateLabel": "تاريخ التسليم المتوقع",
   "selectDropOffDatePlaceholder": "اختر تاريخ التسليم",
   "fareLabel": "الأجرة",
   "enterFarePlaceholder": "أدخل الأجرة",
   "submitButton": "التالي"
-  }
+}

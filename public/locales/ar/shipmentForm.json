@@ -1,13 +1,13 @@
 {
-  "goodType": "نوع البضاعة",
-  "selectGoodType": "اختر نوع البضاعة",
+  "goodType": "نوع البضائع",
+  "selectGoodType": "اختر نوع البضائع",
   "quantity": "الكمية",
   "length": "الطول",
   "width": "العرض",
   "height": "الارتفاع",
   "cm": "سم",
-  "weightPerItem": "الوزن لكل قطعة",
-  "stackableCargo": "يمكن تكديس عناصر الشحنة",
-  "includingADR": "بما في ذلك بضائع ADR",
+  "weightPerItem": "الوزن لكل عنصر",
+  "stackableCargo": "البضائع قابلة للتكديس",
+  "includingADR": "تشمل ADR",
   "submit": "إرسال"
-  }
+}
