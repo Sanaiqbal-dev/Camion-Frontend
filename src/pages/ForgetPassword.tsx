@@ -1,7 +1,7 @@
 import ShipperImage from '../assets/images/shipper-img.svg';
 import CamionLogo from '../assets/icons/ic-camion.svg';
 import Image from 'react-bootstrap/Image';
-import { Form, Col } from 'react-bootstrap';
+import { Form, Col, Container, Row, Button } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -53,13 +53,18 @@ const ForgetPassword = () => {
   };
 
   return (
-    <div className="main-container">
-      <div className="parent-row row g-0">
-        <div className="img-container">
-          <Image className="background-img" src={ShipperImage} />
-        </div>
-        <div className="form-main-container">
-          <div className="login d-flex align-items-center py-5">
+		<Container fluid className="vh-100">
+	<Row className="h-100">
+		<Col xs={12} md={6} className="d-none d-md-block p-0">
+			<div className="image-container">
+			<Image className="background-img"
+					src={ShipperImage}
+					alt="Camion"
+				/>
+			</div>
+		</Col>
+		<Col xs={12} md={6}>
+		<div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
                 <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
@@ -96,9 +101,9 @@ const ForgetPassword = () => {
                       </div>
 
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-                        <button type="submit" className="btn customRegisterButton w-100">
+                        <Button type="submit" variant='primary' className="btn customRegisterButton w-100">
                           Verify
-                        </button>
+                        </Button>
                         <div className="d-flex justify-content-start">
                           <div>Already have an account?</div>
                           <div>
@@ -121,10 +126,20 @@ const ForgetPassword = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>			
+			</Col>
+			</Row>
+			</Container>
+    // <div className="main-container">
+    //   <div className="parent-row row g-0">
+    //     <div className="img-container">
+    //       <Image className="background-img" src={ShipperImage} />
+    //     </div>
+    //     <div className="form-main-container">
+
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 
