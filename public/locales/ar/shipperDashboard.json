@@ -1,0 +1,17 @@
+{
+  "totalOrders": "إجمالي الطلبات",
+  "orderIncrease": "زيادة الطلب",
+  "activeOrders": "الطلبات النشطة",
+  "shipped": "شحنت",
+  "ordersThisMonth": "الطلبات هذا الشهر",
+  "orderDecrease": "نقصان الطلب",
+  "pending": "معلق",
+  "assigned": "معين",
+  "unassigned": "غير معين",
+  "inProgress": "قيد التنفيذ",
+  "dispatched": "أرسلت",
+  "atPickUp": "عند الاستلام",
+  "inTransit": "في العبور",
+  "delivered": "تم التسليم",
+  "shipmentDetails": "تفاصيل الشحنة"
+}

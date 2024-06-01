@@ -53,7 +53,7 @@ const ForgetPassword = () => {
     navigate('/Login', { replace: true });
   };
 
-  const { t } = useTranslation(['forgotPassword']);
+  const { t } = useTranslation(['forgetPassword']);
 
   return (
     <Container fluid className="vh-100">

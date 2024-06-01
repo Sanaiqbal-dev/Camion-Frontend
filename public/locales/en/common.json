@@ -28,5 +28,13 @@
 	"selectA": "Select a",
 	"loading": "Loading...",
 	"cancel": "Cancel",
-	"close": "Close"
+	"close": "Close",
+	"originHeader": "Origin",
+	"destinationHeader": "Destination",
+	"weightHeader": "Weight",
+	"etaHeader": "ETA",
+	"statusHeader": "Status",
+	"dimensionHeader": "Dimension",
+	"actionHeader": "Action",
+	"deleteAction": "Delete"
 }

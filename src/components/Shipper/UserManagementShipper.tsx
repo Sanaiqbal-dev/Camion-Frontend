@@ -14,8 +14,10 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const UserManagementShipper = () => {
+  const { t } = useTranslation(['userManagement']);
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -133,16 +135,16 @@ const UserManagementShipper = () => {
   });
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isUserCreated || isUserDeleted || isUserUpdated ? t('successToast') : t('dangerToast')} />}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
-          Create New User
+          {t('createUser')}
         </button>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -158,7 +160,7 @@ const UserManagementShipper = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -167,12 +169,12 @@ const UserManagementShipper = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('search')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
       </div>
-      {users ? <DataTable columns={columns} data={users} isAction={true} /> : <span>No Users Found!</span>}
+      {users ? <DataTable columns={columns} data={users} isAction={true} /> : <span>{t('noUsersFound')}</span>}
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
           <img src={PreviousIcon} />
@@ -181,15 +183,14 @@ const UserManagementShipper = () => {
           <img src={NextIcon} />
         </Button>
       </div>
-      <CreateUser
-        show={showCreateUserModal}
-        onSubmitForm={submitCreateFormHandler}
-        handleClose={() => setshowCreateUserModal(false)}
-        // showError={!isLoading && isError && error}
-        isSuccess={isUserCreated ? 'success' : ''}
-      />
+      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} isSuccess={isUserCreated ? 'success' : ''} />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage={t('confirmationMessage')}
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
     </div>
   );
 };

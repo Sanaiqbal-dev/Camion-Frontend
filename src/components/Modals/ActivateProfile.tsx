@@ -12,6 +12,7 @@ import { useGetProfileQuery } from '@/services/user';
 import { FaCamera } from 'react-icons/fa';
 import { IProfile } from '@/interface/aspNetUser';
 import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
 
 interface IUser {
   FirstName: string;
@@ -96,6 +97,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const [brFile, setBrFile] = useState<File>();
   const [showToast, setShowToast] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<File>();
+  const { t } = useTranslation(['activateProfile']);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleImageUpload = (event: any) => {
@@ -204,157 +206,225 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   console.log('ProfileImage', profileImage);
 
   return (
-    <>
-      <Modal show={show} onHide={handleClose} centered size='lg' backdrop="static" keyboard={false}>
-        {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
-        <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
-            <div style={{ position: 'relative', width: '106px', height: '106px' }}>
-              {uploadedImage ? (
-                <img src={uploadedImage && URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
-              ) : (
-                <div style={{ height: '106px', width: '106px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {profile?.profileImagePath !== '' ? (
-                    <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
-                  ) : (
-                    <RxAvatar style={{ height: '100%', width: '100%' }} />
-                  )}
-                </div>
-              )}
-              <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }}>
-                <FaCamera />
-              </Button>
-              <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
-            </div>
-            <Modal.Title>Company Profile</Modal.Title>
-            <div
-              style={{
-                fontFamily: 'Roboto',
-                fontSize: '14px',
-                fontWeight: '400',
-                textAlign: 'left',
-                color: '#000000',
-                backgroundColor: '#F9090973',
-                borderRadius: '45px',
-                padding: '4px 15px',
-              }}>
-              {profile && profile.companyName && profile.isCompanyAccountActive && <span>On updating company information, your account will require admin approval again.</span>}
-              {profile && !profile.companyName && <span>To activate your profile please complete your profile details.</span>}
-              {profile && !profile.isCompanyAccountActive && <span>Your profile is currently under review.</span>}
-            </div>
+    <Modal show={show} onHide={handleClose} centered size="lg" backdrop="static" keyboard={false}>
+      {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
+      <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
+          <div style={{ position: 'relative', width: '106px', height: '106px' }}>
+            {uploadedImage ? (
+              <img src={URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
+            ) : (
+              <div style={{ height: '106px', width: '106px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {profile?.profileImagePath !== '' ? (
+                  <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
+                ) : (
+                  <RxAvatar style={{ height: '100%', width: '100%' }} />
+                )}
+              </div>
+            )}
+            <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }}>
+              <FaCamera />
+            </Button>
+            <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
           </div>
-        </Modal.Header>
-        <Modal.Body>
-          {profile && (
-            <Form onSubmit={handleSubmit(onSubmit, onerror)}>
-              <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
+          <Modal.Title>{t('companyProfile')}</Modal.Title>
+          <div
+            style={{
+              fontFamily: 'Roboto',
+              fontSize: '14px',
+              fontWeight: '400',
+              textAlign: 'left',
+              color: '#000000',
+              backgroundColor: '#F9090973',
+              borderRadius: '45px',
+              padding: '4px 15px',
+            }}>
+            {profile && profile.companyName && profile.isCompanyAccountActive && <span>{t('updateApprovalWarning')}</span>}
+            {profile && !profile.companyName && <span>{t('completeProfilePrompt')}</span>}
+            {profile && !profile.isCompanyAccountActive && <span>{t('underReviewMessage')}</span>}
+          </div>
+        </div>
+      </Modal.Header>
+      <Modal.Body>
+        {profile && (
+          <Form onSubmit={handleSubmit(onSubmit, onerror)}>
+            <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
+              <div style={{ display: 'flex', gap: '18px' }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('firstName')}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder={t('enterFirstName')}
+                    defaultValue={profile?.firstName}
+                    style={{ width: '270px', height: '50px' }}
+                    {...register('FirstName')}
+                    isInvalid={!!errors.FirstName}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('lastName')}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder={t('enterLastName')}
+                    defaultValue={profile?.lastName}
+                    style={{ width: '270px', height: '50px' }}
+                    {...register('LastName')}
+                    isInvalid={!!errors.LastName}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <div style={{ display: 'flex', gap: '18px' }}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>{t('emailAddress')}</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder={t('enterEmailAddress')}
+                    defaultValue={profile?.email}
+                    style={{ width: '270px', height: '50px' }}
+                    {...register('Email')}
+                    isInvalid={!!errors.Email}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('contactNumber')}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder={t('enterContactNumber')}
+                    style={{ width: '270px', height: '50px' }}
+                    defaultValue={profile ? profile.phoneNumber : '+966'}
+                    {...register('PhoneNumber')}
+                    isInvalid={!!errors.PhoneNumber}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.PhoneNumber?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <div style={{ display: 'flex', gap: '18px' }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('password')}</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder={t('enterPassword')}
+                    style={{ width: '270px', height: '50px' }}
+                    {...register('Password')}
+                    isInvalid={!!errors.Password}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.Password?.message}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('confirmPassword')}</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder={t('enterConfirmPassword')}
+                    style={{ width: '270px', height: '50px' }}
+                    {...register('ConfirmPassword')}
+                    isInvalid={!!errors.ConfirmPassword}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.ConfirmPassword?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <div style={{ display: 'flex', gap: '18px' }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('companyName')}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    defaultValue={profile?.companyName}
+                    placeholder={t('enterCompanyName')}
+                    style={{ width: '560px', height: '50px' }}
+                    {...register('CompanyName')}
+                    isInvalid={!!errors.CompanyName}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              <div style={{ display: 'flex', gap: '18px' }}>
+                <Form.Group className="mb-3">
+                  <Form.Label>{t('moiNumber')}</Form.Label>
+                  <Form.Control
+                    type="text"
+                    defaultValue={profile?.moiNumber}
+                    placeholder={t('enterMoiNumber')}
+                    style={{ width: '560px', height: '50px' }}
+                    {...register('MOINumber')}
+                    isInvalid={!!errors.MOINumber}
+                  />
+                  <Form.Control.Feedback type="invalid">{errors.MOINumber?.message}</Form.Control.Feedback>
+                </Form.Group>
+              </div>
+              {isShipper ? (
                 <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>First name</Form.Label>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">{t('vatCertificate')}</Form.Label>
+                    <div className="tw-flex-col">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(vatFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: '270px',
+                          height: '50px',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}>
+                        {vatFile ? vatFile.name : t('uploadDocument')}
+                      </Button>
+                      {showVatFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
+                    </div>
                     <Form.Control
-                      type="text"
-                      placeholder="Enter first name"
-                      defaultValue={profile?.firstName}
-                      style={{ width: '270px', height: '50px' }}
-                      {...register('FirstName')}
-                      isInvalid={!!errors.FirstName}
+                      type="file"
+                      ref={vatFileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setVatFile(file);
+                        }
+                      }}
                     />
-                    <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
                   </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Last name</Form.Label>
+                  <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Label className="tw-text-sm">{t('crDocument')}</Form.Label>
+                    <div className="tw-flex-col">
+                      <Button
+                        variant="default"
+                        onClick={() => handleFileInputClick(crFileInputRef)}
+                        className="custom-file-upload-button"
+                        style={{
+                          width: '270px',
+                          height: '50px',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}>
+                        {crFile ? crFile.name : t('uploadDocument')}
+                      </Button>
+                      {showCrFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
+                    </div>
                     <Form.Control
-                      type="text"
-                      placeholder="Enter your last name"
-                      defaultValue={profile?.lastName}
-                      style={{ width: '270px', height: '50px' }}
-                      {...register('LastName')}
-                      isInvalid={!!errors.LastName}
+                      type="file"
+                      ref={crFileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const files = (e.target as HTMLInputElement).files;
+                        if (files && files.length > 0) {
+                          const file = files[0];
+                          setCrFile(file);
+                        }
+                      }}
                     />
-                    <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
                   </Form.Group>
                 </div>
-                <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter email address"
-                      defaultValue={profile?.email}
-                      style={{ width: '270px', height: '50px' }}
-                      {...register('Email')}
-                      isInvalid={!!errors.Email}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Contact number</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter your phone number"
-                      style={{ width: '270px', height: '50px' }}
-                      defaultValue={profile ? profile.phoneNumber : '+966'}
-                      {...register('PhoneNumber')}
-                      isInvalid={!!errors.PhoneNumber}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.PhoneNumber?.message}</Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-                <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" style={{ width: '270px', height: '50px' }} {...register('Password')} isInvalid={!!errors.Password} />
-                    <Form.Control.Feedback type="invalid">{errors.Password?.message}</Form.Control.Feedback>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3">
-                    <Form.Label>Confirm password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Confirm password"
-                      style={{ width: '270px', height: '50px' }}
-                      {...register('ConfirmPassword')}
-                      isInvalid={!!errors.ConfirmPassword}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.ConfirmPassword?.message}</Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-                <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Company name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={profile?.companyName}
-                      placeholder="Company name"
-                      style={{ width: '560px', height: '50px' }}
-                      {...register('CompanyName')}
-                      isInvalid={!!errors.CompanyName}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-                <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Moi number</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={profile?.moiNumber}
-                      placeholder="Moi number"
-                      style={{ width: '560px', height: '50px' }}
-                      {...register('MOINumber')}
-                      isInvalid={!!errors.MOINumber}
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.MOINumber?.message}</Form.Control.Feedback>
-                  </Form.Group>
-                </div>
-                {isShipper ? (
+              ) : (
+                <>
                   <div style={{ display: 'flex', gap: '18px' }}>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">VAT certificate</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('transportLicenses')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
-                          onClick={() => handleFileInputClick(vatFileInputRef)}
+                          onClick={() => handleFileInputClick(tlFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
                             width: '270px',
@@ -362,29 +432,29 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             display: 'flex',
                             alignItems: 'center',
                           }}>
-                          {vatFile ? vatFile.name : 'Upload the document'}
+                          {tlFile ? tlFile.name : t('uploadDocument')}
                         </Button>
-                        {showVatFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
+                        {showtlFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
                       <Form.Control
                         type="file"
-                        ref={vatFileInputRef}
+                        ref={tlFileInputRef}
                         style={{ display: 'none' }}
                         onChange={(e) => {
                           const files = (e.target as HTMLInputElement).files;
                           if (files && files.length > 0) {
                             const file = files[0];
-                            setVatFile(file);
+                            setTlFile(file);
                           }
                         }}
                       />
                     </Form.Group>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">CR Document</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('carrierLiabilityInsurance')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
-                          onClick={() => handleFileInputClick(crFileInputRef)}
+                          onClick={() => handleFileInputClick(cliFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
                             width: '270px',
@@ -392,165 +462,96 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             display: 'flex',
                             alignItems: 'center',
                           }}>
-                          {crFile ? crFile.name : 'Upload the document'}
+                          {cliFile ? cliFile.name : t('uploadDocument')}
                         </Button>
-                        {showCrFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
+                        {showCliFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
-
                       <Form.Control
                         type="file"
-                        ref={crFileInputRef}
+                        ref={cliFileInputRef}
                         style={{ display: 'none' }}
                         onChange={(e) => {
                           const files = (e.target as HTMLInputElement).files;
                           if (files && files.length > 0) {
                             const file = files[0];
-                            setCrFile(file);
+                            setCliFile(file);
                           }
                         }}
                       />
                     </Form.Group>
                   </div>
-                ) : (
-                  <>
-                    <div style={{ display: 'flex', gap: '18px' }}>
-                      <Form.Group className="tw-flex tw-flex-col">
-                        <Form.Label className="tw-text-sm">Transport Licenses</Form.Label>
-                        <div className="tw-flex-col">
-                          <Button
-                            variant="default"
-                            onClick={() => handleFileInputClick(tlFileInputRef)}
-                            className="custom-file-upload-button"
-                            style={{
-                              width: '270px',
-                              height: '50px',
-                              display: 'flex',
-                              alignItems: 'center',
-                            }}>
-                            {tlFile ? tlFile.name : 'Upload the document'}
-                          </Button>
-
-                          {showtlFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
-                        </div>
-                        <Form.Control
-                          type="file"
-                          ref={tlFileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => {
-                            const files = (e.target as HTMLInputElement).files;
-                            if (files && files.length > 0) {
-                              const file = files[0];
-                              setTlFile(file);
-                            }
-                          }}
-                        />
-                      </Form.Group>
-                      <Form.Group className="tw-flex tw-flex-col">
-                        <Form.Label className="tw-text-sm">Carrier Liability Insurance</Form.Label>
-                        <div className="tw-flex-col">
-                          <Button
-                            variant="default"
-                            onClick={() => handleFileInputClick(cliFileInputRef)}
-                            className="custom-file-upload-button"
-                            style={{
-                              width: '270px',
-                              height: '50px',
-                              display: 'flex',
-                              alignItems: 'center',
-                            }}>
-                            {cliFile ? cliFile.name : 'Upload the document'}
-                          </Button>
-                          {showCliFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
-                        </div>
-
-                        <Form.Control
-                          type="file"
-                          ref={cliFileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => {
-                            const files = (e.target as HTMLInputElement).files;
-                            if (files && files.length > 0) {
-                              const file = files[0];
-                              setCliFile(file);
-                            }
-                          }}
-                        />
-                      </Form.Group>
-                    </div>
-                    <div style={{ display: 'flex', gap: '18px' }}>
-                      <Form.Group className="tw-flex tw-flex-col">
-                        <Form.Label className="tw-text-sm">Company Letterhead</Form.Label>
-                        <div className="tw-flex-col">
-                          <Button
-                            variant="default"
-                            onClick={() => handleFileInputClick(clFileInputRef)}
-                            className="custom-file-upload-button"
-                            style={{
-                              width: '270px',
-                              height: '50px',
-                              display: 'flex',
-                              alignItems: 'center',
-                            }}>
-                            {clFile ? clFile.name : 'Upload the document'}
-                          </Button>
-                          {showclFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
-                        </div>
-                        <Form.Control
-                          type="file"
-                          ref={clFileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => {
-                            const files = (e.target as HTMLInputElement).files;
-                            if (files && files.length > 0) {
-                              const file = files[0];
-                              setClFile(file);
-                            }
-                          }}
-                        />
-                      </Form.Group>
-                      <Form.Group className="tw-flex tw-flex-col">
-                        <Form.Label className="tw-text-sm">Business Registration</Form.Label>
-                        <div className="tw-flex-col">
-                          <Button
-                            variant="default"
-                            onClick={() => handleFileInputClick(brFileInputRef)}
-                            className="custom-file-upload-button"
-                            style={{
-                              width: '270px',
-                              height: '50px',
-                              display: 'flex',
-                              alignItems: 'center',
-                            }}>
-                            {brFile ? brFile.name : 'Upload the document'}
-                          </Button>
-                          {showBrFileError && <div style={{ color: 'red' }}>This file is mendatory</div>}
-                        </div>
-
-                        <Form.Control
-                          type="file"
-                          ref={brFileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => {
-                            const files = (e.target as HTMLInputElement).files;
-                            if (files && files.length > 0) {
-                              const file = files[0];
-                              setBrFile(file);
-                            }
-                          }}
-                        />
-                      </Form.Group>
-                    </div>
-                  </>
-                )}
-              </div>
-              <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated || isProfileLoading}>
-                Update profile
-              </Button>
-            </Form>
-          )}
-        </Modal.Body>
-      </Modal>
-    </>
+                  <div style={{ display: 'flex', gap: '18px' }}>
+                    <Form.Group className="tw-flex tw-flex-col">
+                      <Form.Label className="tw-text-sm">{t('companyLetterhead')}</Form.Label>
+                      <div className="tw-flex-col">
+                        <Button
+                          variant="default"
+                          onClick={() => handleFileInputClick(clFileInputRef)}
+                          className="custom-file-upload-button"
+                          style={{
+                            width: '270px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}>
+                          {clFile ? clFile.name : t('uploadDocument')}
+                        </Button>
+                        {showclFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
+                      </div>
+                      <Form.Control
+                        type="file"
+                        ref={clFileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const files = (e.target as HTMLInputElement).files;
+                          if (files && files.length > 0) {
+                            const file = files[0];
+                            setClFile(file);
+                          }
+                        }}
+                      />
+                    </Form.Group>
+                    <Form.Group className="tw-flex tw-flex-col">
+                      <Form.Label className="tw-text-sm">{t('businessRegistration')}</Form.Label>
+                      <div className="tw-flex-col">
+                        <Button
+                          variant="default"
+                          onClick={() => handleFileInputClick(brFileInputRef)}
+                          className="custom-file-upload-button"
+                          style={{
+                            width: '270px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}>
+                          {brFile ? brFile.name : t('uploadDocument')}
+                        </Button>
+                        {showBrFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
+                      </div>
+                      <Form.Control
+                        type="file"
+                        ref={brFileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const files = (e.target as HTMLInputElement).files;
+                          if (files && files.length > 0) {
+                            const file = files[0];
+                            setBrFile(file);
+                          }
+                        }}
+                      />
+                    </Form.Group>
+                  </div>
+                </>
+              )}
+            </div>
+            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated || isProfileLoading}>
+              {t('updateProfile')}
+            </Button>
+          </Form>
+        )}
+      </Modal.Body>
+    </Modal>
   );
 };
 

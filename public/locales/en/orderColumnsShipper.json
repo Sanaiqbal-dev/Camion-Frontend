@@ -1,0 +1,11 @@
+{
+  "trackingHeader": "TrackingId",
+  "originHeader": "Origin",
+  "destinationHeader": "Destination",
+  "weightHeader": "Weight",
+  "typeHeader": "Type",
+  "etaHeader": "ETA",
+  "statusHeader": "Status",
+  "actionHeader": "Action",
+  "trackAction": "Track"
+}

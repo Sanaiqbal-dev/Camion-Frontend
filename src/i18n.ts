@@ -18,7 +18,7 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json', // Adjust the loadPath according to your server setup
     },
-    ns: ['common', 'login'], // Specify the namespaces you want to use
+    ns: ['common', 'login','orderColumn','proposalColumns'], // Specify the namespaces you want to use
     defaultNS: 'common',
     react: {
       useSuspense: false, // Set to true if you want to use React Suspense for loading translations

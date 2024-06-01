@@ -250,7 +250,7 @@ const Orders = () => {
           assignedVehicle={selectedOrderItem?.vehicleId}
           onAssignVehicleToOrderItem={(data) => onAssignVehicleToOrderItem(data)}
         />
-        <ConfirmationModal promptMessage={t('deleteOrderConfirmation')} show={showDeleteForm} handleClose={() => setShowDeleteForm(false)} performOperation={() => DeleteOrder()} />
+        <ConfirmationModal promptMessage={t('confirmationMessage')} show={showDeleteForm} handleClose={() => setShowDeleteForm(false)} performOperation={() => DeleteOrder()} />
       </div>
     </>
   );
