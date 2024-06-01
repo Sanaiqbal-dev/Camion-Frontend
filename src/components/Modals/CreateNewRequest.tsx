@@ -177,7 +177,60 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                 <Form.Control.Feedback type="invalid">{errors.cityId?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            {/* Additional form groups with translations */}
+            <div style={{ display: 'flex', gap: '18px' }}>
+              <Form.Group className="mb-3">
+                <Form.Label>{t('zipCodeLable')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="15618"
+                  style={{
+                    width: '270px',
+                    height: '50px',
+                    borderTop: 'none',
+                    borderRight: 'none',
+                    borderLeft: 'none',
+                  }}
+                  {...register('zipCode')}
+                  isInvalid={!!errors.zipCode}
+                />
+                <Form.Control.Feedback type="invalid">{errors.zipCode?.message}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>{t('additionalNumberLabel')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="121212"
+                  style={{
+                    width: '270px',
+                    height: '50px',
+                    borderTop: 'none',
+                    borderRight: 'none',
+                    borderLeft: 'none',
+                  }}
+                  {...register('additionalNumber')}
+                  isInvalid={!!errors.additionalNumber}
+                />
+                <Form.Control.Feedback type="invalid">{errors.additionalNumber?.message}</Form.Control.Feedback>
+              </Form.Group>
+            </div>
+
+            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+              <Form.Label>{t('unitNoLabel')}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="121212"
+                style={{
+                  width: '560px',
+                  height: '59px',
+                  borderTop: 'none',
+                  borderRight: 'none',
+                  borderLeft: 'none',
+                }}
+                {...register('unitNo')}
+                isInvalid={!!errors.unitNo}
+              />
+              <Form.Control.Feedback type="invalid">{errors.unitNo?.message}</Form.Control.Feedback>
+            </Form.Group>
           </div>
           <Button variant="primary" type="submit">
             {t('nextButton')}
