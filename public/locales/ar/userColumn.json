@@ -1,7 +1,7 @@
 {
-  "userName": "User Name",
-  "emailAddress": "Email Address",
-  "action": "Action",
-  "edit": "Edit",
-  "delete": "Delete"
-}
+  "userName": "اسم المستخدم",
+  "emailAddress": "عنوان البريد الإلكتروني",
+  "action": "عمل",
+  "edit": "تحرير",
+  "delete": "حذف"
+  }

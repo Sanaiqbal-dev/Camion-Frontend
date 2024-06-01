@@ -1,16 +1,16 @@
 {
-  "driverName": "Driver Name",
-  "driverNotAssigned": "Driver Not Assign",
-  "vehicleType": "Vehicle Type",
-  "modelYear": "Model Year",
-  "vehicleNumber": "Vehicle Number",
-  "color": "Color",
-  "registrationNumber": "Registration Number",
-  "imeiNumber": "IMEI Number",
-  "vehicleRegistration": "Vehicle Registration",
-  "viewDocument": "View Document",
-  "action": "Action",
-  "edit": "Edit",
-  "delete": "Delete",
-  "assignDriver": "Assign Driver"
-}
+  "driverName": "اسم السائق",
+  "driverNotAssigned": "لم يتم تعيين السائق",
+  "vehicleType": "نوع المركبة",
+  "modelYear": "سنة الطراز",
+  "vehicleNumber": "رقم المركبة",
+  "color": "اللون",
+  "registrationNumber": "رقم التسجيل",
+  "imeiNumber": "رقم IMEI",
+  "vehicleRegistration": "تسجيل المركبة",
+  "viewDocument": "عرض المستند",
+  "action": "عمل",
+  "edit": "تحرير",
+  "delete": "حذف",
+  "assignDriver": "تعيين سائق"
+  }

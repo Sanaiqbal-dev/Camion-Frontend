@@ -1,15 +1,15 @@
 {
-  "origin": "Origin",
-  "destination": "Destination",
-  "weight": "Weight",
-  "dimensions": "Dimensions",
-  "eta": "ETA",
-  "status": "Status",
-  "action": "Action",
-  "selectStatus": "Select Status",
-  "delete": "Delete",
-  "assignVehicle": "Assign Vehicle",
-  "vehicleAssigned": "Vehicle Assigned",
-  "printBayan": "Print Bayan",
-  "createBayan": "Create Bayan"
-}
+  "origin": "الأصل",
+  "destination": "الوجهة",
+  "weight": "الوزن",
+  "dimensions": "الأبعاد",
+  "eta": "الوقت المقدر للوصول",
+  "status": "الحالة",
+  "action": "عمل",
+  "selectStatus": "اختر الحالة",
+  "delete": "حذف",
+  "assignVehicle": "تعيين مركبة",
+  "vehicleAssigned": "تم تعيين المركبة",
+  "printBayan": "طباعة بيان",
+  "createBayan": "إنشاء بيان"
+  }

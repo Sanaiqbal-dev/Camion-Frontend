@@ -1,11 +1,11 @@
 {
-  "driverName": "Driver Name",
-  "driverIdIqama": "Driver ID/Iqama",
-  "licenseNumber": "License Number",
-  "dateOfBirth": "Date Of Birth",
-  "nationality": "Nationality",
-  "mobileNumber": "Mobile Number",
-  "viewIqamaId": "View Iqama/ID",
-  "edit": "Edit",
-  "delete": "Delete"
-}
+  "driverName": "اسم السائق",
+  "driverIdIqama": "هوية/إقامة السائق",
+  "licenseNumber": "رقم الرخصة",
+  "dateOfBirth": "تاريخ الميلاد",
+  "nationality": "الجنسية",
+  "mobileNumber": "رقم الجوال",
+  "viewIqamaId": "عرض الهوية/الإقامة",
+  "edit": "تحرير",
+  "delete": "حذف"
+  }

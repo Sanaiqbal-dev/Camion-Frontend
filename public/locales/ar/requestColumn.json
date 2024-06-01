@@ -1,10 +1,10 @@
 {
-  "origin": "Origin",
-  "destination": "Destination",
-  "weight": "Weight",
-  "dimensions": "Dimensions",
-  "edt": "EDT",
-  "action": "Action",
-  "submitProposal": "Submit proposal",
-  "proposalSubmitted": "Proposal Submitted"
-}
+  "origin": "الأصل",
+  "destination": "الوجهة",
+  "weight": "الوزن",
+  "dimensions": "الأبعاد",
+  "edt": "الوقت المتوقع للتسليم",
+  "action": "عمل",
+  "submitProposal": "تقديم الاقتراح",
+  "proposalSubmitted": "تم تقديم الاقتراح"
+  }

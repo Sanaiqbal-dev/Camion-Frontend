@@ -1,10 +1,10 @@
 {
-  "trip": "Trip",
-  "sender": "Sender",
-  "senderAddress": "Sender Address",
-  "recipient": "Recipient",
-  "recipientAddress": "Recipient Address",
-  "action": "Action",
-  "share": "Share",
-  "printBayanBill": "Print Bayan Bill"
-}
+  "trip": "رحلة",
+  "sender": "مرسل",
+  "senderAddress": "عنوان المرسل",
+  "recipient": "مستلم",
+  "recipientAddress": "عنوان المستلم",
+  "action": "عمل",
+  "share": "مشاركة",
+  "printBayanBill": "طباعة فاتورة بيان"
+  }
