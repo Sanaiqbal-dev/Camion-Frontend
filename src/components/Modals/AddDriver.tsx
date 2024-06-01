@@ -162,7 +162,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
-          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add a new'} driver</Modal.Title>
+          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add New'} driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>

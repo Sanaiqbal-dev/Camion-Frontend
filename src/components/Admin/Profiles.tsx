@@ -24,7 +24,7 @@ const Profiles = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const [updateCompanyAccount, { isSuccess: isCoumpanyAccountUpdated }] = useUpdateCompanyAccountMutation();
+  const [updateCompanyAccount, { isSuccess: isCompanyAccountUpdated, isLoading: isAccountUpdating }] = useUpdateCompanyAccountMutation();
 
   const companyProfiles = useGetCompanyProfilesListQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
   // const [selectedFile, setSelectedFile] = useState<any>();
@@ -39,6 +39,8 @@ const Profiles = () => {
       return 'Deactivated';
     }
   };
+
+  const isDisabled = isAccountUpdating;
 
   const profilesData: Iprofiles[] = ProfilesTableData?.map((item) => ({
     id: item.userId,
@@ -137,6 +139,7 @@ const Profiles = () => {
     onDeactivateButtonClick,
     onDeleteButtonClick,
     onRejectButtonClick,
+    isDisabled,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -169,10 +172,11 @@ const Profiles = () => {
       setTotalPageCount(maxPageCount);
     }
   }, [entriesValue, companyProfiles]);
+  console.log('isDisabled', isDisabled);
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isCoumpanyAccountUpdated ? 'success' : 'danger'} />}
+      {showToast && isCompanyAccountUpdated && <Toast showToast={showToast} setShowToast={setshowToast} variant={isCompanyAccountUpdated ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">

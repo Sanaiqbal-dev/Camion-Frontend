@@ -11,6 +11,7 @@ interface ProfileActionProps {
   onRejectButtonClick: (id: string) => void;
   onDeactivateButtonClick: (id: string) => void;
   onDeleteButtonClick: (id: string) => void;
+  isDisabled: boolean;
 }
 
 export const ProfileColumns = ({
@@ -19,6 +20,7 @@ export const ProfileColumns = ({
   onRejectButtonClick,
   onDeactivateButtonClick,
   onDeleteButtonClick,
+  isDisabled,
 }: ProfileActionProps): ColumnDef<Iprofiles>[] => [
   {
     accessorKey: 'profileType',
@@ -101,7 +103,8 @@ export const ProfileColumns = ({
               color: '#0EBC93',
               backgroundColor: '#0EBC931A',
             }}
-            onClick={() => id && onAcceptButtonClick(id)}>
+            onClick={() => id && onAcceptButtonClick(id)}
+            disabled={isDisabled}>
             <img src={IconTick} alt="Accept" />
             Accept
           </button>
@@ -111,14 +114,15 @@ export const ProfileColumns = ({
               color: '#EB5757',
               backgroundColor: '#EB57571A',
             }}
-            onClick={() => id && onRejectButtonClick(id)}>
+            onClick={() => id && onRejectButtonClick(id)}
+            disabled={isDisabled}>
             <img src={IconRejectProfile} alt="Reject" />
             Reject
           </button>
         </div>
       ) : status === 'Active' ? (
         <div>
-          <button className="table-action-btn" style={{ color: '#F48031', backgroundColor: '#F480311A' }} onClick={() => id && onDeactivateButtonClick(id)}>
+          <button className="table-action-btn" style={{ color: '#F48031', backgroundColor: '#F480311A' }} onClick={() => id && onDeactivateButtonClick(id)} disabled={isDisabled}>
             Deactivate
           </button>
         </div>
@@ -130,6 +134,7 @@ export const ProfileColumns = ({
               color: '#EB5757',
               backgroundColor: '#EB57571A',
             }}
+            disabled={isDisabled}
             onClick={() => id && onDeleteButtonClick(id)}>
             <img src={IconDeleteProfile} alt="Delete" />
             Delete
