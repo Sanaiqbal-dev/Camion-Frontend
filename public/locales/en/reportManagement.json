@@ -1,5 +1,8 @@
 {
   "show": "Show",
   "entries": "entries",
-  "searchPlaceholder": "Search"
+  "searchPlaceholder": "Search",
+  "selectDocument": "Select Document",
+  "notApproved": "Not Approved",
+  "deactivated": "Deactivated"
 }

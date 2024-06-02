@@ -30,7 +30,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
   } = useForm<IdriverForm>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['createNewUser']);
+  const { t } = useTranslation(['assignDriver']);
 
   const onSubmit: SubmitHandler<IdriverForm> = async (data) => {
     onAssignDriver(parseInt(data.driver));

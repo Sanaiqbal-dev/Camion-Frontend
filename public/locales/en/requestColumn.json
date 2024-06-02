@@ -6,5 +6,8 @@
   "edt": "EDT",
   "action": "Action",
   "submitProposal": "Submit proposal",
-  "proposalSubmitted": "Proposal Submitted"
+  "proposalSubmitted": "Proposal Submitted",
+  "editAction": "Edit",
+  "deleteAction": "Delete",
+  "proposalsAction": "Proposals"
 }

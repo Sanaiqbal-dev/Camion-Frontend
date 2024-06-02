@@ -7,5 +7,6 @@
   "mobileNumber": "رقم الجوال",
   "viewIqamaId": "عرض الهوية/الإقامة",
   "edit": "تحرير",
-  "delete": "حذف"
-  }
+  "delete": "حذف",
+  "action": "عمل"
+}

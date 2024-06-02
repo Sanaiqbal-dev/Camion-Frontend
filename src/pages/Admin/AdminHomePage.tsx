@@ -2,16 +2,18 @@ import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import AdminSider from '../../components/Admin/AdminSider';
 import { RxAvatar } from 'react-icons/rx';
 import { useAppSelector } from '@/state/hooks';
+import { useTranslation } from 'react-i18next';
 
 const AdminHomePage = () => {
+  const { t } = useTranslation(['adminHomePage']);
   const token = useAppSelector((state) => state.session.token);
   const currentRouteLocation = useLocation();
   const pageTitleMap = [
-    { pathname: '/admin/profiles', title: 'Profiles' },
-    { pathname: '/admin/orderManagement', title: 'Order Managment' },
-    { pathname: '/admin/reportManagement', title: 'Reports' },
-    { pathname: '/admin/settings', title: 'Settings' },
-    { pathname: '/admin/adminUserManagement', title: 'Admin User Management' },
+    { pathname: '/admin/profiles', title: t('profiles') },
+    { pathname: '/admin/orderManagement', title: t('orderManagement') },
+    { pathname: '/admin/reportManagement', title: t('reports') },
+    { pathname: '/admin/settings', title: t('settings') },
+    { pathname: '/admin/adminUserManagement', title: t('adminUserManagement') },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentRouteLocation.pathname);

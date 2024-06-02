@@ -66,7 +66,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
   }, [isEdit, proposalId, proposalItem]);
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <div style={{ display: 'flex', gap: '20px' }}>
           {forms.map((form, index) => (

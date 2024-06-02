@@ -6,5 +6,8 @@
   "edt": "الوقت المتوقع للتسليم",
   "action": "عمل",
   "submitProposal": "تقديم الاقتراح",
-  "proposalSubmitted": "تم تقديم الاقتراح"
-  }
+  "proposalSubmitted": "تم تقديم الاقتراح",
+  "editAction": "تعديل",
+  "deleteAction": "حذف",
+  "proposalsAction": "العروض"
+}

@@ -49,7 +49,7 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
     }
   }, [shipmentData]);
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>{t('modalTitle')}</Modal.Title>
       </Modal.Header>

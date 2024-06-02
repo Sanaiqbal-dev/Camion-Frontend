@@ -66,7 +66,7 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>{infoType == 'pickup' ? 'Pick Up Location' : 'Delivery Location'}</Modal.Title>
       </Modal.Header>

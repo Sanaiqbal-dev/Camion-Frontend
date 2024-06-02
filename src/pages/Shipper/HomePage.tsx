@@ -2,22 +2,24 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import ShipperSider from '../../components/Shipper/ShipperSider';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
 // import ActivateProfile from '../../components/Modals/ActivateProfile';
 // import { useState } from 'react';
 // import { useSelector } from 'react-redux';
 
 const HomePage = () => {
+  const { t } = useTranslation(['shipperHomePage']);
   const profileImage = useAppSelector((state) => state.session?.profileImage);
 
   // const [showProfileModal, setShowProfileModal] = useState(false);
   const currentPageTitle = useLocation();
   const pageTitleMap = [
-    { pathname: '/shipper/shipperdashboard', title: 'Dashboard' },
-    { pathname: '/Shipper/shipperrequests', title: 'Requests' },
-    { pathname: '/shipper/shipperorders', title: 'Orders' },
-    { pathname: '/shipper/usermanagement', title: 'User Management' },
-    { pathname: '/shipper/proposals', title: 'Proposals' },
-    { pathname: '/shipper/shippertracking', title: 'Tracking' },
+    { pathname: '/shipper/shipperdashboard', title: t('dashboard') },
+    { pathname: '/Shipper/shipperrequests', title: t('requests') },
+    { pathname: '/shipper/shipperorders', title: t('orders') },
+    { pathname: '/shipper/usermanagement', title: t('userManagement') },
+    { pathname: '/shipper/proposals', title: t('proposals') },
+    { pathname: '/shipper/shippertracking', title: t('tracking') },
   ];
 
   const GetPageTitle = () => {
@@ -75,9 +77,9 @@ const HomePage = () => {
                   borderRadius: '45px',
                   padding: '4px',
                 }}>
-                To activate your profile please complete your profile details,{' '}
+                {t('toActivateProfile')},{' '}
                 <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
-                  Click Here
+                  {t('clickHere')}
                 </span>
               </div>
             )}

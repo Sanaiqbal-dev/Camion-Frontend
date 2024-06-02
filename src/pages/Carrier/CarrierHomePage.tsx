@@ -5,34 +5,37 @@ import ActivateProfile from '@/components/Modals/ActivateProfile';
 import { useState } from 'react';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
+
 const CarrierHomePage = () => {
+  const { t } = useTranslation(['carrierHomePage']);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const token = useAppSelector((state) => state.session.token);
-  // const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
   const currentRouteLocation = useLocation();
   const profileImage = useAppSelector((state) => state.session?.profileImage);
   const pageTitleMap = [
-    { pathname: '/carrier/dashboard', title: 'Dashboard' },
-    { pathname: '/carrier/tracking', title: 'Tracking' },
-    { pathname: '/carrier/requests', title: 'Requests' },
-    { pathname: '/carrier/orders', title: 'Orders' },
-    { pathname: '/carrier/drivermanagement', title: 'Driver Management' },
-    { pathname: '/carrier/vehiclemanagement', title: 'Vehicle Management' },
-    { pathname: '/carrier/bayan', title: 'Bayan' },
-    { pathname: '/carrier/userManagement', title: 'User Management' },
-    { pathname: '/carrier/bayanBill', title: 'Bayan Bill' },
+    { pathname: '/carrier/dashboard', title: t('dashboard') },
+    { pathname: '/carrier/tracking', title: t('tracking') },
+    { pathname: '/carrier/requests', title: t('requests') },
+    { pathname: '/carrier/orders', title: t('orders') },
+    { pathname: '/carrier/drivermanagement', title: t('driverManagement') },
+    { pathname: '/carrier/vehiclemanagement', title: t('vehicleManagement') },
+    { pathname: '/carrier/bayan', title: t('bayan') },
+    { pathname: '/carrier/userManagement', title: t('userManagement') },
+    { pathname: '/carrier/bayanBill', title: t('bayanBill') },
   ];
+
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentRouteLocation.pathname);
-
     return pageObject?.title ? pageObject.title : '';
   };
+
   const toggleSidebar = () => {};
 
   if (!token) {
     return <Navigate to="/login" state={{ from: { currentRouteLocation } }} replace />;
   }
-  // const showCreateCompanyNotification = hasNoCompanyRegistered && currentRouteLocation.pathname === '/carrier/dashboard';
+
   return (
     <div className="wrapper">
       <CarrierSider />
@@ -53,32 +56,13 @@ const CarrierHomePage = () => {
             <Link to="/carrier/userManagement">
               <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {profileImage !== '' ? (
-                  <img src={profileImage} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
+                  <img src={profileImage} alt={t('profileImageAlt')} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
                 ) : (
                   <RxAvatar style={{ height: '100%', width: '100%' }} />
                 )}
               </div>
             </Link>
             <DropdownMenu>
-              {/* {showCreateCompanyNotification && (
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '14px',
-                    fontWeight: '400',
-                    textAlign: 'left',
-                    color: '#000000',
-                    backgroundColor: '#F9090973',
-                    borderRadius: '45px',
-                    padding: '4px',
-                  }}>
-                  To activate your profile please complete your profile details,{' '}
-                  <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
-                    Click Here
-                  </span>
-                </div>
-              )} */}
-
               <DropdownMenuContent align="end">
                 {/* <DropdownMenuItem onClick={() => onLogoutClick()}>
                   <Button variant="primary">Logout</Button>

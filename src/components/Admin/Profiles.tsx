@@ -34,11 +34,11 @@ const Profiles = () => {
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
-      return 'Not Approved';
+      return t('notApproved');
     } else if (accountStatus == 1 && isActive) {
-      return 'Active';
+      return t('active');
     } else if (accountStatus == 1 && !isActive) {
-      return 'Deactivated';
+      return t('deactivated');
     }
   };
 

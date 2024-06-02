@@ -7,5 +7,6 @@
   "mobileNumber": "Mobile Number",
   "viewIqamaId": "View Iqama/ID",
   "edit": "Edit",
-  "delete": "Delete"
+  "delete": "Delete",
+  "action": "Action"
 }

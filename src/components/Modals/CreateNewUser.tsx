@@ -46,7 +46,7 @@ const CreateNewUser: React.FC<CreateUserModalProps> = ({ show, handleClose, hand
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'}>
+    <Modal show={show} onHide={handleClose} centered size="lg">
       <Modal.Header style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <Modal.Title>{t('fillInInfoTitle', { infoType })}</Modal.Title>
       </Modal.Header>

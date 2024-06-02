@@ -76,7 +76,7 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} size="lg" centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>{t('addNewVehicle')}</Modal.Title>
       </Modal.Header>

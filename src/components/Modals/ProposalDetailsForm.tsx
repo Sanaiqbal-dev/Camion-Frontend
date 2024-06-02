@@ -101,7 +101,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
           setShowToast={setShowToast}
         />
       )}
-      <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+      <Modal show={show} onHide={handleClose} size="lg" centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>{t('proposalDetails')}</Modal.Title>
         </Modal.Header>

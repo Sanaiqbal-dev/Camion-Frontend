@@ -150,11 +150,10 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
       {showToast && (
         <Toast variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />
       )}
-      {/* {showToast && isFileUploaded && <Toast variant={isFileUploaded ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />} */}
 
-      <Modal show={modal.show} onHide={handleCloseModal} centered size={'sm'} backdrop="static" keyboard={false}>
+      <Modal show={modal.show} onHide={handleCloseModal} centered size={'lg'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>
-          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add A New'}Driver</Modal.Title>
+          <Modal.Title>{modal.mode === 'edit' ? 'Update' : 'Add New'} Driver</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>

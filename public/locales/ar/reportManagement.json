@@ -1,5 +1,8 @@
 {
   "show": "عرض",
   "entries": "إدخالات",
-  "searchPlaceholder": "بحث"
+  "searchPlaceholder": "بحث",
+  "notApproved": "غير معتمد",
+  "deactivated": "معطل",
+  "active": "نشط"
 }

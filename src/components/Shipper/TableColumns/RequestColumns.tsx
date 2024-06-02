@@ -46,8 +46,8 @@ export const RequestColumns = ({ onEdit, onDelete, onProposalList }: RequestActi
               <span style={{ color: '#27AE60' }}>{t('editAction')}</span>
             </div>
             <div onClick={() => onDelete(row.original.id)}>
-              <img src={DeleteIcon} alt={t('common:deleteAction')} />
-              <span style={{ color: '#EB5757' }}>{t('common:deleteAction')}</span>
+              <img src={DeleteIcon} alt={t('deleteAction')} />
+              <span style={{ color: '#EB5757' }}>{t('deleteAction')}</span>
             </div>
             <div onClick={() => onProposalList(row.original.id)}>
               <img src={ProposalIcon} alt={t('proposalsAction')} />

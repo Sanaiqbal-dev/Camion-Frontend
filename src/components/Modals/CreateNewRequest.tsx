@@ -96,7 +96,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
         reset();
       }}
       centered
-      size={'sm'}
+      size={'lg'}
       backdrop="static"
       keyboard={false}>
       <Modal.Header closeButton>

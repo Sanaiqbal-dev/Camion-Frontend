@@ -53,7 +53,7 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
   };
 
   return (
-    <Modal show={show} onHide={handleCloseModal} centered backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleCloseModal} size="lg" centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <Modal.Title>{t('addNewUser')}</Modal.Title>
       </Modal.Header>
