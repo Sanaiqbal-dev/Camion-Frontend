@@ -12,24 +12,22 @@ interface UpdatePasswordModalProps {
 
   handleClose: () => void;
 }
-const schema = z
-  .object({
-    currentPassword: z.string().min(1, 'Enter your current password'),
-    newPassword: z
-      .string()
-      .min(6, 'Password must be at least 6 characters.')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
-      ),
-    confirmPassword: z.string().min(6, 'Confirm your password.'),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
 
 const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm, handleClose }) => {
+  const { t } = useTranslation(['updatePassword']);
+  const schema = z
+    .object({
+      currentPassword: z.string().min(1, t('validationErrorEnterCurrentPassword')),
+      newPassword: z
+        .string()
+        .min(8, t('validationErrorPasswordMinLength'))
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/, t('validationErrorPasswordRequirements')),
+      confirmPassword: z.string().min(6, t('validationErrorConfirmYourPassword')),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t('validationErrorPasswordsDontMatch'),
+      path: ['confirmPassword'],
+    });
   const {
     register,
     handleSubmit,
@@ -37,7 +35,7 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
   } = useForm<IPassword>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['updatePassword']);
+
   const onSubmit: SubmitHandler<IPassword> = async (data) => {
     onSubmitForm(data);
   };
