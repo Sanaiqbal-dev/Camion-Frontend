@@ -15,6 +15,7 @@ import { PAGER_SIZE } from '@/config/constant';
 import { QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import ConfirmationModal from '../Modals/ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 const DriverManagement = () => {
   const values = [10, 20, 30, 40, 50];
 
@@ -22,6 +23,7 @@ const DriverManagement = () => {
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const { t } = useTranslation(['driverManagement']);
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -137,14 +139,14 @@ const DriverManagement = () => {
         <div></div>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => setModal({ show: true, mode: 'add' })}>
-            Add Driver
+            {t('addDriver')}
           </button>
         </div>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -160,7 +162,7 @@ const DriverManagement = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -169,7 +171,7 @@ const DriverManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('search')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -192,7 +194,7 @@ const DriverManagement = () => {
       )}
       <AddDriver modal={modal} handleClose={handleCloseModal} driverExistingData={editDriverData} />
       <ConfirmationModal
-        promptMessage={isDeleteDriver ? 'Are you sure, you want to delete this driver?' : ''}
+        promptMessage={isDeleteDriver ? t('deleteDriverConfirmation') : ''}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {

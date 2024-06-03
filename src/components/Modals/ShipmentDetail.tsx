@@ -11,6 +11,7 @@ import { IShipmentDetails } from '@/interface/proposal';
 import { useGetProposalQuery } from '@/services/proposal';
 import ShipmentForm from './ShipmentForm';
 import { useGetShipmentTypesQuery } from '@/services/shipmentType';
+import { useTranslation } from 'react-i18next';
 
 interface ShipmentDetailModalProps {
   show: boolean;
@@ -26,6 +27,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
 
   const shipmentData = useGetShipmentTypesQuery();
   const [shipmentId, setShipmentId] = useState<number>();
+  const { t } = useTranslation(['shipmentForm']);
   useEffect(() => {
     if (shipmentData.data?.result) {
       setShipmentId(shipmentData.data.result[0].id);
@@ -64,7 +66,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
   }, [isEdit, proposalId, proposalItem]);
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
         <div style={{ display: 'flex', gap: '20px' }}>
           {forms.map((form, index) => (
@@ -92,7 +94,7 @@ const ShipmentDetail: React.FC<ShipmentDetailModalProps> = ({ show, handleClose,
             </div>
           ))}
         </div>
-        <Modal.Title>Fill in the other shipment details</Modal.Title>
+        <Modal.Title>{t('fillInShipmentDetails')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>

@@ -6,17 +6,7 @@ import { IProposalDetailResponseData, IShipmentDetails } from '@/interface/propo
 import { useEffect } from 'react';
 import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { IGoodType } from '@/interface/goodType';
-
-const schema = z.object({
-  quantity: z.coerce.number().int().min(1, 'Enter number of items'),
-  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
-  height: z.coerce.number().int().min(1, 'Enter height in centimeters'),
-  weightPerItem: z.coerce.number().int().min(1, 'Please enter weight per item'),
-  isCargoItemsStackable: z.boolean().optional().default(false),
-  isIncludingItemsARGood: z.boolean().optional().default(false),
-  goodTypeId: z.coerce.number().min(1, 'Good Type is required.'),
-});
+import { useTranslation } from 'react-i18next';
 
 interface IShipmentForm {
   isEdit: boolean;
@@ -25,6 +15,18 @@ interface IShipmentForm {
   onSubmitShipmentForm: (data: IShipmentDetails) => void;
 }
 const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
+  const { t } = useTranslation(['shipmentForm']);
+
+  const schema = z.object({
+    quantity: z.coerce.number().int().min(1, t('enterNumberOfItems')),
+    length: z.coerce.number().int().min(1, t('enterLengthInCm')),
+    width: z.coerce.number().int().min(1, t('enterWidthInCm')),
+    height: z.coerce.number().int().min(1, t('enterHeightInCm')),
+    weightPerItem: z.coerce.number().int().min(1, t('enterWeightPerItem')),
+    isCargoItemsStackable: z.boolean().optional().default(false),
+    isIncludingItemsARGood: z.boolean().optional().default(false),
+    goodTypeId: z.coerce.number().min(1, t('goodTypeRequired')),
+  });
   const {
     register,
     handleSubmit,
@@ -68,10 +70,10 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
       <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
           <Form.Group className="mb-3">
-            <Form.Label>Good type</Form.Label>
+            <Form.Label>{t('goodType')}</Form.Label>
             <Form.Control
               as="select"
-              placeholder="Select district"
+              placeholder={t('selectGoodType')}
               style={{
                 width: '100%',
                 height: '59px',
@@ -79,7 +81,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               {...register('goodTypeId', { required: true })}
               isInvalid={!!errors.goodTypeId}
               readOnly>
-              <option value="">Select good type</option>
+              <option value="">{t('selectGoodType')}</option>
               {allGoodTypes &&
                 allGoodTypes.result.map((goodType: IGoodType) => (
                   <option key={goodType.id} value={goodType.id}>
@@ -90,7 +92,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Quantity</Form.Label>
+            <Form.Label>{t('quantity')}</Form.Label>
             <Form.Control
               type="number"
               min={1}
@@ -108,7 +110,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Length"
+              placeholder={t('length')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -119,7 +121,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Width"
+              placeholder={t('width')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -131,7 +133,7 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
             <Form.Control
               type="number"
               min={1}
-              placeholder="Height"
+              placeholder={t('height')}
               style={{
                 width: 'auto',
                 height: '59px',
@@ -149,11 +151,11 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
                 backgroundColor: '#E0E0E0',
                 color: '#7A7A7A',
               }}>
-              Cm
+              {t('cm')}
             </div>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Weight per item</Form.Label>
+            <Form.Label>{t('weightPerItem')}</Form.Label>
             <Form.Control
               type="number"
               min={1}
@@ -176,17 +178,17 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
               }}>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
-                <label className="form-check-label">Cargo item are stackable</label>
+                <label className="form-check-label">{t('stackableCargo')}</label>
               </div>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
-                <label>Including ADR goods</label>
+                <label>{t('includingADR')}</label>
               </div>
             </div>
           </Form.Group>
 
           <Button className="tw-ml-auto tw-mr-auto" variant="primary" type="submit">
-            Submit
+            {t('submit')}
           </Button>
         </div>
       </Form>

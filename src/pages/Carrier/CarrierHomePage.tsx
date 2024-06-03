@@ -1,39 +1,41 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import CarrierSider from '../../components/Carrier/CarrierSider';
-import { useSelector } from 'react-redux';
 import { DropdownMenu, DropdownMenuContent } from '@radix-ui/react-dropdown-menu';
 import ActivateProfile from '@/components/Modals/ActivateProfile';
 import { useState } from 'react';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
+
 const CarrierHomePage = () => {
+  const { t } = useTranslation(['carrierHomePage']);
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const token = useSelector((state: any) => state.session.token);
-  // const hasNoCompanyRegistered = useSelector((state: any) => !state.session.isCompanyAccount);
+  const token = useAppSelector((state) => state.session.token);
   const currentRouteLocation = useLocation();
   const profileImage = useAppSelector((state) => state.session?.profileImage);
   const pageTitleMap = [
-    { pathname: '/carrier/dashboard', title: 'Dashboard' },
-    { pathname: '/carrier/tracking', title: 'Tracking' },
-    { pathname: '/carrier/requests', title: 'Requests' },
-    { pathname: '/carrier/orders', title: 'Orders' },
-    { pathname: '/carrier/drivermanagement', title: 'Driver Management' },
-    { pathname: '/carrier/vehiclemanagement', title: 'Vehicle Management' },
-    { pathname: '/carrier/bayan', title: 'Bayan' },
-    { pathname: '/carrier/userManagement', title: 'User Management' },
-    { pathname: '/carrier/bayanBill', title: 'Bayan Bill' },
+    { pathname: '/carrier/dashboard', title: t('dashboard') },
+    { pathname: '/carrier/tracking', title: t('tracking') },
+    { pathname: '/carrier/requests', title: t('requests') },
+    { pathname: '/carrier/orders', title: t('orders') },
+    { pathname: '/carrier/drivermanagement', title: t('driverManagement') },
+    { pathname: '/carrier/vehiclemanagement', title: t('vehicleManagement') },
+    { pathname: '/carrier/bayan', title: t('bayan') },
+    { pathname: '/carrier/userManagement', title: t('userManagement') },
+    { pathname: '/carrier/bayanBill', title: t('bayanBill') },
   ];
+
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentRouteLocation.pathname);
-
     return pageObject?.title ? pageObject.title : '';
   };
+
   const toggleSidebar = () => {};
 
   if (!token) {
     return <Navigate to="/login" state={{ from: { currentRouteLocation } }} replace />;
   }
-  // const showCreateCompanyNotification = hasNoCompanyRegistered && currentRouteLocation.pathname === '/carrier/dashboard';
+
   return (
     <div className="wrapper">
       <CarrierSider />
@@ -54,7 +56,7 @@ const CarrierHomePage = () => {
             <Link to="/carrier/userManagement">
               <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {profileImage !== '' ? (
-                  <img src={profileImage} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
+                  <img src={profileImage} alt={t('profileImageAlt')} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
                 ) : (
                   <RxAvatar style={{ height: '100%', width: '100%' }} />
                 )}

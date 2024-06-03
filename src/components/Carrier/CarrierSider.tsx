@@ -18,10 +18,12 @@ import { setLogout } from '@/state/slice/sessionSlice';
 import ActivateProfile from '../Modals/ActivateProfile';
 import { useState } from 'react';
 import { useAppSelector } from '@/state';
+import { useTranslation } from 'react-i18next';
 
 const CarrierSider = () => {
   const [showActivateProfile, setShowActivateProfile] = useState(false);
   const session = useAppSelector((state) => state.session);
+  const { t } = useTranslation(['carrierSider']);
 
   const dispatch = useDispatch();
 
@@ -30,7 +32,7 @@ const CarrierSider = () => {
   };
 
   return (
-    <div className="text-light pt-5 sidebar  sidebar-admin" id="sidebar-container">
+    <div className="text-light pt-5 sidebar sidebar-admin" id="sidebar-container">
       <div>
         <Image src={CamionLogo} alt="logo" height={27} style={{ width: '80%', margin: '0 auto' }} />
         {session?.isCompanyAccount && (
@@ -40,7 +42,7 @@ const CarrierSider = () => {
                 <Accordion.Header>
                   <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                     <Image src={IconDashboard} />
-                    Dashboard
+                    {t('dashboard')}
                   </div>
                 </Accordion.Header>
               </Accordion.Item>
@@ -50,7 +52,7 @@ const CarrierSider = () => {
                 <Accordion.Header>
                   <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                     <Image src={IconTracking} />
-                    <span>Tracking</span>
+                    <span>{t('tracking')}</span>
                   </div>
                 </Accordion.Header>
               </Accordion.Item>
@@ -59,7 +61,7 @@ const CarrierSider = () => {
               <Accordion.Header>
                 <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                   <Image src={IconOrderManagment} />
-                  Order Management
+                  {t('orderManagement')}
                 </div>
               </Accordion.Header>
               <Accordion.Body>
@@ -68,7 +70,7 @@ const CarrierSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconRequest} />
-                        <span>Requests</span>
+                        <span>{t('requests')}</span>
                       </div>
                     </h2>
                   </div>
@@ -78,7 +80,7 @@ const CarrierSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconOrder} />
-                        <span>Orders</span>
+                        <span>{t('orders')}</span>
                       </div>
                     </h2>
                   </div>
@@ -89,7 +91,7 @@ const CarrierSider = () => {
               <Accordion.Header>
                 <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                   <Image src={IconFleetManagment} />
-                  Fleet Management
+                  {t('fleetManagement')}
                 </div>
               </Accordion.Header>
               <Accordion.Body>
@@ -98,7 +100,7 @@ const CarrierSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconDriverManagment} />
-                        <span>Driver Managment</span>
+                        <span>{t('driverManagement')}</span>
                       </div>
                     </h2>
                   </div>
@@ -108,7 +110,7 @@ const CarrierSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconVehicleManagment} />
-                        <span>Vehicle Management</span>
+                        <span>{t('vehicleManagement')}</span>
                       </div>
                     </h2>
                   </div>
@@ -118,7 +120,7 @@ const CarrierSider = () => {
                     <h2 className="accordion-header" id="headingOne">
                       <div className="accordion-not-collapsing-item" style={{ gap: '12px' }}>
                         <Image src={IconBayan} />
-                        <span>Bayan</span>
+                        <span>{t('bayan')}</span>
                       </div>
                     </h2>
                   </div>
@@ -132,13 +134,13 @@ const CarrierSider = () => {
         {session.isCompanyAccount && !session.isSubUser && (
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
             <Image src={IconSettings} />
-            Settings
+            {t('settings')}
           </div>
         )}
         <NavLink key={'Logout'} to={'/login'} onClick={handleReplaceNavigate} className={({ isActive }) => (isActive ? 'selected-navlink' : undefined)}>
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
             <Image src={LogoutIcon} />
-            <span style={{ color: '#FF3939' }}>Logout</span>
+            <span style={{ color: '#FF3939' }}>{t('logout')}</span>
           </div>
         </NavLink>
       </div>

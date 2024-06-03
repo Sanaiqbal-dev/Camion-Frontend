@@ -1,0 +1,13 @@
+{
+  "origin": "Origin",
+  "destination": "Destination",
+  "weight": "Weight",
+  "dimensions": "Dimensions",
+  "edt": "EDT",
+  "action": "Action",
+  "submitProposal": "Submit proposal",
+  "proposalSubmitted": "Proposal Submitted",
+  "editAction": "Edit",
+  "deleteAction": "Delete",
+  "proposalsAction": "Proposals"
+}

@@ -1,0 +1,7 @@
+{
+  "modalTitle": "Assign Vehicle",
+  "vehiclesLabel": "Vehicles",
+  "selectVehiclePlaceholder": "Select a Vehicle",
+  "assignVehicleButton": "Assign Vehicle",
+  "vehicleTypeRequiredMessage": "Vehicle type is required"
+}

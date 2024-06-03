@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { INewRequest } from '@/interface/shipper';
-// import { IPlaces } from '@/interface/proposal';
+import { useTranslation } from 'react-i18next';
 import { useGetCityListQuery, useGetDistrictListQuery, useGetProposalQuery } from '@/services/proposal';
 
 interface CreateRequestModalProps {
@@ -15,23 +15,19 @@ interface CreateRequestModalProps {
   proposalObject?: number;
   handleNextStep: (requestObj: INewRequest, requestType: string) => void;
 }
-const schema = z.object({
-  buildingNumber: z
-    .string()
-    .regex(/^[a-z A-Z 0-9]*$/, 'Building number must contain only alphabets and numbers.')
-    .min(1, 'Building number is required'),
-  streetName: z
-    .string()
-    .regex(/^[a-z A-Z 0-9]*$/, 'Street name must contain only alphabets and numbers.')
-    .min(1, 'Enter street name'),
-  districtId: z.coerce.number().min(1, 'Please enter your district name'),
-  cityId: z.coerce.number().min(1, 'City name is required'),
-  zipCode: z.coerce.number().min(1, 'Zip code is required'),
-  additionalNumber: z.coerce.number().min(1, 'Additional number is required'),
-  unitNo: z.string().min(1, 'unit no is required'),
-});
 
 const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose, handleNextStep, infoType = 'origin', isEdit, proposalObject }) => {
+  const { t } = useTranslation(['createNewRequest']);
+
+  const schema = z.object({
+    buildingNumber: z.string().min(1, t('buildingNumberRequired')),
+    streetName: z.string().min(1, t('enterStreetName')),
+    districtId: z.coerce.number().min(1, t('districtNameRequired')),
+    cityId: z.coerce.number().min(1, t('cityNameRequired')),
+    zipCode: z.coerce.number().min(1, t('zipCodeRequired')),
+    additionalNumber: z.coerce.number().min(1, t('additionalNumberRequired')),
+    unitNo: z.string().min(1, t('unitNoRequired')),
+  });
   const {
     register,
     handleSubmit,
@@ -41,7 +37,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   } = useForm<INewRequest>({
     resolver: zodResolver(schema),
   });
-
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
@@ -68,20 +63,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
         setValue(key as keyof INewRequest, value);
       });
     }
-    // else if (!isEdit) {
-    //   const currentObj = {
-    //     buildingNumber: '',
-    //     streetName: '',
-    //     districtId: '',
-    //     cityId: '',
-    //     zipCode: '',
-    //     additionalNumber: '',
-    //     unitNo: '',
-    //   };
-    //   Object.entries(currentObj).forEach(([key, value]) => {
-    //     setValue(key as keyof INewRequest, value);
-    //   });
-    // }
   }, [isEdit, setValue, infoType, proposalItem]);
 
   useEffect(() => {
@@ -90,7 +71,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const onSubmit: SubmitHandler<INewRequest> = async (data) => {
     const city_ = cityData?.result?.find((item) => item.id === selectedCity)?.id;
     const district_ = districtData?.result?.find((item) => item.id === selectedDistrict)?.id;
-    // console.log(city_, district_);
     const updatedObject = {
       buildingNumber: data.buildingNumber,
       streetName: data.streetName,
@@ -100,7 +80,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
       additionalNumber: data.additionalNumber,
       unitNo: data.unitNo,
     };
-    // console.log('submitted object :', updatedObject);
+
     handleNextStep(updatedObject, '');
     reset();
   };
@@ -108,17 +88,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   const onError = (error: any) => {
     console.error('Form errors', error);
   };
-
-  // useEffect(() => {
-  //   if (cityData) {
-  //     setCityList(cityData.result);
-  //     console.log('rerendering', cityData.result);
-  //   }
-  //   if (districtData) {
-  //     setDistrictList(districtData.result);
-  //     console.log(districtData.result);
-  //   }
-  // }, [cityData, districtData]);
 
   return (
     <Modal
@@ -128,56 +97,33 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
         reset();
       }}
       centered
-      size={'sm'}
+      size={'lg'}
       backdrop="static"
       keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Fill in the {infoType} information</Modal.Title>
+        <Modal.Title>{t('fillInInfoTitle', { infoType })}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            {/* <Form.Group className="mb-3">
-              <Form.Label>Search your address to auto fill all the details</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Start with street name"
-                style={{
-                  width: '560px',
-                  height: '59px',
-                }}
-              />
-            </Form.Group> */}
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Building number</Form.Label>
+                <Form.Label>{t('buildingNumberLabel')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="12345"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('enterBuildingNumber')}
+                  style={{ width: '270px', height: '50px' }}
                   {...register('buildingNumber')}
                   isInvalid={!!errors.buildingNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.buildingNumber?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Street name</Form.Label>
+                <Form.Label>{t('streetNameLabel')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Any street name"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('enterStreetName')}
+                  style={{ width: '270px', height: '50px' }}
                   {...register('streetName')}
                   isInvalid={!!errors.streetName}
                 />
@@ -186,17 +132,11 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>District name</Form.Label>
+                <Form.Label>{t('districtNameLabel')}</Form.Label>
                 <Form.Control
                   as="select"
-                  placeholder="Select district"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('selectDistrict')}
+                  style={{ width: '270px', height: '50px' }}
                   {...register('districtId', {
                     required: true,
                     onChange(event) {
@@ -204,7 +144,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                     },
                   })}
                   isInvalid={!!errors.districtId}>
-                  <option value="">Select District</option>
+                  <option value="">{t('selectDistrict')}</option>
                   {districtData &&
                     districtData.result.map((district) => (
                       <option key={district.id} value={district.id}>
@@ -215,27 +155,19 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                 <Form.Control.Feedback type="invalid">{errors.districtId?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>City name</Form.Label>
+                <Form.Label>{t('cityNameLabel')}</Form.Label>
                 <Form.Control
                   as="select"
-                  placeholder="Select city"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('selectCity')}
+                  style={{ width: '270px', height: '50px' }}
                   {...register('cityId', {
                     required: true,
                     onChange(event) {
                       setSelectedCity(Number(event.target.value));
                     },
                   })}
-                  isInvalid={!!errors.cityId}
-                  // onChange={(e) => setSelectedCity(Number(e.target.value))}
-                >
-                  <option value="">Select City</option>
+                  isInvalid={!!errors.cityId}>
+                  <option value="">{t('selectCity')}</option>
                   {cityData &&
                     cityData.result.map((city) => (
                       <option key={city.id} value={city.id}>
@@ -248,7 +180,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Zip code</Form.Label>
+                <Form.Label>{t('zipCodeLabel')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="15618"
@@ -265,7 +197,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
                 <Form.Control.Feedback type="invalid">{errors.zipCode?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>Additional number</Form.Label>
+                <Form.Label>{t('additionalNumberLabel')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="121212"
@@ -284,7 +216,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
             </div>
 
             <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-              <Form.Label>Unit no</Form.Label>
+              <Form.Label>{t('unitNoLabel')}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="121212"
@@ -302,7 +234,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            Next
+            {t('nextButton')}
           </Button>
         </Form>
       </Modal.Body>

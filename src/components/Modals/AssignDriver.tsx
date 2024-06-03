@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React from 'react';
 import { IDriver } from '@/interface/carrier';
+import { useTranslation } from 'react-i18next';
 
 interface AssignVehicleModalProps {
   show: boolean;
@@ -16,13 +17,12 @@ interface AssignVehicleModalProps {
 interface IdriverForm {
   driver: string;
 }
-export const schema = z.object({
-  driver: z.string().min(1, 'Select Driver'),
-});
 
 const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assignedDriverId, handleClose, onAssignDriver }) => {
-  // console.log('Assign Driver', assignedDriverId);
-
+  const { t } = useTranslation(['assignDriver']);
+  const schema = z.object({
+    driver: z.string().min(1, t('validationErrorSelectDriver')),
+  });
   const {
     register,
     handleSubmit,
@@ -31,6 +31,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
   } = useForm<IdriverForm>({
     resolver: zodResolver(schema),
   });
+
   const onSubmit: SubmitHandler<IdriverForm> = async (data) => {
     onAssignDriver(parseInt(data.driver));
     reset();
@@ -39,18 +40,18 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
   return (
     <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Assign Driver</Modal.Title>
+        <Modal.Title>{t('modalTitle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" style={{ minWidth: '436px' }} controlId="formBasicEmail">
-            <Form.Label>Drivers</Form.Label>
+            <Form.Label>{t('driversLabel')}</Form.Label>
             <Form.Control
               as="select"
               {...register('driver', {
-                required: 'driver is required',
+                required: t('driverRequiredMessage'),
               })}>
-              <option value="">Select a driver</option>
+              <option value="">{t('selectDriverPlaceholder')}</option>
               {drivers.map((d, index) => {
                 return (
                   <option selected={d.id === assignedDriverId} key={'driverOption_' + index} value={d.id}>
@@ -63,7 +64,7 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
           </Form.Group>
 
           <Button variant="primary" type="submit">
-            Assign Driver
+            {t('assignDriverButton')}
           </Button>
         </Form>
       </Modal.Body>

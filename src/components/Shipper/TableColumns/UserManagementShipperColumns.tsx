@@ -10,33 +10,33 @@ interface UserActionsProps {
 }
 
 export const UserManagementShipperColumns = ({ onEdit, onDelete }: UserActionsProps): ColumnDef<IUserManagement>[] => {
-  const { t } = useTranslation(['userManagementShipperColumns']);
+  const { t } = useTranslation(['userColumn']);
 
   return [
     {
       accessorKey: 'userName',
-      header: t('userNameHeader'),
+      header: t('userName'),
       cell: ({ row }) => {
         return <div>{row.original.fullName}</div>;
       },
     },
     {
       accessorKey: 'email',
-      header: t('emailAddressHeader'),
+      header: t('emailAddress'),
     },
     {
       accessorKey: 'action',
-      header: t('actionHeader'),
+      header: t('action'),
       cell: ({ row }) => {
         return (
           <div className="action-container" style={{ justifyContent: 'start' }}>
             <div onClick={() => onEdit(row.original.userId)}>
-              <img src={EditIcon} alt={t('editAction')} />
-              <span style={{ color: '#27AE60' }}>{t('editAction')}</span>
+              <img src={EditIcon} />
+              <span style={{ color: '#27AE60' }}>{t('edit')}</span>
             </div>
             <div onClick={() => onDelete(row.original.userId)}>
-              <img src={DeleteIcon} alt={t('deleteAction')} />
-              <span style={{ color: '#EB5757' }}>{t('deleteAction')}</span>
+              <img src={DeleteIcon} />
+              <span style={{ color: '#EB5757' }}>{t('delete')}</span>
             </div>
           </div>
         );

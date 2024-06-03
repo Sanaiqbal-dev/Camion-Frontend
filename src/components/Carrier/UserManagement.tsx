@@ -15,12 +15,15 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const UserManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const { t } = useTranslation(['userManagement']);
+
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   // const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
@@ -178,13 +181,13 @@ const UserManagement = () => {
       <div className="table-container">
         <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
           <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
-            Create New User
+            {t('createUser')}
           </button>
         </div>
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
             <Col xs="auto" className="tw-text-secondary">
-              Show
+              {t('show')}
             </Col>
             <Col xs="auto">
               <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -200,7 +203,7 @@ const UserManagement = () => {
               </div>
             </Col>
             <Col xs="auto" className="tw-text-secondary">
-              entries
+              {t('entries')}
             </Col>
           </Row>
           <Row className="tw-mt-3">
@@ -209,12 +212,12 @@ const UserManagement = () => {
                 <InputGroup.Text>
                   <Image src={SearchIcon} />
                 </InputGroup.Text>
-                <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+                <FormControl type="text" placeholder={t('search')} className="form-control" onChange={onSearchChange}></FormControl>
               </InputGroup>
             </Col>
           </Row>
         </div>
-        {UsersData ? <DataTable isAction={true} columns={columns} data={UsersData} /> : <span>No Users Found!</span>}
+        {UsersData ? <DataTable isAction={true} columns={columns} data={UsersData} /> : <span>{t('noUsersFound')}</span>}
         <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-py-4 tw-mb-5">
           <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
             <img src={PreviousIcon} />
@@ -227,21 +230,24 @@ const UserManagement = () => {
           show={showCreateUserModal}
           onSubmitForm={submitCreateFormHandler}
           handleClose={() => setshowCreateUserModal(false)}
-          // showError={!isUserAdding && isError && error}
-          isSuccess={!error ? 'success' : ''}
+          isSuccess={!error ? t('toastSuccess') : ''}
         />
         <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
-        <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+        <ConfirmationModal
+          show={isConfirmationModalOpen}
+          promptMessage={t('confirmationMessage')}
+          handleClose={() => setIsConfirmationModalOpen(false)}
+          performOperation={onDeleteHandler}
+        />
       </div>
-      <CreateUser
-        show={showCreateUserModal}
-        onSubmitForm={submitCreateFormHandler}
-        handleClose={() => setshowCreateUserModal(false)}
-        // showError={!isLoading && isError && error}
-        isSuccess={!error ? 'success' : ''}
-      />
+      <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} isSuccess={!error ? t('toastSuccess') : ''} />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage={t('confirmationMessage')}
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
     </>
   );
 };

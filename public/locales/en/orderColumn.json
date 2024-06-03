@@ -1,9 +1,0 @@
-{
-    "trackingHeader": "Tracking",
-    "typeHeader": "Type",
-    "trackAction": "Track",
-    "pendingStatus": "Pending",
-    "inProgressStatus": "In Progress",
-    "readyToLoadStatus": "Ready To Load",
-    "driverAssignedStatus": "Driver Assigned"
-}

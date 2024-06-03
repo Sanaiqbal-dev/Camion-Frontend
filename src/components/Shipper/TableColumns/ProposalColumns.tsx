@@ -3,7 +3,7 @@ import { IProposalQuotation } from '@/interface/proposalQuotation';
 import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
-  const { t } = useTranslation(['proposalColumns', 'common']);
+  const { t } = useTranslation(['proposalColumns']);
 
   return (
     <div style={{ marginBottom: '10px', marginTop: '20px' }}>
@@ -92,7 +92,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('common:statusHeader')}
+              {t('status')}
             </div>
             <div
               style={{
@@ -115,7 +115,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('common:originHeader')}
+              {t('origin')}
             </div>
             <div
               style={{
@@ -138,7 +138,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('common:destinationHeader')}
+              {t('destination')}
             </div>
             <div
               style={{
@@ -161,7 +161,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('common:weightHeader')}
+              {t('weight')}
             </div>
             <div
               style={{
@@ -184,7 +184,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('common:dimensionHeader')}
+              {t('dimension')}
             </div>
             <div
               style={{

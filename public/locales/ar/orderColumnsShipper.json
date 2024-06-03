@@ -1,0 +1,11 @@
+{
+  "trackingHeader": "التتبع",
+  "originHeader": "المต้น",
+  "destinationHeader": "الوجهة",
+  "weightHeader": "الوزن",
+  "typeHeader": "النوع",
+  "etaHeader": "التاريخ المقدر للوصول",
+  "statusHeader": "الحالة",
+  "actionHeader": "الإجراء",
+  "trackAction": "تتبع"
+}

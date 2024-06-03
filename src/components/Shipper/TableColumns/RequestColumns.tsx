@@ -12,32 +12,32 @@ interface RequestActionsProps {
 }
 
 export const RequestColumns = ({ onEdit, onDelete, onProposalList }: RequestActionsProps): ColumnDef<IRequestTable>[] => {
-  const { t } = useTranslation(['requestColumns', 'common']);
+  const { t } = useTranslation(['requestColumn']);
 
   return [
     {
       accessorKey: 'origin',
-      header: t('common:originHeader'),
+      header: t('origin'),
     },
     {
       accessorKey: 'destination',
-      header: t('common:destinationHeader'),
+      header: t('destination'),
     },
     {
       accessorKey: 'weight',
-      header: t('common:weightHeader'),
+      header: t('weight'),
     },
     {
       accessorKey: 'dimentions',
-      header: t('common:dimensionHeader'),
+      header: t('dimensions'),
     },
     {
       accessorKey: 'ETA',
-      header: t('common:etaHeader'),
+      header: t('edt'),
     },
     {
       accessorKey: 'action',
-      header: t('common:actionHeader'),
+      header: t('action'),
       cell: ({ row }) => {
         return (
           <div className="action-container" style={{ justifyContent: 'start', gap: '20px' }}>
@@ -46,8 +46,8 @@ export const RequestColumns = ({ onEdit, onDelete, onProposalList }: RequestActi
               <span style={{ color: '#27AE60' }}>{t('editAction')}</span>
             </div>
             <div onClick={() => onDelete(row.original.id)}>
-              <img src={DeleteIcon} alt={t('common:deleteAction')} />
-              <span style={{ color: '#EB5757' }}>{t('common:deleteAction')}</span>
+              <img src={DeleteIcon} alt={t('deleteAction')} />
+              <span style={{ color: '#EB5757' }}>{t('deleteAction')}</span>
             </div>
             <div onClick={() => onProposalList(row.original.id)}>
               <img src={ProposalIcon} alt={t('proposalsAction')} />

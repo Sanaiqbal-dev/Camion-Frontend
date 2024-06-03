@@ -1,0 +1,17 @@
+{
+  "modalTitle": "معلومات الشحن",
+  "shipmentTypeLabel": "نوع الشحنة",
+  "selectShipmentTypePlaceholder": "اختر نوع الشحنة",
+  "estimatedPickupDateLabel": "تاريخ الاستلام المتوقع",
+  "selectPickupDatePlaceholder": "اختر تاريخ الاستلام",
+  "estimatedDropOffDateLabel": "تاريخ التسليم المتوقع",
+  "selectDropOffDatePlaceholder": "اختر تاريخ التسليم",
+  "fareLabel": "الأجرة",
+  "enterFarePlaceholder": "أدخل الأجرة",
+  "submitButton": "التالي",
+  "errorSelectShipmentType": "اختر نوع الشحنة",
+  "errorSelectPickupDate": "اختر تاريخ الاستلام",
+  "errorSelectDropOffDate": "اختر تاريخ التسليم",
+  "errorEnterFare": "أدخل الأجرة",
+  "errorDropOffDateMustBeLater": "يجب أن يكون تاريخ التسليم لاحقًا لتاريخ الاستلام"
+}

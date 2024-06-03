@@ -13,7 +13,7 @@ interface shipmentDetailsProps {
 }
 
 const ShippementDetails = (props: shipmentDetailsProps) => {
-  const { t } = useTranslation(['shipmentDetails']);
+  const { t } = useTranslation(['proposalColumns']);
 
   const { orderNumber, trackingId, amount, origin, destination, dimension, weight, status } = props;
   return (
@@ -38,7 +38,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('trackingIdLabel')}
+              {t('trackingId')}
             </div>
             <div
               style={{
@@ -61,7 +61,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('amountLabel')}
+              {t('amount')}
             </div>
             <div
               style={{
@@ -71,7 +71,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 lineHeight: '18.75px',
                 textAlign: 'left',
               }}>
-              {t('amountCurrency')} {amount}
+              SAR: {amount}
             </div>
           </div>
           <div className="col-sm">
@@ -84,7 +84,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('originLabel')}
+              {t('origin')}
             </div>
             <div
               style={{
@@ -108,7 +108,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('destinationLabel')}
+              {t('destination')}
             </div>
             <div
               style={{
@@ -132,7 +132,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('weightLabel')}
+              {t('weight')}
             </div>
             <div
               style={{
@@ -155,7 +155,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('dimensionLabel')}
+              {t('dimension')}
             </div>
             <div
               style={{
@@ -178,7 +178,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              {t('statusLabel')}
+              {t('status')}
             </div>
             <div
               style={{
@@ -202,7 +202,7 @@ const ShippementDetails = (props: shipmentDetailsProps) => {
                   backgroundColor: '#0060B8',
                   borderRadius: '10px',
                 }}>
-                {t('trackButton')}
+                {t('trackAction')}
               </button>
             </Link>
           </div>

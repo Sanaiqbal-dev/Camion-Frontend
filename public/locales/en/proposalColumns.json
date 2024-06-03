@@ -1,5 +1,12 @@
 {
-    "trackingId": "Tracking ID:",
-    "accept": "Accept",
-    "reject": "Reject"
+  "trackingId": "Tracking ID:",
+  "origin": "Origin",
+  "destination": "Destination",
+  "weight": "Weight",
+  "dimensions": "Dimensions",
+  "accept": "Accept",
+  "reject": "Reject",
+  "status": "Status",
+  "amount": "Amount",
+  "trackAction": "Track"
 }

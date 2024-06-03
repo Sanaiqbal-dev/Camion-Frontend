@@ -25,12 +25,14 @@ import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { useGetDriversListQuery } from '@/services/drivers';
 import { Toast } from '../ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const { t } = useTranslation(['vehicleManagement']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [totalPageCount, setTotalPageCount] = useState(0);
   const values = [10, 20, 30, 40, 50];
@@ -56,6 +58,7 @@ const VehicleManagement = () => {
     pageCount: pager.pageSize,
     term: searchTerm,
   });
+
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
@@ -109,7 +112,6 @@ const VehicleManagement = () => {
     setShowEditVehicle(true);
   };
   const submitCreateVehicleHandler = async (data: FormData) => {
-    // setShowCreateVehicle(false);
     try {
       const resp = await createVehicle(data).unwrap();
       setShowToast(true);
@@ -119,7 +121,7 @@ const VehicleManagement = () => {
       setShowToast(true);
       throw e;
     }
-    refetch(); //
+    refetch();
   };
   const submitEditVehicleHandler = async (data: FormData) => {
     setShowEditVehicle(false);
@@ -162,7 +164,6 @@ const VehicleManagement = () => {
   };
   const onVeiwDocumentClick = (id: number) => {
     const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
-    // setSelectedFile(selectedVehicle?.fileName);
     downloadSelectedFile(selectedVehicle?.fileName);
   };
 
@@ -212,14 +213,14 @@ const VehicleManagement = () => {
               onClick={() => {
                 setShowCreateVehicle(true);
               }}>
-              Add Vehicle
+              {t('addVehicle')}
             </button>
           </div>
         </div>
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
             <Col xs="auto" className="tw-text-secondary">
-              Show
+              {t('show')}
             </Col>
             <Col xs="auto">
               <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -235,7 +236,7 @@ const VehicleManagement = () => {
               </div>
             </Col>
             <Col xs="auto" className="tw-text-secondary">
-              entries
+              {t('entries')}
             </Col>
           </Row>
           <Row className="tw-mt-3">
@@ -244,12 +245,12 @@ const VehicleManagement = () => {
                 <InputGroup.Text>
                   <Image src={SearchIcon} />
                 </InputGroup.Text>
-                <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+                <FormControl type="text" placeholder={t('search')} className="form-control" onChange={handleInputChange}></FormControl>
               </InputGroup>
             </Col>
           </Row>
         </div>
-        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>No Data found.</>}
+        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>{t('noDataFound')}</>}
         {vehicles && vehicles.length > 10 && (
           <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
             <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= data.result.total} onClick={() => updatePage(-1)}>
@@ -279,7 +280,7 @@ const VehicleManagement = () => {
       <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
       <ConfirmationModal
         show={isConfirmationModalOpen}
-        promptMessage="Are you sure, you want to delete this vehicle?"
+        promptMessage={t('deleteVehicleConfirmation')}
         handleClose={() => setIsConfirmationModalOpen(false)}
         performOperation={onDeleteHandler}
       />

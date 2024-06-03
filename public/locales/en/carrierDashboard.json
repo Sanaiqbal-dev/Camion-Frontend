@@ -1,0 +1,22 @@
+{
+  "totalOrders": "Total Orders",
+  "orderIncrease": "Order Increase",
+  "orderDecrease": "Order Decrease",
+  "activeOrders": "Active Orders",
+  "onRoute": "On Route",
+  "ordersThisMonth": "Orders this month",
+  "totalVehicles": "Total Vehicles",
+  "totalDrivers": "Total Drivers",
+  "overspeed": "Overspeed",
+  "maxSpeed": "Max Speed",
+  "alerts": "Alerts",
+  "fenceOverstay": "Fence Overstay",
+  "maxOverstay": "Max Overstay",
+  "acMisuse": "AC Misuse",
+  "approxFuelWaste": "Approx Fuel waste",
+  "stayAwayFromZone": "Stay Away From Zone",
+  "stayInZone": "Stay In Zone",
+  "temperature": "Temperature",
+  "minTemp": "Min Temp.",
+  "maxTemp": "Max Temp."
+}

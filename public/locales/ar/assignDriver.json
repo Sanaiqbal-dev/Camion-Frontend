@@ -1,0 +1,8 @@
+{
+  "modalTitle": "تعيين سائق",
+  "driversLabel": "السائقين",
+  "selectDriverPlaceholder": "اختر سائقًا",
+  "assignDriverButton": "تعيين سائق",
+  "driverRequiredMessage": "السائق مطلوب",
+  "validationErrorSelectDriver": "اختر السائق"
+}

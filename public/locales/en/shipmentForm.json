@@ -1,0 +1,20 @@
+{
+  "goodType": "Good type",
+  "selectGoodType": "Select good type",
+  "quantity": "Quantity",
+  "length": "Length",
+  "width": "Width",
+  "height": "Height",
+  "cm": "Cm",
+  "weightPerItem": "Weight per item",
+  "stackableCargo": "Cargo items are stackable",
+  "includingADR": "Including ADR goods",
+  "submit": "Submit",
+  "fillInShipmentDetails": "Fill in the other shipment details",
+  "enterNumberOfItems": "Enter number of items",
+  "enterLengthInCm": "Enter length in centimeters",
+  "enterWidthInCm": "Enter width in centimeters",
+  "enterHeightInCm": "Enter height in centimeters",
+  "enterWeightPerItem": "Please enter weight per item",
+  "goodTypeRequired": "Good Type is required"
+}

@@ -12,6 +12,7 @@ import { useGetProfileQuery } from '@/services/user';
 import { FaCamera } from 'react-icons/fa';
 import { IProfile } from '@/interface/aspNetUser';
 import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
 
 interface IUser {
   FirstName: string;
@@ -32,28 +33,30 @@ interface CreateUserModalProps {
   handleClose: () => void;
   submitProfileInfo: (proposal: IUser) => void;
 }
-const schema = z
-  .object({
-    FirstName: z.string().min(3, 'Please enter your first name'),
-    LastName: z.string().min(1, 'Please enter your Second name'),
-    Email: z.string().email('Enter email address'),
-    PhoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
-    Password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
-        message: 'Password must include a special character (including _), a capital letter, a lowercase letter, and a number',
-      }),
-    ConfirmPassword: z.string().min(6, 'Confirm your password.'),
-    CompanyName: z.string().min(5, 'Company name should be atleast 5 characters.'),
-    MOINumber: z.string().min(4, 'Moi should be atleast 4 characters.'),
-  })
-  .refine((data) => data.Password === data.ConfirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
 
 const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
+  const { t } = useTranslation(['activateProfile']);
+
+  const schema = z
+    .object({
+      FirstName: z.string().min(3, t('validationErrorEnterFirstName')),
+      LastName: z.string().min(1, t('validationErrorEnterLastName')),
+      Email: z.string().email(t('validationErrorEnterEmailAddress')),
+      PhoneNumber: z.string().regex(/^\+966\d{9}$/, t('validationErrorPhoneNumber')),
+      Password: z
+        .string()
+        .min(8, t('validationErrorPasswordMinLength'))
+        .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
+          message: t('validationErrorPasswordComplexity'),
+        }),
+      ConfirmPassword: z.string().min(6, t('validationErrorConfirmPassword')),
+      CompanyName: z.string().min(5, t('validationErrorCompanyName')),
+      MOINumber: z.string().min(4, t('validationErrorMoiNumber')),
+    })
+    .refine((data) => data.Password === data.ConfirmPassword, {
+      message: t('validationErrorPasswordsDontMatch'),
+      path: ['ConfirmPassword'],
+    });
   const {
     register,
     handleSubmit,
@@ -210,24 +213,15 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   }, [show, reset]);
 
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size="lg" backdrop="static" keyboard={false}>
       {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}
       <Modal.Header style={{ display: 'flex', gap: '20px' }} closeButton>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
           <div style={{ position: 'relative', width: '106px', height: '106px' }}>
             {uploadedImage ? (
-              <img src={uploadedImage && URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
+              <img src={URL.createObjectURL(uploadedImage)} alt="Profile" style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
             ) : (
-              <div
-                style={{
-                  height: '106px',
-                  width: '106px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+              <div style={{ height: '106px', width: '106px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {profile?.profileImagePath !== '' ? (
                   <img src={profile?.profileImagePath} style={{ height: '106px', width: '106px', borderRadius: '50%' }} />
                 ) : (
@@ -235,12 +229,12 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 )}
               </div>
             )}
-            <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }} disabled={isCreatingProfile}>
+            <Button variant="secondary" onClick={handleImageInputClick} style={{ position: 'absolute', bottom: '0', right: '0', borderRadius: '50%' }}>
               <FaCamera />
             </Button>
-            <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} disabled={isCreatingProfile} />
+            <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
           </div>
-          <Modal.Title>Company Profile</Modal.Title>
+          <Modal.Title>{t('companyProfile')}</Modal.Title>
           <div
             style={{
               fontFamily: 'Roboto',
@@ -252,9 +246,9 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               borderRadius: '45px',
               padding: '4px 15px',
             }}>
-            {profile && profile.companyName && profile.isCompanyAccountActive && <span>On updating company information, your account will require admin approval again.</span>}
-            {profile && !profile.companyName && <span>To activate your profile please complete your profile details.</span>}
-            {profile && !profile.isCompanyAccountActive && <span>Your profile is currently under review.</span>}
+            {profile && profile.companyName && profile.isCompanyAccountActive && <span>{t('updateApprovalWarning')}</span>}
+            {profile && !profile.companyName && <span>{t('completeProfilePrompt')}</span>}
+            {profile && !profile.isCompanyAccountActive && <span>{t('underReviewMessage')}</span>}
           </div>
         </div>
       </Modal.Header>
@@ -264,113 +258,104 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
             <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>First name</Form.Label>
+                  <Form.Label>{t('firstName')}</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Enter first name"
+                    placeholder={t('enterFirstName')}
                     defaultValue={profile?.firstName}
                     style={{ width: '270px', height: '50px' }}
                     {...register('FirstName')}
                     isInvalid={!!errors.FirstName}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Last name</Form.Label>
+                  <Form.Label>{t('lastName')}</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Enter your last name"
+                    placeholder={t('enterLastName')}
                     defaultValue={profile?.lastName}
                     style={{ width: '270px', height: '50px' }}
                     {...register('LastName')}
                     isInvalid={!!errors.LastName}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>Email address</Form.Label>
+                  <Form.Label>{t('emailAddress')}</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="Enter email address"
+                    placeholder={t('enterEmailAddress')}
                     defaultValue={profile?.email}
                     style={{ width: '270px', height: '50px' }}
                     {...register('Email')}
                     isInvalid={!!errors.Email}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Contact number</Form.Label>
+                  <Form.Label>{t('contactNumber')}</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Enter your phone number"
+                    placeholder={t('enterContactNumber')}
                     style={{ width: '270px', height: '50px' }}
                     defaultValue={profile ? profile.phoneNumber : '+966'}
                     {...register('PhoneNumber')}
                     isInvalid={!!errors.PhoneNumber}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.PhoneNumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>{t('password')}</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Password"
+                    placeholder={t('enterPassword')}
                     style={{ width: '270px', height: '50px' }}
                     {...register('Password')}
                     isInvalid={!!errors.Password}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.Password?.message}</Form.Control.Feedback>
                 </Form.Group>
-
                 <Form.Group className="mb-3">
-                  <Form.Label>Confirm password</Form.Label>
+                  <Form.Label>{t('confirmPassword')}</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Confirm password"
+                    placeholder={t('enterConfirmPassword')}
                     style={{ width: '270px', height: '50px' }}
                     {...register('ConfirmPassword')}
                     isInvalid={!!errors.ConfirmPassword}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.ConfirmPassword?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Company name</Form.Label>
+                  <Form.Label>{t('companyName')}</Form.Label>
                   <Form.Control
                     type="text"
                     defaultValue={profile?.companyName}
-                    placeholder="Company name"
+                    placeholder={t('enterCompanyName')}
                     style={{ width: '560px', height: '50px' }}
                     {...register('CompanyName')}
                     isInvalid={!!errors.CompanyName}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
               <div style={{ display: 'flex', gap: '18px' }}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Moi number</Form.Label>
+                  <Form.Label>{t('moiNumber')}</Form.Label>
                   <Form.Control
                     type="text"
                     defaultValue={profile?.moiNumber}
-                    placeholder="Moi number"
+                    placeholder={t('enterMoiNumber')}
                     style={{ width: '560px', height: '50px' }}
                     {...register('MOINumber')}
                     isInvalid={!!errors.MOINumber}
-                    disabled={isCreatingProfile}
                   />
                   <Form.Control.Feedback type="invalid">{errors.MOINumber?.message}</Form.Control.Feedback>
                 </Form.Group>
@@ -378,7 +363,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
               {isShipper ? (
                 <div style={{ display: 'flex', gap: '18px' }}>
                   <Form.Group className="tw-flex tw-flex-col">
-                    <Form.Label className="tw-text-sm">VAT certificate</Form.Label>
+                    <Form.Label className="tw-text-sm">{t('vatCertificate')}</Form.Label>
                     <div className="tw-flex-col">
                       <Button
                         variant="default"
@@ -389,13 +374,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
-                          overflow: 'hidden',
-                          whiteSpace: 'nowrap',
-                        }}
-                        disabled={isCreatingProfile}>
-                        {vatFile ? vatFile.name : 'Upload the document'}
+                        }}>
+                        {vatFile ? vatFile.name : t('uploadDocument')}
                       </Button>
-                      {showVatFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                      {showVatFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                     </div>
                     <Form.Control
                       type="file"
@@ -408,11 +390,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           setVatFile(file);
                         }
                       }}
-                      disabled={isCreatingProfile}
                     />
                   </Form.Group>
                   <Form.Group className="tw-flex tw-flex-col">
-                    <Form.Label className="tw-text-sm">Commercial registration</Form.Label>
+                    <Form.Label className="tw-text-sm">{t('crDocument')}</Form.Label>
                     <div className="tw-flex-col">
                       <Button
                         variant="default"
@@ -423,13 +404,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
-                          overflow: 'hidden',
-                          whiteSpace: 'nowrap',
-                        }}
-                        disabled={isCreatingProfile}>
-                        {crFile ? crFile.name : 'Upload the document'}
+                        }}>
+                        {crFile ? crFile.name : t('uploadDocument')}
                       </Button>
-                      {showCrFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                      {showCrFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                     </div>
                     <Form.Control
                       type="file"
@@ -442,7 +420,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           setCrFile(file);
                         }
                       }}
-                      disabled={isCreatingProfile}
                     />
                   </Form.Group>
                 </div>
@@ -450,7 +427,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 <>
                   <div style={{ display: 'flex', gap: '18px' }}>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">Transport Licenses</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('transportLicenses')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
@@ -461,14 +438,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                          }}
-                          disabled={isCreatingProfile}>
-                          {tlFile ? tlFile.name : 'Upload the document'}
+                          }}>
+                          {tlFile ? tlFile.name : t('uploadDocument')}
                         </Button>
-
-                        {showtlFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                        {showtlFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
                       <Form.Control
                         type="file"
@@ -481,11 +454,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             setTlFile(file);
                           }
                         }}
-                        disabled={isCreatingProfile}
                       />
                     </Form.Group>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">Carrier Liability Insurance</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('carrierLiabilityInsurance')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
@@ -496,15 +468,11 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                          }}
-                          disabled={isCreatingProfile}>
-                          {cliFile ? cliFile.name : 'Upload the document'}
+                          }}>
+                          {cliFile ? cliFile.name : t('uploadDocument')}
                         </Button>
-                        {showCliFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                        {showCliFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
-
                       <Form.Control
                         type="file"
                         ref={cliFileInputRef}
@@ -516,13 +484,12 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             setCliFile(file);
                           }
                         }}
-                        disabled={isCreatingProfile}
                       />
                     </Form.Group>
                   </div>
                   <div style={{ display: 'flex', gap: '18px' }}>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">Company Letterhead</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('companyLetterhead')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
@@ -533,13 +500,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                          }}
-                          disabled={isCreatingProfile}>
-                          {clFile ? clFile.name : 'Upload the document'}
+                          }}>
+                          {clFile ? clFile.name : t('uploadDocument')}
                         </Button>
-                        {showclFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                        {showclFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
                       <Form.Control
                         type="file"
@@ -552,11 +516,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             setClFile(file);
                           }
                         }}
-                        disabled={isCreatingProfile}
                       />
                     </Form.Group>
                     <Form.Group className="tw-flex tw-flex-col">
-                      <Form.Label className="tw-text-sm">Business Registration</Form.Label>
+                      <Form.Label className="tw-text-sm">{t('businessRegistration')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
                           variant="default"
@@ -567,15 +530,11 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                          }}
-                          disabled={isCreatingProfile}>
-                          {brFile ? brFile.name : 'Upload the document'}
+                          }}>
+                          {brFile ? brFile.name : t('uploadDocument')}
                         </Button>
-                        {showBrFileError && <div style={{ color: 'red' }}>This file is mandatory</div>}
+                        {showBrFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
                       </div>
-
                       <Form.Control
                         type="file"
                         ref={brFileInputRef}
@@ -587,15 +546,14 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             setBrFile(file);
                           }
                         }}
-                        disabled={isCreatingProfile}
                       />
                     </Form.Group>
                   </div>
                 </>
               )}
             </div>
-            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileLoading}>
-              Update profile
+            <Button variant="primary" type="submit" disabled={isCreatingProfile || isProfileCreated || isProfileLoading}>
+              {t('updateProfile')}
             </Button>
           </Form>
         )}

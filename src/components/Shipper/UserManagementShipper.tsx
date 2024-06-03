@@ -154,13 +154,13 @@ const UserManagementShipper = () => {
       )}
       <div className="search-and-entries-container" style={{ flexDirection: 'row-reverse' }}>
         <button className="add-item-btn" id="add-user-btn" onClick={() => setshowCreateUserModal(true)}>
-          {t('createNewUser')}
+          {t('createUser')}
         </button>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            {t('showLabel')}
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -176,7 +176,7 @@ const UserManagementShipper = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            {t('entriesLabel')}
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -185,7 +185,7 @@ const UserManagementShipper = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('search')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -201,7 +201,12 @@ const UserManagementShipper = () => {
       </div>
       <CreateUser show={showCreateUserModal} onSubmitForm={submitCreateFormHandler} handleClose={() => setshowCreateUserModal(false)} isSuccess={isUserCreated ? 'success' : ''} />
       <UpdatePassword onSubmitForm={submitEditFormHandler} show={showUpdatePasswordModal} handleClose={() => setshowUpdatePasswordModal(false)} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage={t('areYouSure')} handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage={t('confirmationMessage')}
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
     </div>
   );
 };

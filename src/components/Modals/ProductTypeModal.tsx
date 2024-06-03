@@ -5,25 +5,29 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 
 interface ProductTypeModalProps {
   show: boolean;
   handleClose: () => void;
   handleNextStep: (requestObj: IProductType) => void;
 }
-const schema = z.object({
-  productTypeId: z.string().min(1, 'Choose product type'),
-  name: z.string().min(3, 'Enter product name'),
-  price: z.coerce.number().min(3, 'Enter product price'),
-  quantity: z.coerce.number().min(1, 'Enter product quantity'),
-  weight: z.coerce.number().min(1, 'Enter product weight'),
-  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
-  height: z.coerce.number().int().min(1, 'Enter height in centimeters'),
-  isCargoItemsStackable: z.boolean().optional().default(false),
-  isIncludingItemsARGood: z.boolean().optional().default(false),
-});
+
 const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, handleNextStep }) => {
+  const { t } = useTranslation(['productType']);
+
+  const schema = z.object({
+    productTypeId: z.string().min(1, t('errorChooseProductType')),
+    name: z.string().min(3, t('errorEnterProductName')),
+    price: z.coerce.number().min(3, t('errorEnterProductPrice')),
+    quantity: z.coerce.number().min(1, t('errorEnterProductQuantity')),
+    weight: z.coerce.number().min(1, t('errorEnterProductWeight')),
+    length: z.coerce.number().int().min(1, t('errorEnterLengthInCm')),
+    width: z.coerce.number().int().min(1, t('errorEnterWidthInCm')),
+    height: z.coerce.number().int().min(1, t('errorEnterHeightInCm')),
+    isCargoItemsStackable: z.boolean().optional().default(false),
+    isIncludingItemsARGood: z.boolean().optional().default(false),
+  });
   const {
     register,
     handleSubmit,
@@ -51,18 +55,18 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
     }
   }, [data]);
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Product Type</Modal.Title>
+        <Modal.Title>{t('productType')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
           <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
             <Form.Group className="mb-3">
-              <Form.Label>Product Type</Form.Label>
+              <Form.Label>{t('productType')}</Form.Label>
               <Form.Control
                 as="select"
-                placeholder="Select product type"
+                placeholder={t('selectProductType')}
                 required
                 style={{
                   width: '560px',
@@ -81,10 +85,10 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
             </Form.Group>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Product Name</Form.Label>
+                <Form.Label>{t('productName')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter product name"
+                  placeholder={t('enterProductName')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -98,10 +102,10 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Price</Form.Label>
+                <Form.Label>{t('price')}</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter price"
+                  placeholder={t('enterPrice')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -118,10 +122,10 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
 
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>Quantity</Form.Label>
+                <Form.Label>{t('quantity')}</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="e.g.50"
+                  placeholder={t('quantityExample')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -135,10 +139,10 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 <Form.Control.Feedback type="invalid">{errors.quantity?.message}</Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Weight</Form.Label>
+                <Form.Label>{t('weight')}</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter weight"
+                  placeholder={t('enterWeight')}
                   style={{
                     width: '270px',
                     height: '50px',
@@ -155,7 +159,7 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
             <Form.Group className="mb-3 d-flex">
               <Form.Control
                 type="number"
-                placeholder="Length"
+                placeholder={t('length')}
                 style={{
                   width: '164px',
                   height: '59px',
@@ -165,7 +169,7 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
               />
               <Form.Control
                 type="number"
-                placeholder="Width"
+                placeholder={t('width')}
                 style={{
                   width: '164px',
                   height: '59px',
@@ -176,7 +180,7 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
               />
               <Form.Control
                 type="number"
-                placeholder="Height"
+                placeholder={t('height')}
                 style={{
                   width: '164px',
                   height: '59px',
@@ -194,7 +198,7 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                   backgroundColor: '#E0E0E0',
                   color: '#7A7A7A',
                 }}>
-                Cm
+                {t('cm')}
               </div>
             </Form.Group>
             <div
@@ -206,16 +210,16 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
               }}>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
-                <label className="form-check-label">Cargo item are stackable</label>
+                <label className="form-check-label">{t('cargoItemsStackable')}</label>
               </div>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
-                <label>Including ADR goods</label>
+                <label>{t('includingADRGoods')}</label>
               </div>
             </div>
           </div>
           <Button variant="primary" type="submit">
-            Next
+            {t('next')}
           </Button>
         </Form>
       </Modal.Body>

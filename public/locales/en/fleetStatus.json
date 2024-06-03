@@ -1,0 +1,8 @@
+{
+  "fleetStatus": "Fleet Status",
+  "running": "Running",
+  "idle": "Idle",
+  "stopper": "Stopper",
+  "inactive": "InActive",
+  "noData": "No Data"
+}

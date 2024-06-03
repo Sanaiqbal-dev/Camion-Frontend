@@ -1,0 +1,13 @@
+{
+  "origin": "الأصل",
+  "destination": "الوجهة",
+  "weight": "الوزن",
+  "dimensions": "الأبعاد",
+  "edt": "الوقت المتوقع للتسليم",
+  "action": "عمل",
+  "submitProposal": "تقديم الاقتراح",
+  "proposalSubmitted": "تم تقديم الاقتراح",
+  "editAction": "تعديل",
+  "deleteAction": "حذف",
+  "proposalsAction": "العروض"
+}

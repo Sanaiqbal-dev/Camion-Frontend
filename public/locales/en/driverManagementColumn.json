@@ -1,0 +1,12 @@
+{
+  "driverName": "Driver Name",
+  "driverIdIqama": "Driver ID/Iqama",
+  "licenseNumber": "License Number",
+  "dateOfBirth": "Date Of Birth",
+  "nationality": "Nationality",
+  "mobileNumber": "Mobile Number",
+  "viewIqamaId": "View Iqama/ID",
+  "edit": "Edit",
+  "delete": "Delete",
+  "action": "Action"
+}

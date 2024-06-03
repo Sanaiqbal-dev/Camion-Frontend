@@ -5,6 +5,7 @@ import IconDriver from '../../../assets/icons/ic-driver.svg';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { IVehicle } from '../../../interface/carrier';
+import { useTranslation } from 'react-i18next';
 
 export const VehicleManagementColumns = ({
   assignDriver,
@@ -16,95 +17,95 @@ export const VehicleManagementColumns = ({
   editVehicle: (id: number) => void;
   deleteVehicle: (id: number) => void;
   onViewDocumentClick: (id: number) => void;
-}): ColumnDef<IVehicle>[] => [
-  {
-    accessorKey: 'name',
-    header: 'Driver Name',
-    cell: ({ row }) => {
-      const driver = row.original.driver;
-      return (
-        <div
-          className={clsx({
-            'tw-text-red-600': !driver?.name,
-          })}>
-          {driver ? driver.name : 'Driver Not Assign'}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'vehicleType',
-    header: 'Vehicle Type',
-    cell: ({ row }) => {
-      return <div>{row.original.vehicleType.typeName}</div>;
-    },
-  },
-  {
-    accessorKey: 'modelYear',
-    header: 'Model Year',
-  },
-  {
-    accessorKey: 'numberPlate',
-    header: 'Vehicle Number',
-    cell: ({ row }) => {
-      return <div>{row.original.numberPlate}</div>;
-    },
-  },
-  {
-    accessorKey: 'color',
-    header: 'Color',
-  },
+}): ColumnDef<IVehicle>[] => {
+  const { t } = useTranslation(['vehicleManagementColumn']);
 
-  {
-    accessorKey: 'registrationNumber',
-    header: 'Registration Number',
-  },
-
-  {
-    accessorKey: 'imeiNumber',
-    header: 'IMEI Number',
-  },
-
-  {
-    accessorKey: 'vehicleRegistration',
-    header: 'Vehicle Registration',
-    cell: ({ row }) => {
-      const vehicleId = row.original.id;
-
-      return (
-        <div onClick={() => onViewDocumentClick(vehicleId)}>
-          <Link to={''}>View Document</Link>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => {
-      return (
-        <div className="action-container" style={{ justifyContent: 'start' }}>
+  return [
+    {
+      accessorKey: 'name',
+      header: t('driverName'),
+      cell: ({ row }) => {
+        const driver = row.original.driver;
+        return (
           <div
-            onClick={() => {
-              editVehicle(row.original.id);
-            }}>
-            <img src={IconEdit} />
-            <span style={{ color: '#27AE60' }}>Edit</span>
+            className={clsx({
+              'tw-text-red-600': !driver?.name,
+            })}>
+            {driver ? driver.name : t('driverNotAssigned')}
           </div>
-          <div onClick={() => deleteVehicle(row.original.id)}>
-            <img src={IconDelete} />
-            <span style={{ color: '#EB5757' }}>Delete</span>
-          </div>
-          <div
-            id="assign-driver"
-            onClick={() => {
-              assignDriver(row.original.id, row.original.driver?.id);
-            }}>
-            <img src={IconDriver} />
-            <span style={{ color: '#0060B8' }}>Assign Driver</span>
-          </div>
-        </div>
-      );
+        );
+      },
     },
-  },
-];
+    {
+      accessorKey: 'vehicleType',
+      header: t('vehicleType'),
+      cell: ({ row }) => {
+        return <div>{row.original.vehicleType.typeName}</div>;
+      },
+    },
+    {
+      accessorKey: 'modelYear',
+      header: t('modelYear'),
+    },
+    {
+      accessorKey: 'numberPlate',
+      header: t('vehicleNumber'),
+      cell: ({ row }) => {
+        return <div>{row.original.numberPlate}</div>;
+      },
+    },
+    {
+      accessorKey: 'color',
+      header: t('color'),
+    },
+    {
+      accessorKey: 'registrationNumber',
+      header: t('registrationNumber'),
+    },
+    {
+      accessorKey: 'imeiNumber',
+      header: t('imeiNumber'),
+    },
+    {
+      accessorKey: 'vehicleRegistration',
+      header: t('vehicleRegistration'),
+      cell: ({ row }) => {
+        const vehicleId = row.original.id;
+        return (
+          <div onClick={() => onViewDocumentClick(vehicleId)}>
+            <Link to="">{t('viewDocument')}</Link>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'action',
+      header: t('action'),
+      cell: ({ row }) => {
+        return (
+          <div className="action-container" style={{ justifyContent: 'start' }}>
+            <div
+              onClick={() => {
+                editVehicle(row.original.id);
+              }}>
+              <img src={IconEdit} />
+              <span style={{ color: '#27AE60' }}>{t('edit')}</span>
+            </div>
+            <div onClick={() => deleteVehicle(row.original.id)}>
+              <img src={IconDelete} />
+              <span style={{ color: '#EB5757' }}>{t('delete')}</span>
+            </div>
+            <div
+              id="assign-driver"
+              onClick={() => {
+                assignDriver(row.original.id, row.original.driver?.id);
+              }}>
+              <img src={IconDriver} />
+              <span style={{ color: '#0060B8' }}>{t('assignDriver')}</span>
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
+};

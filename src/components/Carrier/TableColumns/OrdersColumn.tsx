@@ -8,6 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '../../../../@/components/ui/button';
 import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
+import { useTranslation } from 'react-i18next';
+
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
   onAssignVehicle: (orderItem: IOrderTable) => void;
@@ -16,54 +18,57 @@ interface OrderActionsProps {
   onUpdateStatus: (id: number, statusId: number) => void;
   orderStatuses: IAPIResponse<IOrderStatusResponseObject[]> | undefined;
 }
-export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => [
-  {
-    accessorKey: 'origin',
-    header: 'Origin',
-  },
-  {
-    accessorKey: 'destination',
-    header: 'Destination',
-  },
-  {
-    accessorKey: 'weight',
-    header: 'Weight',
-  },
-  {
-    accessorKey: 'dimentions',
-    header: 'Dimensions',
-  },
-  {
-    accessorKey: 'ETA',
-    header: 'ETA',
-  },
 
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const item = row.original;
-      const noItemSeleted = (
-        <>
-          Select Status <img src={IconDown} />
-        </>
-      );
+export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => {
+  const { t } = useTranslation(['orderColum']);
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only tw-flex tw-gap-1">
-                {item.status ? (
-                  <>
-                    {item.status} <img src={IconDown} />
-                  </>
-                ) : (
-                  noItemSeleted
-                )}
-              </span>
-            </Button>
-          </DropdownMenuTrigger>
+  return [
+    {
+      accessorKey: 'origin',
+      header: t('origin'),
+    },
+    {
+      accessorKey: 'destination',
+      header: t('destination'),
+    },
+    {
+      accessorKey: 'weight',
+      header: t('weight'),
+    },
+    {
+      accessorKey: 'dimentions',
+      header: t('dimensions'),
+    },
+    {
+      accessorKey: 'ETA',
+      header: t('eta'),
+    },
+    {
+      accessorKey: 'status',
+      header: t('status'),
+      cell: ({ row }) => {
+        const item = row.original;
+        const noItemSelected = (
+          <>
+            {t('selectStatus')} <img src={IconDown} />
+          </>
+        );
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only tw-flex tw-gap-1">
+                  {item.status ? (
+                    <>
+                      {item.status} <img src={IconDown} />
+                    </>
+                  ) : (
+                    noItemSelected
+                  )}
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
 
           <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
             {orderStatuses &&

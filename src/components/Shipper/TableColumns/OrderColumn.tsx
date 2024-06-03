@@ -11,36 +11,36 @@ interface OrderActionsProps {
 }
 
 export const OrderColumns = ({ onDelete, onTrackOrder }: OrderActionsProps): ColumnDef<IOrderTable>[] => {
-  const { t } = useTranslation(['orderColumn', 'common']);
+  const { t } = useTranslation(['orderColumnsShipper']);
 
   return [
     {
       accessorKey: 'trackingId',
-      header: t('orderColumn:trackingHeader'),
+      header: t('trackingHeader'),
     },
     {
       accessorKey: 'origin',
-      header: t('common:originHeader'),
+      header: t('originHeader'),
     },
     {
       accessorKey: 'destination',
-      header: t('common:destinationHeader'),
+      header: t('destinationHeader'),
     },
     {
       accessorKey: 'weight',
-      header: t('common:weightHeader'),
+      header: t('weightHeader'),
     },
     {
       accessorKey: 'type',
-      header: t('orderColumn:typeHeader'),
+      header: t('typeHeader'),
     },
     {
       accessorKey: 'ETA',
-      header: t('common:etaHeader'),
+      header: t('etaHeader'),
     },
     {
       accessorKey: 'status',
-      header: t('common:statusHeader'),
+      header: t('statusHeader'),
       cell: ({ row }) => {
         const statusVal = row.original.status;
         return (
@@ -63,9 +63,9 @@ export const OrderColumns = ({ onDelete, onTrackOrder }: OrderActionsProps): Col
     },
     {
       accessorKey: 'action',
-      header: t('common:actionHeader'),
+      header: t('actionHeader'),
       cell: ({ row }) => {
-        let isEnabled = row.original.status === 'Driver Assigned';
+        const isEnabled = row.original.status === 'Driver Assigned';
         return (
           <div className="action-container" style={{ justifyContent: 'start' }}>
             <div onClick={() => onDelete(row.original.id)}>
