@@ -59,7 +59,7 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { isSuccess: isUserRegistered, error }] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister, { error }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {

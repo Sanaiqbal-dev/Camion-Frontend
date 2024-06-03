@@ -38,9 +38,7 @@ const Tracking = () => {
               // zIndex: "0",
               position: 'absolute',
             }}>
-            {markers && markers.map((item) => (
-              <MapMarker lat={item.latitude} lng={item.longitude} driver={item.driver} numberPlate={item.numberPlate} />
-            ))}
+            {markers && markers.map((item) => <MapMarker lat={item.latitude} lng={item.longitude} driver={item.driver} numberPlate={item.numberPlate} />)}
           </Map>
         </APIProvider>
       )}
