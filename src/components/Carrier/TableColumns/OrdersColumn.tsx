@@ -116,4 +116,4 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
       );
     },
   },
-];
+]};

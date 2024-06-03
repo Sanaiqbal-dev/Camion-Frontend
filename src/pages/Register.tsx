@@ -66,7 +66,7 @@ const Register = () => {
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
     if (!recaptchaResponseRef.current) {
-      setRecaptchaError('Please verify that you are not a robot by checking recaptcha');
+      setRecaptchaError(t('recaptchaError'));
       // alert('Please verify that you are not a robot by checking recaptcha');
       return;
     }
@@ -100,7 +100,7 @@ const Register = () => {
 
   return (
     <Container fluid className="vh-100">
-      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={error ? 'danger' : 'success'} />}
       <Row className="h-100">
         <Col xs={12} md={6} className="d-none d-md-block p-0">
           <div className="image-container">
@@ -207,7 +207,7 @@ const Register = () => {
                   </Row>
                 </div>
                 <ReCAPTCHA ref={recaptchaRef} sitekey={siteKey} onChange={onReCAPTCHAChange} />
-                {isLoading && <p>{t('loading')}</p>}
+                {recaptchaError && <span className="tw-text-red-700">{recaptchaError}</span>}
                 <div className="register-container">
                   <div>
                     <Button variant="primary" type="submit" className="btn customRegisterButton">

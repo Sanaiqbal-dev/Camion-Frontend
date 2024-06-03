@@ -23,43 +23,7 @@ export const ProfileColumns = ({
   onDeactivateButtonClick,
   onDeleteButtonClick,
   isDisabled,
-}: ProfileActionProps): ColumnDef<Iprofiles>[] => [
-  {
-    accessorKey: 'profileType',
-    header: 'Profile Type',
-  },
-  {
-    accessorKey: 'firstName',
-    header: 'First Name',
-  },
-  {
-    accessorKey: 'lastName',
-    header: 'Last Name',
-  },
-  {
-    accessorKey: 'email',
-    header: 'Email Address',
-  },
-  {
-    accessorKey: 'contact',
-    header: 'Contact Number',
-  },
-  {
-    accessorKey: 'company',
-    header: 'Company Name',
-  },
-  {
-    accessorKey: 'CRDocument',
-    header: 'CR Document',
-    cell: ({ row }) => {
-      const files = row.original.crDocument || [];
-      const renderOptions = () => {
-        return files.map((file) => (
-          <option key={file.id} value={file.id}>
-            {file.fileName}
-          </option>
-        ));
-      };
+
 }: ProfileActionProps): ColumnDef<Iprofiles>[] => {
   const { t } = useTranslation(['adminProfileColumn']);
 

@@ -26,5 +26,6 @@
   "validationErrorPasswordMinLength": "Password must be at least 8 characters.",
   "validationErrorPasswordRequirements": "Password must include a special character (including _), a capital letter, a lowercase letter, and a number.",
   "validationErrorConfirmYourPassword": "Confirm your password.",
-  "validationErrorPasswordsDontMatch": "Passwords don't match."
+  "validationErrorPasswordsDontMatch": "Passwords don't match.",
+  "recaptchaError":"Please verify that you are not a robot by checking recaptcha"
 }

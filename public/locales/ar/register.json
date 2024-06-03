@@ -26,5 +26,6 @@
   "validationErrorPasswordMinLength": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
   "validationErrorPasswordRequirements": "يجب أن تتضمن كلمة المرور حرفًا خاصًا (بما في ذلك _)، وحرفًا كبيرًا، وحرفًا صغيرًا، ورقمًا.",
   "validationErrorConfirmYourPassword": "تأكيد كلمة المرور.",
-  "validationErrorPasswordsDontMatch": "كلمات المرور غير متطابقة."
+  "validationErrorPasswordsDontMatch": "كلمات المرور غير متطابقة.",
+  "recaptchaError": "يرجى التحقق من أنك لست روبوتًا عن طريق التحقق من recaptcha"
 }

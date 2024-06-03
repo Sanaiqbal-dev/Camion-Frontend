@@ -58,7 +58,7 @@ const Orders = () => {
   const [showToast, setShowToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
+  // const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
   const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
 
   const onAssignVehicle = (orderItem: IOrderTable) => {
@@ -111,7 +111,8 @@ const Orders = () => {
   const onUpdateStatus = async (id: number, statusId: number) => {
     setSelectedOrderId(id);
     setSelectedStatusId(statusId);
-    setShowStatusConfirmationModal(true);
+    // setShowStatusConfirmationModal(true);
+    UpdateStatus()
   };
 
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
@@ -152,7 +153,7 @@ const Orders = () => {
   };
 
   const UpdateStatus = async () => {
-    setShowStatusConfirmationModal(false);
+    // setShowStatusConfirmationModal(false);
     try {
       const response = await updateOrderStatus({
         orderId: selectedOrderId,
