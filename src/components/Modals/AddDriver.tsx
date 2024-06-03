@@ -8,6 +8,7 @@ import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMut
 import { IDriver, IDriverModalForm } from '@/interface/carrier';
 import { Toast } from '../ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 interface CreateUserModalProps {
   modal: IDriverModalForm;
@@ -20,30 +21,34 @@ interface INationality {
   name: string;
 }
 
-const isAtLeast18YearsOld = (dateString: string) => {
-  const date = new Date(dateString);
-  const today = new Date();
-  const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-  return date <= eighteenYearsAgo;
-};
-const schema = z.object({
-  name: z.string().min(3, "Please enter driver's name."),
-  iqamaId: z.string().min(1, "Please enter driver's iqama number."),
-  licenseNumber: z.string().min(5, "Please enter driver's license number."),
-  dob: z.string().min(10, "Please enter driver's date of birth.").refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old.'),
-  nationalityId: z.string().min(1, "Please enter driver's nationality"),
-  phoneNumber: z
-    .string()
-    .regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits')
-    .min(1, "Please enter driver's phone number."),
-  issueNumber: z
-    .number()
-    .min(1, "Please enter driver's issue number.")
-    .positive('Please enter a positive issue number.')
-    .max(99, 'Issue number must be between 1 and 99 inclusive.'),
-});
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
+	const { t } = useTranslation(['addDriver']);
+
+	const isAtLeast18YearsOld = (dateString: string) => {
+		const date = new Date(dateString);
+		const today = new Date();
+		const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+		return date <= eighteenYearsAgo;
+	};
+
+	const schema = z.object({
+		name: z.string().min(3, t("Please enter driver's name")),
+		iqamaId: z.string().min(1, "Please enter driver's iqama number."),
+		licenseNumber: z.string().min(5, "Please enter driver's license number."),
+		dob: z.string().min(10, "Please enter driver's date of birth.").refine(isAtLeast18YearsOld, 'Driver must be at least 18 years old.'),
+		nationalityId: z.string().min(1, "Please enter driver's nationality"),
+		phoneNumber: z
+			.string()
+			.regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits')
+			.min(1, "Please enter driver's phone number."),
+		issueNumber: z
+			.number()
+			.min(1, "Please enter driver's issue number.")
+			.positive('Please enter a positive issue number.')
+			.max(99, 'Issue number must be between 1 and 99 inclusive.'),
+	});
+
   const {
     register,
     handleSubmit,
@@ -159,7 +164,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
           <Form onSubmit={handleSubmit(onSubmit)}>
             <div className="tw-flex tw-flex-col tw-gap-3 tw-mb-10">
               <Form.Group className="mb-3">
-                <Form.Label>Driver's Name</Form.Label>
+                <Form.Label>{t('driverNameLabel')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter driver's name"

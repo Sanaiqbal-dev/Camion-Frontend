@@ -947,6 +947,9 @@ thead th:last-child {
   border-right: none;
   border-left: 1px solid rgba(0, 96, 184, 0.4);
 }
+.tw-flex, .tw-flex-row{
+	direction: rtl;
+}
 
 // .accordion-button:not(.collapsed)::after {
 // 	background-image: var(--bs-accordion-btn-active-icon);
