@@ -32,7 +32,6 @@ const Tracking = () => {
           width: 'calc(100vw - 360px)',
           height: 'calc(100vh - 90px)',
           marginTop: '15px',
-          // zIndex: "0",
           position: 'absolute',
         }}>
         {markers.map((item) => (
