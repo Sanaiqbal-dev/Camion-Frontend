@@ -15,17 +15,19 @@ interface CreateRequestModalProps {
   proposalObject?: number;
   handleNextStep: (requestObj: INewRequest, requestType: string) => void;
 }
-const schema = z.object({
-  buildingNumber: z.string().min(1, 'Building number is required'),
-  streetName: z.string().min(1, 'Enter street name'),
-  districtId: z.coerce.number().min(1, 'Please enter your district name'),
-  cityId: z.coerce.number().min(1, 'City name is required'),
-  zipCode: z.coerce.number().min(1, 'Zip code is required'),
-  additionalNumber: z.coerce.number().min(1, 'Additional number is required'),
-  unitNo: z.string().min(1, 'unit no is required'),
-});
 
 const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose, handleNextStep, infoType = 'origin', isEdit, proposalObject }) => {
+  const { t } = useTranslation(['createNewRequest']);
+
+  const schema = z.object({
+    buildingNumber: z.string().min(1, t('buildingNumberRequired')),
+    streetName: z.string().min(1, t('enterStreetName')),
+    districtId: z.coerce.number().min(1, t('districtNameRequired')),
+    cityId: z.coerce.number().min(1, t('cityNameRequired')),
+    zipCode: z.coerce.number().min(1, t('zipCodeRequired')),
+    additionalNumber: z.coerce.number().min(1, t('additionalNumberRequired')),
+    unitNo: z.string().min(1, t('unitNoRequired')),
+  });
   const {
     register,
     handleSubmit,
@@ -35,7 +37,6 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
   } = useForm<INewRequest>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['createNewRequest']);
   const { data: proposalItem } = useGetProposalQuery({ id: proposalObject });
   const [selectedCity, setSelectedCity] = useState<number>();
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
@@ -179,7 +180,7 @@ const CreateNewRequest: React.FC<CreateRequestModalProps> = ({ show, handleClose
             </div>
             <div style={{ display: 'flex', gap: '18px' }}>
               <Form.Group className="mb-3">
-                <Form.Label>{t('zipCodeLable')}</Form.Label>
+                <Form.Label>{t('zipCodeLabel')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="15618"

@@ -8,17 +8,6 @@ import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { IGoodType } from '@/interface/goodType';
 import { useTranslation } from 'react-i18next';
 
-const schema = z.object({
-  quantity: z.coerce.number().int().min(1, 'Enter number of items'),
-  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
-  height: z.coerce.number().int().min(1, 'Enter height in centimeters'),
-  weightPerItem: z.coerce.number().int().min(1, 'Please enter weight per item'),
-  isCargoItemsStackable: z.boolean().optional().default(false),
-  isIncludingItemsARGood: z.boolean().optional().default(false),
-  goodTypeId: z.coerce.number().min(1, 'Good Type is required.'),
-});
-
 interface IShipmentForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
@@ -26,6 +15,18 @@ interface IShipmentForm {
   onSubmitShipmentForm: (data: IShipmentDetails) => void;
 }
 const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
+  const { t } = useTranslation(['shipmentForm']);
+
+  const schema = z.object({
+    quantity: z.coerce.number().int().min(1, t('enterNumberOfItems')),
+    length: z.coerce.number().int().min(1, t('enterLengthInCm')),
+    width: z.coerce.number().int().min(1, t('enterWidthInCm')),
+    height: z.coerce.number().int().min(1, t('enterHeightInCm')),
+    weightPerItem: z.coerce.number().int().min(1, t('enterWeightPerItem')),
+    isCargoItemsStackable: z.boolean().optional().default(false),
+    isIncludingItemsARGood: z.boolean().optional().default(false),
+    goodTypeId: z.coerce.number().min(1, t('goodTypeRequired')),
+  });
   const {
     register,
     handleSubmit,
@@ -34,8 +35,6 @@ const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmi
   } = useForm<IShipmentDetails>({
     resolver: zodResolver(schema),
   });
-
-  const { t } = useTranslation(['shipmentForm']);
 
   const { data: allGoodTypes } = useGetAllGoodTypesQuery();
 

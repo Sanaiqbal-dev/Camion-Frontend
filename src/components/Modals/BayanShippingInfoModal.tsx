@@ -13,18 +13,21 @@ interface BayanShippingInfoModalProps {
   handleClose: () => void;
   handleNextStep: (requestObj: IShippingInfo) => void;
 }
-const schema = z
-  .object({
-    shipmentType: z.coerce.number().min(1, 'Select shipment type'),
-    estimatedPickupDate: z.string().min(1, 'Select pickup date'),
-    estimatedDropOffDate: z.string().min(1, 'Select drop Off date'),
-    fare: z.coerce.number().min(3, 'Enter fare'),
-  })
-  .refine((data) => new Date(data.estimatedDropOffDate) > new Date(data.estimatedPickupDate), {
-    message: 'Drop Off date must be later than Pickup date',
-    path: ['estimatedDropOffDate'],
-  });
+
 const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, handleClose, handleNextStep }) => {
+  const { t } = useTranslation(['bayanShippingInfo']);
+
+  const schema = z
+    .object({
+      shipmentType: z.coerce.number().min(1, t('errorSelectShipmentType')),
+      estimatedPickupDate: z.string().min(1, t('errorSelectPickupDate')),
+      estimatedDropOffDate: z.string().min(1, t('errorSelectDropOffDate')),
+      fare: z.coerce.number().min(3, t('errorEnterFare')),
+    })
+    .refine((data) => new Date(data.estimatedDropOffDate) > new Date(data.estimatedPickupDate), {
+      message: t('errorDropOffDateMustBeLater'),
+      path: ['estimatedDropOffDate'],
+    });
   const {
     register,
     handleSubmit,
@@ -32,7 +35,6 @@ const BayanShippingInfoModal: React.FC<BayanShippingInfoModalProps> = ({ show, h
   } = useForm<IShippingInfo>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['bayanShippingInfo']);
   const shipmentData = useGetShipmentTypesQuery();
   const [shipmentTypes, setShipmentTypes] = useState<IShipmentType[]>();
 

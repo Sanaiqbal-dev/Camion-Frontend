@@ -15,5 +15,13 @@
   "cm": "Cm",
   "cargoItemsStackable": "Cargo item are stackable",
   "includingADRGoods": "Including ADR goods",
-  "next": "Next"
+  "next": "Next",
+  "errorChooseProductType": "Choose product type",
+  "errorEnterProductName": "Enter product name",
+  "errorEnterProductPrice": "Enter product price",
+  "errorEnterProductQuantity": "Enter product quantity",
+  "errorEnterProductWeight": "Enter product weight",
+  "errorEnterLengthInCm": "Enter length in centimeters",
+  "errorEnterWidthInCm": "Enter width in centimeters",
+  "errorEnterHeightInCm": "Enter height in centimeters"
 }

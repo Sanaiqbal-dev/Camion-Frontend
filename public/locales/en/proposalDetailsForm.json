@@ -8,5 +8,8 @@
   "enterText": "Enter text here",
   "uploadDocument": "Upload Document (if any)",
   "uploadTheDocument": "Upload the document",
-  "submitProposal": "Submit Proposal"
+  "submitProposal": "Submit Proposal",
+  "validationErrorAmount": "Please enter minimum 3 digits.",
+  "validationErrorDeliveryDate": "Enter an expected delivery date that is a day greater than today.",
+  "validationErrorOtherDetails": "Enter additional details about order proposal."
 }

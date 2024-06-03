@@ -18,5 +18,13 @@
   "registerMyAccount": "Register my account",
   "alreadyHaveAccount": "Already have an account?",
   "signIn": "Sign in",
-  "loading": "Loading ..."
+  "loading": "Loading ...",
+  "validationErrorEnterFirstName": "Enter first name, minimum 3 letters.",
+  "validationErrorEnterLastName": "Enter last name, minimum 3 letters.",
+  "validationErrorEnterValidEmail": "Enter a valid email.",
+  "validationErrorEnterPhoneNumber": "Phone number must be +966 followed by 9 digits.",
+  "validationErrorPasswordMinLength": "Password must be at least 8 characters.",
+  "validationErrorPasswordRequirements": "Password must include a special character (including _), a capital letter, a lowercase letter, and a number.",
+  "validationErrorConfirmYourPassword": "Confirm your password.",
+  "validationErrorPasswordsDontMatch": "Passwords don't match."
 }

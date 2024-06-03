@@ -8,5 +8,12 @@
   "enterPassword": "Password",
   "confirmPassword": "Confirm Password",
   "enterConfirmPassword": "Confirm password",
-  "addNewUserButton": "Add New User"
+  "addNewUserButton": "Add New User",
+
+  "validationErrorFirstName": "First Name must contain at least 2 characters.",
+  "validationErrorEmail": "Enter email address.",
+  "validationErrorPasswordLength": "Password must contain at least 8 characters.",
+  "validationErrorPasswordComplexity": "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.",
+  "validationErrorConfirmPassword": "Confirm your password.",
+  "validationErrorPasswordsDontMatch": "Passwords don't match"
 }

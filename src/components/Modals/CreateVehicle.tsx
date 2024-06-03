@@ -26,21 +26,21 @@ interface CreateUserModalProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmitForm: (requestData: any) => void;
 }
-const schema = z.object({
-  color: z.string().min(1, 'Enter color.'),
-  imeiNumber: z.string().min(1, 'Enter IMEI number.'),
-  registrationNumber: z.string().min(1, 'Enter registration number.'),
-  numberPlate: z
-    .string()
-    // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
-    .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
-    .min(1, 'Enter valid number plate.'),
-  modelYear: z.string().min(1, 'Enter model year.'),
-  vehicleType: z.string().min(1, 'Select vehicle type.'),
-  PlateTypeId: z.string().min(1, 'Select plate type.'),
-});
 
 const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, handleClose, onSubmitForm }) => {
+  const { t } = useTranslation(['createVehicle']);
+  const schema = z.object({
+    color: z.string().min(1, t('validationErrorEnterColor')),
+    imeiNumber: z.string().min(1, t('validationErrorEnterImeiNumber')),
+    registrationNumber: z.string().min(1, t('validationErrorEnterRegistrationNumber')),
+    numberPlate: z
+      .string()
+      .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, t('validationErrorNumberPlateExample'))
+      .min(1, t('validationErrorEnterValidNumberPlate')),
+    modelYear: z.string().min(1, t('validationErrorEnterModelYear')),
+    vehicleType: z.string().min(1, t('validationErrorSelectVehicleType')),
+    PlateTypeId: z.string().min(1, t('validationErrorSelectPlateType')),
+  });
   const {
     register,
     handleSubmit,
@@ -49,7 +49,6 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
   } = useForm<IVehicle>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['createVehicle']);
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
   const [showFileError, setShowFileError] = useState(false);

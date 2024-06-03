@@ -24,28 +24,29 @@ interface IRegisterFormInput {
   confirmPassword: string;
 }
 
-const schema = z
-  .object({
-    firstName: z.string().min(3, 'Enter first name, minimum 3 letters.'),
-    lastName: z.string().min(3, 'Enter last name, minimum 3 letters.'),
-    email: z.string().email('Enter a valid email.'),
-    phoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
-
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
-        message: 'Password must include a special character (including _), a capital letter, a lowercase letter, and a number',
-      }),
-
-    confirmPassword: z.string().min(8, 'Confirm your password.'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
-
 const Register = () => {
+  const { t } = useTranslation(['register']);
+
+  const schema = z
+    .object({
+      firstName: z.string().min(3, t('validationErrorEnterFirstName')),
+      lastName: z.string().min(3, t('validationErrorEnterLastName')),
+      email: z.string().email(t('validationErrorEnterValidEmail')),
+      phoneNumber: z.string().regex(/^\+966\d{9}$/, t('validationErrorEnterPhoneNumber')),
+
+      password: z
+        .string()
+        .min(8, t('validationErrorPasswordMinLength'))
+        .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
+          message: t('validationErrorPasswordRequirements'),
+        }),
+
+      confirmPassword: z.string().min(8, t('validationErrorConfirmYourPassword')),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('validationErrorPasswordsDontMatch'),
+      path: ['confirmPassword'],
+    });
   const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const recaptchaResponseRef = useRef<string | null>(null);
@@ -60,7 +61,6 @@ const Register = () => {
     resolver: zodResolver(schema),
   });
   const [aspNetUserRegister, { isLoading, isSuccess: isUserRegistered, error }] = useAspNetUserRegisterMutation();
-  const { t } = useTranslation(['register']);
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
     if (!recaptchaResponseRef.current) {

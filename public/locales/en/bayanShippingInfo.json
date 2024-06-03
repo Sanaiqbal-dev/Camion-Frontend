@@ -8,5 +8,10 @@
   "selectDropOffDatePlaceholder": "Select drop off date",
   "fareLabel": "Fare",
   "enterFarePlaceholder": "Enter fare",
-  "submitButton": "Next"
+  "submitButton": "Next",
+  "errorSelectShipmentType": "Select shipment type",
+  "errorSelectPickupDate": "Select pickup date",
+  "errorSelectDropOffDate": "Select drop Off date",
+  "errorEnterFare": "Enter fare",
+  "errorDropOffDateMustBeLater": "Drop Off date must be later than Pickup date"
 }

@@ -3,5 +3,6 @@
   "driversLabel": "Drivers",
   "selectDriverPlaceholder": "Select a driver",
   "assignDriverButton": "Assign Driver",
-  "driverRequiredMessage": "Driver is required"
+  "driverRequiredMessage": "Driver is required",
+  "validationErrorSelectDriver": "Select Driver"
 }

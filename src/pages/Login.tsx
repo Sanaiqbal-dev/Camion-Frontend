@@ -1,7 +1,7 @@
 import ShipperImage from '../assets/images/shipper-img.svg';
 import CamionLogo from '../assets/icons/ic-camion.svg';
 import Image from 'react-bootstrap/Image';
-import { Form,Container, Row, Col, Button } from 'react-bootstrap';
+import { Form, Container, Row, Col, Button } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,13 +17,12 @@ import { getErrorMessage } from '@/util/errorHandler';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
-const schema = z.object({
-  username: z.string().email('Enter a valid email.'),
-  password: z.string().min(6, 'Enter your password.'),
-});
-
 const Login = () => {
   const { t } = useTranslation(['login']);
+  const schema = z.object({
+    username: z.string().email(t('validationErrorEnterValidEmail')),
+    password: z.string().min(6, t('validationErrorEnterYourPassword')),
+  });
   const [showToast, setShowToast] = useState(false);
 
   const {
@@ -87,24 +86,21 @@ const Login = () => {
   }, [isLoggedIn, user?.role, navigate]);
 
   return (
-		<Container fluid className="vh-100">
-			{showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
-		<Row className="h-100">
-			<Col xs={12} md={6} className="d-none d-md-block p-0">
-				<div className="image-container">
-				<Image className="background-img"
-						src={ShipperImage}
-						alt="Camion"
-					/>
-				</div>
-			</Col>
-			<Col xs={12} md={6}>
-										<Row className="justify-content-md-center">
-								<Col md="auto" className="position-relative custom-col">
-									<LanguageSwitcher />
-								</Col>
-							</Row>
-							<div className="login d-flex align-items-center py-5">
+    <Container fluid className="vh-100">
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
+      <Row className="h-100">
+        <Col xs={12} md={6} className="d-none d-md-block p-0">
+          <div className="image-container">
+            <Image className="background-img" src={ShipperImage} alt="Camion" />
+          </div>
+        </Col>
+        <Col xs={12} md={6}>
+          <Row className="justify-content-md-center">
+            <Col md="auto" className="position-relative custom-col">
+              <LanguageSwitcher />
+            </Col>
+          </Row>
+          <div className="login d-flex align-items-center py-5">
             <div className="container">
               <div className="row">
                 <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
@@ -112,9 +108,7 @@ const Login = () => {
 
                   <div className="mt-4">
                     <h1 className="h1 mb-3 main_heading">{t('loginTitle')}</h1>
-                    <p className="sub_heading mb-4">
-                      {t('loginSubtitle')}
-                    </p>
+                    <p className="sub_heading mb-4">{t('loginSubtitle')}</p>
                   </div>
                   <div className="form-container">
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -188,9 +182,9 @@ const Login = () => {
               </div>
             </div>
           </div>
-			</Col>
-		</Row>
-	</Container>
+        </Col>
+      </Row>
+    </Container>
     // <div className="main-container">
     //   {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
     //   <div className="parent-row row g-0">
@@ -198,9 +192,9 @@ const Login = () => {
     //       <Image className="background-img" src={ShipperImage} />
     //     </div>
     //     <div className="form-main-container">
-		// 					<Row className="justify-content-md-center mt-3">
-		// 						<Col md="auto"><LanguageSwitcher /></Col>								
-		// 					</Row>
+    // 					<Row className="justify-content-md-center mt-3">
+    // 						<Col md="auto"><LanguageSwitcher /></Col>
+    // 					</Row>
     //       <div className="login d-flex align-items-center py-5">
     //         <div className="container">
     //           <div className="row">

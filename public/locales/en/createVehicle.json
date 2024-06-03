@@ -17,5 +17,13 @@
   "vehicleRegistration": "Vehicle Registration",
   "selectFile": "Select file",
   "addVehicle": "Add Vehicle",
-  "vehicleRegistrationMandatory": "Vehicle registration is mandatory"
+  "vehicleRegistrationMandatory": "Vehicle registration is mandatory",
+  "validationErrorEnterColor": "Enter color.",
+  "validationErrorEnterImeiNumber": "Enter IMEI number.",
+  "validationErrorEnterRegistrationNumber": "Enter registration number.",
+  "validationErrorEnterValidNumberPlate": "Enter valid number plate.",
+  "validationErrorNumberPlateExample": "e.g. ا ب ج 2024",
+  "validationErrorEnterModelYear": "Enter model year.",
+  "validationErrorSelectVehicleType": "Select vehicle type.",
+  "validationErrorSelectPlateType": "Select plate type."
 }

@@ -17,11 +17,12 @@ interface AssignVehicleModalProps {
 interface IdriverForm {
   driver: string;
 }
-export const schema = z.object({
-  driver: z.string().min(1, 'Select Driver'),
-});
 
 const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assignedDriverId, handleClose, onAssignDriver }) => {
+  const { t } = useTranslation(['assignDriver']);
+  const schema = z.object({
+    driver: z.string().min(1, t('validationErrorSelectDriver')),
+  });
   const {
     register,
     handleSubmit,
@@ -30,7 +31,6 @@ const AssignDriver: React.FC<AssignVehicleModalProps> = ({ show, drivers, assign
   } = useForm<IdriverForm>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['assignDriver']);
 
   const onSubmit: SubmitHandler<IdriverForm> = async (data) => {
     onAssignDriver(parseInt(data.driver));

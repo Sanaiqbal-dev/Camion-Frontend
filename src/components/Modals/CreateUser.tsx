@@ -12,25 +12,24 @@ interface CreateUserModalProps {
   handleClose: () => void;
   isSuccess: string;
 }
-const schema = z
-  .object({
-    firstName: z.string().min(2, 'First Name must contain atleast 2 characters.'),
-    email: z.string().email('Enter email address.'),
-    password: z
-      .string()
-      .min(8, 'Password must contain atleast 8 characters.')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character',
-      ),
-    confirmPassword: z.string().min(8, 'Confirm your password.'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
 
 const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmitForm }) => {
+  const { t } = useTranslation(['createUser']);
+
+  const schema = z
+    .object({
+      firstName: z.string().min(2, t('validationErrorFirstName')),
+      email: z.string().email(t('validationErrorEmail')),
+      password: z
+        .string()
+        .min(8, t('validationErrorPasswordLength'))
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/, t('validationErrorPasswordComplexity')),
+      confirmPassword: z.string().min(8, t('validationErrorConfirmPassword')),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('validationErrorPasswordsDontMatch'),
+      path: ['confirmPassword'],
+    });
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -40,7 +39,6 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
   } = useForm<IUser>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['createUser']);
   const handleCloseModal = () => {
     handleClose();
     reset();

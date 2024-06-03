@@ -14,23 +14,25 @@ interface IForgetPassword {
   password: string;
   confirmPassword: string;
 }
-const schema = z
-  .object({
-    email: z.string().email('Enter a valid email.'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*\W).+$/, {
-        message: 'Password must include a special character, a capital letter, a lowercase letter, and a number',
-      }),
-    confirmPassword: z.string().min(8, 'Confirm your password.'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
 
 const ForgetPassword = () => {
+  const { t } = useTranslation(['forgetPassword']);
+
+  const schema = z
+    .object({
+      email: z.string().email(t('enterValidEmail')),
+      password: z
+        .string()
+        .min(8, t('passwordMinLength'))
+        .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*\W).+$/, {
+          message: t('passwordRequirements'),
+        }),
+      confirmPassword: z.string().min(8, t('confirmYourPassword')),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t('passwordsDontMatch'),
+      path: ['confirmPassword'],
+    });
   const {
     register,
     handleSubmit,
@@ -53,8 +55,6 @@ const ForgetPassword = () => {
     navigate('/Login', { replace: true });
   };
 
-  const { t } = useTranslation(['forgetPassword']);
-
   return (
     <Container fluid className="vh-100">
       <Row className="h-100">
@@ -72,7 +72,7 @@ const ForgetPassword = () => {
 
                   <div className="mt-4">
                     <h1 className="h1 mb-3 main_heading">{t('forgotPassword')}</h1>
-                    <p className="sub_heading mb-4">{t('verifyEmailAddress')}</p>
+                    <p className="sub_heading mb-4">{t('verifyEmailToRecoverPassword')}</p>
                   </div>
                   <div className="form-container">
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>

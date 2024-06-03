@@ -27,5 +27,15 @@
   "carrierLiabilityInsurance": "Carrier Liability Insurance",
   "companyLetterhead": "Company Letterhead",
   "businessRegistration": "Business Registration",
-  "updateProfile": "Update profile"
+  "updateProfile": "Update profile",
+  "validationErrorEnterFirstName": "Please enter your first name",
+  "validationErrorEnterLastName": "Please enter your second name",
+  "validationErrorEnterEmailAddress": "Enter email address",
+  "validationErrorPhoneNumber": "Phone number must be +966 followed by 9 digits",
+  "validationErrorPasswordMinLength": "Password must be at least 8 characters.",
+  "validationErrorPasswordComplexity": "Password must include a special character (including _), a capital letter, a lowercase letter, and a number",
+  "validationErrorConfirmPassword": "Confirm your password.",
+  "validationErrorCompanyName": "Company name should be at least 5 characters.",
+  "validationErrorMoiNumber": "Moi should be at least 4 characters.",
+  "validationErrorPasswordsDontMatch": "Passwords don't match"
 }

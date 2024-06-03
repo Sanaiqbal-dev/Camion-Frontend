@@ -14,5 +14,11 @@
   "enterAdditionalNumber": "121212",
   "unitNoLabel": "رقم الوحدة",
   "enterUnitNo": "121212",
-  "nextButton": "التالي"
-  }
+  "nextButton": "التالي",
+  "buildingNumberRequired": "رقم المبنى مطلوب",
+  "districtNameRequired": "يرجى إدخال اسم المنطقة",
+  "cityNameRequired": "اسم المدينة مطلوب",
+  "zipCodeRequired": "الرمز البريدي مطلوب",
+  "additionalNumberRequired": "الرقم الإضافي مطلوب",
+  "unitNoRequired": "رقم الوحدة مطلوب"
+}

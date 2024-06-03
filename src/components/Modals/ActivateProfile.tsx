@@ -33,28 +33,30 @@ interface CreateUserModalProps {
   handleClose: () => void;
   submitProfileInfo: (proposal: IUser) => void;
 }
-const schema = z
-  .object({
-    FirstName: z.string().min(3, 'Please enter your first name'),
-    LastName: z.string().min(1, 'Please enter your Second name'),
-    Email: z.string().email('Enter email address'),
-    PhoneNumber: z.string().regex(/^\+966\d{9}$/, 'Phone number must be +966 followed by 9 digits'),
-    Password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters.')
-      .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
-        message: 'Password must include a special character (including _), a capital letter, a lowercase letter, and a number',
-      }),
-    ConfirmPassword: z.string().min(6, 'Confirm your password.'),
-    CompanyName: z.string().min(5, 'Company name should be atleast 5 characters.'),
-    MOINumber: z.string().min(4, 'Moi should be atleast 4 characters.'),
-  })
-  .refine((data) => data.Password === data.ConfirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword'],
-  });
 
 const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
+  const { t } = useTranslation(['activateProfile']);
+
+  const schema = z
+    .object({
+      FirstName: z.string().min(3, t('validationErrorEnterFirstName')),
+      LastName: z.string().min(1, t('validationErrorEnterLastName')),
+      Email: z.string().email(t('validationErrorEnterEmailAddress')),
+      PhoneNumber: z.string().regex(/^\+966\d{9}$/, t('validationErrorPhoneNumber')),
+      Password: z
+        .string()
+        .min(8, t('validationErrorPasswordMinLength'))
+        .regex(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/, {
+          message: t('validationErrorPasswordComplexity'),
+        }),
+      ConfirmPassword: z.string().min(6, t('validationErrorConfirmPassword')),
+      CompanyName: z.string().min(5, t('validationErrorCompanyName')),
+      MOINumber: z.string().min(4, t('validationErrorMoiNumber')),
+    })
+    .refine((data) => data.Password === data.ConfirmPassword, {
+      message: t('validationErrorPasswordsDontMatch'),
+      path: ['ConfirmPassword'],
+    });
   const {
     register,
     handleSubmit,
@@ -97,7 +99,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   const [brFile, setBrFile] = useState<File>();
   const [showToast, setShowToast] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<File>();
-  const { t } = useTranslation(['activateProfile']);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleImageUpload = (event: any) => {

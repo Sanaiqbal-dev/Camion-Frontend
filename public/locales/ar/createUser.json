@@ -1,12 +1,18 @@
 {
-"addNewUser": "إضافة مستخدم جديد",  
-"firstName": "الاسم الأول",  
-"enterFirstName": "أدخل الاسم الأول",  
-"emailAddress": "البريد الإلكتروني",  
-"enterEmailAddress": "أدخل البريد الإلكتروني",  
-"password": "كلمة المرور",  
-"enterPassword": "أدخل كلمة المرور",  
-"confirmPassword": "تأكيد كلمة المرور",  
-"enterConfirmPassword": "أعد كتابة كلمة المرور",  
-"addNewUserButton": "إضافة مستخدم جديد"  
+  "addNewUser": "إضافة مستخدم جديد",
+  "firstName": "الاسم الأول",
+  "enterFirstName": "أدخل الاسم الأول",
+  "emailAddress": "البريد الإلكتروني",
+  "enterEmailAddress": "أدخل البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "enterPassword": "أدخل كلمة المرور",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "enterConfirmPassword": "أعد كتابة كلمة المرور",
+  "addNewUserButton": "إضافة مستخدم جديد",
+  "validationErrorFirstName": "يجب أن يحتوي الاسم الأول على حرفين على الأقل.",
+  "validationErrorEmail": "أدخل عنوان البريد الإلكتروني.",
+  "validationErrorPasswordLength": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل.",
+  "validationErrorPasswordComplexity": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل وحرف صغير واحد ورقم واحد وحرف خاص واحد.",
+  "validationErrorConfirmPassword": "أكد كلمة المرور.",
+  "validationErrorPasswordsDontMatch": "كلمات المرور غير متطابقة"
 }

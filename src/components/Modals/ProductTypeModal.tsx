@@ -12,19 +12,22 @@ interface ProductTypeModalProps {
   handleClose: () => void;
   handleNextStep: (requestObj: IProductType) => void;
 }
-const schema = z.object({
-  productTypeId: z.string().min(1, 'Choose product type'),
-  name: z.string().min(3, 'Enter product name'),
-  price: z.coerce.number().min(3, 'Enter product price'),
-  quantity: z.coerce.number().min(1, 'Enter product quantity'),
-  weight: z.coerce.number().min(1, 'Enter product weight'),
-  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
-  height: z.coerce.number().int().min(1, 'Enter height in centimeters'),
-  isCargoItemsStackable: z.boolean().optional().default(false),
-  isIncludingItemsARGood: z.boolean().optional().default(false),
-});
+
 const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, handleNextStep }) => {
+  const { t } = useTranslation(['productType']);
+
+  const schema = z.object({
+    productTypeId: z.string().min(1, t('errorChooseProductType')),
+    name: z.string().min(3, t('errorEnterProductName')),
+    price: z.coerce.number().min(3, t('errorEnterProductPrice')),
+    quantity: z.coerce.number().min(1, t('errorEnterProductQuantity')),
+    weight: z.coerce.number().min(1, t('errorEnterProductWeight')),
+    length: z.coerce.number().int().min(1, t('errorEnterLengthInCm')),
+    width: z.coerce.number().int().min(1, t('errorEnterWidthInCm')),
+    height: z.coerce.number().int().min(1, t('errorEnterHeightInCm')),
+    isCargoItemsStackable: z.boolean().optional().default(false),
+    isIncludingItemsARGood: z.boolean().optional().default(false),
+  });
   const {
     register,
     handleSubmit,
@@ -34,7 +37,6 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
   });
 
   const { data } = useGetAllGoodTypesQuery();
-  const { t } = useTranslation(['productType']);
 
   const [productTypes, setProductTypes] = useState<IGoodsType[]>();
   const onSubmit: SubmitHandler<IProductType> = async (data) => {

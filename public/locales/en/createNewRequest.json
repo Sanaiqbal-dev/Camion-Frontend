@@ -14,5 +14,11 @@
   "enterAdditionalNumber": "121212",
   "unitNoLabel": "Unit no",
   "enterUnitNo": "121212",
-  "nextButton": "Next"
+  "nextButton": "Next",
+  "buildingNumberRequired": "Building number is required",
+  "districtNameRequired": "Please enter your district name",
+  "cityNameRequired": "City name is required",
+  "zipCodeRequired": "Zip code is required",
+  "additionalNumberRequired": "Additional number is required",
+  "unitNoRequired": "Unit number is required"
 }

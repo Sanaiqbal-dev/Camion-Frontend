@@ -22,28 +22,28 @@ interface ProposalDetailsModalProps {
   proposalId?: number;
 }
 
-const schema = z.object({
-  Amount: z.string().min(3, 'Please enter minimum 3 digits.'),
-  DelievryDate: z.string().refine(
-    (value) => {
-      const date = Date.parse(value);
-      if (isNaN(date)) {
-        return false;
-      }
-      const inputDate = new Date(date);
-      const today = new Date();
-      // Set today's date to the end of the day to allow for full day comparison
-      today.setHours(23, 59, 59, 999);
-      return inputDate > today;
-    },
-    {
-      message: 'Enter an expected delivery date that is a day greater than today',
-    },
-  ),
-  OtherDetails: z.string().min(1, 'Enter additional details about order proposal.'),
-});
-
 const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handleClose, proposalId }) => {
+  const { t } = useTranslation(['proposalDetailsForm']);
+  const schema = z.object({
+    Amount: z.string().min(3, t('validationErrorAmount')),
+    DelievryDate: z.string().refine(
+      (value) => {
+        const date = Date.parse(value);
+        if (isNaN(date)) {
+          return false;
+        }
+        const inputDate = new Date(date);
+        const today = new Date();
+        // Set today's date to the end of the day to allow for full day comparison
+        today.setHours(23, 59, 59, 999);
+        return inputDate > today;
+      },
+      {
+        message: t('validationErrorDeliveryDate'),
+      },
+    ),
+    OtherDetails: z.string().min(1, t('validationErrorOtherDetails')),
+  });
   const {
     register,
     handleSubmit,
@@ -52,7 +52,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   } = useForm<IProposalForm>({
     resolver: zodResolver(schema),
   });
-  const { t } = useTranslation(['proposalDetailsForm']);
+
   const userId = useAppSelector((state) => state.session.user.userId);
 
   const [showToast, setShowToast] = useState(false);

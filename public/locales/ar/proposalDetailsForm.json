@@ -8,5 +8,8 @@
   "enterText": "أدخل النص هنا",
   "uploadDocument": "تحميل وثيقة (إن وجدت)",
   "uploadTheDocument": "تحميل الوثيقة",
-  "submitProposal": "إرسال العرض"
-  }
+  "submitProposal": "إرسال العرض",
+  "validationErrorAmount": "يرجى إدخال 3 أرقام على الأقل.",
+  "validationErrorDeliveryDate": "أدخل تاريخ تسليم متوقع بعد اليوم.",
+  "validationErrorOtherDetails": "أدخل تفاصيل إضافية حول عرض الطلب."
+}
