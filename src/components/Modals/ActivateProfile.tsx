@@ -203,6 +203,12 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
   };
   console.log('ProfileImage', profileImage);
 
+  useEffect(() => {
+    if (!show) {
+      reset();
+    }
+  }, [show, reset]);
+
   return (
     <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
       {showToast && isProfileCreated && <Toast variant={isProfileCreated ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />}

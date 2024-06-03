@@ -17,7 +17,7 @@ const Tracking = () => {
   useEffect(() => {
     if (!isLoadingOrderTracking) {
       setMarkers(orderTracking);
-      if (orderTracking.length > 0) {
+      if (orderTracking?.length > 0) {
         setPosition({ lat: orderTracking[0].latitude, lng: orderTracking[0].longitude });
       }
     }
@@ -38,7 +38,7 @@ const Tracking = () => {
               // zIndex: "0",
               position: 'absolute',
             }}>
-            {markers.map((item) => (
+            {markers && markers.map((item) => (
               <MapMarker lat={item.latitude} lng={item.longitude} driver={item.driver} numberPlate={item.numberPlate} />
             ))}
           </Map>

@@ -98,7 +98,7 @@ const Register = () => {
 
   return (
     <div className="main-container">
-      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={isUserRegistered ? 'success' : 'danger'} />}
+      <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} duration={4000} variant={error ? 'danger' : 'success'} />
       <div className="parent-row row g-0">
         <div className="img-container">
           <Image className="background-img" src={isCarrier ? CarrierImage : ShipperImage} />

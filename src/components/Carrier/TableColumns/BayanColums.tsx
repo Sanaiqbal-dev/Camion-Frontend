@@ -17,7 +17,7 @@ export const BayanColumns = ({ onPrintBayan }: BayanActionProps): ColumnDef<IBay
   },
   {
     accessorKey: 'senderFullAddress',
-    header: 'sender Address',
+    header: 'Sender Address',
   },
   {
     accessorKey: 'recipientName',

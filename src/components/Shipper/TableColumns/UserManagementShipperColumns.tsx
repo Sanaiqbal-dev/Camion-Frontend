@@ -10,7 +10,7 @@ interface UserActionsProps {
 }
 
 export const UserManagementShipperColumns = ({ onEdit, onDelete }: UserActionsProps): ColumnDef<IUserManagement>[] => {
-  const { t } = useTranslation(['userManagementShipperColumn']);
+  const { t } = useTranslation(['userManagementShipperColumns']);
 
   return [
     {

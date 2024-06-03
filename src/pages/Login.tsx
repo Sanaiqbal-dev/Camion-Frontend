@@ -88,7 +88,7 @@ const Login = () => {
   return (
     <div className="main-container">
       {showToast && (
-        <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} duration={1000} variant={error ? 'danger' : 'success'} />
+        <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} duration={4000} variant={error ? 'danger' : 'success'} />
       )}
       <div className="parent-row row g-0">
         <div className="img-container">
