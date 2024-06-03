@@ -130,20 +130,22 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
               key={item.id} // Assuming each marker has a unique id
               lat={item.latitude}
               lng={item.longitude}
-              shipperTrackingInfo={
-                <div
-                  style={{
-                    height: '40px',
-                    width: '140px',
-                    backgroundColor: '#FFF',
-                    borderRadius: '30px',
-                    justifyContent: 'center',
-                    padding: '10px',
-                  }}>
-                  {item.driver}
-                  <br /> {item.numberPlate}
-                </div>
-              }
+              driver={item.driver}
+              numberPlate={item.numberPlate}
+              // shipperTrackingInfo={
+              //   <div
+              //     style={{
+              //       height: '40px',
+              //       width: '140px',
+              //       backgroundColor: '#FFF',
+              //       borderRadius: '30px',
+              //       justifyContent: 'center',
+              //       padding: '10px',
+              //     }}>
+              //     {item.driver}
+              //     <br /> {item.numberPlate}
+              //   </div>
+              // }
             />
           ))}
         </Map>
