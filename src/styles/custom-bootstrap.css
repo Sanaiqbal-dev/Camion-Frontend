@@ -102,14 +102,20 @@
 
 .customLoginButton:hover,
 .customRegisterButton:hover {
-  background-color: #00529c;
-  color: white;
+  background-color: #00529c !important;
+  color: white !important;
 }
 
 .customLoginButton:active,
 .customRegisterButton:active {
-  background-color: #00529c;
-  color: white;
+  background-color: #00529c !important;
+  color: white !important;
+}
+
+.customLoginButton:disabled,
+.customRegisterButton:disabled {
+  background-color: #00529c !important;
+  color: white !important;
 }
 
 .btn-container > div {
@@ -128,9 +134,11 @@
   color: #4f4f4f;
   border: 2px solid #e0e0e0;
 }
+
 .customShipperButton span {
   color: #4f4f4f;
 }
+
 .customShipperButton svg {
   stroke: #4f4f4f;
   stroke-width: 0.5px;
@@ -141,9 +149,11 @@
   color: #0060b8;
   border: 2px solid #0060b8;
 }
+
 .customShipperButtonEnabled span {
   color: #0060b8;
 }
+
 .customShipperButtonEnabled svg {
   stroke: #0060b8;
   stroke-width: 0.5px;
@@ -154,9 +164,11 @@
   color: #4f4f4f;
   border: 2px solid #e0e0e0;
 }
+
 .customCarrierButton span {
   color: #4f4f4f;
 }
+
 .customCarrierButton svg {
   stroke: #4f4f4f;
   stroke-width: 1.5px;
@@ -167,9 +179,11 @@
   color: #0060b8;
   border: 2px solid #0060b8;
 }
+
 .customCarrierButtonEnabled span {
   color: #0060b8;
 }
+
 .customCarrierButtonEnabled svg {
   stroke: #0060b8;
   stroke-width: 1.5px;
@@ -253,7 +267,8 @@ tr {
   justify-content: space-between;
 }
 
-.accordion {
+.accordion,
+div[dir='ltr'] .accordion {
   margin-top: 100px;
   margin-left: 20px;
   margin-right: 20px;
@@ -298,7 +313,7 @@ tr {
   rotate: 180deg;
 }
 
-.accordion-button:not(.collapsed)::after {
+.accordion-button:not(.collapsed)::after, div[dir='ltr'] .accordion-button:not(.collapsed)::after {
   --bs-accordion-btn-active-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
   rotate: 180deg;
 }
@@ -432,7 +447,7 @@ tr {
   border-radius: 16px;
   margin: 0%;
   border: none;
-  background-color: rgba(220, 224, 249, 0.5019607843);
+  background-color: #dce0f980;
 }
 
 .additional-stats {
@@ -441,6 +456,7 @@ tr {
   margin: 0%;
   background-color: white;
 }
+
 .additional-stats div {
   border-radius: 16px;
   padding: 16px;
@@ -513,7 +529,7 @@ tr {
   border: none;
   background-color: white;
   border-radius: 16px;
-  box-shadow: 0px 20px 50px 0px rgba(220, 224, 249, 0.5019607843);
+  box-shadow: 0px 20px 50px 0px #dce0f980;
   padding: 30px 20px;
   gap: 20px;
 }
@@ -524,6 +540,7 @@ tr {
   justify-content: space-between;
   font-size: 14px;
 }
+
 .bill-main-content > div p {
   line-height: 10px;
   padding: 0px;
@@ -568,6 +585,7 @@ tr {
     padding: 0%;
   }
 }
+
 .g-recaptcha {
   height: 78px;
 }
@@ -659,7 +677,7 @@ thead th:last-child {
 
 .img-prev-disabled svg,
 .img-next-disabled svg {
-  fill: rgb(231, 230, 230);
+  fill: #e7e6e6;
 }
 
 .img-prev:hover,
@@ -678,12 +696,14 @@ thead th:last-child {
   gap: 20px;
   cursor: pointer;
 }
+
 .action-container div {
   display: flex;
   flex-direction: column;
   gap: 5px;
   align-items: center;
 }
+
 .action-container div img {
   width: 20px;
   height: 20px;
@@ -711,7 +731,7 @@ thead th:last-child {
   gap: 10px;
 }
 
-.modal {
+.modal, div[dir='ltr'] .modal {
   --bs-modal-width: 1000px;
 }
 
@@ -832,7 +852,7 @@ thead th:last-child {
 .success {
   position: fixed !important;
   z-index: 100000;
-  background-color: rgb(159, 242, 159);
+  background-color: #9ff29f;
 }
 
 .danger {
@@ -841,27 +861,47 @@ thead th:last-child {
   background-color: lightcoral;
 }
 
-[role=alert] .btn-close {
+[role='alert'] .btn-close {
   background-size: 0.75rem;
 }
 
-div[dir=rtl] .wrapper {
+.accordion-header .accordion-button {
+  padding: 0;
+}
+
+.btn-group > .btn-group:not(:last-child) > .btn, .btn-group > .btn.dropdown-toggle-split:first-child, .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0px;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+}
+
+.btn-group > .btn-group:not(:first-child) > .btn, .btn-group > .btn:nth-child(n+3), .btn-group > :not(.btn-check) + .btn {
+  border-radius: 0px;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+}
+
+div[dir='rtl'] .wrapper {
   padding-right: 270px;
   padding-left: initial;
 }
-div[dir=rtl] .parent-row {
+
+div[dir='rtl'] .parent-row {
   padding-right: 50%;
   padding-left: initial;
 }
-div[dir=rtl] .img-container {
+
+div[dir='rtl'] .img-container {
   left: initial;
   right: 0%;
 }
-div[dir=rtl] .sidebar {
+
+div[dir='rtl'] .sidebar {
   left: initial;
   right: 0;
 }
-div[dir=rtl] .accordion {
+
+div[dir='rtl'] .accordion {
   margin-left: 20px;
   margin-right: initial;
   --bs-accordion-color: white;
@@ -877,25 +917,30 @@ div[dir=rtl] .accordion {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-btn-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
 }
-div[dir=rtl] .data-table tr td:first-child,
-div[dir=rtl] thead th:first-child {
+
+div[dir='rtl'] .data-table tr td:first-child,
+div[dir='rtl'] thead th:first-child {
   padding-right: 20px;
   padding-left: initial;
 }
-div[dir=rtl] .data-table tr td:last-child,
-div[dir=rtl] thead th:last-child {
+
+div[dir='rtl'] .data-table tr td:last-child,
+div[dir='rtl'] thead th:last-child {
   padding-right: initial;
   padding-left: 20px;
 }
-div[dir=rtl] .img-prev,
-div[dir=rtl] .img-next {
+
+div[dir='rtl'] .img-prev,
+div[dir='rtl'] .img-next {
   transform: rotate(180deg);
 }
-div[dir=rtl] .accordion-header .accordion-button {
+
+div[dir='rtl'] .accordion-header .accordion-button {
   padding: 0;
 }
-div[dir=rtl] .accordion-header .accordion-button::after {
-  content: "";
+
+div[dir='rtl'] .accordion-header .accordion-button::after {
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -903,16 +948,29 @@ div[dir=rtl] .accordion-header .accordion-button::after {
   background-repeat: no-repeat;
   background-position: center;
 }
-div[dir=rtl] .dashboard-item .accordion-button::after {
+
+div[dir='rtl'] .dashboard-item .accordion-button::after {
   display: none;
 }
-div[dir=rtl] .border-right {
+
+div[dir='rtl'] .border-right {
   border-right: none;
   border-left: 1px solid rgba(0, 96, 184, 0.4);
 }
-div[dir=rtl] .tw-flex,
-div[dir=rtl] .tw-flex-row {
+
+div[dir='rtl'] .tw-flex,
+div[dir='rtl'] .tw-flex-row {
   direction: rtl;
 }
 
-/*# sourceMappingURL=custom-bootstrap.css.map */
+div[dir='rtl'] .btn-group > .btn-group:not(:last-child) > .btn, div[dir='rtl'] .btn-group > .btn.dropdown-toggle-split:first-child, div[dir='rtl'] .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0px !important;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+}
+
+div[dir='rtl'] .btn-group > .btn-group:not(:first-child) > .btn, div[dir='rtl'] .btn-group > .btn:nth-child(n+3), div[dir='rtl'] .btn-group > :not(.btn-check) + .btn {
+  border-radius: 0px !important;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+}
