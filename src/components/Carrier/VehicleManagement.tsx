@@ -63,7 +63,7 @@ const VehicleManagement = () => {
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle, { isSuccess: isVehicleAdded, error }] = useCreateVehicleMutation();
-  const [editVehicle] = useEditVehicleMutation();
+  const [editVehicle, { isSuccess: isVehicleUpdated, isError: isVehicleNotUpdated }] = useEditVehicleMutation();
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
   useEffect(() => {
@@ -124,10 +124,16 @@ const VehicleManagement = () => {
     refetch();
   };
   const submitEditVehicleHandler = async (data: FormData) => {
-    setShowEditVehicle(false);
-    const resp = await editVehicle(data).unwrap();
-    refetch();
-    console.log(resp);
+    try {
+      const resp = await editVehicle(data).unwrap();
+      setShowToast(true);
+      refetch();
+      console.log(resp);
+      setShowEditVehicle(false);
+    } catch (e) {
+      setShowToast(true);
+      throw e;
+    }
   };
   const deleteVehicleHandler = async (id: number) => {
     const veh = vehicles.find((v) => v.id === id);
@@ -202,7 +208,15 @@ const VehicleManagement = () => {
 
   return (
     <>
-      <Toast variant={isVehicleAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} duration={4000} showToast={showToast} setShowToast={setShowToast} />
+      {showToast && <Toast variant={isVehicleAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && (
+        <Toast
+          variant={isVehicleUpdated ? 'success' : 'danger'}
+          message={isVehicleNotUpdated ? getErrorMessage(isVehicleNotUpdated) : ''}
+          showToast={showToast}
+          setShowToast={setShowToast}
+        />
+      )}
       <div className="table-container">
         <div className="search-and-entries-container">
           <div></div>

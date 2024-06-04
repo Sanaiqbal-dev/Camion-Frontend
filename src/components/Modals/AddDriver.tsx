@@ -22,33 +22,27 @@ interface INationality {
 }
 
 const isAtLeast18YearsOld = (dateString: string) => {
-	const date = new Date(dateString);
-	const today = new Date();
-	const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-	return date <= eighteenYearsAgo;
+  const date = new Date(dateString);
+  const today = new Date();
+  const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+  return date <= eighteenYearsAgo;
 };
 
 const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverExistingData }) => {
-	const { t } = useTranslation(['addDriver']);
+  const { t } = useTranslation(['addDriver']);
 
-
-
-	const schema = z.object({
-		name: z.string().min(3, t("pleaseEnterDriversName")),
-		iqamaId: z.string().min(1, t("pleaseEnterDriversIqamaNumber")),
-		licenseNumber: z.string().min(5, t("pleaseEnterDriversLicenseNumber")),
-		dob: z.string().min(10, t("pleaseEnterDriversDateOfBirth")).refine(isAtLeast18YearsOld, t("driverMustBeAtLeast18YearsOld")),
-		nationalityId: z.string().min(1, t("pleaseEnterDriversNationality")),
-		phoneNumber: z
-			.string()
-			.regex(/^\+966\d{9}$/, t("phoneNumberMustBe966FollowedBy9Digits"))
-			.min(1, t("pleaseEnterDriversPhoneNumber")),
-		issueNumber: z
-			.number()
-			.min(1, t("pleaseEnterDriversIssueNumber"))
-			.positive(t("pleaseEnterAPositiveIssueNumber"))
-			.max(99, t("issueNumberMustBeBetween1And99Inclusive")),
-	});
+  const schema = z.object({
+    name: z.string().min(3, t('pleaseEnterDriversName')),
+    iqamaId: z.string().min(1, t('pleaseEnterDriversIqamaNumber')),
+    licenseNumber: z.string().min(5, t('pleaseEnterDriversLicenseNumber')),
+    dob: z.string().min(10, t('pleaseEnterDriversDateOfBirth')).refine(isAtLeast18YearsOld, t('driverMustBeAtLeast18YearsOld')),
+    nationalityId: z.string().min(1, t('pleaseEnterDriversNationality')),
+    phoneNumber: z
+      .string()
+      .regex(/^\+966\d{9}$/, t('phoneNumberMustBe966FollowedBy9Digits'))
+      .min(1, t('pleaseEnterDriversPhoneNumber')),
+    issueNumber: z.number().min(1, t('pleaseEnterDriversIssueNumber')).positive(t('pleaseEnterAPositiveIssueNumber')).max(99, t('issueNumberMustBeBetween1And99Inclusive')),
+  });
 
   const {
     register,
@@ -155,15 +149,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   }, [formData, setValue]);
   return (
     <>
-      {showToast && (
-        <Toast
-          variant={isDriverAdded || isDriverUpdated ? 'success' : 'danger'}
-          message={error ? getErrorMessage(error) : ''}
-          duration={4000}
-          showToast={showToast}
-          setShowToast={setShowToast}
-        />
-      )}
+      {showToast && <Toast variant={isDriverAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
+      {showToast && <Toast variant={isDriverUpdated ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'lg'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>

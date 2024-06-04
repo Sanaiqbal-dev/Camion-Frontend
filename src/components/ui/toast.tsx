@@ -43,7 +43,7 @@ export const Toast = (props: IAlertProps) => {
   return (
     <Alert
       show={showToast}
-      className={`tw-fixed tw-top-2 tw-right-2 tw-max-w-sm tw-max-h-16 d-inline-block m-1 ${variant}`}
+      className={`tw-fixed tw-top-2 tw-right-2 tw-max-w-sm tw-max-h-auto d-inline-block m-1 ${variant}`}
       variant={variant}
       onClose={handleCloseAlert}
       transition

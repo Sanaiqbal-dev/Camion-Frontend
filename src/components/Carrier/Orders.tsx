@@ -25,6 +25,7 @@ import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
 import { useGetOrderStatusesQuery } from '@/services/orderStatus';
 import { useTranslation } from 'react-i18next';
+import { getErrorMessage } from '@/util/errorHandler';
 
 export interface StatusProps {
   id: string;
@@ -48,7 +49,7 @@ const Orders = () => {
   const [deleteOrder, { isSuccess: isOrderDeleted, isLoading: isOrderDeleting }] = useDeleteOrderMutation();
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
-  const [createBayanFromOrder, { isSuccess: isBayanCreated }] = useCreateBayanFromOrderMutation();
+  const [createBayanFromOrder, { isSuccess: isBayanCreated, error }] = useCreateBayanFromOrderMutation();
   const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation();
   const { data: orderStatuses } = useGetOrderStatusesQuery();
 
@@ -112,7 +113,7 @@ const Orders = () => {
     setSelectedOrderId(id);
     setSelectedStatusId(statusId);
     // setShowStatusConfirmationModal(true);
-    UpdateStatus()
+    UpdateStatus();
   };
 
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
@@ -223,7 +224,7 @@ const Orders = () => {
       {showToast && (isOrderDeleted || isOrderDeleting || isDriverAssigned) && (
         <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />
       )}
-      {showToast && isBayanCreated && <Toast showToast={showToast} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
+      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
       <div className="table-container orders-table">
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
