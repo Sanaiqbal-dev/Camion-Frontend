@@ -52,7 +52,7 @@ export const OrderColumns = ({ onDelete, onTrackOrder }: OrderActionsProps): Col
                   ? 'tw-text-orange-400'
                   : statusVal == 'Ready To Load'
                     ? 'tw-text-green-700'
-                    : statusVal == 'Driver Assigned'
+                    : statusVal == 'At Pick Up' || statusVal == 'Dispatched' || statusVal == 'In Transit' || statusVal == 'Delivered'
                       ? 'tw-text-blue-600'
                       : 'tw-text-black'
             }>
@@ -65,7 +65,7 @@ export const OrderColumns = ({ onDelete, onTrackOrder }: OrderActionsProps): Col
       accessorKey: 'action',
       header: t('actionHeader'),
       cell: ({ row }) => {
-        const isEnabled = row.original.status === 'Driver Assigned';
+        const isEnabled = row.original.status === 'Dispatched' || row.original.status === 'In Transit';
         return (
           <div className="action-container" style={{ justifyContent: 'start' }}>
             <div onClick={() => onDelete(row.original.id)}>
