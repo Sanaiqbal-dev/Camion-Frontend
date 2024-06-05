@@ -50,13 +50,15 @@ const Orders = () => {
   const [updateOrderStatus] = useUpdateOrderMutation();
   const [assignVehicle, { isSuccess: isDriverAssigned }] = useAssignVehicleToOrderMutation();
   const [createBayanFromOrder, { isSuccess: isBayanCreated, error }] = useCreateBayanFromOrderMutation();
-  const [createBayanFromBayanId] = useGetBayanFromBayanIdMutation();
+  const [createBayanFromBayanId, { isSuccess: isBayanPrinted, error: bayanPrintError }] = useGetBayanFromBayanIdMutation();
   const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
   const [selectedStatusId, setSelectedStatusId] = useState<number>();
   const [showToast, setShowToast] = useState(false);
+  const [showCreateBayanToast, setShowCreateBayanToast] = useState(false);
+  const [showPrintBayanToast, setShowPrintBayanToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   // const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
@@ -93,9 +95,9 @@ const Orders = () => {
     try {
       const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
       console.log('Bayan Bill', response);
-      setShowToast(true);
+      setShowCreateBayanToast(true);
     } catch (e) {
-      setShowToast(true);
+      setShowCreateBayanToast(true);
     }
   };
 
@@ -103,9 +105,9 @@ const Orders = () => {
     try {
       const response = await createBayanFromBayanId(bayanId).unwrap();
       console.log('Bayan Bill', response);
-      setShowToast(true);
+      setShowPrintBayanToast(true);
     } catch (e) {
-      setShowToast(true);
+      setShowPrintBayanToast(true);
     }
   };
 
@@ -221,10 +223,29 @@ const Orders = () => {
 
   return (
     <>
-      {showToast && (isOrderDeleted || isOrderDeleting || isDriverAssigned) && (
-        <Toast variant={isOrderDeleted || isOrderDeleting || isDriverAssigned ? 'success' : 'danger'} showToast={showToast} setShowToast={setShowToast} />
+      {showToast && (isOrderDeleted || isOrderDeleting || isDriverAssigned || isBayanCreated || isBayanPrinted) && (
+        <Toast
+          variant={isOrderDeleted || isOrderDeleting || isDriverAssigned || isBayanCreated || isBayanPrinted ? 'success' : 'danger'}
+          showToast={showToast}
+          setShowToast={setShowToast}
+        />
       )}
-      {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} variant={isBayanCreated ? 'success' : 'danger'} setShowToast={setShowToast} />}
+      {showCreateBayanToast && (
+        <Toast
+          showToast={showCreateBayanToast}
+          message={error ? getErrorMessage(error) : ''}
+          variant={isBayanCreated ? 'success' : 'danger'}
+          setShowToast={setShowCreateBayanToast}
+        />
+      )}
+      {showPrintBayanToast && (
+        <Toast
+          showToast={showPrintBayanToast}
+          message={bayanPrintError ? getErrorMessage(bayanPrintError) : ''}
+          variant={isBayanPrinted ? 'success' : 'danger'}
+          setShowToast={setShowPrintBayanToast}
+        />
+      )}
       <div className="table-container orders-table">
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
