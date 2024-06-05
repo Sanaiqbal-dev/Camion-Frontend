@@ -82,7 +82,6 @@ const ShipperDashboard = () => {
           background: '#FFF',
           borderRadius: '16px',
           boxShadow: '#DCE0F980',
-          padding: '10px 0px',
         }}>
         <div
           className="border-right"
