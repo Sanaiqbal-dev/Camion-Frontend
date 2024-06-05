@@ -55,10 +55,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     defaultValues: driverExistingData,
   });
   const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver, error }] = useAddNewDriverMutation();
-  const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver }] = useUpdateDriverMutation();
+  const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver, error: updateError }] = useUpdateDriverMutation();
   // const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
 
   const [showToast, setShowToast] = useState(false);
+  const [showAddDriverToast, setShowAddDriverToast] = useState(false);
+
   const [nationalityId, setNationalityId] = useState<number | string>('');
   const [formData, setFormData] = useState<IDriver | null>();
   const nationalityList = useGetNationalityListQuery();
@@ -80,6 +82,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   }, [driverExistingData, modal.mode, reset]);
 
   const onSubmit: SubmitHandler<IDriver> = async (data) => {
+    setShowToast(false);
+
     try {
       if (modal.mode === 'edit' && data) {
         const formDataToSend = new FormData();
@@ -123,14 +127,14 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
         await addNewDriver(formData).unwrap();
 
-        setShowToast(true);
+        setShowAddDriverToast(true);
       }
       reset();
       setFile(undefined);
       setFormData(null);
       handleClose();
     } catch (e) {
-      setShowToast(true);
+      modal.mode === 'edit' ? setShowToast(true) : setShowAddDriverToast(true);
       throw e;
     }
   };
@@ -149,8 +153,12 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   }, [formData, setValue]);
   return (
     <>
-      {showToast && <Toast variant={isDriverAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
-      {showToast && <Toast variant={isDriverUpdated ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
+      {showAddDriverToast && (
+        <Toast variant={isDriverAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showAddDriverToast} setShowToast={setShowAddDriverToast} />
+      )}
+      {showToast && (
+        <Toast variant={isDriverUpdated ? 'success' : 'danger'} message={updateError ? getErrorMessage(updateError) : ''} showToast={showToast} setShowToast={setShowToast} />
+      )}
 
       <Modal show={modal.show} onHide={handleCloseModal} centered size={'lg'} backdrop="static" keyboard={false}>
         <Modal.Header style={{ display: 'flex', gap: '10px' }} closeButton>

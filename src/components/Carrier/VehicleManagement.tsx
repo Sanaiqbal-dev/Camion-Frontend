@@ -50,6 +50,8 @@ const VehicleManagement = () => {
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [showAddVehicleToast, setShowAddVehicleToast] = useState(false);
+
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
 
@@ -63,7 +65,7 @@ const VehicleManagement = () => {
   const [assignDriver] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle, { isSuccess: isVehicleAdded, error }] = useCreateVehicleMutation();
-  const [editVehicle, { isSuccess: isVehicleUpdated, isError: isVehicleNotUpdated }] = useEditVehicleMutation();
+  const [editVehicle, { isSuccess: isVehicleUpdated, error: isVehicleNotUpdated }] = useEditVehicleMutation();
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
   useEffect(() => {
@@ -114,11 +116,11 @@ const VehicleManagement = () => {
   const submitCreateVehicleHandler = async (data: FormData) => {
     try {
       const resp = await createVehicle(data).unwrap();
-      setShowToast(true);
+      setShowAddVehicleToast(true);
 
       console.log(resp);
     } catch (e) {
-      setShowToast(true);
+      setShowAddVehicleToast(true);
       throw e;
     }
     refetch();
@@ -208,7 +210,14 @@ const VehicleManagement = () => {
 
   return (
     <>
-      {showToast && <Toast variant={isVehicleAdded ? 'success' : 'danger'} message={error ? getErrorMessage(error) : ''} showToast={showToast} setShowToast={setShowToast} />}
+      {showAddVehicleToast && (
+        <Toast
+          variant={isVehicleAdded ? 'success' : 'danger'}
+          message={error ? getErrorMessage(error) : ''}
+          showToast={showAddVehicleToast}
+          setShowToast={setShowAddVehicleToast}
+        />
+      )}
       {showToast && (
         <Toast
           variant={isVehicleUpdated ? 'success' : 'danger'}
