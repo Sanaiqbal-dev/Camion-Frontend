@@ -286,7 +286,12 @@ tr {
   border: 0;
   border-radius: 10px;
   overflow-anchor: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    border-radius 0.15s ease;
 }
 
 .accordion-button {
@@ -464,14 +469,15 @@ tr {
 }
 
 .stats-value {
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 600;
 }
 
 .stats-label {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   color: #0060b8;
+  white-space: noWrap;
 }
 
 .border-right {
@@ -841,27 +847,27 @@ thead th:last-child {
   background-color: lightcoral;
 }
 
-[role=alert] .btn-close {
+[role='alert'] .btn-close {
   background-size: 0.75rem;
 }
 
-div[dir=rtl] .wrapper {
+div[dir='rtl'] .wrapper {
   padding-left: 270px;
   padding-right: initial;
 }
-div[dir=rtl] .parent-row {
+div[dir='rtl'] .parent-row {
   padding-left: 50%;
   padding-right: initial;
 }
-div[dir=rtl] .img-container {
+div[dir='rtl'] .img-container {
   right: initial;
   left: 0%;
 }
-div[dir=rtl] .sidebar {
+div[dir='rtl'] .sidebar {
   right: initial;
   left: 0;
 }
-div[dir=rtl] .accordion {
+div[dir='rtl'] .accordion {
   margin-right: 20px;
   margin-left: initial;
   --bs-accordion-color: white;
@@ -877,25 +883,25 @@ div[dir=rtl] .accordion {
   --bs-accordion-active-bg: transparent;
   --bs-accordion-btn-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
 }
-div[dir=rtl] .data-table tr td:first-child,
-div[dir=rtl] thead th:first-child {
+div[dir='rtl'] .data-table tr td:first-child,
+div[dir='rtl'] thead th:first-child {
   padding-left: 20px;
   padding-right: initial;
 }
-div[dir=rtl] .data-table tr td:last-child,
-div[dir=rtl] thead th:last-child {
+div[dir='rtl'] .data-table tr td:last-child,
+div[dir='rtl'] thead th:last-child {
   padding-left: initial;
   padding-right: 20px;
 }
-div[dir=rtl] .img-prev,
-div[dir=rtl] .img-next {
+div[dir='rtl'] .img-prev,
+div[dir='rtl'] .img-next {
   transform: rotate(-180deg);
 }
-div[dir=rtl] .accordion-header .accordion-button {
+div[dir='rtl'] .accordion-header .accordion-button {
   padding: 0;
 }
-div[dir=rtl] .accordion-header .accordion-button::after {
-  content: "";
+div[dir='rtl'] .accordion-header .accordion-button::after {
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -903,14 +909,14 @@ div[dir=rtl] .accordion-header .accordion-button::after {
   background-repeat: no-repeat;
   background-position: center;
 }
-div[dir=rtl] .dashboard-item .accordion-button::after {
+div[dir='rtl'] .dashboard-item .accordion-button::after {
   display: none;
 }
-div[dir=rtl] .border-right {
+div[dir='rtl'] .border-right {
   border-left: none;
   border-right: 1px solid rgba(0, 96, 184, 0.4);
 }
-div[dir=rtl] .tw-flex,
-div[dir=rtl] .tw-flex-row {
+div[dir='rtl'] .tw-flex,
+div[dir='rtl'] .tw-flex-row {
   direction: ltr;
 }

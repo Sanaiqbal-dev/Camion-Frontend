@@ -22,7 +22,7 @@ const ShipperDashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
           <span className="stats-label">{t('totalOrders')}</span>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
             {t('orderIncrease')}
             <span
               style={{
@@ -40,7 +40,7 @@ const ShipperDashboard = () => {
           <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
           <span className="stats-label">{t('activeOrders')}</span>
 
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
             {t('orderIncrease')}
             <span
               style={{
@@ -61,7 +61,7 @@ const ShipperDashboard = () => {
         <div className="col stats-item">
           <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
           <span className="stats-label">{t('ordersThisMonth')}</span>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
             {t('orderDecrease')}
             <span
               style={{
@@ -82,6 +82,7 @@ const ShipperDashboard = () => {
           background: '#FFF',
           borderRadius: '16px',
           boxShadow: '#DCE0F980',
+          padding: '10px 0px',
         }}>
         <div
           className="border-right"
@@ -109,7 +110,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
@@ -132,7 +133,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
@@ -180,7 +181,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
@@ -203,7 +204,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
@@ -226,7 +227,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
@@ -272,7 +273,7 @@ const ShipperDashboard = () => {
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',

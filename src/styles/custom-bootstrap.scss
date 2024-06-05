@@ -250,10 +250,8 @@ $grid-breakpoints: (
   width: 270px;
   height: 100vh;
   box-sizing: border-box;
-      overflow-y: scroll;
-
+  overflow-y: scroll;
 }
-
 
 .auto-width-columns table {
   width: 100%;
@@ -329,7 +327,8 @@ div[dir='ltr'] .accordion {
   rotate: 180deg;
 }
 
-.accordion-button:not(.collapsed)::after, div[dir='ltr'] .accordion-button:not(.collapsed)::after{
+.accordion-button:not(.collapsed)::after,
+div[dir='ltr'] .accordion-button:not(.collapsed)::after {
   --bs-accordion-btn-active-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
   rotate: 180deg;
 }
@@ -495,14 +494,15 @@ div[dir='ltr'] .accordion {
 }
 
 .stats-value {
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 600;
 }
 
 .stats-label {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   color: #0060b8;
+  white-space: noWrap;
 }
 
 .border-right {
@@ -663,7 +663,8 @@ thead th:first-child {
   padding-left: 20px;
 }
 
-thead th, tbody td{
+thead th,
+tbody td {
   padding: 20px;
 }
 .orders-table .data-table tr td:last-child {
@@ -753,7 +754,8 @@ thead th:last-child {
 }
 
 //Modals
-.modal, div[dir='ltr'] .modal {
+.modal,
+div[dir='ltr'] .modal {
   --bs-modal-width: 1000px;
 }
 .modal-dialog {
@@ -883,20 +885,24 @@ thead th:last-child {
   }
 }
 .accordion-header {
-	.accordion-button {
-		padding: 0;
-	}
+  .accordion-button {
+    padding: 0;
+  }
 }
 
-.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn.dropdown-toggle-split:first-child, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
-	border-radius: 0px;
-	border-top-left-radius: 6px !important ;
-	border-bottom-left-radius:6px!important;
+.btn-group > .btn-group:not(:last-child) > .btn,
+.btn-group > .btn.dropdown-toggle-split:first-child,
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0px;
+  border-top-left-radius: 6px !important ;
+  border-bottom-left-radius: 6px !important;
 }
-.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:nth-child(n+3), .btn-group>:not(.btn-check)+.btn {
-	border-radius: 0px;
-	border-top-right-radius: 6px!important;
-	border-bottom-right-radius: 6px !important;
+.btn-group > .btn-group:not(:first-child) > .btn,
+.btn-group > .btn:nth-child(n + 3),
+.btn-group > :not(.btn-check) + .btn {
+  border-radius: 0px;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
 }
 // .btn-group>.btn-group:not(:first-child), .btn-group>:not(.btn-check:first-child)+.btn {
 // 	margin-right: calc(var(--bs-border-width)* -1);
@@ -1011,14 +1017,18 @@ div[dir='rtl'] {
   // 	transform: rotate(180);
   // }
 
-	.btn-group>.btn-group:not(:last-child)>.btn, .btn-group>.btn.dropdown-toggle-split:first-child, .btn-group>.btn:not(:last-child):not(.dropdown-toggle) {
-		border-radius: 0px !important;
-		border-top-right-radius: 6px !important ;
-		border-bottom-right-radius:6px!important;
-	}
-	.btn-group>.btn-group:not(:first-child)>.btn, .btn-group>.btn:nth-child(n+3), .btn-group>:not(.btn-check)+.btn {
-		border-radius: 0px!important;
-		border-top-left-radius: 6px!important;
-		border-bottom-left-radius: 6px !important;
-	}
+  .btn-group > .btn-group:not(:last-child) > .btn,
+  .btn-group > .btn.dropdown-toggle-split:first-child,
+  .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+    border-radius: 0px !important;
+    border-top-right-radius: 6px !important ;
+    border-bottom-right-radius: 6px !important;
+  }
+  .btn-group > .btn-group:not(:first-child) > .btn,
+  .btn-group > .btn:nth-child(n + 3),
+  .btn-group > :not(.btn-check) + .btn {
+    border-radius: 0px !important;
+    border-top-left-radius: 6px !important;
+    border-bottom-left-radius: 6px !important;
+  }
 }

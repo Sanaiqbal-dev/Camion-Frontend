@@ -301,7 +301,12 @@ div[dir='ltr'] .accordion {
   border: 0;
   border-radius: 10px;
   overflow-anchor: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    border-radius 0.15s ease;
 }
 
 .accordion-button {
@@ -313,7 +318,8 @@ div[dir='ltr'] .accordion {
   rotate: 180deg;
 }
 
-.accordion-button:not(.collapsed)::after, div[dir='ltr'] .accordion-button:not(.collapsed)::after {
+.accordion-button:not(.collapsed)::after,
+div[dir='ltr'] .accordion-button:not(.collapsed)::after {
   --bs-accordion-btn-active-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12.5L10 7.5L15 12.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>');
   rotate: 180deg;
 }
@@ -480,7 +486,7 @@ div[dir='ltr'] .accordion {
 }
 
 .stats-value {
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 600;
 }
 
@@ -731,7 +737,8 @@ thead th:last-child {
   gap: 10px;
 }
 
-.modal, div[dir='ltr'] .modal {
+.modal,
+div[dir='ltr'] .modal {
   --bs-modal-width: 1000px;
 }
 
@@ -869,13 +876,17 @@ thead th:last-child {
   padding: 0;
 }
 
-.btn-group > .btn-group:not(:last-child) > .btn, .btn-group > .btn.dropdown-toggle-split:first-child, .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+.btn-group > .btn-group:not(:last-child) > .btn,
+.btn-group > .btn.dropdown-toggle-split:first-child,
+.btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
   border-radius: 0px;
   border-top-left-radius: 6px !important;
   border-bottom-left-radius: 6px !important;
 }
 
-.btn-group > .btn-group:not(:first-child) > .btn, .btn-group > .btn:nth-child(n+3), .btn-group > :not(.btn-check) + .btn {
+.btn-group > .btn-group:not(:first-child) > .btn,
+.btn-group > .btn:nth-child(n + 3),
+.btn-group > :not(.btn-check) + .btn {
   border-radius: 0px;
   border-top-right-radius: 6px !important;
   border-bottom-right-radius: 6px !important;
@@ -963,13 +974,17 @@ div[dir='rtl'] .tw-flex-row {
   direction: rtl;
 }
 
-div[dir='rtl'] .btn-group > .btn-group:not(:last-child) > .btn, div[dir='rtl'] .btn-group > .btn.dropdown-toggle-split:first-child, div[dir='rtl'] .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
+div[dir='rtl'] .btn-group > .btn-group:not(:last-child) > .btn,
+div[dir='rtl'] .btn-group > .btn.dropdown-toggle-split:first-child,
+div[dir='rtl'] .btn-group > .btn:not(:last-child):not(.dropdown-toggle) {
   border-radius: 0px !important;
   border-top-right-radius: 6px !important;
   border-bottom-right-radius: 6px !important;
 }
 
-div[dir='rtl'] .btn-group > .btn-group:not(:first-child) > .btn, div[dir='rtl'] .btn-group > .btn:nth-child(n+3), div[dir='rtl'] .btn-group > :not(.btn-check) + .btn {
+div[dir='rtl'] .btn-group > .btn-group:not(:first-child) > .btn,
+div[dir='rtl'] .btn-group > .btn:nth-child(n + 3),
+div[dir='rtl'] .btn-group > :not(.btn-check) + .btn {
   border-radius: 0px !important;
   border-top-left-radius: 6px !important;
   border-bottom-left-radius: 6px !important;
