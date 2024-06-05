@@ -57,39 +57,37 @@ const CreateUser: React.FC<CreateUserModalProps> = ({ show, handleClose, onSubmi
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
-              <Form.Group controlId="formFirstName">
-                <Form.Label>{t('firstName')}</Form.Label>
-                <Form.Control type="text" placeholder={t('enterFirstName')} style={{ width: '270px', height: '50px' }} {...register('firstName')} isInvalid={!!errors.firstName} />
-                <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="formEmail">
-                <Form.Label>{t('emailAddress')}</Form.Label>
-                <Form.Control type="email" placeholder={t('enterEmailAddress')} style={{ width: '270px', height: '50px' }} {...register('email')} isInvalid={!!errors.email} />
-                <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
-              </Form.Group>
-            </div>
-            <div className="tw-flex tw-flex-row tw-gap-5">
-              <Form.Group controlId="formPassword">
-                <Form.Label>{t('password')}</Form.Label>
-                <Form.Control type="password" placeholder={t('enterPassword')} style={{ width: '270px', height: '50px' }} {...register('password')} isInvalid={!!errors.password} />
-                <Form.Control.Feedback type="invalid" style={{ maxWidth: '270px' }}>
-                  {errors.password?.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="formConfirmPassword">
-                <Form.Label>{t('confirmPassword')}</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder={t('enterConfirmPassword')}
-                  style={{ width: '270px', height: '50px' }}
-                  {...register('confirmPassword')}
-                  isInvalid={!!errors.confirmPassword}
-                />
-                <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
-              </Form.Group>
-            </div>
+          <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group controlId="formFirstName" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('firstName')}</Form.Label>
+              <Form.Control type="text" placeholder={t('enterFirstName')} style={{ height: '50px' }} {...register('firstName')} isInvalid={!!errors.firstName} />
+              <Form.Control.Feedback type="invalid">{errors.firstName?.message}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formEmail" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('emailAddress')}</Form.Label>
+              <Form.Control type="email" placeholder={t('enterEmailAddress')} style={{ height: '50px' }} {...register('email')} isInvalid={!!errors.email} />
+              <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
+            </Form.Group>
+          </div>
+          <div className="tw-flex tw-flex-row tw-gap-5  tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group controlId="formPassword" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('password')}</Form.Label>
+              <Form.Control type="password" placeholder={t('enterPassword')} style={{ height: '50px' }} {...register('password')} isInvalid={!!errors.password} />
+              <Form.Control.Feedback type="invalid" style={{ maxWidth: '270px' }}>
+                {errors.password?.message}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formConfirmPassword" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('confirmPassword')}</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder={t('enterConfirmPassword')}
+                style={{ height: '50px' }}
+                {...register('confirmPassword')}
+                isInvalid={!!errors.confirmPassword}
+              />
+              <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
+            </Form.Group>
           </div>
           <Button variant="primary" type="submit" disabled={isLoading}>
             {t('addNewUserButton')}
