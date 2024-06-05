@@ -255,52 +255,52 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
       <Modal.Body>
         {profile && (
           <Form onSubmit={handleSubmit(onSubmit, onerror)}>
-            <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-              <div style={{ display: 'flex', gap: '18px' }}>
-                <Form.Group className="mb-3">
+            <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+              <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('firstName')}</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder={t('enterFirstName')}
                     defaultValue={profile?.firstName}
-                    style={{ width: '270px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('FirstName')}
                     isInvalid={!!errors.FirstName}
                   />
                   <Form.Control.Feedback type="invalid">{errors.FirstName?.message}</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('lastName')}</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder={t('enterLastName')}
                     defaultValue={profile?.lastName}
-                    style={{ width: '270px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('LastName')}
                     isInvalid={!!errors.LastName}
                   />
                   <Form.Control.Feedback type="invalid">{errors.LastName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
-              <div style={{ display: 'flex', gap: '18px' }}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
+              <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                <Form.Group className="mb-3" controlId="formBasicEmail" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('emailAddress')}</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder={t('enterEmailAddress')}
                     defaultValue={profile?.email}
-                    style={{ width: '270px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('Email')}
                     isInvalid={!!errors.Email}
                   />
                   <Form.Control.Feedback type="invalid">{errors.Email?.message}</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('contactNumber')}</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder={t('enterContactNumber')}
-                    style={{ width: '270px', height: '50px' }}
+                    style={{ height: '50px' }}
                     defaultValue={profile ? profile.phoneNumber : '+966'}
                     {...register('PhoneNumber')}
                     isInvalid={!!errors.PhoneNumber}
@@ -308,52 +308,46 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                   <Form.Control.Feedback type="invalid">{errors.PhoneNumber?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
-              <div style={{ display: 'flex', gap: '18px' }}>
-                <Form.Group className="mb-3">
+              <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('password')}</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder={t('enterPassword')}
-                    style={{ width: '270px', height: '50px' }}
-                    {...register('Password')}
-                    isInvalid={!!errors.Password}
-                  />
+                  <Form.Control type="password" placeholder={t('enterPassword')} style={{ height: '50px' }} {...register('Password')} isInvalid={!!errors.Password} />
                   <Form.Control.Feedback type="invalid">{errors.Password?.message}</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('confirmPassword')}</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder={t('enterConfirmPassword')}
-                    style={{ width: '270px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('ConfirmPassword')}
                     isInvalid={!!errors.ConfirmPassword}
                   />
                   <Form.Control.Feedback type="invalid">{errors.ConfirmPassword?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
-              <div style={{ display: 'flex', gap: '18px' }}>
-                <Form.Group className="mb-3">
+              <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('companyName')}</Form.Label>
                   <Form.Control
                     type="text"
                     defaultValue={profile?.companyName}
                     placeholder={t('enterCompanyName')}
-                    style={{ width: '560px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('CompanyName')}
                     isInvalid={!!errors.CompanyName}
                   />
                   <Form.Control.Feedback type="invalid">{errors.CompanyName?.message}</Form.Control.Feedback>
                 </Form.Group>
               </div>
-              <div style={{ display: 'flex', gap: '18px' }}>
-                <Form.Group className="mb-3">
+              <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                   <Form.Label>{t('moiNumber')}</Form.Label>
                   <Form.Control
                     type="text"
                     defaultValue={profile?.moiNumber}
                     placeholder={t('enterMoiNumber')}
-                    style={{ width: '560px', height: '50px' }}
+                    style={{ height: '50px' }}
                     {...register('MOINumber')}
                     isInvalid={!!errors.MOINumber}
                   />
@@ -361,8 +355,8 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 </Form.Group>
               </div>
               {isShipper ? (
-                <div style={{ display: 'flex', gap: '18px' }}>
-                  <Form.Group className="tw-flex tw-flex-col">
+                <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                  <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                     <Form.Label className="tw-text-sm">{t('vatCertificate')}</Form.Label>
                     <div className="tw-flex-col">
                       <Button
@@ -370,7 +364,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                         onClick={() => handleFileInputClick(vatFileInputRef)}
                         className="custom-file-upload-button"
                         style={{
-                          width: '270px',
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
@@ -392,7 +385,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                       }}
                     />
                   </Form.Group>
-                  <Form.Group className="tw-flex tw-flex-col">
+                  <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                     <Form.Label className="tw-text-sm">{t('crDocument')}</Form.Label>
                     <div className="tw-flex-col">
                       <Button
@@ -400,7 +393,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                         onClick={() => handleFileInputClick(crFileInputRef)}
                         className="custom-file-upload-button"
                         style={{
-                          width: '270px',
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
@@ -425,8 +417,8 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                 </div>
               ) : (
                 <>
-                  <div style={{ display: 'flex', gap: '18px' }}>
-                    <Form.Group className="tw-flex tw-flex-col">
+                  <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                    <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                       <Form.Label className="tw-text-sm">{t('transportLicenses')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
@@ -434,7 +426,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           onClick={() => handleFileInputClick(tlFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
-                            width: '270px',
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
@@ -456,7 +447,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                         }}
                       />
                     </Form.Group>
-                    <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                       <Form.Label className="tw-text-sm">{t('carrierLiabilityInsurance')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
@@ -464,7 +455,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           onClick={() => handleFileInputClick(cliFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
-                            width: '270px',
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
@@ -487,8 +477,8 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                       />
                     </Form.Group>
                   </div>
-                  <div style={{ display: 'flex', gap: '18px' }}>
-                    <Form.Group className="tw-flex tw-flex-col">
+                  <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+                    <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                       <Form.Label className="tw-text-sm">{t('companyLetterhead')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
@@ -496,7 +486,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           onClick={() => handleFileInputClick(clFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
-                            width: '270px',
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
@@ -518,7 +507,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                         }}
                       />
                     </Form.Group>
-                    <Form.Group className="tw-flex tw-flex-col">
+                    <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '100%' }}>
                       <Form.Label className="tw-text-sm">{t('businessRegistration')}</Form.Label>
                       <div className="tw-flex-col">
                         <Button
@@ -526,7 +515,6 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           onClick={() => handleFileInputClick(brFileInputRef)}
                           className="custom-file-upload-button"
                           style={{
-                            width: '270px',
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',

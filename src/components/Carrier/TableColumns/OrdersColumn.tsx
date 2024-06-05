@@ -70,50 +70,50 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
               </Button>
             </DropdownMenuTrigger>
 
-          <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
-            {orderStatuses &&
-              orderStatuses.result
-                .filter((x: IOrderStatus) => x.id >= item.statusId)
-                .map((statusItem: IOrderStatus) => {
-                  return (
-                    <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
-                      {statusItem.description}
-                    </DropdownMenuItem>
-                  );
-                })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+            <DropdownMenuContent className="tw-flex tw-flex-col tw-gap-2 tw-p-2" align="end">
+              {orderStatuses &&
+                orderStatuses.result
+                  .filter((x: IOrderStatus) => x.id >= item.statusId)
+                  .map((statusItem: IOrderStatus) => {
+                    return (
+                      <DropdownMenuItem className="hover:tw-bg-black hover:tw-text-white" onClick={() => onUpdateStatus(item.id, statusItem.id)}>
+                        {statusItem.description}
+                      </DropdownMenuItem>
+                    );
+                  })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
-  },
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => {
-      return (
-        <div className="action-container" style={{ justifyContent: 'start' }}>
-          <div onClick={() => onDelete(row.original.id)}>
-            <img src={IconDelete} />
-            <span style={{ color: '#EB5757' }}>Delete</span>
-          </div>
-          <div onClick={() => onAssignVehicle(row.original)}>
-            <img src={IconAssignVehicle} />
-            <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
-          </div>
-          {row.original.bayanId && (
-            <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
-              <img src={IconPrintBill} />
-              <span style={{ color: '#F48031' }}>Print Bayan</span>
+    {
+      accessorKey: 'action',
+      header: t('action'),
+      cell: ({ row }) => {
+        return (
+          <div className="action-container" style={{ justifyContent: 'start' }}>
+            <div onClick={() => onDelete(row.original.id)}>
+              <img src={IconDelete} />
+              <span style={{ color: '#EB5757' }}>Delete</span>
             </div>
-          )}
-          {!row.original.bayanId && (
-            <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
-              <img src={IconPrintBill} />
-              <span style={{ color: '#F48031' }}>Create Bayan</span>
+            <div onClick={() => onAssignVehicle(row.original)}>
+              <img src={IconAssignVehicle} />
+              <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
             </div>
-          )}
-        </div>
-      );
+            {row.original.bayanId && (
+              <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
+                <img src={IconPrintBill} />
+                <span style={{ color: '#F48031' }}>Print Bayan</span>
+              </div>
+            )}
+            {!row.original.bayanId && (
+              <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+                <img src={IconPrintBill} />
+                <span style={{ color: '#F48031' }}>Create Bayan</span>
+              </div>
+            )}
+          </div>
+        );
+      },
     },
-  },
-]};
+  ];};
