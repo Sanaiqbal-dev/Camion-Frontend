@@ -61,15 +61,14 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3">
+          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('productType')}</Form.Label>
               <Form.Control
                 as="select"
                 placeholder={t('selectProductType')}
                 required
                 style={{
-                  width: '560px',
                   height: '59px',
                 }}
                 {...register('productTypeId')}
@@ -84,13 +83,12 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
               <Form.Control.Feedback type="invalid">{errors.productTypeId?.message}</Form.Control.Feedback>
             </Form.Group>
             <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('productName')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder={t('enterProductName')}
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -101,13 +99,12 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 />
                 <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('price')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder={t('enterPrice')}
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -121,13 +118,12 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
             </div>
 
             <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('quantity')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder={t('quantityExample')}
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -138,13 +134,12 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 />
                 <Form.Control.Feedback type="invalid">{errors.quantity?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('weight')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder={t('enterWeight')}
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -156,13 +151,14 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 <Form.Control.Feedback type="invalid">{errors.weight?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <Form.Group className="mb-3 d-flex">
+            <Form.Group className="mb-3 d-flex" style={{ flex: 1, width: '100%' }}>
               <Form.Control
                 type="number"
                 placeholder={t('length')}
                 style={{
-                  width: '164px',
                   height: '59px',
+                  flex: 1,
+                  width: '100%',
                 }}
                 isInvalid={!!errors.length}
                 {...register('length')}
@@ -171,7 +167,8 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 type="number"
                 placeholder={t('width')}
                 style={{
-                  width: '164px',
+                  flex: 1,
+                  width: '100%',
                   height: '59px',
                   margin: '0 -2px 0 -2px',
                 }}
@@ -182,7 +179,8 @@ const ProductTypeModal: React.FC<ProductTypeModalProps> = ({ show, handleClose, 
                 type="number"
                 placeholder={t('height')}
                 style={{
-                  width: '164px',
+                  flex: 1,
+                  width: '100%',
                   height: '59px',
                 }}
                 isInvalid={!!errors.height}

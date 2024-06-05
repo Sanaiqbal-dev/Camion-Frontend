@@ -107,56 +107,55 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-              <div className="singleLineControl tw-flex tw-gap-5">
-                <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount">
-                  <Form.Label className="tw-text-sm">{t('amount')}</Form.Label>
-                  <Form.Control type="string" className="form-control customInput" {...register('Amount')} isInvalid={!!errors.Amount} placeholder={t('enterAmount')} />
-                  <Form.Control.Feedback type="invalid">{errors.Amount?.message}</Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD">
-                  <Form.Label className="tw-text-sm">{t('expectedDeliveryDate')}</Form.Label>
-                  <Form.Control
-                    type="date"
-                    min={new Date().toISOString().split('T')[0]}
-                    placeholder={t('selectDate')}
-                    style={{ width: '270px', height: '50px' }}
-                    {...register('DelievryDate')}
-                    isInvalid={!!errors.DelievryDate}
-                  />
-                  <Form.Control.Feedback type="invalid">{errors.DelievryDate?.message}</Form.Control.Feedback>
-                </Form.Group>
-              </div>
-              <Form.Group controlId="formBasicOtherDetails">
-                <Form.Label className="tw-text-sm">{t('otherDetails')}</Form.Label>
-                <Form.Control as="textarea" rows={5} placeholder={t('enterText')} style={{ width: '100%' }} {...register('OtherDetails')} isInvalid={!!errors.OtherDetails} />
-                <Form.Control.Feedback type="invalid">{errors.OtherDetails?.message}</Form.Control.Feedback>
+            {/* <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10"> */}
+            <div className="singleLineControl tw-flex tw-gap-5" style={{ flex: 1, width: '100%' }}>
+              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount" style={{ flex: 1, width: '100%' }}>
+                <Form.Label className="tw-text-sm">{t('amount')}</Form.Label>
+                <Form.Control type="string" className="form-control customInput" {...register('Amount')} isInvalid={!!errors.Amount} placeholder={t('enterAmount')} />
+                <Form.Control.Feedback type="invalid">{errors.Amount?.message}</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
-                <Form.Label className="tw-text-sm">{t('uploadDocument')}</Form.Label>
-                <div className="tw-flex">
-                  <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
-                    {t('uploadTheDocument')}
-                  </Button>
-                  <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
-                </div>
+              <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicEDD" style={{ flex: 1, width: '100%' }}>
+                <Form.Label className="tw-text-sm">{t('expectedDeliveryDate')}</Form.Label>
                 <Form.Control
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={(e) => {
-                    const files = (e.target as HTMLInputElement).files;
-                    if (files && files.length > 0) {
-                      const file = files[0];
-                      setSeletedFile(file);
-                      console.log(file);
-                    }
-                  }}
+                  type="date"
+                  min={new Date().toISOString().split('T')[0]}
+                  placeholder={t('selectDate')}
+                  {...register('DelievryDate')}
+                  isInvalid={!!errors.DelievryDate}
                 />
+                <Form.Control.Feedback type="invalid">{errors.DelievryDate?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
+            <Form.Group controlId="formBasicOtherDetails" style={{ flex: 1, width: '100%' }}>
+              <Form.Label className="tw-text-sm">{t('otherDetails')}</Form.Label>
+              <Form.Control as="textarea" rows={5} placeholder={t('enterText')} style={{ width: '100%' }} {...register('OtherDetails')} isInvalid={!!errors.OtherDetails} />
+              <Form.Control.Feedback type="invalid">{errors.OtherDetails?.message}</Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument" style={{ flex: 1, width: '100%' }}>
+              <Form.Label className="tw-text-sm">{t('uploadDocument')}</Form.Label>
+              <div className="tw-flex">
+                <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
+                  {t('uploadTheDocument')}
+                </Button>
+                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
+              </div>
+              <Form.Control
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const files = (e.target as HTMLInputElement).files;
+                  if (files && files.length > 0) {
+                    const file = files[0];
+                    setSeletedFile(file);
+                    console.log(file);
+                  }
+                }}
+              />
+            </Form.Group>
+            {/* </div>   */}
             <Button variant="primary" type="submit" disabled={isSubmittingProposal}>
               {t('submitProposal')}
             </Button>

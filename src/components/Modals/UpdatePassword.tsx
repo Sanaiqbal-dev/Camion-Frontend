@@ -47,39 +47,33 @@ const UpdatePassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3" controlId="formBasicCurrentPassword">
+          <div className="tw-flex tw-flex-row tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group className="mb-3" controlId="formBasicCurrentPassword" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('currentPassword')}</Form.Label>
               <Form.Control
                 type="password"
                 placeholder={t('enterCurrentPassword')}
-                style={{ width: '270px', height: '50px' }}
+                style={{ height: '50px' }}
                 {...register('currentPassword')}
                 isInvalid={!!errors.currentPassword}
               />
               <Form.Control.Feedback type="invalid">{errors.currentPassword?.message}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicNewPassword">
+            <Form.Group className="mb-3" controlId="formBasicNewPassword" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('newPassword')}</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder={t('enterNewPassword')}
-                style={{ width: '270px', height: '50px' }}
-                {...register('newPassword')}
-                isInvalid={!!errors.newPassword}
-              />
+              <Form.Control type="password" placeholder={t('enterNewPassword')} style={{ height: '50px' }} {...register('newPassword')} isInvalid={!!errors.newPassword} />
               <Form.Control.Feedback type="invalid" style={{ maxWidth: '270px' }}>
                 {errors.newPassword?.message}
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Group className="mb-3" controlId="formBasicConfirmPassword" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('confirmPassword')}</Form.Label>
               <Form.Control
                 type="password"
                 placeholder={t('enterConfirmPassword')}
-                style={{ width: '270px', height: '50px' }}
+                style={{ height: '50px' }}
                 {...register('confirmPassword')}
                 isInvalid={!!errors.confirmPassword}
               />

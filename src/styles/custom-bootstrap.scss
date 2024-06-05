@@ -250,6 +250,14 @@ $grid-breakpoints: (
   width: 270px;
   height: 100vh;
   box-sizing: border-box;
+      overflow-y: scroll;
+
+}
+
+
+.auto-width-columns table {
+  width: 100%;
+  table-layout: auto; /* Allows table cells to grow based on content */
 }
 
 tr {
@@ -647,6 +655,7 @@ div[dir='ltr'] .accordion {
 // .data-table tbody tr:hover {
 //   background-color: #dbd9d9;
 // }
+
 .data-table tr td:first-child,
 thead th:first-child {
   border-top-left-radius: 8px;
@@ -654,6 +663,9 @@ thead th:first-child {
   padding-left: 20px;
 }
 
+thead th, tbody td{
+  padding: 20px;
+}
 .orders-table .data-table tr td:last-child {
   width: 0px;
 }

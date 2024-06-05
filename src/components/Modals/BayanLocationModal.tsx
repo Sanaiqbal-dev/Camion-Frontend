@@ -74,29 +74,29 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3">
+          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('labelSearchAddress')}</Form.Label>
-              <Form.Control type="text" placeholder={t('placeholderStreetName')} style={{ width: '560px', height: '59px' }} />
+              <Form.Control type="text" placeholder={t('placeholderStreetName')} style={{ height: '59px' }} />
             </Form.Group>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{infoType === 'pickup' ? t('labelSenderName') : t('labelReceiverName')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder={t('placeholderSenderName')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('name')}
                   isInvalid={!!errors.name}
                 />
                 <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{infoType === 'pickup' ? t('labelSenderPhoneNumber') : t('labelReceiverPhoneNumber')}</Form.Label>
                 <Form.Control
                   type="string"
                   placeholder={t('placeholderPhoneNumber')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   defaultValue="+966"
                   {...register('phoneNumber')}
                   isInvalid={!!errors.phoneNumber}
@@ -104,37 +104,37 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelBuildingNumber')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder={t('placeholderBuildingNumber')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('buildingNumber')}
                   isInvalid={!!errors.buildingNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.buildingNumber?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelStreetName')}</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder={t('placeholderStreetNameInput')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('streetName')}
                   isInvalid={!!errors.streetName}
                 />
                 <Form.Control.Feedback type="invalid">{errors.streetName?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelDistrictName')}</Form.Label>
                 <Form.Control
                   as="select"
                   placeholder={t('placeholderSelectDistrict')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('districtId', { required: true })}
                   isInvalid={!!errors.districtId}
                   onChange={(e) => setSelectedDistrict(Number(e.target.value))}
@@ -149,12 +149,12 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.districtId?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelCityName')}</Form.Label>
                 <Form.Control
                   as="select"
                   placeholder={t('placeholderSelectCity')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('cityId', { required: true })}
                   isInvalid={!!errors.cityId}
                   onChange={(e) => setSelectedCity(e.target.value)}
@@ -170,25 +170,24 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                 <Form.Control.Feedback type="invalid">{errors.cityId?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelZipCode')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder={t('placeholderZipCode')}
-                  style={{ width: '270px', height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('zipCode')}
                   isInvalid={!!errors.zipCode}
                 />
                 <Form.Control.Feedback type="invalid">{errors.zipCode?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
                 <Form.Label>{t('labelAdditionalNumber')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="121212"
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -201,13 +200,12 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
               </Form.Group>
             </div>
 
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
+            <Form.Group className="mb-3" controlId="formBasicConfirmPassword" style={{ flex: 1, width: '100%' }}>
               <Form.Label>{t('labelUnitNo')}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="121212"
                 style={{
-                  width: '560px',
                   height: '59px',
                   borderTop: 'none',
                   borderRight: 'none',
