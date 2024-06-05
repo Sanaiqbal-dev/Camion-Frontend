@@ -6,17 +6,21 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { IVehicle } from '../../../interface/carrier';
 import { useTranslation } from 'react-i18next';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
+import { IDownloadState } from '@/interface/common';
 
 export const VehicleManagementColumns = ({
   assignDriver,
   editVehicle,
   deleteVehicle,
   onViewDocumentClick,
+  documentDownloading,
 }: {
   assignDriver: (id: number, driverId: string) => void;
   editVehicle: (id: number) => void;
   deleteVehicle: (id: number) => void;
   onViewDocumentClick: (id: number) => void;
+  documentDownloading: IDownloadState;
 }): ColumnDef<IVehicle>[] => {
   const { t } = useTranslation(['vehicleManagementColumn']);
 
@@ -71,7 +75,10 @@ export const VehicleManagementColumns = ({
       header: t('vehicleRegistration'),
       cell: ({ row }) => {
         const vehicleId = row.original.id;
-        return (
+        const regNumber = row.original.registrationNumber;
+        return (documentDownloading.status==true && documentDownloading.id==regNumber) ? (
+          <LoadingAnimation />
+        ) : (
           <div onClick={() => onViewDocumentClick(vehicleId)}>
             <Link to="">{t('viewDocument')}</Link>
           </div>

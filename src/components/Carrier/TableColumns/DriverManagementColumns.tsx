@@ -4,14 +4,16 @@ import IconDelete from '../../../assets/icons/ic-delete.svg';
 import { Link } from 'react-router-dom';
 import { IDriver } from '../../../interface/carrier';
 import { useTranslation } from 'react-i18next';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface DriverActionProps {
   onDeleteDriver: (id: number) => void;
   onUpdateDriver: (id: number) => void;
   onIqamaDownloadClick: (id: number) => void;
+  iqamaDownloading: boolean;
 }
 
-export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick }: DriverActionProps): ColumnDef<IDriver>[] => {
+export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick, iqamaDownloading }: DriverActionProps): ColumnDef<IDriver>[] => {
   const { t } = useTranslation(['driverManagementColumn']);
 
   return [
@@ -45,7 +47,9 @@ export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqam
       cell: ({ row }) => {
         const driverId = row.original.id;
 
-        return (
+        return iqamaDownloading ? (
+          <LoadingAnimation />
+        ) : (
           <div
             onClick={() => {
               if (row.original.fileName !== t('noFileUploaded')) onIqamaDownloadClick(parseInt(driverId));

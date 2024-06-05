@@ -39,6 +39,8 @@ const DriverManagement = () => {
   const [deleteDriver] = useDeleteDriverMutation();
 
   const [downloadFile] = useLazyDownloadFileQuery();
+  const [isDownloading, setIsDownloading] = useState(false);
+
 
   const tableData: IDriver[] = getDriversList.data?.result.result;
   const driversData: any = tableData?.map((item) => ({
@@ -83,13 +85,17 @@ const DriverManagement = () => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
+        setIsDownloading(true);
         await downloadFile(fileName);
         console.log('Download successful!');
+        setIsDownloading(false);
       } else {
         console.log('No file selected!');
+        setIsDownloading(false);
       }
     } catch (error) {
       console.error('Error downloading file:', error);
+      setIsDownloading(false);
     }
   };
 
@@ -103,6 +109,7 @@ const DriverManagement = () => {
     onDeleteDriver,
     onUpdateDriver,
     onIqamaDownloadClick,
+    iqamaDownloading: isDownloading,
   });
   const handleCloseModal = () => {
     setEditDriverData(undefined);

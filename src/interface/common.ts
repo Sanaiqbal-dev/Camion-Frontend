@@ -202,3 +202,7 @@ export interface IMarkers {
   latitude: number;
   lastUpdatedDate: string;
 }
+export interface IDownloadState {
+  status: boolean;
+  id: any;
+}

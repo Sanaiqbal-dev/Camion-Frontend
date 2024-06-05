@@ -54,6 +54,7 @@ const VehicleManagement = () => {
 
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const { data, isLoading, refetch } = useGetVehiclesQuery({
     page: pager.page - 1,
@@ -161,13 +162,17 @@ const VehicleManagement = () => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
+        setIsDownloading(true);
         await downloadFile(fileName);
         console.log('Download successful!');
+        setIsDownloading(false);
       } else {
         console.log('No file selected!');
+        setIsDownloading(false);
       }
     } catch (error) {
       console.error('Error downloading file:', error);
+      setIsDownloading(false);
     }
   };
   const onVeiwDocumentClick = (id: number) => {
@@ -206,6 +211,7 @@ const VehicleManagement = () => {
     editVehicle: editVehicleHandler,
     deleteVehicle: deleteVehicleHandler,
     onViewDocumentClick: onVeiwDocumentClick,
+    documentDownloading:isDownloading,
   });
 
   return (
