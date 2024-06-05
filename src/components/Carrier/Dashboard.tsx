@@ -23,7 +23,7 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
           <span className="stats-label">{t('totalOrders')}</span>
-          <div className="tw-flex tw-flex-row tw-gap-2">
+          <div className="tw-flex tw-flex-row tw-gap-2" style={{ whiteSpace: 'nowrap' }}>
             <span>
               {t('orderIncrease')} <span style={{ color: '#0ebc93' }}>5%</span>
             </span>
@@ -34,7 +34,7 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
           <span className="stats-label">{t('activeOrders')}</span>
-          <div className="tw-flex tw-flex-row tw-gap-2">
+          <div className="tw-flex tw-flex-row tw-gap-2" style={{ whiteSpace: 'nowrap' }}>
             <span>
               {t('orderIncrease')} <span style={{ color: '#0ebc93' }}>5%</span>
             </span>
@@ -45,7 +45,7 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.onRoute}</span>
           <span className="stats-label">{t('onRoute')}</span>
-          <div className="tw-flex tw-flex-row tw-gap-2">
+          <div className="tw-flex tw-flex-row tw-gap-2" style={{ whiteSpace: 'nowrap' }}>
             <span>
               {t('orderIncrease')} <span style={{ color: '#0ebc93' }}>5%</span>
             </span>
@@ -56,7 +56,7 @@ const Dashboard = () => {
         <div className="col stats-item border-right">
           <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
           <span className="stats-label">{t('ordersThisMonth')}</span>
-          <div className="tw-flex tw-flex-row tw-gap-2">
+          <div className="tw-flex tw-flex-row tw-gap-2" style={{ whiteSpace: 'nowrap' }}>
             <span>
               {t('orderDecrease')} <span style={{ color: 'red' }}>5%</span>
             </span>
