@@ -42,6 +42,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<AspNetUserLoginRequest> = async (values: AspNetUserLoginRequest) => {
+    setShowToast(false);
     try {
       const response = await aspNetUserLogin(values).unwrap();
       dispatch(
@@ -185,103 +186,6 @@ const Login = () => {
         </Col>
       </Row>
     </Container>
-    // <div className="main-container">
-    //   {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
-    //   <div className="parent-row row g-0">
-    //     <div className="img-container">
-    //       <Image className="background-img" src={ShipperImage} />
-    //     </div>
-    //     <div className="form-main-container">
-    // 					<Row className="justify-content-md-center mt-3">
-    // 						<Col md="auto"><LanguageSwitcher /></Col>
-    // 					</Row>
-    //       <div className="login d-flex align-items-center py-5">
-    //         <div className="container">
-    //           <div className="row">
-    //             <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
-    //               <Image src={CamionLogo} />
-
-    //               <div className="mt-4">
-    //                 <h1 className="h1 mb-3 main_heading">{t('loginTitle')}</h1>
-    //                 <p className="sub_heading mb-4">
-    //                   {t('loginSubtitle')}
-    //                 </p>
-    //               </div>
-    //               <div className="form-container">
-    //                 <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-    //                   <div>
-    //                     <Row className="form-group mb-4">
-    //                       <Form.Group as={Col}>
-    //                         <Form.Label className="customLabel">{t('emailLabel')}</Form.Label>
-    //                         <Form.Control
-    //                           type="email"
-    //                           className="form-control customInput"
-    //                           {...register('username')}
-    //                           isInvalid={!!errors.username}
-    //                           placeholder={t('emailPlaceholder')}
-    //                           disabled={isLoading}
-    //                         />
-    //                         <Form.Control.Feedback type="invalid">{errors.username?.message}</Form.Control.Feedback>
-    //                       </Form.Group>
-    //                     </Row>
-    //                     <Row className="form-group">
-    //                       <Form.Group as={Col} controlId="validationCustom05">
-    //                         <Form.Label className="customLabel">{t('passwordLabel')}</Form.Label>
-    //                         <Form.Control
-    //                           type="password"
-    //                           className="form-control customInput"
-    //                           placeholder={t('passwordPlaceholder')}
-    //                           {...register('password')}
-    //                           isInvalid={!!errors.password}
-    //                           disabled={isLoading}
-    //                         />
-    //                         <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
-    //                         <div className="mt-2 d-flex flex-row-reverse">
-    //                           <Link
-    //                             to="/forgotPassword"
-    //                             style={{
-    //                               color: '#0060b8',
-    //                               fontSize: '16px',
-    //                               cursor: 'pointer',
-    //                               textDecoration: 'none',
-    //                               marginLeft: '30px',
-    //                             }}>
-    //                             {t('forgotPassword')}
-    //                           </Link>
-    //                         </div>
-    //                       </Form.Group>
-    //                     </Row>
-    //                   </div>
-    //                   <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
-    //                     <button type="submit" className="btn customLoginButton w-100" disabled={isLoading}>
-    //                       {t('login')}
-    //                     </button>
-    //                     <div className="d-flex justify-content-start">
-    //                       <div>{t('noAccount')}</div>
-    //                       <div>
-    //                         <Link
-    //                           to="/Register"
-    //                           style={{
-    //                             color: '#0060b8',
-    //                             fontSize: '16px',
-    //                             cursor: 'pointer',
-    //                             textDecoration: 'none',
-    //                             marginLeft: '30px',
-    //                           }}>
-    //                           {t('registerAccount')}
-    //                         </Link>
-    //                       </div>
-    //                     </div>
-    //                   </div>
-    //                 </Form>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 };
 
