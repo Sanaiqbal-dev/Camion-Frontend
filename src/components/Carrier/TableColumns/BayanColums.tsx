@@ -8,7 +8,7 @@ import { IDownloadState } from '@/interface/common';
 
 interface BayanActionProps {
   onPrintBayan: (tripId: number) => void;
-  bayanDownloading: IDownloadState;
+  bayanDownloading?: IDownloadState;
 }
 
 export const BayanColumns = ({ onPrintBayan, bayanDownloading }: BayanActionProps): ColumnDef<IBayanItem>[] => {

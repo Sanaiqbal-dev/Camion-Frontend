@@ -11,7 +11,7 @@ interface DriverActionProps {
   onDeleteDriver: (id: number) => void;
   onUpdateDriver: (id: number) => void;
   onIqamaDownloadClick: (id: number) => void;
-  iqamaDownloading: IDownloadState;
+  iqamaDownloading?: IDownloadState;
 }
 
 export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick, iqamaDownloading }: DriverActionProps): ColumnDef<IDriver>[] => {

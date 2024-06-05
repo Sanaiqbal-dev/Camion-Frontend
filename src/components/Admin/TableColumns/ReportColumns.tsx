@@ -7,7 +7,7 @@ import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface ReportActionProps {
   onDownloadReport: (userId: string) => void;
-  documentDownloading: IDownloadState;
+  documentDownloading?: IDownloadState;
 }
 
 export const ReportsColumn = ({ onDownloadReport, documentDownloading }: ReportActionProps): ColumnDef<IReport>[] => {

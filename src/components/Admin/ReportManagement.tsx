@@ -5,7 +5,7 @@ import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
 import { useGetReportsQuery, useLazyDownloadReportQuery } from '@/services/report';
 import { ColumnDef } from '@tanstack/react-table';
 import { IReport } from '@/interface/reports';
@@ -13,7 +13,6 @@ import { ReportsColumn } from './TableColumns/ReportColumns';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
-import { stat } from 'fs';
 
 const ReportManagement = () => {
   const { t } = useTranslation(['reportManagement']);
@@ -67,7 +66,7 @@ const ReportManagement = () => {
   const columns: ColumnDef<IReport>[] = ReportsColumn({
     onDownloadReport,
     documentDownloading:isDownloading,
-    
+
   });
 
   const FilterDataForTable = (orderItems: IReport[]) => {
