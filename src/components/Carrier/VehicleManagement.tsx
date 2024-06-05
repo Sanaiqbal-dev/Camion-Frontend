@@ -19,7 +19,7 @@ import CreateVehicleModal from '../Modals/CreateVehicle';
 import EditVehicleModal from '../Modals/EditVehicle';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { useGetDriversListQuery } from '@/services/drivers';
@@ -51,7 +51,7 @@ const VehicleManagement = () => {
   const [showEditVehicle, setShowEditVehicle] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [downloadFile] = useLazyDownloadFileQuery();
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 
   const { data, isLoading, refetch } = useGetVehiclesQuery({
     page: pager.page - 1,
@@ -155,26 +155,26 @@ const VehicleManagement = () => {
   const closeEditModal = () => {
     setShowEditVehicle(false);
   };
-  const downloadSelectedFile = async (fileName?: string) => {
+  const downloadSelectedFile = async (fileName?: string, vehicleId?:number) => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
-        setIsDownloading(true);
+        setIsDownloading({status:true,id:vehicleId});
         await downloadFile(fileName);
         console.log('Download successful!');
-        setIsDownloading(false);
+        setIsDownloading({ status: false, id: vehicleId });
       } else {
         console.log('No file selected!');
-        setIsDownloading(false);
+        setIsDownloading({ status: false, id: vehicleId });
       }
     } catch (error) {
       console.error('Error downloading file:', error);
-      setIsDownloading(false);
+        setIsDownloading({ status: false, id: vehicleId });
     }
   };
   const onVeiwDocumentClick = (id: number) => {
     const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
-    downloadSelectedFile(selectedVehicle?.fileName);
+    downloadSelectedFile(selectedVehicle?.fileName,selectedVehicle?.id);
   };
 
   useEffect(() => {

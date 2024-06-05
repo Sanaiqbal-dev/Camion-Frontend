@@ -5,15 +5,18 @@ import IconDeleteProfile from '../../../assets/icons/ic-delete-profile.svg';
 import IconRejectProfile from '../../../assets/icons/ic-reject-profile.svg';
 import { Iprofiles } from '../../../interface/admin';
 import clsx from 'clsx';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
+import { IDownloadState } from '@/interface/common';
 
 interface ProfileActionProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onSelectFile: (file: any) => void;
+  onSelectFile: (file: any, profileId: string) => void;
   onAcceptButtonClick: (id: string) => void;
   onRejectButtonClick: (id: string) => void;
   onDeactivateButtonClick: (id: string) => void;
   onDeleteButtonClick: (id: string) => void;
   isDisabled: boolean;
+  documentDownloading?: IDownloadState;
 }
 
 export const ProfileColumns = ({
@@ -23,7 +26,7 @@ export const ProfileColumns = ({
   onDeactivateButtonClick,
   onDeleteButtonClick,
   isDisabled,
-
+  documentDownloading,
 }: ProfileActionProps): ColumnDef<Iprofiles>[] => {
   const { t } = useTranslation(['adminProfileColumn']);
 
@@ -69,11 +72,14 @@ export const ProfileColumns = ({
           const selectedIndex = event.target.selectedIndex;
           const selectedFile = files[selectedIndex - 1];
           if (selectedFile) {
-            onSelectFile(selectedFile);
+            console.log('id is ' + row.original.id);
+            onSelectFile(selectedFile, row.original.id);
           }
         };
 
-        return (
+        return documentDownloading?.status == true && documentDownloading?.id == row.original.id ? (
+          <LoadingAnimation />
+        ) : (
           <select onChange={handleChange} style={{ maxWidth: '130px' }}>
             <option value="">{t('selectDocument')}</option>
             {renderOptions()}
@@ -110,7 +116,7 @@ export const ProfileColumns = ({
                 backgroundColor: '#0EBC931A',
               }}
               onClick={() => id && onAcceptButtonClick(id)}
-            disabled={isDisabled}>
+              disabled={isDisabled}>
               <img src={IconTick} alt={t('accept')} />
               {t('accept')}
             </button>
@@ -121,7 +127,7 @@ export const ProfileColumns = ({
                 backgroundColor: '#EB57571A',
               }}
               onClick={() => id && onRejectButtonClick(id)}
-            disabled={isDisabled}>
+              disabled={isDisabled}>
               <img src={IconRejectProfile} alt={t('reject')} />
               {t('reject')}
             </button>
@@ -141,7 +147,7 @@ export const ProfileColumns = ({
                 backgroundColor: '#EB57571A',
               }}
               disabled={isDisabled}
-            onClick={() => id && onDeleteButtonClick(id)}>
+              onClick={() => id && onDeleteButtonClick(id)}>
               <img src={IconDeleteProfile} alt={t('delete')} />
               {t('delete')}
             </button>

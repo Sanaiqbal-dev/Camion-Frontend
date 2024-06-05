@@ -13,7 +13,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { Toast } from '../ui/toast';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
 import { useTranslation } from 'react-i18next';
 
 const Profiles = () => {
@@ -41,6 +41,7 @@ const Profiles = () => {
       return t('deactivated');
     }
   };
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 
   const isDisabled = isAccountUpdating;
 
@@ -123,16 +124,20 @@ const Profiles = () => {
       }
     }
   };
-  const downloadSelectedFile = async (file: any) => {
+  const downloadSelectedFile = async (file: any, profileId: string) => {
+    console.log(file.fileName);
     try {
+      setIsDownloading({ status: true, id: profileId });
       await downloadFile(file.fileName).unwrap();
       setshowToast(true);
+      setIsDownloading({ status: false, id: profileId });
     } catch (error) {
       setshowToast(true);
+      setIsDownloading({ status: false, id: profileId });
     }
   };
-  const onSelectFile = (file: any) => {
-    downloadSelectedFile(file);
+  const onSelectFile = (file: any, profileId: string) => {
+    downloadSelectedFile(file, profileId);
   };
 
   const columns: ColumnDef<Iprofiles>[] = ProfileColumns({
@@ -142,6 +147,7 @@ const Profiles = () => {
     onDeleteButtonClick,
     onRejectButtonClick,
     isDisabled,
+    documentDownloading:isDownloading,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);

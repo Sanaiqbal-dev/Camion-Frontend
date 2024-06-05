@@ -12,7 +12,7 @@ import { useDeleteDriverMutation, useGetDriversListQuery } from '@/services/driv
 import { ColumnDef } from '@tanstack/react-table';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useTranslation } from 'react-i18next';
@@ -39,8 +39,7 @@ const DriverManagement = () => {
   const [deleteDriver] = useDeleteDriverMutation();
 
   const [downloadFile] = useLazyDownloadFileQuery();
-  const [isDownloading, setIsDownloading] = useState(false);
-
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 
   const tableData: IDriver[] = getDriversList.data?.result.result;
   const driversData: any = tableData?.map((item) => ({
@@ -81,28 +80,28 @@ const DriverManagement = () => {
     setModal({ show: true, mode: 'edit' });
   };
 
-  const downloadSelectedFile = async (fileName: string) => {
+  const downloadSelectedFile = async (fileName?: string, driverId?: number) => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
-        setIsDownloading(true);
+        setIsDownloading({ status: true, id: driverId });
         await downloadFile(fileName);
         console.log('Download successful!');
-        setIsDownloading(false);
+        setIsDownloading({ status: false, id: driverId });
       } else {
         console.log('No file selected!');
-        setIsDownloading(false);
+        setIsDownloading({ status: false, id: driverId });
       }
     } catch (error) {
       console.error('Error downloading file:', error);
-      setIsDownloading(false);
+      setIsDownloading({ status: false, id: driverId });
     }
   };
 
   const onIqamaDownloadClick = (id: number) => {
     const selectedDriver = driversData.find((driver: any) => driver.id === id);
     // setSelectedFile(selectedDriver.fileName);
-    downloadSelectedFile(selectedDriver.fileName);
+    downloadSelectedFile(selectedDriver?.fileName, selectedDriver?.id);
   };
 
   const columns: ColumnDef<IDriver>[] = DriverManagementColumns({

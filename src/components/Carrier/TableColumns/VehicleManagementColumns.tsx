@@ -20,7 +20,7 @@ export const VehicleManagementColumns = ({
   editVehicle: (id: number) => void;
   deleteVehicle: (id: number) => void;
   onViewDocumentClick: (id: number) => void;
-  documentDownloading: IDownloadState;
+  documentDownloading?: IDownloadState;
 }): ColumnDef<IVehicle>[] => {
   const { t } = useTranslation(['vehicleManagementColumn']);
 
@@ -75,8 +75,7 @@ export const VehicleManagementColumns = ({
       header: t('vehicleRegistration'),
       cell: ({ row }) => {
         const vehicleId = row.original.id;
-        const regNumber = row.original.registrationNumber;
-        return (documentDownloading.status==true && documentDownloading.id==regNumber) ? (
+        return (documentDownloading?.status==true && documentDownloading?.id==vehicleId) ? (
           <LoadingAnimation />
         ) : (
           <div onClick={() => onViewDocumentClick(vehicleId)}>

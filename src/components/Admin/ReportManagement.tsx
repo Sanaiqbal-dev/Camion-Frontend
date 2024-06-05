@@ -13,6 +13,7 @@ import { ReportsColumn } from './TableColumns/ReportColumns';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
+import { stat } from 'fs';
 
 const ReportManagement = () => {
   const { t } = useTranslation(['reportManagement']);
@@ -24,6 +25,8 @@ const ReportManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showToast, setshowToast] = useState(false);
   const [downloadReport, { isSuccess: isReportDownloaded }] = useLazyDownloadReportQuery();
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
+
   const { data: currentData } = useGetReportsQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
@@ -51,15 +54,20 @@ const ReportManagement = () => {
     const selectedReport = reportsTableData.find((report: IReport) => report.userId === userId);
     console.log('selectedReport', selectedReport?.name);
     try {
+      setIsDownloading({ status: true, id: userId });
       await downloadReport(selectedReport?.userId).unwrap();
       setshowToast(true);
+      setIsDownloading({ status: false, id: userId });
     } catch (error) {
       setshowToast(true);
+      setIsDownloading({ status: false, id: userId });
     }
   };
 
   const columns: ColumnDef<IReport>[] = ReportsColumn({
     onDownloadReport,
+    documentDownloading:isDownloading,
+    
   });
 
   const FilterDataForTable = (orderItems: IReport[]) => {
