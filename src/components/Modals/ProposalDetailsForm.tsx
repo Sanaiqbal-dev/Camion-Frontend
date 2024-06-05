@@ -25,7 +25,10 @@ interface ProposalDetailsModalProps {
 const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handleClose, proposalId }) => {
   const { t } = useTranslation(['proposalDetailsForm']);
   const schema = z.object({
-    Amount: z.string().min(3, t('validationErrorAmount')),
+    Amount: z
+      .string()
+      .refine((value) => !isNaN(Number(value)), t('validationAmmountNumber'))
+      .refine((value) => Number(value) > 100 && Number(value) < 100000, t('validationErrorAmount')),
     DelievryDate: z.string().refine(
       (value) => {
         const date = Date.parse(value);
@@ -34,9 +37,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
         }
         const inputDate = new Date(date);
         const today = new Date();
-        // Set today's date to the end of the day to allow for full day comparison
         today.setHours(23, 59, 59, 999);
-        return inputDate > today;
+        const fiveDaysFromToday = new Date();
+        fiveDaysFromToday.setDate(today.getDate() + 5);
+        return inputDate > today && inputDate <= fiveDaysFromToday;
       },
       {
         message: t('validationErrorDeliveryDate'),
@@ -44,6 +48,7 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
     ),
     OtherDetails: z.string().min(1, t('validationErrorOtherDetails')),
   });
+
   const {
     register,
     handleSubmit,

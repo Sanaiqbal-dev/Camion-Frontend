@@ -9,7 +9,8 @@
   "uploadDocument": "تحميل وثيقة (إن وجدت)",
   "uploadTheDocument": "تحميل الوثيقة",
   "submitProposal": "إرسال العرض",
-  "validationErrorAmount": "يرجى إدخال 3 أرقام على الأقل.",
-  "validationErrorDeliveryDate": "أدخل تاريخ تسليم متوقع بعد اليوم.",
+  "validationErrorAmount": "يجب أن يكون المبلغ أكبر من 100 وأقل من 100000",
+  "validationAmmountNumber": "يجب أن يكون المبلغ رقمًا",
+  "validationErrorDeliveryDate": "يجب أن يكون التاريخ أكبر من اليوم وليس أكثر من 5 أيام من اليوم.",
   "validationErrorOtherDetails": "أدخل تفاصيل إضافية حول عرض الطلب."
 }
