@@ -6,6 +6,7 @@ import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import { BayanColumns } from './TableColumns/BayanColums';
 import { IBayanItem } from '../../interface/carrier';
+import { IDownloadState } from '../../interface/common';
 import BayanLocationModal from '../Modals/BayanLocationModal';
 import ProductTypeModal from '../Modals/ProductTypeModal';
 import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
@@ -49,6 +50,7 @@ const Bayan = () => {
   // const showCreateBayan = useSelector((state: any) => state.session.isCompanyAccount);
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -206,10 +208,13 @@ const Bayan = () => {
   const onPrintBayan = async (tripId: number) => {
     console.log('Print is clicked on :', tripId);
     try {
+      setIsDownloading({ status: true, id: tripId });
       const response = await getPrintBayan(tripId).unwrap();
       console.log('Bayan Bill', response);
+      setIsDownloading({ status: false, id: tripId });
     } catch (e) {
       console.log('Bayan Bill ERROR', e);
+      setIsDownloading({ status: false, id: tripId });
     }
 
     // try {
@@ -223,6 +228,7 @@ const Bayan = () => {
 
   const columns: ColumnDef<IBayanItem>[] = BayanColumns({
     onPrintBayan,
+    bayanDownloading: isDownloading,
   });
 
   const updatePage = (action: number) => {

@@ -63,6 +63,8 @@ const Orders = () => {
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   // const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
   const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [isBayanCreating, setIsBayanCreating] = useState(false);
 
   const onAssignVehicle = (orderItem: IOrderTable) => {
     setShowAssignVehicleForm(true);
@@ -93,21 +95,27 @@ const Orders = () => {
 
   const onCreateBayan = async (orderItemId: number) => {
     try {
+      setIsBayanCreating(true);
       const response = await createBayanFromOrder({ orderId: orderItemId }).unwrap();
       console.log('Bayan Bill', response);
       setShowCreateBayanToast(true);
+      setIsBayanCreating(false);
     } catch (e) {
       setShowCreateBayanToast(true);
+      setIsBayanCreating(false);
     }
   };
 
   const onPrintBayan = async (bayanId: number) => {
     try {
+      setIsDownloading(true);
       const response = await createBayanFromBayanId(bayanId).unwrap();
       console.log('Bayan Bill', response);
       setShowPrintBayanToast(true);
+      setIsDownloading(false);
     } catch (e) {
       setShowPrintBayanToast(true);
+      setIsDownloading(false);
     }
   };
 
@@ -126,6 +134,8 @@ const Orders = () => {
     onPrintBayan,
     onUpdateStatus,
     orderStatuses,
+    bayanDownloading: isDownloading,
+    bayanCreating:isBayanCreating,
   });
 
   const values = [10, 20, 30, 40, 50];

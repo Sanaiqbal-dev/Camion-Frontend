@@ -9,6 +9,7 @@ import { Button } from '../../../../@/components/ui/button';
 import { IAPIResponse } from '@/interface/common';
 import { IOrderStatus, IOrderStatusResponseObject } from '@/interface/orderStatus';
 import { useTranslation } from 'react-i18next';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface OrderActionsProps {
   onDelete: (orderItemId: number) => void;
@@ -17,9 +18,20 @@ interface OrderActionsProps {
   onPrintBayan: (orderItemId: number) => void;
   onUpdateStatus: (id: number, statusId: number) => void;
   orderStatuses: IAPIResponse<IOrderStatusResponseObject[]> | undefined;
+  bayanDownloading: boolean;
+  bayanCreating: boolean;
 }
 
-export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrintBayan, onUpdateStatus, orderStatuses }: OrderActionsProps): ColumnDef<IOrderTable>[] => {
+export const OrderColumns = ({
+  onDelete,
+  onAssignVehicle,
+  onCreateBayan,
+  onPrintBayan,
+  onUpdateStatus,
+  orderStatuses,
+  bayanDownloading,
+  bayanCreating,
+}: OrderActionsProps): ColumnDef<IOrderTable>[] => {
   const { t } = useTranslation(['orderColum']);
 
   return [
@@ -100,20 +112,27 @@ export const OrderColumns = ({ onDelete, onAssignVehicle, onCreateBayan, onPrint
               <img src={IconAssignVehicle} />
               <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
             </div>
-            {row.original.bayanId && (
-              <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
-                <img src={IconPrintBill} />
-                <span style={{ color: '#F48031' }}>Print Bayan</span>
-              </div>
-            )}
-            {!row.original.bayanId && (
-              <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
-                <img src={IconPrintBill} />
-                <span style={{ color: '#F48031' }}>Create Bayan</span>
-              </div>
-            )}
+            {row.original.bayanId &&
+              (bayanDownloading ? (
+                <LoadingAnimation />
+              ) : (
+                <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
+                  <img src={IconPrintBill} />
+                  <span style={{ color: '#F48031' }}>Print Bayan</span>
+                </div>
+              ))}
+            {!row.original.bayanId &&
+              (bayanCreating ? (
+                <LoadingAnimation />
+              ) : (
+                <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+                  <img src={IconPrintBill} />
+                  <span style={{ color: '#F48031' }}>Create Bayan</span>
+                </div>
+              ))}
           </div>
         );
       },
     },
-  ];};
+  ];
+};
