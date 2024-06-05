@@ -43,7 +43,7 @@ const Proposals = () => {
     if (!isLoading) {
       const quotations: IProposalQuotation[] = data?.statusCode === 200 && data.result.total > 0 ? data?.result?.result : [];
       setQuotationProposals(quotations);
-      const maxPageCount = data.result.total / entriesValue + 1;
+      const maxPageCount = data?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [isLoading]);
