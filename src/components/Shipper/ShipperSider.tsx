@@ -1,4 +1,4 @@
-import { Accordion, Image } from 'react-bootstrap';
+import { Accordion, Button, ButtonGroup, Image } from 'react-bootstrap';
 import CamionLogo from '../../assets/icons/ic-smallCamionlogo.svg';
 import IconDashboard from '../../assets/icons/ic-dashboard.svg';
 import IconOrderManagment from '../../assets/icons/ic-order-management.svg';
@@ -14,12 +14,26 @@ import { useState } from 'react';
 import ActivateProfile from '../Modals/ActivateProfile';
 import { useAppSelector } from '@/state';
 import { useTranslation } from 'react-i18next';
+import LanguageIcon from '../../assets/icons/ic-language.svg';
+
+import { useLocale } from '@/i18n';
+import { AVAILABLE_LANGUAGES } from '@/config/app'; // Make sure this import path is correct
+import { ILanguage } from '@/interface/common';
 
 const ShipperSider = () => {
   const { t } = useTranslation(['shipperSider']);
+  const { language, changeLanguage } = useLocale();
 
   const dispatch = useDispatch();
   const session = useAppSelector((state) => state.session);
+  const handleLanguageChange = (lang: ILanguage) => {
+    changeLanguage(lang);
+  };
+
+  const getLanguageDisplayName = (langCode: string) => {
+    if (langCode === 'ar') return 'ع';
+    return langCode;
+  };
 
   const [showActivateProfile, setShowActivateProfile] = useState(false);
 
@@ -88,6 +102,17 @@ const ShipperSider = () => {
       </div>
 
       <div className="sidebar-admin">
+        <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+          <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
+          <ButtonGroup>
+            {AVAILABLE_LANGUAGES.length > 1 &&
+              AVAILABLE_LANGUAGES.map((lang: ILanguage) => (
+                <Button key={lang.code} variant={language === lang.code ? 'primary' : 'outline-primary'} onClick={() => handleLanguageChange(lang)}>
+                  {getLanguageDisplayName(lang.code)}
+                </Button>
+              ))}
+          </ButtonGroup>
+        </div>
         {session?.isCompanyAccount && (
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
             <Image src={IconSettings} />

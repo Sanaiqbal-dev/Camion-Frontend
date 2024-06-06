@@ -105,21 +105,24 @@ const Login = () => {
             <div className="container">
               <div className="row">
                 <div className="auth-form-container">
-                  <Image src={CamionLogo} />
+                  <div style={{ marginLeft: '3%' }}>
+                    {' '}
+                    <Image src={CamionLogo} />
+                  </div>
 
-                  <div className="mt-4">
-                    <h1 className="h1 mb-3 main_heading">{t('loginTitle')}</h1>
-                    <p className="sub_heading mb-4">{t('loginSubtitle')}</p>
+                  <div className="mt-2 pl-2" style={{ paddingLeft: '3%' }}>
+                    <h1 className="h2 ml-2 mb-2 main_heading">{t('loginTitle')}</h1>
+                    <p className="sub_heading mb-2">{t('loginSubtitle')}</p>
                   </div>
                   <div className="form-container">
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                       <div>
-                        <Row className="form-group mb-4">
+                        <Row className="form-group mb-2">
                           <Form.Group as={Col}>
                             <Form.Label className="customLabel">{t('emailLabel')}</Form.Label>
                             <Form.Control
                               type="email"
-                              className="form-control customInput"
+                              className="form-control"
                               {...register('username')}
                               isInvalid={!!errors.username}
                               placeholder={t('emailPlaceholder')}
@@ -133,7 +136,7 @@ const Login = () => {
                             <Form.Label className="customLabel">{t('passwordLabel')}</Form.Label>
                             <Form.Control
                               type="password"
-                              className="form-control customInput"
+                              className="form-control"
                               placeholder={t('passwordPlaceholder')}
                               {...register('password')}
                               isInvalid={!!errors.password}
@@ -156,7 +159,7 @@ const Login = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
+                      <div className="register-container" style={{ flexDirection: 'column', width: '94%', marginLeft: '3%' }}>
                         <Button type="submit" variant="primary" className="btn customLoginButton w-100" disabled={isLoading}>
                           {t('login')}
                         </Button>

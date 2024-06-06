@@ -1,4 +1,5 @@
-import { Accordion, Image } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Accordion, Image, Button, ButtonGroup } from 'react-bootstrap';
 import CamionLogo from '../../assets/images/camion-logo.svg';
 import IconDashboard from '../../assets/icons/ic-dashboard.svg';
 import IconTracking from '../../assets/icons/ic-tracking.svg';
@@ -10,25 +11,36 @@ import IconDriverManagment from '../../assets/icons/ic-driver-management.svg';
 import IconVehicleManagment from '../../assets/icons/ic-vehicle-management.svg';
 import IconBayan from '../../assets/icons/ic-bayan.svg';
 import IconSettings from '../../assets/icons/ic-settings.svg';
-
 import LogoutIcon from '../../assets/icons/ic-logoutIcon.svg';
+import LanguageIcon from '../../assets/icons/ic-language.svg';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLogout } from '@/state/slice/sessionSlice';
 import ActivateProfile from '../Modals/ActivateProfile';
-import { useState } from 'react';
 import { useAppSelector } from '@/state';
 import { useTranslation } from 'react-i18next';
+import { useLocale } from '@/i18n';
+import { AVAILABLE_LANGUAGES } from '@/config/app'; // Make sure this import path is correct
+import { ILanguage } from '@/interface/common';
 
-const CarrierSider = () => {
+const CarrierSider: React.FC = () => {
   const [showActivateProfile, setShowActivateProfile] = useState(false);
   const session = useAppSelector((state) => state.session);
   const { t } = useTranslation(['carrierSider']);
-
+  const { language, changeLanguage } = useLocale();
   const dispatch = useDispatch();
 
   const handleReplaceNavigate = () => {
     dispatch(setLogout());
+  };
+
+  const handleLanguageChange = (lang: ILanguage) => {
+    changeLanguage(lang);
+  };
+
+  const getLanguageDisplayName = (langCode: string) => {
+    if (langCode === 'ar') return 'ع';
+    return langCode;
   };
 
   return (
@@ -130,7 +142,19 @@ const CarrierSider = () => {
           </Accordion>
         )}
       </div>
+
       <div className="sidebar-admin">
+        <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
+          <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
+          <ButtonGroup>
+            {AVAILABLE_LANGUAGES.length > 1 &&
+              AVAILABLE_LANGUAGES.map((lang: ILanguage) => (
+                <Button key={lang.code} variant={language === lang.code ? 'primary' : 'outline-primary'} onClick={() => handleLanguageChange(lang)}>
+                  {getLanguageDisplayName(lang.code)}
+                </Button>
+              ))}
+          </ButtonGroup>
+        </div>
         {session.isCompanyAccount && !session.isSubUser && (
           <div className="accordion-not-collapsing-item tw-flex tw-gap-3" onClick={() => setShowActivateProfile(true)}>
             <Image src={IconSettings} />

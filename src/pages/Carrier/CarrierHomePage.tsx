@@ -51,7 +51,6 @@ const CarrierHomePage = () => {
         </div>
         <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
           <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
-
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to="/carrier/userManagement">
               <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

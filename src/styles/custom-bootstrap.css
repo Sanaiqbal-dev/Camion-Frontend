@@ -198,7 +198,7 @@
 .form-container > * {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 16px;
 }
 
 .btn-custom-upload {
@@ -230,7 +230,6 @@
 
 .register-container {
   display: flex;
-  margin-top: 24px;
   justify-content: flex-start;
   align-items: center;
   gap: 24px;
