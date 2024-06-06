@@ -50,6 +50,8 @@ const VehicleManagement = () => {
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [showDriverAssignedToast, setShowDriverAssignedToast] = useState(false);
+
   const [showAddVehicleToast, setShowAddVehicleToast] = useState(false);
 
   // const [selectedFile, setSelectedFile] = useState<any>();
@@ -63,7 +65,7 @@ const VehicleManagement = () => {
   });
 
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
-  const [assignDriver] = useAssignDriverMutation();
+  const [assignDriver, { isSuccess: isDriverAssigned, error: DriverAssignmentError }] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
   const [createVehicle, { isSuccess: isVehicleAdded, error }] = useCreateVehicleMutation();
   const [editVehicle, { isSuccess: isVehicleUpdated, error: isVehicleNotUpdated }] = useEditVehicleMutation();
@@ -89,12 +91,20 @@ const VehicleManagement = () => {
 
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
-    const res = await assignDriver({
-      vehicleId: vehicleIdfordriver?.id,
-      driverId: id,
-    }).unwrap();
-    console.log(res);
-    refetch();
+    try {
+      const res = await assignDriver({
+        vehicleId: vehicleIdfordriver?.id,
+        driverId: id,
+      }).unwrap();
+      console.log(res);
+      setShowDriverAssignedToast(true);
+      setShowDriverModal(false);
+      refetch();
+    } catch (e) {
+      setShowDriverAssignedToast(true);
+      throw e;
+    }
+
     const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver?.id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const selectedDriver = drivers.find((d: any) => d.id === id);
@@ -118,7 +128,6 @@ const VehicleManagement = () => {
     try {
       const resp = await createVehicle(data).unwrap();
       setShowAddVehicleToast(true);
-
       console.log(resp);
     } catch (e) {
       setShowAddVehicleToast(true);
@@ -158,11 +167,11 @@ const VehicleManagement = () => {
   const closeEditModal = () => {
     setShowEditVehicle(false);
   };
-  const downloadSelectedFile = async (fileName?: string, vehicleId?:number) => {
+  const downloadSelectedFile = async (fileName?: string, vehicleId?: number) => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
-        setIsDownloading({status:true,id:vehicleId});
+        setIsDownloading({ status: true, id: vehicleId });
         await downloadFile(fileName);
         console.log('Download successful!');
         setIsDownloading({ status: false, id: vehicleId });
@@ -172,12 +181,12 @@ const VehicleManagement = () => {
       }
     } catch (error) {
       console.error('Error downloading file:', error);
-        setIsDownloading({ status: false, id: vehicleId });
+      setIsDownloading({ status: false, id: vehicleId });
     }
   };
   const onVeiwDocumentClick = (id: number) => {
     const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
-    downloadSelectedFile(selectedVehicle?.fileName,selectedVehicle?.id);
+    downloadSelectedFile(selectedVehicle?.fileName, selectedVehicle?.id);
   };
 
   useEffect(() => {
@@ -211,7 +220,7 @@ const VehicleManagement = () => {
     editVehicle: editVehicleHandler,
     deleteVehicle: deleteVehicleHandler,
     onViewDocumentClick: onVeiwDocumentClick,
-    documentDownloading:isDownloading,
+    documentDownloading: isDownloading,
   });
 
   return (
@@ -230,6 +239,14 @@ const VehicleManagement = () => {
           message={isVehicleNotUpdated ? getErrorMessage(isVehicleNotUpdated) : ''}
           showToast={showToast}
           setShowToast={setShowToast}
+        />
+      )}
+      {showDriverAssignedToast && (
+        <Toast
+          variant={isDriverAssigned ? 'success' : 'danger'}
+          message={DriverAssignmentError ? getErrorMessage(DriverAssignmentError) : ''}
+          showToast={showDriverAssignedToast}
+          setShowToast={setShowDriverAssignedToast}
         />
       )}
       <div className="table-container">

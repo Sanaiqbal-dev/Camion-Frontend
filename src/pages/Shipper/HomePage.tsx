@@ -3,15 +3,11 @@ import ShipperSider from '../../components/Shipper/ShipperSider';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
 import { useTranslation } from 'react-i18next';
-// import ActivateProfile from '../../components/Modals/ActivateProfile';
-// import { useState } from 'react';
-// import { useSelector } from 'react-redux';
 
 const HomePage = () => {
   const { t } = useTranslation(['shipperHomePage']);
   const profileImage = useAppSelector((state) => state.session?.profileImage);
 
-  // const [showProfileModal, setShowProfileModal] = useState(false);
   const currentPageTitle = useLocation();
   const pageTitleMap = [
     { pathname: '/shipper/shipperdashboard', title: t('dashboard') },
@@ -28,8 +24,6 @@ const HomePage = () => {
   };
 
   const toggleSidebar = () => {};
-  // const session = useSelector((state: any) => state.session);
-  // const showCreateCompanyNotification = !isCompanyRegistered && currentPageTitle.pathname === '/shipper/shipperdashboard';
 
   return (
     <div className="wrapper" style={{ backgroundColor: '#F3F3F3' }}>
@@ -58,34 +52,7 @@ const HomePage = () => {
             </Link>
           </div>
         </header>
-        {/* <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
-          <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
 
-          <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
-            <Link to={`${isCompanyRegistered ? '/shipper/usermanagement' : '#'}`}>
-              <Image className="profile-img" src={ProfileIcon} />
-            </Link>
-            {showCreateCompanyNotification && (
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  textAlign: 'left',
-                  color: '#000000',
-                  backgroundColor: '#F9090973',
-                  borderRadius: '45px',
-                  padding: '4px',
-                }}>
-                {t('toActivateProfile')},{' '}
-                <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
-                  {t('clickHere')}
-                </span>
-              </div>
-            )}
-          </div>
-        </header>
-        <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} /> */}
         <div className="mt-4">
           <Outlet />
         </div>

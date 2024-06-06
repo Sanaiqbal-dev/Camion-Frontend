@@ -66,12 +66,19 @@ const CreteVehicle: React.FC<CreateUserModalProps> = ({ show, vehicleTypes, hand
     if (selectedFile) {
       formData.append('UploadFile', selectedFile);
     }
+
     if (!selectedFile) {
       setShowFileError(true);
       return;
     }
-    onSubmitForm(formData);
-    reset();
+
+    try {
+      await onSubmitForm(formData);
+      reset();
+      handleClose();
+    } catch (error) {
+      console.error('Error submitting form', error);
+    }
   };
 
   return (
