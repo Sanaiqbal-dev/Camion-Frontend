@@ -77,8 +77,7 @@ $grid-breakpoints: (
 .sub_heading {
   font-weight: 400;
   color: #7a7a7a;
-  font-size: large;
-  line-height: 1.6;
+  font-size: 14px;
 }
 
 .btn-login {
@@ -135,8 +134,8 @@ $grid-breakpoints: (
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  width: 150px;
+  height: 60px;
+  width: 90px;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -202,7 +201,7 @@ $grid-breakpoints: (
 .form-container > * {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
 .btn-custom-upload {
@@ -236,7 +235,7 @@ $grid-breakpoints: (
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 }
 
 .sidebar {

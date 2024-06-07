@@ -17,7 +17,7 @@ import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
 
 const UserManagementShipper = () => {
-  const { t } = useTranslation(['userManagementShipper']);
+  const { t } = useTranslation(['userManagement']);
 
   const [pager, setPager] = useState<QueryPager>({
     page: 1,

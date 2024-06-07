@@ -105,13 +105,12 @@ const Login = () => {
             <div className="container">
               <div className="row">
                 <div className="auth-form-container">
-                  <div style={{ marginLeft: '3%' }}>
-                    {' '}
-                    <Image src={CamionLogo} />
+                  <div>
+                    <Image src={CamionLogo} style={{ height: '40px' }} />
                   </div>
 
-                  <div className="mt-2 pl-2" style={{ paddingLeft: '3%' }}>
-                    <h1 className="h2 ml-2 mb-2 main_heading">{t('loginTitle')}</h1>
+                  <div className="mt-2 pl-2">
+                    <h1 className="h3 ml-2 mb-2 main_heading">{t('loginTitle')}</h1>
                     <p className="sub_heading mb-2">{t('loginSubtitle')}</p>
                   </div>
                   <div className="form-container">
@@ -148,7 +147,7 @@ const Login = () => {
                                 to="/forgotPassword"
                                 style={{
                                   color: '#0060b8',
-                                  fontSize: '16px',
+                                  fontSize: '14px',
                                   cursor: 'pointer',
                                   textDecoration: 'none',
                                   marginLeft: '30px',
@@ -159,7 +158,7 @@ const Login = () => {
                           </Form.Group>
                         </Row>
                       </div>
-                      <div className="register-container" style={{ flexDirection: 'column', width: '94%', marginLeft: '3%' }}>
+                      <div className="register-container" style={{ flexDirection: 'column', width: '98%', fontSize: '14px' }}>
                         <Button type="submit" variant="primary" className="btn customLoginButton w-100" disabled={isLoading}>
                           {t('login')}
                         </Button>
@@ -170,10 +169,11 @@ const Login = () => {
                               to="/Register"
                               style={{
                                 color: '#0060b8',
-                                fontSize: '16px',
+                                fontSize: '14px',
                                 cursor: 'pointer',
                                 textDecoration: 'none',
                                 marginLeft: '30px',
+                                whiteSpace: 'nowrap',
                               }}>
                               {t('registerAccount')}
                             </Link>
