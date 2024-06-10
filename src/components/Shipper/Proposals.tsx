@@ -26,6 +26,7 @@ const Proposals = () => {
   const [showToast, setShowToast] = useState(false);
 
   const [updateQuotationStatus, { isSuccess: isQuotationStatusUpdated }] = useUpdateQuotationStatusMutation();
+  const [loading, setLoading] = useState(false);
 
   const { data, isLoading } = useGetProposalQuotationsQuery({
     page: pager.page - 1,
@@ -50,6 +51,7 @@ const Proposals = () => {
 
   const quotationClickHandler = async (quotation: IProposalQuotation, isAccepted: boolean) => {
     try {
+      setLoading(true);
       const updatedQuotation = {
         id: quotation.id,
         status: quotation.status,
@@ -61,15 +63,19 @@ const Proposals = () => {
       setQuotationProposals(updatedQuotations);
     } catch (e) {
       setShowToast(true);
+    } finally {
+      setLoading(false); // Add this line
     }
   };
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? t('toastSuccess') : t('toastDanger')} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? 'success' : 'danger'} />}
       <div style={{ height: '100vh', overflowY: 'scroll' }}>
         {(!quotationProposals || quotationProposals.length === 0) && <span style={{}}>{t('noResults')}</span>}
-        {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}
+        {quotationProposals?.map((quotation: IProposalQuotation, index: number) => (
+          <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} loading={loading} />
+        ))}
       </div>
 
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5 tw-bottom-0">

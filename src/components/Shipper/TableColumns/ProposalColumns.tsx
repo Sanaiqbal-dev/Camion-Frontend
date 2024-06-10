@@ -2,7 +2,15 @@ import { useTranslation } from 'react-i18next';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
 import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
-const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
+const ProposalColumns = ({
+  quotation,
+  onClick,
+  loading,
+}: {
+  quotation: IProposalQuotation;
+  onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void;
+  loading: boolean;
+}) => {
   const { t } = useTranslation(['proposalColumns']);
 
   return (
@@ -208,7 +216,8 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                   borderRadius: '5px',
                   fontWeight: '600px',
                 }}
-                onClick={() => onClick(quotation, true)}>
+                onClick={() => onClick(quotation, true)}
+                disabled={loading}>
                 {t('accept')}
               </button>
               <button
@@ -220,7 +229,8 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                   borderRadius: '5px',
                   fontWeight: '600px',
                 }}
-                onClick={() => onClick(quotation, false)}>
+                onClick={() => onClick(quotation, false)}
+                disabled={loading}>
                 {t('reject')}
               </button>
             </div>

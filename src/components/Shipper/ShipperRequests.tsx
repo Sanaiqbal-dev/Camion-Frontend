@@ -243,109 +243,111 @@ const ShipperRequests = () => {
   }, [showCreateUserModalFirstStep, showCreateUserModalSecondStep, showShippementDetailsModal]);
 
   return (
-    <div className="table-container">
+    <>
       {showToast && (
         <Toast
           showToast={showToast}
           setShowToast={setShowToast}
-          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? t('successToast') : t('dangerToast')}
+          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'}
           message={requestFailedMessage}
         />
       )}
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div>
-          <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
-            {t('createNewRequest')}
-          </button>
+      <div className="table-container">
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div>
+            <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
+              {t('createNewRequest')}
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="tw-flex tw-justify-between tw-items-center">
-        <Row className="tw-items-center">
-          <Col xs="auto" className="tw-text-secondary">
-            {t('showLabel')}
-          </Col>
-          <Col xs="auto">
-            <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
-              <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
-              <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
-                <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
-                </button>
-                <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
-                  <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
-                </button>
+        <div className="tw-flex tw-justify-between tw-items-center">
+          <Row className="tw-items-center">
+            <Col xs="auto" className="tw-text-secondary">
+              {t('showLabel')}
+            </Col>
+            <Col xs="auto">
+              <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
+                <input className="tw-text-center tw-w-7 tw-border-0 tw-font-bold tw-bg-white tw-text-gray-700 tw-text-base" type="text" readOnly value={entriesValue} />
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-items-center">
+                  <button className="tw-border-none" onClick={() => handleChangeValue(1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={PreviousIcon} />
+                  </button>
+                  <button className="tw-border-none" onClick={() => handleChangeValue(-1)}>
+                    <Image className="tw-cursor-pointer tw-border-0 tw-bg-transparent" src={NextIcon} />
+                  </button>
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col xs="auto" className="tw-text-secondary">
-            {t('entriesLabel')}
-          </Col>
-        </Row>
-        <Row className="tw-mt-3">
-          <Col>
-            <InputGroup>
-              <InputGroup.Text>
-                <Image src={SearchIcon} />
-              </InputGroup.Text>
-              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
-            </InputGroup>
-          </Col>
-        </Row>
+            </Col>
+            <Col xs="auto" className="tw-text-secondary">
+              {t('entriesLabel')}
+            </Col>
+          </Row>
+          <Row className="tw-mt-3">
+            <Col>
+              <InputGroup>
+                <InputGroup.Text>
+                  <Image src={SearchIcon} />
+                </InputGroup.Text>
+                <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
+              </InputGroup>
+            </Col>
+          </Row>
+        </div>
+        {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
+        <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
+          <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
+            <img src={PreviousIcon} />
+          </Button>
+          <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
+            <img src={NextIcon} />
+          </Button>
+        </div>
+        <CreateNewRequest
+          show={showCreateUserModalFirstStep}
+          infoType={'origin'}
+          isEdit={isEditProposal}
+          proposalObject={selectedProposalItem ? selectedProposalItem : undefined}
+          handleClose={() => {
+            SetShowCreateUserModalFirstStep(false);
+            setIsEditProposal(false);
+            setSelectedProposalItem(undefined);
+          }}
+          handleNextStep={CreateUserNextStep}
+        />
+        <CreateNewRequest
+          show={showCreateUserModalSecondStep}
+          infoType={'destination'}
+          isEdit={isEditProposal}
+          proposalObject={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
+          handleClose={() => {
+            SetShowCreateUserModalSecondStep(false);
+            setIsEditProposal(false);
+            setSelectedProposalItem(undefined);
+          }}
+          handleNextStep={goToShippementDetails}
+        />
+        <ShipmentDetail
+          show={showShippementDetailsModal}
+          isEdit={isEditProposal}
+          proposalId={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
+          handleClose={() => {
+            setShowShippementDetailsModal(false);
+            setIsEditProposal(false);
+            setSelectedProposalItem(undefined);
+          }}
+          handleFormDataSubmission={setShipmentDetails}
+        />
+        <ConfirmationModal
+          promptMessage={isEditProposal ? t('updateRequestConfirmation') : isDeleteProposal ? t('deleteRequestConfirmation') : t('createNewRequestConfirmation')}
+          show={showConfirmationModal}
+          handleClose={() => setShowConfirmationModal(false)}
+          performOperation={() => {
+            setShowConfirmationModal(false);
+            isDeleteProposal ? DeleteProposal() : setSendProposalRequest(true);
+          }}
+        />
       </div>
-      {requestTableData && <DataTable columns={columns} data={requestTableData} isAction={true} />}
-      <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
-        <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
-          <img src={PreviousIcon} />
-        </Button>
-        <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
-          <img src={NextIcon} />
-        </Button>
-      </div>
-      <CreateNewRequest
-        show={showCreateUserModalFirstStep}
-        infoType={'origin'}
-        isEdit={isEditProposal}
-        proposalObject={selectedProposalItem ? selectedProposalItem : undefined}
-        handleClose={() => {
-          SetShowCreateUserModalFirstStep(false);
-          setIsEditProposal(false);
-          setSelectedProposalItem(undefined);
-        }}
-        handleNextStep={CreateUserNextStep}
-      />
-      <CreateNewRequest
-        show={showCreateUserModalSecondStep}
-        infoType={'destination'}
-        isEdit={isEditProposal}
-        proposalObject={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
-        handleClose={() => {
-          SetShowCreateUserModalSecondStep(false);
-          setIsEditProposal(false);
-          setSelectedProposalItem(undefined);
-        }}
-        handleNextStep={goToShippementDetails}
-      />
-      <ShipmentDetail
-        show={showShippementDetailsModal}
-        isEdit={isEditProposal}
-        proposalId={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
-        handleClose={() => {
-          setShowShippementDetailsModal(false);
-          setIsEditProposal(false);
-          setSelectedProposalItem(undefined);
-        }}
-        handleFormDataSubmission={setShipmentDetails}
-      />
-      <ConfirmationModal
-        promptMessage={isEditProposal ? t('updateRequestConfirmation') : isDeleteProposal ? t('deleteRequestConfirmation') : t('createNewRequestConfirmation')}
-        show={showConfirmationModal}
-        handleClose={() => setShowConfirmationModal(false)}
-        performOperation={() => {
-          setShowConfirmationModal(false);
-          isDeleteProposal ? DeleteProposal() : setSendProposalRequest(true);
-        }}
-      />
-    </div>
+    </>
   );
 };
 export default ShipperRequests;
