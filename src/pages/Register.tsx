@@ -181,6 +181,7 @@ const Register = () => {
                       <Form.Control
                         type="text"
                         className="form-control"
+                        dir="ltr"
                         defaultValue="+966"
                         {...register('phoneNumber')}
                         isInvalid={!!errors.phoneNumber}

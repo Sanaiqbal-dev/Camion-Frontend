@@ -1,15 +1,15 @@
 {
-  "origin": "الأصل",
+  "origin": "المنشأ",
   "destination": "الوجهة",
   "weight": "الوزن",
   "dimensions": "الأبعاد",
   "eta": "الوقت المقدر للوصول",
   "status": "الحالة",
-  "action": "عمل",
+  "action": "خيارات",
   "selectStatus": "اختر الحالة",
   "delete": "حذف",
   "assignVehicle": "تعيين مركبة",
   "vehicleAssigned": "تم تعيين المركبة",
   "printBayan": "طباعة بيان",
   "createBayan": "إنشاء بيان"
-  }
+}

@@ -23,7 +23,7 @@
   "companyName": "اسم الشركة",
   "crDocument": "وثيقة السجل التجاري",
   "status": "الحالة",
-  "action": "إجراء",
+  "action": "خيارات",
   "selectDocument": "اختر الوثيقة",
   "notApproved": "غير معتمد",
   "deactivated": "معطل",

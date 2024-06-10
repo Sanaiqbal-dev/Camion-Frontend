@@ -1,11 +1,11 @@
 {
   "dashboard": "لوحة التحكم",
   "tracking": "التتبع",
-  "requests": "الطلبات",
+  "requests": "عروض الطلبات",
   "orders": "الطلبات",
   "driverManagement": "إدارة السائقين",
   "vehicleManagement": "إدارة المركبات",
   "bayan": "بيان",
   "userManagement": "إدارة المستخدمين",
   "bayanBill": "فاتورة بيان"
-  }
+}

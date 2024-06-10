@@ -4,7 +4,7 @@
   "senderAddress": "عنوان المرسل",
   "recipient": "مستلم",
   "recipientAddress": "عنوان المستلم",
-  "action": "عمل",
+  "action": "خيارات",
   "share": "مشاركة",
   "printBayanBill": "طباعة فاتورة بيان"
-  }
+}

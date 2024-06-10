@@ -1,6 +1,6 @@
 {
-  "trackingId": "معرف التتبع:",
-  "origin": "المصدر",
+  "trackingId": "رقم التتبع",
+  "origin": "المنشأ",
   "destination": "الوجهة",
   "weight": "الوزن",
   "dimension": "الأبعاد",

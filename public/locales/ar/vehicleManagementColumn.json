@@ -9,8 +9,8 @@
   "imeiNumber": "رقم IMEI",
   "vehicleRegistration": "تسجيل المركبة",
   "viewDocument": "عرض المستند",
-  "action": "عمل",
+  "action": "خيارات",
   "edit": "تحرير",
   "delete": "حذف",
   "assignDriver": "تعيين سائق"
-  }
+}

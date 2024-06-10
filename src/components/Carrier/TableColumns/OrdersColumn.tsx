@@ -50,6 +50,7 @@ export const OrderColumns = ({
     {
       accessorKey: 'dimentions',
       header: t('dimensions'),
+      cell: ({ row }) => <span style={{ unicodeBidi: 'bidi-override', direction: 'ltr' }}>{row.original.dimentions}</span>,
     },
     {
       accessorKey: 'ETA',
@@ -106,11 +107,11 @@ export const OrderColumns = ({
           <div className="action-container" style={{ justifyContent: 'start' }}>
             <div onClick={() => onDelete(row.original.id)}>
               <img src={IconDelete} />
-              <span style={{ color: '#EB5757' }}>Delete</span>
+              <span style={{ color: '#EB5757' }}>{t('delete')}</span>
             </div>
             <div onClick={() => onAssignVehicle(row.original)}>
               <img src={IconAssignVehicle} />
-              <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? 'Vehicle Assigned' : 'Assign Vehicle'}</span>
+              <span style={{ color: '#0060B8' }}>{row.original.vehicleId > 0 ? t('vehicleAssigned') : t('assignVehicle')}</span>
             </div>
             {row.original.bayanId &&
               (bayanDownloading ? (
@@ -118,7 +119,7 @@ export const OrderColumns = ({
               ) : (
                 <div style={{ marginLeft: '10px' }} onClick={() => onPrintBayan(row.original.bayanId)}>
                   <img src={IconPrintBill} />
-                  <span style={{ color: '#F48031' }}>Print Bayan</span>
+                  <span style={{ color: '#F48031' }}>{t('printBayan')}</span>
                 </div>
               ))}
             {!row.original.bayanId &&
@@ -127,7 +128,7 @@ export const OrderColumns = ({
               ) : (
                 <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
                   <img src={IconPrintBill} />
-                  <span style={{ color: '#F48031' }}>Create Bayan</span>
+                  <span style={{ color: '#F48031' }}>{t('createBayan')}</span>
                 </div>
               ))}
           </div>
