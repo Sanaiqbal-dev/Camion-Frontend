@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAddNewDriverMutation, useGetNationalityListQuery, useUpdateDriverMutation } from '@/services/drivers';
-// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IDriver, IDriverModalForm } from '@/interface/carrier';
 import { Toast } from '../ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
@@ -56,7 +55,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   });
   const [addNewDriver, { isSuccess: isDriverAdded, isLoading: isAddingDriver, error }] = useAddNewDriverMutation();
   const [updateDriver, { isSuccess: isDriverUpdated, isLoading: isUpdatingDriver, error: updateError }] = useUpdateDriverMutation();
-  // const [uploadFile, { isSuccess: isFileUploaded, isLoading: isUploadingFile }] = useUploadFileMutation();
 
   const [showToast, setShowToast] = useState(false);
   const [showAddDriverToast, setShowAddDriverToast] = useState(false);
@@ -66,7 +64,6 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
   const [file, setFile] = useState<File>();
-  // const [filePath, setFilePath] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileInputClick = (inputRef: React.RefObject<HTMLInputElement>) => {

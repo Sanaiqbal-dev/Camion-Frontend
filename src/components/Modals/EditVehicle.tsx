@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
 import { useTranslation } from 'react-i18next';
@@ -36,8 +35,6 @@ const schema = z.object({
   registrationNumber: z.string().min(1, 'Enter registration number.'),
   numberPlate: z
     .string()
-    // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
-    // .regex(/^[\u0600-\u06FF]{3} \d{1,4}$/, 'e.g. ثلاث 1234')
     .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
     .min(1, 'Enter valid number plate.'),
   modelYear: z.string().min(1, 'Enter model year.'),

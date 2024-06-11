@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { IOrderTable } from '../../interface/carrier';
 import { ColumnDef } from '@tanstack/react-table';
 import AssignVehicle from '../Modals/AssignVehicle';
-// import { useNavigate } from 'react-router-dom';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import {
   useAssignVehicleToOrderMutation,
@@ -61,7 +60,6 @@ const Orders = () => {
   const [showPrintBayanToast, setShowPrintBayanToast] = useState(false);
   const [showAssignVehicleForm, setShowAssignVehicleForm] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
-  // const [showStatusConfirmationModal, setShowStatusConfirmationModal] = useState(false);
   const [selectedOrderItem, setSelectedOrderItem] = useState<IOrderTable>();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isBayanCreating, setIsBayanCreating] = useState(false);
@@ -122,20 +120,18 @@ const Orders = () => {
   const onUpdateStatus = async (id: number, statusId: number) => {
     setSelectedOrderId(id);
     setSelectedStatusId(statusId);
-    // setShowStatusConfirmationModal(true);
     UpdateStatus();
   };
 
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
     onDelete,
     onAssignVehicle,
-    // onPrintBill,
     onCreateBayan,
     onPrintBayan,
     onUpdateStatus,
     orderStatuses,
     bayanDownloading: isDownloading,
-    bayanCreating:isBayanCreating,
+    bayanCreating: isBayanCreating,
   });
 
   const values = [10, 20, 30, 40, 50];
@@ -166,7 +162,6 @@ const Orders = () => {
   };
 
   const UpdateStatus = async () => {
-    // setShowStatusConfirmationModal(false);
     try {
       const response = await updateOrderStatus({
         orderId: selectedOrderId,

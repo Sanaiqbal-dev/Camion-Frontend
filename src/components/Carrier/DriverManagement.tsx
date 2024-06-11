@@ -100,7 +100,6 @@ const DriverManagement = () => {
 
   const onIqamaDownloadClick = (id: number) => {
     const selectedDriver = driversData.find((driver: any) => driver.id === id);
-    // setSelectedFile(selectedDriver.fileName);
     downloadSelectedFile(selectedDriver?.fileName, selectedDriver?.id);
   };
 

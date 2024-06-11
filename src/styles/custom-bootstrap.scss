@@ -28,6 +28,17 @@ $grid-breakpoints: (
   padding-left: 270px;
   background-color: #f3f3f3;
 }
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding-left: 0;
+  }
+
+  .AdminSider {
+    display: none;
+  }
+}
+
 .content-container {
   width: 100%;
   position: relative;
@@ -179,6 +190,10 @@ $grid-breakpoints: (
   }
 }
 
+.sidebar-visible .sidebar {
+  display: block;
+}
+
 .customCarrierButtonEnabled {
   background-color: #f0f5fb;
   color: #0060b8;
@@ -274,6 +289,14 @@ tr {
   flex-direction: column;
   justify-content: space-between;
 }
+
+@media (max-width: 768px) {
+  .sidebar-admin {
+    display: none;
+    padding-left: 0;
+  }
+}
+
 .accordion,
 div[dir='ltr'] .accordion {
   margin-top: 100px;
@@ -338,6 +361,11 @@ div[dir='ltr'] .accordion-button:not(.collapsed)::after {
 
 .burger-menu {
   display: none;
+}
+@media (max-width: 768px) {
+  .burger-menu {
+    display: block;
+  }
 }
 
 .profile-img {
@@ -910,6 +938,11 @@ div[dir='rtl'] {
   .wrapper {
     padding-right: 270px;
     padding-left: initial;
+  }
+  @media (max-width: 768px) {
+    .wrapper {
+      padding-right: 0;
+    }
   }
 
   .parent-row {

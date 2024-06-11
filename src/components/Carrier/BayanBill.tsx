@@ -6,10 +6,7 @@ const BayanBill = () => {
   const shareBayan = () => {};
   return (
     <div className="tw-pt-4">
-      <div
-        className="tw-flex tw-flex-row-reverse tw-gap-4"
-        // style={{ flexDirection: "row-reverse" }}
-      >
+      <div className="tw-flex tw-flex-row-reverse tw-gap-4">
         <button className="add-item-btn" id="print-bayan-btn" onClick={() => printBayanBill()}>
           Print Bayan Bill
         </button>

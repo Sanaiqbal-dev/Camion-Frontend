@@ -35,7 +35,6 @@ const Tracking = () => {
               width: 'calc(100vw - 360px)',
               height: 'calc(100vh - 90px)',
               marginTop: '15px',
-              // zIndex: "0",
               position: 'absolute',
             }}>
             {markers && markers.map((item) => <MapMarker lat={item.latitude} lng={item.longitude} driver={item.driver} numberPlate={item.numberPlate} />)}

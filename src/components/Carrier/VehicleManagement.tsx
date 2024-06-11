@@ -54,7 +54,6 @@ const VehicleManagement = () => {
 
   const [showAddVehicleToast, setShowAddVehicleToast] = useState(false);
 
-  // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
   const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 

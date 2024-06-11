@@ -13,7 +13,6 @@ import BayanShippingInfoModal from '../Modals/BayanShippingInfoModal';
 import AssignVehicle from '../Modals/AssignVehicle';
 import { ICreateBayan, ILocation, IProductType, IShippingInfo, TripData } from '@/interface/bayan';
 import { useCreateBayanMutation, useGetBayansQuery, useGetPrintBayanMutation } from '@/services/bayan';
-// import { useSelector } from 'react-redux';
 import { QueryPager } from '@/interface/common';
 import { PAGER_SIZE } from '@/config/constant';
 import { ColumnDef } from '@tanstack/react-table';
@@ -22,18 +21,6 @@ import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
 
 const Bayan = () => {
-  // const bayanData: IBayanItem[] = [
-  //   {
-  //     id: '728ed52f',
-  //     origin: 'Riyadh, KSA',
-  //     destination: 'Riyadh, KSA',
-  //     weight: '82.5 kg',
-  //     type: 'flatbed',
-  //     ETA: '3/25/2024',
-  //     action: '',
-  //   },
-  // ];
-
   const values = [10, 20, 30, 40, 50];
   const [bayanData, setBayanData] = useState<IBayanItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -47,7 +34,6 @@ const Bayan = () => {
   const [sendBayanCreateRequest, setSendBayanCreateRequest] = useState(false);
   const [getPrintBayan] = useGetPrintBayanMutation();
   const [createBayan] = useCreateBayanMutation();
-  // const showCreateBayan = useSelector((state: any) => state.session.isCompanyAccount);
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [isDownloading, setIsDownloading] = useState<IDownloadState>();
@@ -171,19 +157,6 @@ const Bayan = () => {
     debouncedSearch(event.target.value);
   };
 
-  // useEffect(() => {
-  //   if (sendBayanCreateRequest) {
-  //     try {
-  //       const response = createBayan(bayanObject).unwrap();
-  //       console.log('Create bayan response:', response);
-  //       setSendBayanCreateRequest(false);
-  //     } catch (error) {
-  //       setShowToast(true);
-  //       console.log('Create bayan error:', error);
-  //     }
-  //   }
-  // }, [sendBayanCreateRequest]);
-
   useEffect(() => {
     if (sendBayanCreateRequest) {
       const createBayanAsync = async () => {
@@ -216,14 +189,6 @@ const Bayan = () => {
       console.log('Bayan Bill ERROR', e);
       setIsDownloading({ status: false, id: tripId });
     }
-
-    // try {
-    //   const response = await createBayanFromBayanId(bayanId).unwrap();
-    //   console.log('Bayan Bill', response);
-    //   // setShowToast(true);
-    // } catch (e) {
-    //   setShowToast(true);
-    // }
   };
 
   const columns: ColumnDef<IBayanItem>[] = BayanColumns({
@@ -234,9 +199,7 @@ const Bayan = () => {
   const updatePage = (action: number) => {
     setPager({ page: pager.page + action, pageSize: entriesValue });
   };
-  // {showToast && (
-  //   <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} duration={1000} variant={error ? 'danger' : 'success'} />
-  // )}
+
   return (
     <>
       {showToast && <Toast variant={isByanCreated ? 'success' : 'danger'} message={bayanErrorMessage} duration={10000} showToast={showToast} setShowToast={setShowToast} />}

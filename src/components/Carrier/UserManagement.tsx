@@ -26,11 +26,6 @@ const UserManagement = () => {
 
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
-  // const { data: companyUserData, refetch } = useGetCompanyUsersQuery({
-  //   page: pager.page - 1,
-  //   pageCount: pager.pageSize,
-  //   term: searchTerm,
-  // });
   const [edituser, setEditUser] = useState<IUserManagement | undefined>();
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
 

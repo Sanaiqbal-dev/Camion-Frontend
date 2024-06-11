@@ -2,8 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-// import { Image } from 'react-bootstrap';
-// import PropfileImage from '../../assets/icons/ic-profile.svg';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { useCreateCompanyProfileMutation } from '@/services/companyProfile';
 import { useAppSelector } from '@/state';

@@ -101,7 +101,7 @@ const ShipperSider = () => {
         )}
       </div>
 
-      <div className="sidebar-admin">
+      <div>
         <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
           <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
           <ButtonGroup>

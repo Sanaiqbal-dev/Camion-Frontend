@@ -3,6 +3,7 @@ import ShipperSider from '../../components/Shipper/ShipperSider';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 const HomePage = () => {
   const { t } = useTranslation(['shipperHomePage']);
@@ -23,15 +24,18 @@ const HomePage = () => {
     return pageObject?.title ? pageObject.title : '';
   };
 
-  const toggleSidebar = () => {};
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
 
   return (
-    <div className="wrapper" style={{ backgroundColor: '#F3F3F3' }}>
+    <div className={`wrapper ${isSidebarVisible ? 'sidebar-visible' : ''}`} style={{ backgroundColor: '#F3F3F3' }}>
       <ShipperSider />
       <div className="content-container col px-1 pt-4 px-sm-2 px-md-3 px-xl-5">
-        <div className="burger-menu">
-          <span onClick={toggleSidebar}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
+        <div className="burger-menu" onClick={toggleSidebar}>
+          <span style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-list" viewBox="0 0 16 16">
               <path
                 fillRule="evenodd"
                 d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
@@ -52,7 +56,6 @@ const HomePage = () => {
             </Link>
           </div>
         </header>
-
         <div className="mt-4">
           <Outlet />
         </div>

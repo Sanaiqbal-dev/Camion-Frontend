@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setLogout } from '@/state/slice/sessionSlice';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/i18n';
-import { AVAILABLE_LANGUAGES } from '@/config/app'; // Make sure this import path is correct
+import { AVAILABLE_LANGUAGES } from '@/config/app';
 import { ILanguage } from '@/interface/common';
 import LanguageIcon from '../../assets/icons/ic-language.svg';
 
@@ -54,7 +54,7 @@ const AdminSider = () => {
           </NavLink>
         </div>
       </div>
-      <div className="sidebar-admin">
+      <div>
         <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
           <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
           <ButtonGroup>

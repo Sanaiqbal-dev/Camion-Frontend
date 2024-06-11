@@ -112,10 +112,6 @@ const UserManagementShipper = () => {
   };
   const submitEditFormHandler = async (data: any) => {
     try {
-      // console.log('submitCreateFormHandler', {
-      //   ...data,
-      //   email: edituser?.email,
-      // });
       await updateSubUserPassword({
         password: data.newPassword,
         confirmPassword: data.confirmPassword,

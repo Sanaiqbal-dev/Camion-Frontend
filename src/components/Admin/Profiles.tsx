@@ -29,7 +29,6 @@ const Profiles = () => {
   const [updateCompanyAccount, { isSuccess: isCompanyAccountUpdated, isLoading: isAccountUpdating }] = useUpdateCompanyAccountMutation();
 
   const companyProfiles = useGetCompanyProfilesListQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
-  // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
@@ -147,7 +146,7 @@ const Profiles = () => {
     onDeleteButtonClick,
     onRejectButtonClick,
     isDisabled,
-    documentDownloading:isDownloading,
+    documentDownloading: isDownloading,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);

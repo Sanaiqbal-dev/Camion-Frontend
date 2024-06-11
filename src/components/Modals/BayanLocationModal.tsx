@@ -3,7 +3,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useState } from 'react';
-// import { IPlaces } from '@/interface/proposal';
 import { useGetCityListQuery, useGetDistrictListQuery } from '@/services/proposal';
 import { ILocation } from '@/interface/bayan';
 import { useTranslation } from 'react-i18next';
@@ -37,8 +36,6 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     resolver: zodResolver(schema),
   });
 
-  // const [cityList, setCityList] = useState<IPlaces[]>();
-  // const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 

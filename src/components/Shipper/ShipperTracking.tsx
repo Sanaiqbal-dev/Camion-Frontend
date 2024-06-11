@@ -132,21 +132,7 @@ const ShipperTracking: React.FC<IShipperTracking> = () => {
                 lat={item.latitude}
                 lng={item.longitude}
                 driver={item.driver}
-              numberPlate={item.numberPlate}
-              // shipperTrackingInfo={
-                //   <div
-                //     style={{
-                //       height: '40px',
-                //       width: '140px',
-                //       backgroundColor: '#FFF',
-                //       borderRadius: '30px',
-                //       justifyContent: 'center',
-                //       padding: '10px',
-                //     }}>
-                //     {item.driver}
-                //     <br /> {item.numberPlate}
-                //   </div>
-                // }
+                numberPlate={item.numberPlate}
               />
             ))}
           </Map>

@@ -20,7 +20,7 @@ import ActivateProfile from '../Modals/ActivateProfile';
 import { useAppSelector } from '@/state';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/i18n';
-import { AVAILABLE_LANGUAGES } from '@/config/app'; // Make sure this import path is correct
+import { AVAILABLE_LANGUAGES } from '@/config/app';
 import { ILanguage } from '@/interface/common';
 
 const CarrierSider: React.FC = () => {
@@ -143,7 +143,7 @@ const CarrierSider: React.FC = () => {
         )}
       </div>
 
-      <div className="sidebar-admin">
+      <div>
         <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
           <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
           <ButtonGroup>
