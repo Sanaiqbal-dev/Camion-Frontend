@@ -1,5 +1,6 @@
 import { AspNetUserLoginRequest, AspNetUserLoginResponse, IAspNetUser, ILoginResponse } from '@/interface/aspNetUser';
 import baseApi from './baseApi';
+import { IEmail } from '@/interface/common';
 
 export const aspNetUserAuthApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,15 +19,24 @@ export const aspNetUserAuthApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['AspNetUser'],
     }),
-    aspNetUserResetPassword: builder.mutation<AspNetUserLoginResponse, Partial<IAspNetUser>>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    aspNetUserResetPassword: builder.mutation<AspNetUserLoginResponse, any>({
       query: (body) => ({
-        url: '/Account/ResetPassword',
+        url: '/Account/ResetUserPassword',
         method: 'POST',
         body,
+      }),
+      invalidatesTags: ['AspNetUser'],
+    }),
+
+    resetPasswordByEmail: builder.mutation<AspNetUserLoginResponse, IEmail>({
+      query: ({ email }) => ({
+        url: `/Account/ResetPasswordByEmail?email=${encodeURIComponent(email)}`,
+        method: 'POST',
       }),
       invalidatesTags: ['AspNetUser'],
     }),
   }),
 });
 
-export const { useAspNetUserLoginMutation, useAspNetUserRegisterMutation, useAspNetUserResetPasswordMutation } = aspNetUserAuthApi;
+export const { useAspNetUserLoginMutation, useAspNetUserRegisterMutation, useAspNetUserResetPasswordMutation, useResetPasswordByEmailMutation } = aspNetUserAuthApi;

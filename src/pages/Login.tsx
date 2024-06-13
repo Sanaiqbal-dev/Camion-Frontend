@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAspNetUserLoginMutation } from '@/services/aspNetUserAuth';
+import { useAspNetUserLoginMutation, useResetPasswordByEmailMutation } from '@/services/aspNetUserAuth';
 import { AspNetUserLoginRequest } from '@/interface/aspNetUser';
 import { setSession } from '@/state/slice/sessionSlice';
 import { useAppSelector } from '@/state';
@@ -16,6 +16,8 @@ import { Toast } from '@/components/ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import ForgetPassword from '../components/Modals/ForgetPassword';
+import { IEmail } from '@/interface/common';
 
 const Login = () => {
   const { t } = useTranslation(['login']);
@@ -24,6 +26,7 @@ const Login = () => {
     password: z.string().min(6, t('validationErrorEnterYourPassword')),
   });
   const [showToast, setShowToast] = useState(false);
+  const [showForgetPassword, setShowForgetPassword] = useState(false);
 
   const {
     register,
@@ -36,6 +39,8 @@ const Login = () => {
   const { isLoggedIn, dir, lang, user } = useAppSelector((state) => state.session);
 
   const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
+
+  const [forgetPassword] = useResetPasswordByEmailMutation();
 
   const dispatch = useDispatch();
 
@@ -71,6 +76,15 @@ const Login = () => {
       }
     } catch (e) {
       setShowToast(true);
+    }
+  };
+
+  const forgetPasswordHandler = async (data: IEmail) => {
+    try {
+      await forgetPassword(data).unwrap();
+      setShowForgetPassword(false);
+    } catch (error) {
+      console.log('Error', error);
     }
   };
 
@@ -143,17 +157,18 @@ const Login = () => {
                             />
                             <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
                             <div className="mt-2 d-flex flex-row-reverse">
-                              <Link
-                                to="/forgotPassword"
+                              <span
                                 style={{
                                   color: '#0060b8',
                                   fontSize: '14px',
                                   cursor: 'pointer',
                                   textDecoration: 'none',
                                   marginLeft: '30px',
-                                }}>
+                                  whiteSpace: 'nowrap',
+                                }}
+                                onClick={() => setShowForgetPassword(true)}>
                                 {t('forgotPassword')}
-                              </Link>
+                              </span>
                             </div>
                           </Form.Group>
                         </Row>
@@ -188,6 +203,7 @@ const Login = () => {
           </div>
         </Col>
       </Row>
+      <ForgetPassword show={showForgetPassword} onSubmitForm={forgetPasswordHandler} handleClose={() => setShowForgetPassword(false)} />
     </Container>
   );
 };

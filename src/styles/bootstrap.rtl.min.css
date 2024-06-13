@@ -516,7 +516,7 @@ legend + * {
   -webkit-appearance: textfield;
   outline-offset: -2px;
 }
-[type='email'],
+/* [type='email'], */
 [type='number'],
 [type='tel'],
 [type='url'] {

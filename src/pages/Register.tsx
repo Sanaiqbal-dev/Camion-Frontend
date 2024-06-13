@@ -13,6 +13,7 @@ import { useAspNetUserRegisterMutation } from '@/services/aspNetUserAuth';
 import { Toast } from '@/components/ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 interface IRegisterFormInput {
   role: string;
@@ -61,7 +62,7 @@ const Register = () => {
   } = useForm<IRegisterFormInput>({
     resolver: zodResolver(schema),
   });
-  const [aspNetUserRegister, { error }] = useAspNetUserRegisterMutation();
+  const [aspNetUserRegister, { error, isLoading }] = useAspNetUserRegisterMutation();
 
   let timeoutRef: NodeJS.Timeout | null = null;
   const onSubmit: SubmitHandler<IRegisterFormInput> = async (values: IRegisterFormInput) => {
@@ -101,6 +102,11 @@ const Register = () => {
   return (
     <Container fluid className="vh-100">
       {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setshowToast} variant={error ? 'danger' : 'success'} />}
+      <Row style={{ justifyContent: 'flex-end', marginRight: '10%', marginLeft: '10%' }}>
+        <Col md="auto" className="position-relative custom-col">
+          <LanguageSwitcher />
+        </Col>
+      </Row>
       <Row className="h-100">
         <Col xs={12} md={6} className="d-none d-md-block p-0">
           <div className="image-container">
@@ -166,14 +172,14 @@ const Register = () => {
                     </Form.Group>
                     <Form.Group as={Col} md="6">
                       <Form.Label className="customLabel">{t('lastName')}</Form.Label>
-                      <Form.Control type="text" className="form-control  " {...register('lastName')} isInvalid={!!errors.lastName} placeholder={t('enterLastName')} />
+                      <Form.Control type="text" className="form-control" {...register('lastName')} isInvalid={!!errors.lastName} placeholder={t('enterLastName')} />
                       <Form.Control.Feedback type="invalid">{errors.lastName?.message}</Form.Control.Feedback>
                     </Form.Group>
                   </Row>
                   <Row className="form-group mb-2">
                     <Form.Group as={Col} md="6">
                       <Form.Label className="customLabel">{t('email')}</Form.Label>
-                      <Form.Control type="email" className="form-control  " {...register('email')} isInvalid={!!errors.email} placeholder={t('enterEmail')} />
+                      <Form.Control type="email" className="form-control" {...register('email')} isInvalid={!!errors.email} placeholder={t('enterEmail')} />
                       <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group as={Col} md="6" controlId="validationCustom04">
@@ -181,7 +187,6 @@ const Register = () => {
                       <Form.Control
                         type="text"
                         className="form-control"
-                        dir="ltr"
                         defaultValue="+966"
                         {...register('phoneNumber')}
                         isInvalid={!!errors.phoneNumber}
@@ -213,7 +218,7 @@ const Register = () => {
                 {recaptchaError && <span className="tw-text-red-700">{recaptchaError}</span>}
                 <div className="register-container">
                   <div>
-                    <Button variant="primary" type="submit" className="btn customRegisterButton">
+                    <Button variant="primary" type="submit" className="btn customRegisterButton" disabled={isLoading}>
                       {t('registerMyAccount')}
                     </Button>
                   </div>

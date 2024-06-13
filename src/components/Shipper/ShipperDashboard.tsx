@@ -10,19 +10,19 @@ import { useTranslation } from 'react-i18next';
 const ShipperDashboard = () => {
   const { t } = useTranslation(['shipperDashboard']);
 
-  const shipperDashboardData = useGetShipperDashboardOrderListQuery('');
-  const proposalQuotation = useGetProposalQuotationsQuery('');
-  const ordersCount = shipperDashboardData.currentData?.result;
-  const proposalQuotationsData = proposalQuotation.data?.result.result;
-  console.log('Data', proposalQuotationsData);
+  const { currentData: shipperDashboardData } = useGetShipperDashboardOrderListQuery('');
+  const { data: proposalQuotationData } = useGetProposalQuotationsQuery('');
+
+  const ordersCount = shipperDashboardData?.result;
+  const proposalQuotations = proposalQuotationData?.result.result;
 
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="row main-stats">
-        <div className="col stats-item border-right">
-          <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
+        <div className="col stats-item border-right overflow-auto">
+          <span className="stats-value">{ordersCount?.totalOrders}</span>
           <span className="stats-label">{t('totalOrders')}</span>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
             {t('orderIncrease')}
             <span
               style={{
@@ -35,12 +35,10 @@ const ShipperDashboard = () => {
             </span>
           </div>
         </div>
-
-        <div className="col stats-item border-right">
-          <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
+        <div className="col stats-item border-right overflow-auto">
+          <span className="stats-value">{ordersCount?.activeOrders}</span>
           <span className="stats-label">{t('activeOrders')}</span>
-
-          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
             {t('orderIncrease')}
             <span
               style={{
@@ -54,14 +52,13 @@ const ShipperDashboard = () => {
           </div>
         </div>
         <div className="col stats-item border-right">
-          <span className="stats-value">{ordersCount && ordersCount.shipped}</span>
+          <span className="stats-value">{ordersCount?.shipped}</span>
           <span className="stats-label">{t('shipped')}</span>
         </div>
-
         <div className="col stats-item">
-          <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
+          <span className="stats-value">{ordersCount?.orderThisMonth}</span>
           <span className="stats-label">{t('ordersThisMonth')}</span>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
             {t('orderDecrease')}
             <span
               style={{
@@ -76,209 +73,48 @@ const ShipperDashboard = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          background: '#FFF',
-          borderRadius: '16px',
-          boxShadow: '#DCE0F980',
-        }}>
-        <div
-          className="border-right"
-          style={{
-            display: 'flex',
-            padding: '10px',
-            flexDirection: 'column',
-            width: '30%',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              margin: '10px',
-              fontFamily: 'Roboto',
-              fontSize: '20px',
-              fontWeight: '500',
-              lineHeight: '23.44px',
-              textAlign: 'left',
-              color: '#0060B8',
-            }}>
-            {t('pending')}
-          </div>
-          <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.assigned}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '20px',
-                  fontWeight: '500',
-                  lineHeight: '23.44px',
-                  textAlign: 'left',
-                  color: '#0060B8',
-                }}>
-                {t('assigned')}
-              </div>
+      <div className="responsive-container">
+        <div className="section border-right">
+          <div className="title">{t('pending')}</div>
+          <div className="items">
+            <div className="item">
+              <div className="value">{ordersCount?.assigned}</div>
+              <div className="label">{t('assigned')}</div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.notAssigned}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '20px',
-                  fontWeight: '500',
-                  lineHeight: '23.44px',
-                  textAlign: 'left',
-                  color: '#0060B8',
-                }}>
-                {t('unassigned')}
-              </div>
+            <div className="item">
+              <div className="value">{ordersCount?.notAssigned}</div>
+              <div className="label">{t('unassigned')}</div>
             </div>
           </div>
         </div>
 
-        <div
-          className="border-right"
-          style={{
-            display: 'flex',
-            padding: '10px',
-            flexDirection: 'column',
-            width: '45%',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              margin: '10px',
-              fontFamily: 'Roboto',
-              fontSize: '20px',
-              fontWeight: '500',
-              lineHeight: '23.44px',
-              textAlign: 'left',
-              color: '#0060B8',
-            }}>
-            {t('inProgress')}
-          </div>
-          <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.dispatched}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '20px',
-                  fontWeight: '500',
-                  lineHeight: '23.44px',
-                  textAlign: 'left',
-                  color: '#0060B8',
-                }}>
-                {t('dispatched')}
-              </div>
+        <div className="section border-right">
+          <div className="title">{t('inProgress')}</div>
+          <div className="items">
+            <div className="item">
+              <div className="value">{ordersCount?.dispatched}</div>
+              <div className="label">{t('dispatched')}</div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.atPickUp}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '20px',
-                  fontWeight: '500',
-                  lineHeight: '23.44px',
-                  textAlign: 'left',
-                  color: '#0060B8',
-                }}>
+            <div className="item">
+              <div className="value">{ordersCount?.atPickUp}</div>
+              <div className="label" style={{ whiteSpace: 'nowrap' }}>
                 {t('atPickUp')}
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.inTransit}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '20px',
-                  fontWeight: '500',
-                  lineHeight: '23.44px',
-                  textAlign: 'left',
-                  color: '#0060B8',
-                }}>
+            <div className="item">
+              <div className="value">{ordersCount?.inTransit}</div>
+              <div className="label" style={{ whiteSpace: 'nowrap' }}>
                 {t('inTransit')}
               </div>
             </div>
           </div>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            padding: '10px',
-            flexDirection: 'column',
-          }}>
-          <div
-            style={{
-              display: 'flex',
-              margin: '10px',
-              fontFamily: 'Roboto',
-              fontSize: '20px',
-              fontWeight: '500',
-              lineHeight: '23.44px',
-              textAlign: 'left',
-              color: '#0060B8',
-            }}>
-            {t('delivered')}
-          </div>
-          <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
-            <div>
-              <div
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: '22px',
-                  fontWeight: '600',
-                  lineHeight: '42.19px',
-                  textAlign: 'left',
-                }}>
-                {ordersCount && ordersCount.delivered}
-              </div>
+        <div className="section">
+          <div className="title">{t('delivered')}</div>
+          <div className="items">
+            <div className="item">
+              <div className="value">{ordersCount?.delivered}</div>
             </div>
           </div>
         </div>
@@ -307,9 +143,10 @@ const ShipperDashboard = () => {
           }}>
           {t('shipmentDetails')}
         </div>
-        {proposalQuotationsData &&
-          proposalQuotationsData.map((data: IProposalQuotation, index: number) => (
+        {proposalQuotations &&
+          proposalQuotations.map((data: IProposalQuotation, index: number) => (
             <ShippementDetails
+              key={index}
               orderNumber={index + 1}
               trackingId={data.trackingId}
               amount={data.amount}

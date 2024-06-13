@@ -5,14 +5,16 @@ import { Form, Col, Container, Row, Button } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAspNetUserResetPasswordMutation } from '@/services/aspNetUserAuth';
 import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 interface IForgetPassword {
-  email: string;
   password: string;
   confirmPassword: string;
+  email: string;
+  token: string;
 }
 
 const ForgetPassword = () => {
@@ -20,7 +22,6 @@ const ForgetPassword = () => {
 
   const schema = z
     .object({
-      email: z.string().email(t('enterValidEmail')),
       password: z
         .string()
         .min(8, t('passwordMinLength'))
@@ -33,6 +34,7 @@ const ForgetPassword = () => {
       message: t('passwordsDontMatch'),
       path: ['confirmPassword'],
     });
+
   const {
     register,
     handleSubmit,
@@ -41,22 +43,49 @@ const ForgetPassword = () => {
     resolver: zodResolver(schema),
   });
 
-  const navigate = useNavigate();
-  const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
-  const onSubmit: SubmitHandler<IForgetPassword> = async (values: IForgetPassword) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    aspNetUserResetPassword(values).then((result: any) => {
-      if (result) {
-        console.log('Password reset successful', values);
-      }
-    });
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const userEmail = searchParams.get('Email') || '';
+  const rawToken = searchParams.get('Token') || '';
 
-    console.log(values);
-    navigate('/Login', { replace: true });
+  console.log('userEmail', userEmail);
+
+  console.log('rawToken', rawToken);
+
+  //const userToken = encodeURIComponent(rawToken); // Remove spaces and decode the token
+  const userToken = decodeURIComponent(rawToken); // Remove spaces and decode the token
+
+  console.log('decodeToken', userToken);
+
+  //const navigate = useNavigate();
+  const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
+
+  const onSubmit: SubmitHandler<IForgetPassword> = async (data: IForgetPassword) => {
+    console.log('Function Called');
+    const payload = {
+      email: userEmail,
+      token: userToken,
+      password: data.password,
+    };
+    console.log(payload);
+    try {
+      await aspNetUserResetPassword(payload);
+      console.log('Password reset successful', payload);
+      //navigate('/Login', { replace: true });
+    } catch (error) {
+      console.error('Password reset failed', error);
+    }
+
+    console.log(payload);
   };
 
   return (
     <Container fluid className="vh-100">
+      <Row style={{ justifyContent: 'flex-end', marginRight: '10%', marginLeft: '10%' }}>
+        <Col md="auto" className="position-relative custom-col">
+          <LanguageSwitcher />
+        </Col>
+      </Row>
       <Row className="h-100">
         <Col xs={12} md={6} className="d-none d-md-block p-0">
           <div className="image-container">
@@ -78,11 +107,6 @@ const ForgetPassword = () => {
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                       <div className="form-group mb-4">
                         <Form.Group as={Col}>
-                          <Form.Label className="customLabel">{t('emailAddress')}</Form.Label>
-                          <Form.Control type="email" className="form-control customInput" {...register('email')} isInvalid={!!errors.email} placeholder={t('enterEmailAddress')} />
-                          <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group as={Col}>
                           <Form.Label className="customLabel">{t('password')}</Form.Label>
                           <Form.Control
                             type="password"
@@ -94,7 +118,7 @@ const ForgetPassword = () => {
                           <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col}>
-                          <Form.Label className="customLabel">{t('confirmPassword')}</Form.Label>
+                          <Form.Label className="customLabel mt-4">{t('confirmPassword')}</Form.Label>
                           <Form.Control
                             type="password"
                             className="form-control customInput"
@@ -108,10 +132,9 @@ const ForgetPassword = () => {
 
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
                         <Button type="submit" variant="primary" className="btn customRegisterButton w-100">
-                          {t('verify')}
+                          {t('verifyButton')}
                         </Button>
                         <div className="d-flex justify-content-start mt-3">
-                          <div>{t('alreadyHaveAccount')}</div>
                           <div>
                             <Link
                               to="/Login"

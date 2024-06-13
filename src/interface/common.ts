@@ -183,6 +183,10 @@ export interface IPassword {
   confirmPassword: string;
 }
 
+export interface IEmail {
+  email: string;
+}
+
 export interface IVehicleType {
   id: number;
   typeName: string;
