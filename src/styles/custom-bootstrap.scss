@@ -1041,6 +1041,10 @@ div[dir='ltr'] .modal {
 // }
 
 div[dir='rtl'] {
+	input[name="phoneNumber"], input[name="phoneNumber"].form-control, .phoneNumber{
+		direction: ltr;
+	 text-align: right; 
+	}
   .wrapper {
     padding-right: 270px;
     padding-left: initial;
