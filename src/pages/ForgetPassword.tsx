@@ -48,14 +48,26 @@ const ForgetPassword = () => {
   const userEmail = searchParams.get('Email') || '';
   const rawToken = searchParams.get('Token') || '';
 
-  console.log('userEmail', userEmail);
+  // console.log('userEmail', userEmail);
 
-  console.log('rawToken', rawToken);
+  // console.log('rawToken', rawToken);
 
   //const userToken = encodeURIComponent(rawToken); // Remove spaces and decode the token
-  const userToken = decodeURIComponent(rawToken); // Remove spaces and decode the token
+  //const userToken = decodeURIComponent(rawToken); // Remove spaces and decode the token
 
-  console.log('decodeToken', userToken);
+	const userToken = encodeURIComponent(rawToken).replace(/\s+/g, '+');
+
+	// if(rawToken === cleanedToken){
+	// 	console.log('Token is same');
+	// 	console.log(cleanedToken)
+		// console.log(decodeURIComponent(rawToken))
+	// }else{
+	// 	console.log('Token is different');
+	// 	console.log(rawToken)
+	// 	console.log(cleanedToken)
+	// }
+
+  // console.log('decodeToken', userToken);
 
   //const navigate = useNavigate();
   const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
