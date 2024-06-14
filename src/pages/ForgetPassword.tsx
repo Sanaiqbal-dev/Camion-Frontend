@@ -5,10 +5,11 @@ import { Form, Col, Container, Row, Button } from 'react-bootstrap';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAspNetUserResetPasswordMutation } from '@/services/aspNetUserAuth';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface IForgetPassword {
   password: string;
@@ -55,22 +56,22 @@ const ForgetPassword = () => {
   //const userToken = encodeURIComponent(rawToken); // Remove spaces and decode the token
   //const userToken = decodeURIComponent(rawToken); // Remove spaces and decode the token
 
-	const userToken = encodeURIComponent(rawToken).replace(/\s+/g, '+');
+  const userToken = encodeURIComponent(rawToken).replace(/\s+/g, '+');
 
-	// if(rawToken === cleanedToken){
-	// 	console.log('Token is same');
-	// 	console.log(cleanedToken)
-		// console.log(decodeURIComponent(rawToken))
-	// }else{
-	// 	console.log('Token is different');
-	// 	console.log(rawToken)
-	// 	console.log(cleanedToken)
-	// }
+  // if(rawToken === cleanedToken){
+  // 	console.log('Token is same');
+  // 	console.log(cleanedToken)
+  // console.log(decodeURIComponent(rawToken))
+  // }else{
+  // 	console.log('Token is different');
+  // 	console.log(rawToken)
+  // 	console.log(cleanedToken)
+  // }
 
   // console.log('decodeToken', userToken);
 
-  //const navigate = useNavigate();
-  const [aspNetUserResetPassword] = useAspNetUserResetPasswordMutation();
+  const navigate = useNavigate();
+  const [aspNetUserResetPassword, { isLoading }] = useAspNetUserResetPasswordMutation();
 
   const onSubmit: SubmitHandler<IForgetPassword> = async (data: IForgetPassword) => {
     console.log('Function Called');
@@ -83,7 +84,7 @@ const ForgetPassword = () => {
     try {
       await aspNetUserResetPassword(payload);
       console.log('Password reset successful', payload);
-      //navigate('/Login', { replace: true });
+      navigate('/Login', { replace: true });
     } catch (error) {
       console.error('Password reset failed', error);
     }
@@ -144,7 +145,7 @@ const ForgetPassword = () => {
 
                       <div className="register-container" style={{ flexDirection: 'column', width: '100%' }}>
                         <Button type="submit" variant="primary" className="btn customRegisterButton w-100">
-                          {t('verifyButton')}
+                          {isLoading ? <LoadingAnimation /> : t('verifyButton')}
                         </Button>
                         <div className="d-flex justify-content-start mt-3">
                           <div>

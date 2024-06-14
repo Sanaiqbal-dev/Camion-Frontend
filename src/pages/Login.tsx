@@ -43,7 +43,7 @@ const Login = () => {
 
   const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
 
-  const [forgetPassword, { isLoading: isPasswordLinkBeingSent, error: resetPasswordError }] = useResetPasswordByEmailMutation();
+  const [forgetPassword, { isLoading: isPasswordLinkBeingSent, error: resetPasswordError, isSuccess }] = useResetPasswordByEmailMutation();
 
   const dispatch = useDispatch();
 
@@ -85,8 +85,8 @@ const Login = () => {
   const forgetPasswordHandler = async (data: IEmail) => {
     try {
       await forgetPassword(data).unwrap();
-      // setShowPasswordToast(true);
-      setShowForgetPassword(false);
+      setShowPasswordToast(true);
+      // setShowForgetPassword(false);
     } catch (error) {
       setShowPasswordToast(true);
     }
@@ -215,7 +215,13 @@ const Login = () => {
           </div>
         </Col>
       </Row>
-      <ForgetPassword show={showForgetPassword} onSubmitForm={forgetPasswordHandler} isLoading={isPasswordLinkBeingSent} handleClose={() => setShowForgetPassword(false)} />
+      <ForgetPassword
+        show={showForgetPassword}
+        onSubmitForm={forgetPasswordHandler}
+        isSuccess={isSuccess}
+        isLoading={isPasswordLinkBeingSent}
+        handleClose={() => setShowForgetPassword(false)}
+      />
     </Container>
   );
 };

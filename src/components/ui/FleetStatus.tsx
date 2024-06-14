@@ -6,7 +6,7 @@ const FleetStatus = () => {
   const { t } = useTranslation(['fleetStatus']);
 
   return (
-    <Card style={{ borderRadius: '16px', backgroundColor: 'white', border: 'none', height: '100%' }}>
+    <Card style={{ borderRadius: '16px', backgroundColor: 'white', border: 'none', height: '100%', minWidth: '329px' }}>
       <Card.Body className="row">
         <div className="col-8 d-flex flex-column">
           <span className="fw-bold m-3">{t('fleetStatus')}</span>
