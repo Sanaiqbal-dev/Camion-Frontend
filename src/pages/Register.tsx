@@ -14,6 +14,7 @@ import { Toast } from '@/components/ui/toast';
 import { getErrorMessage } from '@/util/errorHandler';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 interface IRegisterFormInput {
   role: string;
@@ -219,7 +220,7 @@ const Register = () => {
                 <div className="register-container">
                   <div>
                     <Button variant="primary" type="submit" className="btn customRegisterButton" disabled={isLoading}>
-                      {t('registerMyAccount')}
+                      {isLoading ? <LoadingAnimation /> : t('registerMyAccount')}
                     </Button>
                   </div>
                   <div className="d-flex justify-content-start">

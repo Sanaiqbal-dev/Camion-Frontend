@@ -4,15 +4,16 @@ import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React from 'react';
 import { IEmail } from '@/interface/common';
+import LoadingAnimation from '../ui/LoadingAnimation';
 
 interface UpdatePasswordModalProps {
   show: boolean;
   onSubmitForm: (data: IEmail) => void;
-
+  isLoading: boolean;
   handleClose: () => void;
 }
 
-const ForgetPassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm, handleClose }) => {
+const ForgetPassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm, handleClose, isLoading }) => {
   const schema = z.object({
     email: z.string().min(1, 'Please enter a valid email address'),
   });
@@ -44,7 +45,7 @@ const ForgetPassword: React.FC<UpdatePasswordModalProps> = ({ show, onSubmitForm
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            Reset Password
+            {isLoading ? <LoadingAnimation /> : 'Reset Password'}
           </Button>
         </Form>
       </Modal.Body>

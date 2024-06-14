@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 import ForgetPassword from '../components/Modals/ForgetPassword';
 import { IEmail } from '@/interface/common';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
 
 const Login = () => {
   const { t } = useTranslation(['login']);
@@ -26,6 +27,8 @@ const Login = () => {
     password: z.string().min(6, t('validationErrorEnterYourPassword')),
   });
   const [showToast, setShowToast] = useState(false);
+  const [showPasswordToast, setShowPasswordToast] = useState(false);
+
   const [showForgetPassword, setShowForgetPassword] = useState(false);
 
   const {
@@ -40,7 +43,7 @@ const Login = () => {
 
   const [aspNetUserLogin, { isLoading, error }] = useAspNetUserLoginMutation();
 
-  const [forgetPassword] = useResetPasswordByEmailMutation();
+  const [forgetPassword, { isLoading: isPasswordLinkBeingSent, error: resetPasswordError }] = useResetPasswordByEmailMutation();
 
   const dispatch = useDispatch();
 
@@ -82,9 +85,10 @@ const Login = () => {
   const forgetPasswordHandler = async (data: IEmail) => {
     try {
       await forgetPassword(data).unwrap();
+      // setShowPasswordToast(true);
       setShowForgetPassword(false);
     } catch (error) {
-      console.log('Error', error);
+      setShowPasswordToast(true);
     }
   };
 
@@ -103,6 +107,14 @@ const Login = () => {
   return (
     <Container fluid className="vh-100">
       {showToast && <Toast showToast={showToast} message={error ? getErrorMessage(error) : ''} setShowToast={setShowToast} variant={error ? 'danger' : 'success'} />}
+      {showPasswordToast && (
+        <Toast
+          showToast={showPasswordToast}
+          message={resetPasswordError ? getErrorMessage(resetPasswordError) : ''}
+          setShowToast={setShowPasswordToast}
+          variant={resetPasswordError ? 'danger' : 'success'}
+        />
+      )}
       <Row className="h-100">
         <Col xs={12} md={6} className="d-none d-md-block p-0">
           <div className="image-container">
@@ -175,7 +187,7 @@ const Login = () => {
                       </div>
                       <div className="register-container" style={{ flexDirection: 'column', width: '98%', fontSize: '14px' }}>
                         <Button type="submit" variant="primary" className="btn customLoginButton w-100" disabled={isLoading}>
-                          {t('login')}
+                          {isLoading ? <LoadingAnimation /> : t('login')}
                         </Button>
                         <div className="d-flex justify-content-start">
                           <div>{t('noAccount')}</div>
@@ -203,7 +215,7 @@ const Login = () => {
           </div>
         </Col>
       </Row>
-      <ForgetPassword show={showForgetPassword} onSubmitForm={forgetPasswordHandler} handleClose={() => setShowForgetPassword(false)} />
+      <ForgetPassword show={showForgetPassword} onSubmitForm={forgetPasswordHandler} isLoading={isPasswordLinkBeingSent} handleClose={() => setShowForgetPassword(false)} />
     </Container>
   );
 };
