@@ -1,0 +1,12 @@
+{
+  "driverName": "اسم السائق",
+  "driverIdIqama": "هوية/إقامة السائق",
+  "licenseNumber": "رقم الرخصة",
+  "dateOfBirth": "تاريخ الميلاد",
+  "nationality": "الجنسية",
+  "mobileNumber": "رقم الجوال",
+  "viewIqamaId": "عرض الهوية/الإقامة",
+  "edit": "تحرير",
+  "delete": "حذف",
+  "action": "عمل"
+}

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useTranslation } from 'react-i18next';
 
 const schema = z.object({
   otherType: z.string().min(1, 'Please enter other item type name'),
@@ -35,6 +36,7 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
   });
 
   const { data: allGoodTypes } = useGetAllGoodTypesQuery();
+  const { t } = useTranslation(['otherForm']);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
     console.log(data);
@@ -47,7 +49,6 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
         otherType: proposalObject.otherName,
         length: proposalObject.length,
         width: proposalObject.width,
-        // shipmentTypeId: proposalObject.shipmentTypeId,
         weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
@@ -63,154 +64,136 @@ const OtherForm: React.FC<IOtherForm> = ({ isEdit, proposalObject, onSubmitShipm
   }, [isEdit, setValue]);
 
   return (
-    <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className="tw-grid  tw-w-full">
-          <Form.Group className="mb-3">
-            <Form.Label>Other Type</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter other shipment type"
-              style={{
-                width: '100%',
-                height: '59px',
-              }}
-              isInvalid={!!errors.otherType}
-              {...register('otherType')}
-            />
-            <Form.Control.Feedback type="invalid">{errors.otherType?.message}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Good Type</Form.Label>
-            <Form.Control
-              as="select"
-              placeholder="Select district"
-              style={{
-                width: '100%',
-                height: '59px',
-                // borderTop: 'none',
-                // borderRight: 'none',
-                // borderLeft: 'none',
-              }}
-              {...register('goodTypeId', { required: true })}
-              isInvalid={!!errors.goodTypeId}
-              // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
-              readOnly>
-              <option value="">Select Good Type</option>
-              {allGoodTypes &&
-                allGoodTypes.result.map((goodType: IGoodType) => (
-                  <option key={goodType.id} value={goodType.id}>
-                    {goodType.nameEnglish}
-                  </option>
-                ))}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
-          </Form.Group>
-        </div>
-        <Form.Group className="mb-3 d-flex">
-          <Form.Control
-            type="number"
-            placeholder="Length"
-            style={{
-              width: '164px',
-              height: '59px',
-            }}
-            isInvalid={!!errors.length}
-            {...register('length')}
-          />
-          {/* <Form.Control.Feedback type="invalid">
-            {errors.length?.message}
-          </Form.Control.Feedback> */}
-          <Form.Control
-            type="number"
-            placeholder="Width"
-            style={{
-              width: '164px',
-              height: '59px',
-              margin: '0 -2px 0 -2px',
-            }}
-            isInvalid={!!errors.width}
-            {...register('width')}
-          />
-          {/* <Form.Control.Feedback type="invalid">
-            {errors.width?.message}
-          </Form.Control.Feedback>{" "} */}
-          <Form.Control
-            type="number"
-            placeholder="Height"
-            style={{
-              width: '164px',
-              height: '59px',
-            }}
-            isInvalid={!!errors.height}
-            {...register('height')}
-          />
-          {/* <Form.Control.Feedback type="invalid">
-            {errors.height?.message}
-          </Form.Control.Feedback> */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '59px',
-              width: '68px',
-              backgroundColor: '#E0E0E0',
-              color: '#7A7A7A',
-            }}>
-            Cm
-          </div>
-        </Form.Group>
-
-        <Form.Group className="mb-3 d-flex">
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <div className="tw-grid tw-w-full">
+        <Form.Group className="mb-3">
+          <Form.Label>{t('otherType')}</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Weight per Item"
+            placeholder={t('enterOtherShipmentType')}
             style={{
-              width: '498px',
+              width: '100%',
               height: '59px',
             }}
-            isInvalid={!!errors.weightPerItem}
-            {...register('weightPerItem')}
+            isInvalid={!!errors.otherType}
+            {...register('otherType')}
           />
-          {/* <Form.Control.Feedback type="invalid">
-            {errors.weightPerItem?.message}
-          </Form.Control.Feedback> */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '59px',
-              width: '68px',
-              backgroundColor: '#E0E0E0',
-              color: '#7A7A7A',
-            }}>
-            Kg
-          </div>
+          <Form.Control.Feedback type="invalid">{errors.otherType?.message}</Form.Control.Feedback>
         </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>{t('goodType')}</Form.Label>
+          <Form.Control
+            as="select"
+            placeholder={t('selectGoodType')}
+            style={{
+              width: '100%',
+              height: '59px',
+            }}
+            {...register('goodTypeId', { required: true })}
+            isInvalid={!!errors.goodTypeId}
+            readOnly>
+            <option value="">{t('selectGoodType')}</option>
+            {allGoodTypes &&
+              allGoodTypes.result.map((goodType: IGoodType) => (
+                <option key={goodType.id} value={goodType.id}>
+                  {goodType.nameEnglish}
+                </option>
+              ))}
+          </Form.Control>
+          <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
+        </Form.Group>
+      </div>
+      <Form.Group className="mb-3 d-flex">
+        <Form.Control
+          type="number"
+          placeholder={t('length')}
+          style={{
+            width: '164px',
+            height: '59px',
+          }}
+          isInvalid={!!errors.length}
+          {...register('length')}
+        />
+        <Form.Control
+          type="number"
+          placeholder={t('width')}
+          style={{
+            width: '164px',
+            height: '59px',
+            margin: '0 -2px 0 -2px',
+          }}
+          isInvalid={!!errors.width}
+          {...register('width')}
+        />
+        <Form.Control
+          type="number"
+          placeholder={t('height')}
+          style={{
+            width: '164px',
+            height: '59px',
+          }}
+          isInvalid={!!errors.height}
+          {...register('height')}
+        />
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            marginTop: '10px',
-            marginLeft: '-60%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '59px',
+            width: '68px',
+            backgroundColor: '#E0E0E0',
+            color: '#7A7A7A',
           }}>
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
-            <label className="form-check-label">Cargo item are stackable</label>
-          </div>
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
-            <label>Including ADR goods</label>
-          </div>
+          {t('cm')}
         </div>
-        <Button className="tw-ml-auto tw-mr-auto tw-mt-5" variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    </>
+      </Form.Group>
+
+      <Form.Group className="mb-3 d-flex">
+        <Form.Control
+          type="text"
+          placeholder={t('weightPerItem')}
+          style={{
+            width: '498px',
+            height: '59px',
+          }}
+          isInvalid={!!errors.weightPerItem}
+          {...register('weightPerItem')}
+        />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '59px',
+            width: '68px',
+            backgroundColor: '#E0E0E0',
+            color: '#7A7A7A',
+          }}>
+          {t('kg')}
+        </div>
+      </Form.Group>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          marginTop: '10px',
+          marginLeft: '-60%',
+        }}>
+        <div className="form-check form-switch">
+          <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
+          <label className="form-check-label">{t('cargoItemsStackable')}</label>
+        </div>
+        <div className="form-check form-switch">
+          <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
+          <label>{t('includingADRGoods')}</label>
+        </div>
+      </div>
+      <Button className="tw-ml-auto tw-mr-auto tw-mt-5" variant="primary" type="submit">
+        {t('submit')}
+      </Button>
+    </Form>
   );
 };
 

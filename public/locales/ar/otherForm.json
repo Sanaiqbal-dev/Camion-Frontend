@@ -1,0 +1,15 @@
+{
+  "otherType": "نوع آخر",
+  "enterOtherShipmentType": "أدخل نوع شحنة آخر",
+  "goodType": "نوع البضاعة",
+  "selectGoodType": "اختر نوع البضاعة",
+  "length": "الطول",
+  "width": "العرض",
+  "height": "الارتفاع",
+  "cm": "سم",
+  "weightPerItem": "الوزن لكل قطعة",
+  "kg": "كجم",
+  "cargoItemsStackable": "يمكن تكديس عناصر الشحنة",
+  "includingADRGoods": "بما في ذلك بضائع ADR",
+  "submit": "إرسال"
+  }

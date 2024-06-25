@@ -106,25 +106,22 @@ export interface IProposalForm {
   userId: string;
 }
 
-interface IFileDownload {
-  filePath: string;
-  fileName?: string;
-}
 export interface ICompanyProfile {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
+  FirstName: string;
+  LastName: string;
+  Email: string;
+  PhoneNumber: string;
   companyAccountStatus?: number | null;
   isCompanyAccountActive?: boolean;
-  password: string;
-  confirmPassword: string;
-  companyName: string;
+  Password: string;
+  ConfirmPassword: string;
+  CompanyName: string;
   companyId?: number;
   deleteCompanyAccount?: boolean;
-  fileDownload: IFileDownload[];
-  moiNumber: string;
-  userId: string;
+  MOINumber: string;
+  userId?: string;
+  FileTypes: number[];
+  UploadFile: string[];
 }
 
 export interface IDriver {
@@ -204,4 +201,8 @@ export interface IMarkers {
   longitude: number;
   latitude: number;
   lastUpdatedDate: string;
+}
+export interface IDownloadState {
+  status: boolean;
+  id: any;
 }

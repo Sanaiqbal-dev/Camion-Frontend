@@ -1,0 +1,14 @@
+{
+  "loginTitle": "Login your account",
+  "loginSubtitle": "Log in to a serviced account and create and manage your shipments the way that suits you best",
+  "emailLabel": "Email",
+  "emailPlaceholder": "Enter email address",
+  "passwordLabel": "Password",
+  "login": "Login",
+  "passwordPlaceholder": "Enter password",
+  "forgotPassword": "Forgot your Password?",
+  "noAccount": "Don’t have an account?",
+  "registerAccount": "Register your account",
+  "validationErrorEnterValidEmail": "Enter a valid email.",
+  "validationErrorEnterYourPassword": "Enter your password."
+}

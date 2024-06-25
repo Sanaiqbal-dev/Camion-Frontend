@@ -19,16 +19,20 @@ import CreateVehicleModal from '../Modals/CreateVehicle';
 import EditVehicleModal from '../Modals/EditVehicle';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
 import { debounce } from '@/util/debounce';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { useGetDriversListQuery } from '@/services/drivers';
+import { Toast } from '../ui/toast';
+import { getErrorMessage } from '@/util/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 const VehicleManagement = () => {
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
   });
+  const { t } = useTranslation(['vehicleManagement']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [totalPageCount, setTotalPageCount] = useState(0);
   const values = [10, 20, 30, 40, 50];
@@ -40,24 +44,31 @@ const VehicleManagement = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [editedVehicle, seteditedVehicle] = useState<IVehicle>();
   const [drivers, setDrivers] = useState<IDriver[]>([]);
-  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<number | null>(null);
+  const [vehicleIdfordriver, setVehicleIdfordriver] = useState<{ id: number; driverId: string } | null>(null);
 
   const [showDriverModal, setShowDriverModal] = useState(false);
   const [showCreateVehicle, setShowCreateVehicle] = useState(false);
   const [showEditVehicle, setShowEditVehicle] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [showDriverAssignedToast, setShowDriverAssignedToast] = useState(false);
+
+  const [showAddVehicleToast, setShowAddVehicleToast] = useState(false);
+
   // const [selectedFile, setSelectedFile] = useState<any>();
   const [downloadFile] = useLazyDownloadFileQuery();
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
 
   const { data, isLoading, refetch } = useGetVehiclesQuery({
     page: pager.page - 1,
     pageCount: pager.pageSize,
     term: searchTerm,
   });
+
   const { data: vehicleTypesData, isLoading: isLoadingVehicleTypes } = useGetVehicleTypesQuery({});
-  const [assignDriver] = useAssignDriverMutation();
+  const [assignDriver, { isSuccess: isDriverAssigned, error: DriverAssignmentError }] = useAssignDriverMutation();
   const [deleteVehicle] = useDeleteVehicleMutation();
-  const [createVehicle] = useCreateVehicleMutation();
-  const [editVehicle] = useEditVehicleMutation();
+  const [createVehicle, { isSuccess: isVehicleAdded, error }] = useCreateVehicleMutation();
+  const [editVehicle, { isSuccess: isVehicleUpdated, error: isVehicleNotUpdated }] = useEditVehicleMutation();
   const { data: getDriversList, isLoading: isLoadingDrivers } = useGetDriversListQuery(void 0);
 
   useEffect(() => {
@@ -80,13 +91,22 @@ const VehicleManagement = () => {
 
   const assignDriverHandler = async (id: number) => {
     setShowDriverModal(false);
-    const res = await assignDriver({
-      vehicleId: vehicleIdfordriver,
-      driverId: id,
-    }).unwrap();
-    console.log(res);
-    refetch();
-    const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver);
+    try {
+      const res = await assignDriver({
+        vehicleId: vehicleIdfordriver?.id,
+        driverId: id,
+      }).unwrap();
+      console.log(res);
+      setShowDriverAssignedToast(true);
+      setShowDriverModal(false);
+      refetch();
+    } catch (e) {
+      setShowDriverAssignedToast(true);
+      throw e;
+    }
+
+    const index = vehicles.findIndex((v) => v.id == vehicleIdfordriver?.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const selectedDriver = drivers.find((d: any) => d.id === id);
     if (index !== -1 && selectedDriver) {
       const newvehicles: IVehicle[] = JSON.parse(JSON.stringify(vehicles));
@@ -95,8 +115,8 @@ const VehicleManagement = () => {
     }
     setVehicleIdfordriver(null);
   };
-  const assignDriverClickHandler = (id: number) => {
-    setVehicleIdfordriver(id);
+  const assignDriverClickHandler = (id: number, driverId: string) => {
+    setVehicleIdfordriver({ id: id, driverId: driverId });
     setShowDriverModal(true);
   };
   const editVehicleHandler = (id: number) => {
@@ -104,17 +124,28 @@ const VehicleManagement = () => {
     seteditedVehicle(veh);
     setShowEditVehicle(true);
   };
-  const submitCreateVehicleHandler = async (data: unknown) => {
-    setShowCreateVehicle(false);
-    const resp = await createVehicle(data).unwrap();
+  const submitCreateVehicleHandler = async (data: FormData) => {
+    try {
+      const resp = await createVehicle(data).unwrap();
+      setShowAddVehicleToast(true);
+      console.log(resp);
+    } catch (e) {
+      setShowAddVehicleToast(true);
+      throw e;
+    }
     refetch();
-    console.log(resp);
   };
-  const submitEditVehicleHandler = async (data: IDriver) => {
-    setShowEditVehicle(false);
-    const resp = await editVehicle(data).unwrap();
-    refetch();
-    console.log(resp);
+  const submitEditVehicleHandler = async (data: FormData) => {
+    try {
+      const resp = await editVehicle(data).unwrap();
+      setShowToast(true);
+      refetch();
+      console.log(resp);
+      setShowEditVehicle(false);
+    } catch (e) {
+      setShowToast(true);
+      throw e;
+    }
   };
   const deleteVehicleHandler = async (id: number) => {
     const veh = vehicles.find((v) => v.id === id);
@@ -136,23 +167,26 @@ const VehicleManagement = () => {
   const closeEditModal = () => {
     setShowEditVehicle(false);
   };
-  const downloadSelectedFile = async (fileName?: string) => {
+  const downloadSelectedFile = async (fileName?: string, vehicleId?: number) => {
     console.log('Downloading file:', fileName);
     try {
       if (fileName) {
+        setIsDownloading({ status: true, id: vehicleId });
         await downloadFile(fileName);
         console.log('Download successful!');
+        setIsDownloading({ status: false, id: vehicleId });
       } else {
         console.log('No file selected!');
+        setIsDownloading({ status: false, id: vehicleId });
       }
     } catch (error) {
       console.error('Error downloading file:', error);
+      setIsDownloading({ status: false, id: vehicleId });
     }
   };
   const onVeiwDocumentClick = (id: number) => {
     const selectedVehicle = vehicles?.find((vehicle: IVehicle) => vehicle.id === id);
-    // setSelectedFile(selectedVehicle?.fileName);
-    downloadSelectedFile(selectedVehicle?.fileName);
+    downloadSelectedFile(selectedVehicle?.fileName, selectedVehicle?.id);
   };
 
   useEffect(() => {
@@ -186,17 +220,38 @@ const VehicleManagement = () => {
     editVehicle: editVehicleHandler,
     deleteVehicle: deleteVehicleHandler,
     onViewDocumentClick: onVeiwDocumentClick,
+    documentDownloading: isDownloading,
   });
 
   return (
     <>
+      {showAddVehicleToast && (
+        <Toast
+          variant={isVehicleAdded ? 'success' : 'danger'}
+          message={error ? getErrorMessage(error) : ''}
+          showToast={showAddVehicleToast}
+          setShowToast={setShowAddVehicleToast}
+        />
+      )}
+      {showToast && (
+        <Toast
+          variant={isVehicleUpdated ? 'success' : 'danger'}
+          message={isVehicleNotUpdated ? getErrorMessage(isVehicleNotUpdated) : ''}
+          showToast={showToast}
+          setShowToast={setShowToast}
+        />
+      )}
+      {showDriverAssignedToast && (
+        <Toast
+          variant={isDriverAssigned ? 'success' : 'danger'}
+          message={DriverAssignmentError ? getErrorMessage(DriverAssignmentError) : ''}
+          showToast={showDriverAssignedToast}
+          setShowToast={setShowDriverAssignedToast}
+        />
+      )}
       <div className="table-container">
         <div className="search-and-entries-container">
-          <div>
-            {/* <button className="filter-btn">
-              <img src={IconFilter} /> Filter
-            </button> */}
-          </div>
+          <div></div>
           <div>
             <button
               className="add-item-btn"
@@ -204,14 +259,14 @@ const VehicleManagement = () => {
               onClick={() => {
                 setShowCreateVehicle(true);
               }}>
-              Add Vehicle
+              {t('addVehicle')}
             </button>
           </div>
         </div>
         <div className="tw-flex tw-justify-between tw-items-center">
           <Row className="tw-items-center">
             <Col xs="auto" className="tw-text-secondary">
-              Show
+              {t('show')}
             </Col>
             <Col xs="auto">
               <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -227,7 +282,7 @@ const VehicleManagement = () => {
               </div>
             </Col>
             <Col xs="auto" className="tw-text-secondary">
-              entries
+              {t('entries')}
             </Col>
           </Row>
           <Row className="tw-mt-3">
@@ -236,13 +291,13 @@ const VehicleManagement = () => {
                 <InputGroup.Text>
                   <Image src={SearchIcon} />
                 </InputGroup.Text>
-                <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+                <FormControl type="text" placeholder={t('search')} className="form-control" onChange={handleInputChange}></FormControl>
               </InputGroup>
             </Col>
           </Row>
         </div>
-        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>No Data found.</>}
-        {data && (
+        {vehicles.length ? <DataTable isAction={true} columns={columns} data={vehicles} /> : <>{t('noDataFound')}</>}
+        {vehicles && vehicles.length > 10 && (
           <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5">
             <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2 || entriesValue >= data.result.total} onClick={() => updatePage(-1)}>
               <img src={PreviousIcon} />
@@ -258,10 +313,23 @@ const VehicleManagement = () => {
           </div>
         )}
       </div>
-      <AssignDriverModal show={showDriverModal} drivers={drivers} handleClose={() => setShowDriverModal(false)} onAssignDriver={assignDriverHandler} />
+      {showDriverModal && (
+        <AssignDriverModal
+          show={showDriverModal}
+          drivers={drivers}
+          assignedDriverId={vehicleIdfordriver?.driverId}
+          handleClose={() => setShowDriverModal(false)}
+          onAssignDriver={assignDriverHandler}
+        />
+      )}
       <CreateVehicleModal show={showCreateVehicle} vehicleTypes={vehicleTypes} handleClose={closeCreateModal} onSubmitForm={submitCreateVehicleHandler} />
       <EditVehicleModal vehicle={editedVehicle} vehicleTypes={vehicleTypes} handleClose={closeEditModal} show={showEditVehicle} onSubmitForm={submitEditVehicleHandler} />
-      <ConfirmationModal show={isConfirmationModalOpen} promptMessage="Are you sure?" handleClose={() => setIsConfirmationModalOpen(false)} performOperation={onDeleteHandler} />
+      <ConfirmationModal
+        show={isConfirmationModalOpen}
+        promptMessage={t('deleteVehicleConfirmation')}
+        handleClose={() => setIsConfirmationModalOpen(false)}
+        performOperation={onDeleteHandler}
+      />
     </>
   );
 };

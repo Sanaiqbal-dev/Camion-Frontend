@@ -4,7 +4,8 @@ import { IAPIResponse, IDriver } from '@/interface/common';
 
 export const Drivers = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    addNewDriver: builder.mutation<IAPIResponse<IDriver[]>, any>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    addNewDriver: builder.mutation<IAPIResponse<FormData>, any>({
       query: (body) => ({
         url: '/api/Drivers/AddNewDriver',
         method: 'POST',
@@ -12,6 +13,7 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Driver'],
     }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getDriversList: builder.query<IAPIResponse<IDriver[]>, any>({
       query: (queryParams) => `/api/Drivers/GetDriverList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['Driver'],
@@ -29,11 +31,12 @@ export const Drivers = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Driver'],
     }),
-    updateDriver: builder.mutation<IAPIResponse<IDriver>, any>({
-      query: ({ id, ...rest }) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updateDriver: builder.mutation<IAPIResponse<FormData>, any>({
+      query: (body) => ({
         url: `/api/Drivers/UpdateDriver`,
         method: 'PUT',
-        body: { id, ...rest },
+        body,
       }),
       invalidatesTags: ['Driver'],
     }),

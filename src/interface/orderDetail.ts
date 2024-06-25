@@ -57,8 +57,8 @@ export interface IOrderDetail {
 export interface IOrderDetailIndex extends IOrder {
   orderDetailId: number;
   orderDetailLabel: string;
-  orderLabel: any;
-  aspNetUserLabel?: any;
+  orderLabel: string;
+  aspNetUserLabel?: string;
 }
 
 export interface IOrderResponseData {
@@ -69,9 +69,12 @@ export interface IOrderResponseData {
   dimentions: string;
   origin: string;
   status: string;
+  statusId: number;
   trackingId: string;
+  vehicleId: number;
   type: string;
   weight: string;
+  bayanId: number;
 }
 export interface OrderResult {
   total: number;
@@ -83,11 +86,14 @@ export interface IProposalResponseObject {
   statusCode: number;
   result: OrderResult;
   message?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
 }
 
 export interface IOrderDetailSingle extends IOrder {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   orderLabel: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   aspNetUserLabel?: any;
 }
 

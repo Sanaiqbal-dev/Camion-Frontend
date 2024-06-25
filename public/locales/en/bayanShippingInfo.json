@@ -1,0 +1,17 @@
+{
+  "modalTitle": "Shipping Info",
+  "shipmentTypeLabel": "Shipment Type",
+  "selectShipmentTypePlaceholder": "Select shipment type",
+  "estimatedPickupDateLabel": "Estimated Pickup Date",
+  "selectPickupDatePlaceholder": "Select pickup date",
+  "estimatedDropOffDateLabel": "Estimated Drop Off Date",
+  "selectDropOffDatePlaceholder": "Select drop off date",
+  "fareLabel": "Fare",
+  "enterFarePlaceholder": "Enter fare",
+  "submitButton": "Next",
+  "errorSelectShipmentType": "Select shipment type",
+  "errorSelectPickupDate": "Select pickup date",
+  "errorSelectDropOffDate": "Select drop Off date",
+  "errorEnterFare": "Enter fare",
+  "errorDropOffDateMustBeLater": "Drop Off date must be later than Pickup date"
+}

@@ -6,10 +6,8 @@ import NextIcon from '../../assets/icons/ic-next.svg';
 import SearchIcon from '../../assets/icons/ic-search.svg';
 import { useEffect, useState } from 'react';
 import CreateNewRequest from '../Modals/CreateNewRequest';
-import ShippementDetails from '../Modals/ShippementDetails';
-import { IProposalResponseData, IShipmentDetails, IShipmentType } from '@/interface/proposal';
+import { IProposalResponseData, IShipmentDetails } from '@/interface/proposal';
 import { INewRequest, IRequestTable } from '@/interface/shipper';
-import { useGetShipmentTypesQuery } from '@/services/shipmentType';
 import { useCreateNewProposalMutation, useDeleteProposalMutation, useGetProposalsQuery, useUpdateProposalMutation } from '@/services/proposal';
 import { useAppSelector } from '@/state';
 import { PAGER_SIZE } from '@/config/constant';
@@ -19,8 +17,12 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import ShipmentDetail from '../Modals/ShipmentDetail';
+import { useTranslation } from 'react-i18next';
 
 const ShipperRequests = () => {
+  const { t } = useTranslation(['shipperRequests']);
+
   const userData = useAppSelector((state) => state.session);
   const [sendProposalRequest, setSendProposalRequest] = useState(false);
 
@@ -30,10 +32,10 @@ const ShipperRequests = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  const shipmentData = useGetShipmentTypesQuery();
   const [createNewProposal, { isSuccess: isProposalCreated }] = useCreateNewProposalMutation();
   const [updateProposal, { isSuccess: isProposalUpdated }] = useUpdateProposalMutation();
   const [deleteProposal, { isSuccess: isProposalDeleted }] = useDeleteProposalMutation();
+  const [requestFailedMessage, setRequestFailedMessage] = useState('');
   const navigate = useNavigate();
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
@@ -43,7 +45,7 @@ const ShipperRequests = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const [isEditProposal, setIsEditProposal] = useState(false);
-  const [isDeletePropoasl, setIsDeleteProposal] = useState(false);
+  const [isDeleteProposal, setIsDeleteProposal] = useState(false);
 
   const [deleteItemId, setDeleteItemId] = useState<number>();
   const { data: currentData, error } = useGetProposalsQuery({
@@ -106,34 +108,26 @@ const ShipperRequests = () => {
     setShowShippementDetailsModal(true);
   };
 
-  const setShipmentDetails = async (data: IShipmentDetails, shipmentType: string) => {
-    const shipmentDataAll: IShipmentType[] = shipmentData.data?.result;
-    const shipmentTypeId = shipmentDataAll?.find((type) => type.name === shipmentType) && shipmentDataAll?.find((type) => type.name === shipmentType)?.id;
-
-    const shipmentTruckTypeDefault = shipmentType === 'Truck' ? data : [{ noOfTrucks: 0, truckTypeId: 0 }];
-    const shipmentQuantityVal = shipmentType === 'Box' ? data.numberOfBoxes : shipmentType === 'Pallet' ? data.numberOfPallets : 0;
-
-    const itemWeight = shipmentType === 'Truck' ? '0' : data.weightPerItem;
-    const itemHeight = shipmentType === 'Other' ? data.height : 0;
-    const otherItemName = shipmentType === 'Other' ? data.otherType : '';
-
+  const setShipmentDetails = async (requestShipmentData: IShipmentDetails) => {
+    console.log(requestShipmentData);
+    const shipmentTruckTypeDefault = [{ noOfTrucks: 0, truckTypeId: 0 }];
     setProposalItem((prevItem?: any) => ({
       ...prevItem,
-      shipmentTypeId: shipmentTypeId,
-      shipmentQuantity: shipmentQuantityVal,
-      length: data.length ? data.length : 0,
-      width: data.width ? data.width : 0,
-      height: itemHeight,
-      isCargoItemsStackable: data.isCargoItemsStackable ? data.isCargoItemsStackable : false,
-      isIncludingItemsARGood: data.isIncludingItemsARGood ? data.isIncludingItemsARGood : false,
+      shipmentTypeId: requestShipmentData.shipmentTypeId,
+      shipmentQuantity: requestShipmentData.quantity,
+      length: requestShipmentData.length,
+      width: requestShipmentData.width,
+      height: requestShipmentData.height,
+      isCargoItemsStackable: requestShipmentData.isCargoItemsStackable,
+      isIncludingItemsARGood: requestShipmentData.isIncludingItemsARGood,
       shipmentTruckType: shipmentTruckTypeDefault,
       userId: userData.user.userId,
-      weight: Number(itemWeight),
-      otherName: otherItemName,
+      weight: requestShipmentData.weightPerItem,
+      otherName: '',
       proposalId: isEditProposal ? selectedProposalItem : 0,
       FileName: '',
       FilePath: '',
-      goodTypeId: Number(data.goodTypeId),
+      goodTypeId: Number(requestShipmentData.goodTypeId),
     }));
 
     setSendProposalRequest(false);
@@ -141,8 +135,9 @@ const ShipperRequests = () => {
   };
 
   const FilterDataForTable = (requestItems: IProposalResponseData[]) => {
-    setRequestTableData([]);
     if (requestItems) {
+      setRequestTableData([]);
+
       const updatedRequestData = requestItems.map((currentRequestObject) => ({
         id: currentRequestObject.id,
         origin: currentRequestObject.origin,
@@ -181,9 +176,11 @@ const ShipperRequests = () => {
     try {
       await deleteProposal({ id: deleteItemId }).unwrap();
       setShowToast(true);
-    } catch (error) {
+    } catch (error: any) {
+      setRequestFailedMessage(error?.error);
       setShowToast(true);
     }
+    setIsDeleteProposal(false);
   };
 
   const updatePage = (action: number) => {
@@ -210,7 +207,6 @@ const ShipperRequests = () => {
   const ProposalCreateOrUpdateRequest = async () => {
     try {
       const response = isEditProposal ? await updateProposal(proposalItem).unwrap() : await createNewProposal(proposalItem).unwrap();
-      // console.log('Create New Proposal response: ', response?.result?.result);
       FilterDataForTable(response?.result.result);
       setShowShippementDetailsModal(false);
       setIsEditProposal(false);
@@ -218,7 +214,10 @@ const ShipperRequests = () => {
       setProposalItem({} as any);
       setSendProposalRequest(false);
       setShowToast(true);
-    } catch (e) {
+      setRequestFailedMessage('');
+    } catch (e: any) {
+      setRequestFailedMessage(isEditProposal ? e.data?.message : e.error);
+      isEditProposal && setIsEditProposal(false);
       setShowToast(true);
     }
   };
@@ -245,18 +244,25 @@ const ShipperRequests = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? 'success' : 'danger'} />}
+      {showToast && (
+        <Toast
+          showToast={showToast}
+          setShowToast={setShowToast}
+          variant={isProposalDeleted || isProposalCreated || isProposalUpdated ? t('successToast') : t('dangerToast')}
+          message={requestFailedMessage}
+        />
+      )}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <div>
           <button className="add-item-btn" id="add-driver-btn" onClick={() => SetShowCreateUserModalFirstStep(true)}>
-            Create new Request
+            {t('createNewRequest')}
           </button>
         </div>
       </div>
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('showLabel')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -272,7 +278,7 @@ const ShipperRequests = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entriesLabel')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -281,7 +287,7 @@ const ShipperRequests = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -319,7 +325,7 @@ const ShipperRequests = () => {
         }}
         handleNextStep={goToShippementDetails}
       />
-      <ShippementDetails
+      <ShipmentDetail
         show={showShippementDetailsModal}
         isEdit={isEditProposal}
         proposalId={isEditProposal && selectedProposalItem ? selectedProposalItem : undefined}
@@ -331,18 +337,12 @@ const ShipperRequests = () => {
         handleFormDataSubmission={setShipmentDetails}
       />
       <ConfirmationModal
-        promptMessage={
-          isEditProposal
-            ? 'Are you sure, you want to update this request?'
-            : isDeletePropoasl
-              ? 'Are you sure, you want to delete this request?'
-              : 'Are you sure, you want to create new request?'
-        }
+        promptMessage={isEditProposal ? t('updateRequestConfirmation') : isDeleteProposal ? t('deleteRequestConfirmation') : t('createNewRequestConfirmation')}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {
           setShowConfirmationModal(false);
-          isDeletePropoasl ? DeleteProposal() : setSendProposalRequest(true);
+          isDeleteProposal ? DeleteProposal() : setSendProposalRequest(true);
         }}
       />
     </div>

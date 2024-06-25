@@ -1,0 +1,15 @@
+{
+  "origin": "Origin",
+  "destination": "Destination",
+  "weight": "Weight",
+  "dimensions": "Dimensions",
+  "eta": "ETA",
+  "status": "Status",
+  "action": "Action",
+  "selectStatus": "Select Status",
+  "delete": "Delete",
+  "assignVehicle": "Assign Vehicle",
+  "vehicleAssigned": "Vehicle Assigned",
+  "printBayan": "Print Bayan",
+  "createBayan": "Create Bayan"
+}

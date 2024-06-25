@@ -2,10 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
-import { IPlaces } from '@/interface/proposal';
+import React, { useState } from 'react';
+// import { IPlaces } from '@/interface/proposal';
 import { useGetCityListQuery, useGetDistrictListQuery } from '@/services/proposal';
 import { ILocation } from '@/interface/bayan';
+import { useTranslation } from 'react-i18next';
 
 interface BayanLocationModalProps {
   show: boolean;
@@ -13,19 +14,20 @@ interface BayanLocationModalProps {
   infoType?: string;
   handleNextStep: (requestObj: ILocation) => void;
 }
-const schema = z.object({
-  name: z.string().min(3, 'Enter name'),
-  phoneNumber: z.string().regex(/^\+?\d[\d\s]{9,}$/, 'Enter a valid contact number.'),
-  buildingNumber: z.string().min(1, 'Building number is required'),
-  streetName: z.string().min(1, 'Enter street name'),
-  districtId: z.string().min(1, 'Please enter your district name'),
-  cityId: z.string().min(1, 'City name is required'),
-  zipCode: z.coerce.number().min(1, 'Zip code is required'),
-  additionalNumber: z.coerce.number(),
-  unitNo: z.string(),
-});
 
 const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClose, handleNextStep, infoType = 'pickup' }) => {
+  const { t } = useTranslation(['bayanLocation']);
+  const schema = z.object({
+    name: z.string().min(3, t('errorEnterName')),
+    phoneNumber: z.string().regex(/^\+966\d{9}$/, t('errorPhoneNumberFormat')),
+    buildingNumber: z.string().min(1, t('errorBuildingNumberRequired')),
+    streetName: z.string().min(1, t('errorEnterStreetName')),
+    districtId: z.string().min(1, t('errorDistrictNameRequired')),
+    cityId: z.string().min(1, t('errorCityNameRequired')),
+    zipCode: z.coerce.number().min(1, t('errorZipCodeRequired')),
+    additionalNumber: z.coerce.number(),
+    unitNo: z.string(),
+  });
   const {
     register,
     handleSubmit,
@@ -35,8 +37,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     resolver: zodResolver(schema),
   });
 
-  const [cityList, setCityList] = useState<IPlaces[]>();
-  const [districtList, setDistrictList] = useState<IPlaces[]>();
+  // const [cityList, setCityList] = useState<IPlaces[]>();
+  // const [districtList, setDistrictList] = useState<IPlaces[]>();
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<number>(0);
 
@@ -44,8 +46,8 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
   const { data: cityData } = useGetCityListQuery(selectedDistrict);
 
   const onSubmit: SubmitHandler<ILocation> = async (data) => {
-    const city_ = cityList?.find((item) => item.name === selectedCity)?.id || 0;
-    const district_ = districtList?.find((item) => item.id === selectedDistrict)?.id || 0;
+    const city_ = cityData?.result?.find((item) => item.name === selectedCity)?.id || 0;
+    const district_ = districtData?.result?.find((item) => item.id === selectedDistrict)?.id || 0;
     const locationObject = {
       name: data.name,
       phoneNumber: data.phoneNumber,
@@ -65,127 +67,81 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
     console.error('Form errors', error);
   };
 
-  useEffect(() => {
-    if (cityData) {
-      setCityList(cityData.result);
-      console.log(cityData.result);
-    }
-    if (districtData) {
-      setDistrictList(districtData.result);
-      console.log(districtData.result);
-    }
-  }, [cityData, districtData]);
   return (
-    <Modal show={show} onHide={handleClose} centered size={'sm'} backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size={'lg'} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{infoType == 'pickup' ? 'Pick Up Location' : 'Delivery Location'}</Modal.Title>
+        <Modal.Title>{infoType === 'pickup' ? t('modalTitlePickup') : t('modalTitleDelivery')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit, onError)}>
-          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
-            <Form.Group className="mb-3">
-              <Form.Label>Search your address to auto fill all the details</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Start with street name"
-                style={{
-                  width: '560px',
-                  height: '59px',
-                }}
-              />
+          <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10" style={{ flex: 1, width: '100%' }}>
+            <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('labelSearchAddress')}</Form.Label>
+              <Form.Control type="text" placeholder={t('placeholderStreetName')} style={{ height: '59px' }} />
             </Form.Group>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
-                <Form.Label>{infoType == 'pickup' ? "Sender's Name" : "Reciever's Name"}</Form.Label>
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{infoType === 'pickup' ? t('labelSenderName') : t('labelReceiverName')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter sender's name"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderSenderName')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('name')}
                   isInvalid={!!errors.name}
                 />
                 <Form.Control.Feedback type="invalid">{errors.name?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>{infoType == 'pickup' ? "Sender's" : "Reciever's"} Phone Number</Form.Label>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{infoType === 'pickup' ? t('labelSenderPhoneNumber') : t('labelReceiverPhoneNumber')}</Form.Label>
                 <Form.Control
-                  type="number"
-                  placeholder="Enter Phone Number"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  type="string"
+                  placeholder={t('placeholderPhoneNumber')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
+                  defaultValue="+966"
                   {...register('phoneNumber')}
                   isInvalid={!!errors.phoneNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.phoneNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
-                <Form.Label>Building number</Form.Label>
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelBuildingNumber')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="12345"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderBuildingNumber')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('buildingNumber')}
                   isInvalid={!!errors.buildingNumber}
                 />
                 <Form.Control.Feedback type="invalid">{errors.buildingNumber?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Street name</Form.Label>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelStreetName')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Any street name"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderStreetNameInput')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('streetName')}
                   isInvalid={!!errors.streetName}
                 />
                 <Form.Control.Feedback type="invalid">{errors.streetName?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
-                <Form.Label>District name</Form.Label>
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelDistrictName')}</Form.Label>
                 <Form.Control
                   as="select"
-                  placeholder="Select district"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderSelectDistrict')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('districtId', { required: true })}
                   isInvalid={!!errors.districtId}
                   onChange={(e) => setSelectedDistrict(Number(e.target.value))}
                   readOnly>
-                  <option value="">Select District</option>
-                  {districtList &&
-                    districtList.map((district) => (
+                  <option value="">{t('placeholderSelectDistrict')}</option>
+                  {districtData &&
+                    districtData.result.map((district) => (
                       <option key={district.id} value={district.id}>
                         {district.name}
                       </option>
@@ -193,25 +149,19 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.districtId?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>City name</Form.Label>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelCityName')}</Form.Label>
                 <Form.Control
                   as="select"
-                  placeholder="Select city"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderSelectCity')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('cityId', { required: true })}
                   isInvalid={!!errors.cityId}
                   onChange={(e) => setSelectedCity(e.target.value)}
                   readOnly>
-                  <option value="">Select City</option>
-                  {cityList &&
-                    cityList.map((city) => (
+                  <option value="">{t('placeholderSelectCity')}</option>
+                  {cityData &&
+                    cityData.result.map((city) => (
                       <option key={city.id} value={city.name}>
                         {city.name}
                       </option>
@@ -220,31 +170,24 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
                 <Form.Control.Feedback type="invalid">{errors.cityId?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div style={{ display: 'flex', gap: '18px' }}>
-              <Form.Group className="mb-3">
-                <Form.Label>Zip code</Form.Label>
+            <div style={{ display: 'flex', gap: '18px', flex: 1, width: '100%' }}>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelZipCode')}</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="15618"
-                  style={{
-                    width: '270px',
-                    height: '50px',
-                    borderTop: 'none',
-                    borderRight: 'none',
-                    borderLeft: 'none',
-                  }}
+                  placeholder={t('placeholderZipCode')}
+                  style={{ height: '50px', borderTop: 'none', borderRight: 'none', borderLeft: 'none' }}
                   {...register('zipCode')}
                   isInvalid={!!errors.zipCode}
                 />
                 <Form.Control.Feedback type="invalid">{errors.zipCode?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Additional number</Form.Label>
+              <Form.Group className="mb-3" style={{ flex: 1, width: '100%' }}>
+                <Form.Label>{t('labelAdditionalNumber')}</Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="121212"
                   style={{
-                    width: '270px',
                     height: '50px',
                     borderTop: 'none',
                     borderRight: 'none',
@@ -257,13 +200,12 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
               </Form.Group>
             </div>
 
-            <Form.Group className="mb-3" controlId="formBasicConfirmPassword">
-              <Form.Label>Unit no</Form.Label>
+            <Form.Group className="mb-3" controlId="formBasicConfirmPassword" style={{ flex: 1, width: '100%' }}>
+              <Form.Label>{t('labelUnitNo')}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="121212"
                 style={{
-                  width: '560px',
                   height: '59px',
                   borderTop: 'none',
                   borderRight: 'none',
@@ -276,7 +218,7 @@ const BayanLocationModal: React.FC<BayanLocationModalProps> = ({ show, handleClo
             </Form.Group>
           </div>
           <Button variant="primary" type="submit">
-            Next
+            {t('buttonNext')}
           </Button>
         </Form>
       </Modal.Body>

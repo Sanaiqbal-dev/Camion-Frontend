@@ -1,0 +1,16 @@
+{
+  "proposalDetails": "Proposal Details",
+  "amount": "Amount",
+  "enterAmount": "Enter amount",
+  "expectedDeliveryDate": "Expected Delivery Date",
+  "selectDate": "Select a date",
+  "otherDetails": "Other Details",
+  "enterText": "Enter text here",
+  "uploadDocument": "Upload Document (if any)",
+  "uploadTheDocument": "Upload the document",
+  "submitProposal": "Submit Proposal",
+  "validationErrorAmount": "Amount must be greater than 100 and less than 100000",
+  "validationAmmountNumber": "Ammount must be a number",
+  "validationErrorDeliveryDate": "Date must be greater than today and not more than 5 days from today.",
+  "validationErrorOtherDetails": "Enter additional details about order proposal."
+}

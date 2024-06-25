@@ -1,0 +1,13 @@
+{
+  "toastSuccess": "نجح",
+  "toastDanger": "خطأ",
+  "filter": "تصفية",
+  "addVehicle": "إضافة مركبة",
+  "show": "عرض",
+  "entries": "إدخالات",
+  "search": "بحث",
+  "noDataFound": "لم يتم العثور على بيانات.",
+  "previous": "السابق",
+  "next": "التالي",
+  "deleteVehicleConfirmation": "هل أنت متأكد أنك تريد حذف هذه المركبة؟"
+}

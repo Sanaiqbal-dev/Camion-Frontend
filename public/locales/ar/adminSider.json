@@ -1,0 +1,13 @@
+{
+  "show": "عرض",
+  "entries": "إدخالات",
+  "searchPlaceholder": "بحث",
+  "deleteOrderPrompt": "هل أنت متأكد أنك تريد حذف هذا الطلب؟",
+  "createNewUser": "إنشاء مستخدم جديد",
+  "noUsersFound": "لم يتم العثور على مستخدمين",
+  "confirmationPrompt": "هل أنت متأكد؟",
+  "userProfiles": "ملفات المستخدمين",
+  "orderManagement": "إدارة الطلبات",
+  "reportManagement": "إدارة التقارير",
+  "logout": "تسجيل الخروج"
+}

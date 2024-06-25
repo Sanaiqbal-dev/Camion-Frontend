@@ -1,0 +1,20 @@
+{
+  "goodType": "نوع البضائع",
+  "selectGoodType": "اختر نوع البضائع",
+  "quantity": "الكمية",
+  "length": "الطول",
+  "width": "العرض",
+  "height": "الارتفاع",
+  "cm": "سم",
+  "weightPerItem": "الوزن لكل عنصر",
+  "stackableCargo": "البضائع قابلة للتكديس",
+  "includingADR": "تشمل ADR",
+  "submit": "إرسال",
+  "fillInShipmentDetails": "املأ تفاصيل الشحنة الأخرى",
+  "enterNumberOfItems": "أدخل عدد العناصر",
+  "enterLengthInCm": "أدخل الطول بالسنتيمتر",
+  "enterWidthInCm": "أدخل العرض بالسنتيمتر",
+  "enterHeightInCm": "أدخل الارتفاع بالسنتيمتر",
+  "enterWeightPerItem": "يرجى إدخال الوزن لكل عنصر",
+  "goodTypeRequired": "نوع البضاعة مطلوب"
+}

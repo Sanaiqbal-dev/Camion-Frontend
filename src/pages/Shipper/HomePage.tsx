@@ -1,34 +1,29 @@
-import { Outlet, useLocation, Link } from 'react-router-dom';
-import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import NotificationIcon from '../../assets/icons/ic-notification.svg';
-import MenuIcon from '../../assets/icons/ic-menu.svg';
-import { Image } from 'react-bootstrap';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import ShipperSider from '../../components/Shipper/ShipperSider';
-import ActivateProfile from '../../components/Modals/ActivateProfile';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/state';
+import { RxAvatar } from 'react-icons/rx';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const { t } = useTranslation(['shipperHomePage']);
+  const profileImage = useAppSelector((state) => state.session?.profileImage);
+
   const currentPageTitle = useLocation();
   const pageTitleMap = [
-    { pathname: '/shipper/shipperdashboard', title: 'Dashboard' },
-    { pathname: '/shipper/shipperrequests', title: 'Requests' },
-    { pathname: '/shipper/shipperorders', title: 'Orders' },
-    { pathname: '/shipper/userManagement', title: 'User Management' },
-    { pathname: '/shipper/proposals', title: 'Proposals' },
-    { pathname: '/shipper/proposalssecond', title: 'Proposals' },
-    { pathname: '/shipper/shippertracking', title: 'Tracking' },
+    { pathname: '/shipper/shipperdashboard', title: t('dashboard') },
+    { pathname: '/Shipper/shipperrequests', title: t('requests') },
+    { pathname: '/shipper/shipperorders', title: t('orders') },
+    { pathname: '/shipper/usermanagement', title: t('userManagement') },
+    { pathname: '/shipper/proposals', title: t('proposals') },
+    { pathname: '/shipper/shippertracking', title: t('tracking') },
   ];
 
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentPageTitle.pathname);
-
     return pageObject?.title ? pageObject.title : '';
   };
 
   const toggleSidebar = () => {};
-  const showCreateCompanyNotification = useSelector((state: any) => !state.session.isCompanyAccount) && currentPageTitle.pathname === '/shipper/shipperdashboard';
 
   return (
     <div className="wrapper" style={{ backgroundColor: '#F3F3F3' }}>
@@ -45,34 +40,19 @@ const HomePage = () => {
         </div>
         <header className="page-title bg-transparent d-flex justify-content-between align-items-center">
           <span style={{ fontWeight: '700', color: '#535353' }}>{GetPageTitle()}</span>
-
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to="/shipper/usermanagement">
-              <Image className="profile-img" src={ProfileIcon} />
-            </Link>
-            <Image className="notification-icon" src={NotificationIcon} alt="Notifications" width="22" height="22" />
-            <Image className="menu-icon" src={MenuIcon} alt="Menu" width="22" height="22" />
-            {showCreateCompanyNotification && (
-              <div
-                style={{
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  textAlign: 'left',
-                  color: '#000000',
-                  backgroundColor: '#F9090973',
-                  borderRadius: '45px',
-                  padding: '4px',
-                }}>
-                To activate your profile please complete your profile details,
-                <span style={{ textDecoration: 'underline', cursor: 'pointer' }} onClick={() => setShowProfileModal(true)}>
-                  Click Here
-                </span>
+              <div style={{ height: '55px', width: '55px', borderRadius: '50%', backgroundColor: '#ccc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {profileImage !== '' ? (
+                  <img src={profileImage} style={{ height: '55px', width: '55px', borderRadius: '50%' }} />
+                ) : (
+                  <RxAvatar style={{ height: '100%', width: '100%' }} />
+                )}
               </div>
-            )}
+            </Link>
           </div>
         </header>
-        <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} />
+
         <div className="mt-4">
           <Outlet />
         </div>

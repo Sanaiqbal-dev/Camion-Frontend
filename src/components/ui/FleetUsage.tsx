@@ -1,20 +1,24 @@
 import { Card, Image } from 'react-bootstrap';
 import GraphTestImage from '../../assets/images/graph-test-img.svg';
+import { useTranslation } from 'react-i18next';
+
 const FleetUsage = () => {
+  const { t } = useTranslation(['fleetUsage']);
+
   return (
     <Card className="fleet-info-card" style={{ borderRadius: '16px', backgroundColor: 'white', border: 'none', height: '100%' }}>
       <Card.Body className="col">
-        <div className="row  m-3d-flex flex-row justify-content-between">
-          <span className="col-4 fw-bold">Fleet Usage</span>
+        <div className="row m-3 d-flex flex-row justify-content-between">
+          <span className="col-4 fw-bold">{t('fleetUsage')}</span>
           <div className="col-8 text-end">
-            <span className="fw-semibold">Today</span> <br />
+            <span className="fw-semibold">{t('today')}</span> <br />
             <br />
             <span className="fw-semibold">
-              Total fleet usage <span style={{ color: '#0060B8' }}>400km</span>
+              {t('totalFleetUsage')} <span style={{ color: '#0060B8' }}>400km</span>
             </span>
             <br />
             <span className="fw-semibold">
-              Avg. Distance/Object <span style={{ color: '#0060B8' }}>400km</span>
+              {t('avgDistanceObject')} <span style={{ color: '#0060B8' }}>400km</span>
             </span>
           </div>
         </div>

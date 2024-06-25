@@ -1,0 +1,22 @@
+{
+  "totalOrders": "إجمالي الطلبات",
+  "orderIncrease": "زيادة الطلبات",
+  "orderDecrease": "انخفاض الطلبات",
+  "activeOrders": "الطلبات النشطة",
+  "onRoute": "في الطريق",
+  "ordersThisMonth": "الطلبات هذا الشهر",
+  "totalVehicles": "إجمالي المركبات",
+  "totalDrivers": "إجمالي السائقين",
+  "overspeed": "تجاوز السرعة",
+  "maxSpeed": "السرعة القصوى",
+  "alerts": "التنبيهات",
+  "fenceOverstay": "البقاء المفرط في المنطقة المحددة",
+  "maxOverstay": "أقصى مدة للبقاء المفرط",
+  "acMisuse": "إساءة استخدام التكييف",
+  "approxFuelWaste": "مقدار هدر الوقود التقريبي",
+  "stayAwayFromZone": "ابتعد عن المنطقة",
+  "stayInZone": "ابق في المنطقة",
+  "temperature": "درجة الحرارة",
+  "minTemp": "درجة الحرارة الدنيا",
+  "maxTemp": "درجة الحرارة القصوى"
+}

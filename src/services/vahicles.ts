@@ -4,14 +4,17 @@ import { ICustomAPIRes, TVehicleTypeList } from '@/interface/vehicle';
 
 export const proposalApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVehicles: builder.query<any, any>({
       query: (queryParams) => `/api/Vehicles/GetVehicleList${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
       providesTags: ['VehicleList'],
     }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getVehicleTypes: builder.query<any, any>({
       query: () => `/api/Vehicles/GetVehicleTypes`,
     }),
-   
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     assignDriver: builder.mutation<any, any>({
       query: (body) => ({
         url: '/api/Vehicles/AssignDriverToVehicle',
@@ -19,6 +22,7 @@ export const proposalApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     deleteVehicle: builder.mutation<any, { id: number }>({
       query: ({ id }) => ({
         url: '/api/Vehicles/DeleteVehicle?id=' + id,
@@ -26,7 +30,8 @@ export const proposalApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['VehicleList'],
     }),
-    createVehicle: builder.mutation<any, any>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    createVehicle: builder.mutation<FormData, any>({
       query: (body) => ({
         url: '/api/Vehicles/AddNewVehicle',
         method: 'POST',
@@ -34,7 +39,8 @@ export const proposalApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['VehicleList'],
     }),
-    editVehicle: builder.mutation<any, any>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    editVehicle: builder.mutation<FormData, any>({
       query: (body) => ({
         url: '/api/Vehicles/UpdateVehicle',
         method: 'PUT',

@@ -11,17 +11,17 @@ import Profiles from '../components/Admin/Profiles';
 import OrderManagement from '../components/Admin/OrderManagement';
 import ReportManagement from '../components/Admin/ReportManagement';
 import AdminUserManagement from '../components/Admin/AdminUserManagement';
-import Settings from '../components/Admin/Settings';
 import ShipperDashboard from '../components/Shipper/ShipperDashboard';
 import ShipperOrders from '../components/Shipper/ShipperOrders';
 import ShipperRequests from '../components/Shipper/ShipperRequests';
 import Proposals from '../components/Shipper/Proposals';
-import ProposalsSecond from '../components/Shipper/ProposalsSecond';
 import ShipperTracking from '../components/Shipper/ShipperTracking';
 import UserManagementShipper from '../components/Shipper/UserManagementShipper';
 import UserManagement from '../components/Carrier/UserManagement';
 import BayanBill from '../components/Carrier/BayanBill';
 import PrivateRoute from './PrivateRoute';
+import { Loading } from '@/components/Modals/Loading';
+import { ProfilePage } from '@/components/ProfilePage';
 
 const LazyCarrierHome = lazy(() => import('../pages/Carrier/CarrierHomePage'));
 const LazyAdminHome = lazy(() => import('../pages/Admin/AdminHomePage'));
@@ -31,15 +31,12 @@ const LazyRegister = lazy(() => import('../pages/Register'));
 const LazyCompanyVerification = lazy(() => import('../pages/CompanyVerification'));
 const LazyForgotPassword = lazy(() => import('../pages/ForgetPassword'));
 
-const withSuspense = (Component: ReactElement, fallback: ReactElement = <div>Loading...</div>): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
+const withSuspense = (Component: ReactElement, fallback: ReactElement = <Loading size={100} />): ReactElement => <Suspense fallback={fallback}>{Component}</Suspense>;
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: withSuspense(<LazyLogin />),
-    // element: withSuspense(<LazyCarrierHome />),
-    // element: withSuspense(<LazyShipperHome />),
-    // element: withSuspense(<LazyAdminHome />),
   },
   {
     path: '/carrier',
@@ -123,10 +120,6 @@ export const router = createBrowserRouter([
             path: 'proposals',
             element: <Proposals />,
           },
-          {
-            path: 'proposalssecond',
-            element: <ProposalsSecond />,
-          },
         ],
       },
     ],
@@ -156,28 +149,32 @@ export const router = createBrowserRouter([
             path: 'adminUserManagement',
             element: <AdminUserManagement />,
           },
-          {
-            path: 'settings',
-            element: <Settings />,
-          },
         ],
       },
     ],
   },
   {
     path: '/login',
-    element: withSuspense(<LazyLogin />, <div>Loading Login...</div>),
+    element: withSuspense(<LazyLogin />, <Loading size={100} />),
   },
   {
     path: '/register',
-    element: withSuspense(<LazyRegister />, <div>Loading Register...</div>),
+    element: withSuspense(<LazyRegister />, <Loading size={100} />),
   },
   {
     path: '/companyVerification',
-    element: withSuspense(<LazyCompanyVerification />, <div>Loading...</div>),
+    element: withSuspense(<LazyCompanyVerification />, <Loading size={100} />),
   },
   {
     path: '/forgotPassword',
-    element: withSuspense(<LazyForgotPassword />, <div>Loading...</div>),
+    element: withSuspense(<LazyForgotPassword />, <Loading size={100} />),
+  },
+  {
+    path: '/shipper/profile',
+    element: <ProfilePage />,
+  },
+  {
+    path: '/carrier/profile',
+    element: <ProfilePage />,
   },
 ]);

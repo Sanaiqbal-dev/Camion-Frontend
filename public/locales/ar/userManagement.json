@@ -1,0 +1,10 @@
+{
+  "createUser": "إنشاء مستخدم جديد",
+  "show": "عرض",
+  "entries": "إدخالات",
+  "search": "بحث",
+  "noUsersFound": "لم يتم العثور على مستخدمين!",
+  "previous": "السابق",
+  "next": "التالي",
+  "confirmationMessage": "هل أنت متأكد؟"
+}

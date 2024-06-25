@@ -1,7 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
 import CompanyLogo from '../../../assets/icons/companyLogo.svg';
 
 const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation; onClick: (quotation: IProposalQuotation, isAccepted: boolean) => void }) => {
+  const { t } = useTranslation(['proposalColumns']);
+
   return (
     <div style={{ marginBottom: '10px', marginTop: '20px' }}>
       <div
@@ -33,7 +36,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
               alignItems: 'center',
               marginLeft: '10px',
             }}>
-            <img src={CompanyLogo} />
+            <img src={CompanyLogo} alt="Company Logo" />
           </div>
           <div
             style={{
@@ -44,7 +47,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
               height: '42px',
               borderRadius: '10px',
               backgroundColor: '#0060B8',
-              fontFamily: 'Inter',
+              fontFamily: 'Roboto',
               fontSize: '18px',
               fontWeight: '600',
               textAlign: 'center',
@@ -66,7 +69,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Tracking ID:
+              {t('trackingId')}
             </div>
             <div
               style={{
@@ -89,7 +92,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Status
+              {t('status')}
             </div>
             <div
               style={{
@@ -112,7 +115,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Origin
+              {t('origin')}
             </div>
             <div
               style={{
@@ -135,7 +138,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Destination
+              {t('destination')}
             </div>
             <div
               style={{
@@ -158,7 +161,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Weight
+              {t('weight')}
             </div>
             <div
               style={{
@@ -181,7 +184,7 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                 textAlign: 'left',
                 color: '#7B7878',
               }}>
-              Dimension
+              {t('dimension')}
             </div>
             <div
               style={{
@@ -206,19 +209,19 @@ const ProposalColumns = ({ quotation, onClick }: { quotation: IProposalQuotation
                   fontWeight: '600px',
                 }}
                 onClick={() => onClick(quotation, true)}>
-                Accept
+                {t('accept')}
               </button>
               <button
                 style={{
                   height: '30px',
                   width: '82px',
                   backgroundColor: '#EB575733',
-                  color: '##EB5757',
+                  color: '#EB5757',
                   borderRadius: '5px',
                   fontWeight: '600px',
                 }}
                 onClick={() => onClick(quotation, false)}>
-                Reject
+                {t('reject')}
               </button>
             </div>
           </div>

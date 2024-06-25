@@ -1,17 +1,29 @@
 import TrendUpIcon from '../../assets/icons/ic-trend-up.svg';
 import TrendDownIcon from '../../assets/icons/ic-trend-down.svg';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useGetShipperDashboardOrderListQuery } from '@/services/dashboard';
+import { useGetProposalQuotationsQuery } from '@/services/ProposalQuotation';
+import ShippementDetails from './ShippementDetails';
+import { IProposalQuotation } from '@/interface/proposalQuotation';
+import { useTranslation } from 'react-i18next';
 
 const ShipperDashboard = () => {
+  const { t } = useTranslation(['shipperDashboard']);
+
+  const shipperDashboardData = useGetShipperDashboardOrderListQuery('');
+  const proposalQuotation = useGetProposalQuotationsQuery('');
+  const ordersCount = shipperDashboardData.currentData?.result;
+  const proposalQuotationsData = proposalQuotation.data?.result.result;
+  console.log('Data', proposalQuotationsData);
+
   return (
     <div className="tw-flex tw-flex-col tw-gap-5">
       <div className="row main-stats">
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
-          <span className="stats-value">450</span>
-          <span className="stats-label">Total Orders</span>
-          <div style={{ display: 'flex' }}>
-            Order Increase
+        <div className="col stats-item border-right">
+          <span className="stats-value">{ordersCount && ordersCount.totalOrders}</span>
+          <span className="stats-label">{t('totalOrders')}</span>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+            {t('orderIncrease')}
             <span
               style={{
                 color: '#0ebc93',
@@ -24,12 +36,12 @@ const ShipperDashboard = () => {
           </div>
         </div>
 
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
-          <span className="stats-value">78</span>
-          <span className="stats-label">Active Orders</span>
+        <div className="col stats-item border-right">
+          <span className="stats-value">{ordersCount && ordersCount.activeOrders}</span>
+          <span className="stats-label">{t('activeOrders')}</span>
 
-          <div style={{ display: 'flex' }}>
-            Order Increase
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+            {t('orderIncrease')}
             <span
               style={{
                 color: '#0ebc93',
@@ -41,16 +53,16 @@ const ShipperDashboard = () => {
             </span>
           </div>
         </div>
-        <div className="col stats-item" style={{ borderRight: 'solid 1px #0060B866' }}>
-          <span className="stats-value">372</span>
-          <span className="stats-label">Shipped</span>
+        <div className="col stats-item border-right">
+          <span className="stats-value">{ordersCount && ordersCount.shipped}</span>
+          <span className="stats-label">{t('shipped')}</span>
         </div>
 
         <div className="col stats-item">
-          <span className="stats-value">52</span>
-          <span className="stats-label">Orders this month</span>
-          <div style={{ display: 'flex' }}>
-            Order decrease
+          <span className="stats-value">{ordersCount && ordersCount.orderThisMonth}</span>
+          <span className="stats-label">{t('ordersThisMonth')}</span>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap' }}>
+            {t('orderDecrease')}
             <span
               style={{
                 color: '#FF3939',
@@ -63,6 +75,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',
@@ -71,11 +84,11 @@ const ShipperDashboard = () => {
           boxShadow: '#DCE0F980',
         }}>
         <div
+          className="border-right"
           style={{
             display: 'flex',
             padding: '10px',
             flexDirection: 'column',
-            borderRight: 'solid 1px #0060B866',
             width: '30%',
           }}>
           <div
@@ -89,19 +102,19 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            Pending
+            {t('pending')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                250
+                {ordersCount && ordersCount.assigned}
               </div>
               <div
                 style={{
@@ -112,19 +125,19 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Assigned
+                {t('assigned')}
               </div>
             </div>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                200
+                {ordersCount && ordersCount.notAssigned}
               </div>
               <div
                 style={{
@@ -135,17 +148,18 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Unassigned
+                {t('unassigned')}
               </div>
             </div>
           </div>
         </div>
+
         <div
+          className="border-right"
           style={{
             display: 'flex',
             padding: '10px',
             flexDirection: 'column',
-            borderRight: 'solid 1px #0060B866',
             width: '45%',
           }}>
           <div
@@ -159,19 +173,19 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            In progress
+            {t('inProgress')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                250
+                {ordersCount && ordersCount.dispatched}
               </div>
               <div
                 style={{
@@ -182,19 +196,19 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                Diapatched
+                {t('dispatched')}
               </div>
             </div>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                200
+                {ordersCount && ordersCount.atPickUp}
               </div>
               <div
                 style={{
@@ -205,19 +219,19 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                At pick up
+                {t('atPickUp')}
               </div>
             </div>
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                200
+                {ordersCount && ordersCount.inTransit}
               </div>
               <div
                 style={{
@@ -228,11 +242,12 @@ const ShipperDashboard = () => {
                   textAlign: 'left',
                   color: '#0060B8',
                 }}>
-                At transit
+                {t('inTransit')}
               </div>
             </div>
           </div>
         </div>
+
         <div
           style={{
             display: 'flex',
@@ -250,24 +265,25 @@ const ShipperDashboard = () => {
               textAlign: 'left',
               color: '#0060B8',
             }}>
-            Delivered
+            {t('delivered')}
           </div>
           <div style={{ display: 'flex', gap: '20px', margin: '0 70px' }}>
             <div>
               <div
                 style={{
                   fontFamily: 'Roboto',
-                  fontSize: '36px',
+                  fontSize: '22px',
                   fontWeight: '600',
                   lineHeight: '42.19px',
                   textAlign: 'left',
                 }}>
-                250
+                {ordersCount && ordersCount.delivered}
               </div>
             </div>
           </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',
@@ -289,944 +305,21 @@ const ShipperDashboard = () => {
             textAlign: 'left',
             color: '#0060B8',
           }}>
-          Shippement details
+          {t('shipmentDetails')}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '5px' }}>01</h3>
-          <div
-            className="container"
-            style={{
-              height: '67px',
-              backgroundColor: '#EBF2F9',
-              padding: '15px',
-              borderRadius: '10px',
-            }}>
-            <div className="row" style={{ display: 'flex' }}>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Tracking ID:
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  9-859859859
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Ammount
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  SAR.4500
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Origin
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Saudi Arabia
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Destination
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Qatar
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Weight
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  250KG
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Dimension
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  25x20x25
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Status
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Ready to ship
-                </div>
-              </div>
-              <div className="col-sm">
-                <Link to={'/shipper/shippertracking'}>
-                  <button
-                    style={{
-                      height: '44px',
-                      width: '110px',
-                      color: '#fff',
-                      backgroundColor: '#0060B8',
-                      borderRadius: '10px',
-                    }}>
-                    Track
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '5px' }}>02</h3>
-          <div
-            className="container"
-            style={{
-              height: '67px',
-              backgroundColor: '#EBF2F9',
-              padding: '15px',
-              borderRadius: '10px',
-            }}>
-            <div className="row" style={{ display: 'flex' }}>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Tracking ID:
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  9-859859859
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Ammount
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  SAR.4500
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Origin
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Saudi Arabia
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Destination
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Qatar
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Weight
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  250KG
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Dimension
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  25x20x25
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Status
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Ready to ship
-                </div>
-              </div>
-              <div className="col-sm">
-                <button
-                  style={{
-                    height: '44px',
-                    width: '110px',
-                    color: '#fff',
-                    backgroundColor: '#0060B8',
-                    borderRadius: '10px',
-                  }}>
-                  Track
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '5px' }}>03</h3>
-          <div
-            className="container"
-            style={{
-              height: '67px',
-              backgroundColor: '#EBF2F9',
-              padding: '15px',
-              borderRadius: '10px',
-            }}>
-            <div className="row" style={{ display: 'flex' }}>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Tracking ID:
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  9-859859859
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Ammount
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  SAR.4500
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Origin
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Saudi Arabia
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Destination
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Qatar
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Weight
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  250KG
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Dimension
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  25x20x25
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Status
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Ready to ship
-                </div>
-              </div>
-              <div className="col-sm">
-                <button
-                  style={{
-                    height: '44px',
-                    width: '110px',
-                    color: '#fff',
-                    backgroundColor: '#0060B8',
-                    borderRadius: '10px',
-                  }}>
-                  Track
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '5px' }}>04</h3>
-          <div
-            className="container"
-            style={{
-              height: '67px',
-              backgroundColor: '#EBF2F9',
-              padding: '15px',
-              borderRadius: '10px',
-            }}>
-            <div className="row" style={{ display: 'flex' }}>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Tracking ID:
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  9-859859859
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Ammount
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  SAR.4500
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Origin
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Saudi Arabia
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Destination
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Qatar
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Weight
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  250KG
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Dimension
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  25x20x25
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Status
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Ready to ship
-                </div>
-              </div>
-              <div className="col-sm">
-                <button
-                  style={{
-                    height: '44px',
-                    width: '110px',
-                    color: '#fff',
-                    backgroundColor: '#0060B8',
-                    borderRadius: '10px',
-                  }}>
-                  Track
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <h3 style={{ marginRight: '5px' }}>05</h3>
-          <div
-            className="container"
-            style={{
-              height: '67px',
-              backgroundColor: '#EBF2F9',
-              padding: '15px',
-            }}>
-            <div className="row" style={{ display: 'flex' }}>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Tracking ID:
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  9-859859859
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Ammount
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  SAR.4500
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Origin
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Saudi Arabia
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Destination
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Qatar
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Weight
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  250KG
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Dimension
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  25x20x25
-                </div>
-              </div>
-              <div className="col-sm">
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '18px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                    color: '#7B7878',
-                  }}>
-                  Status
-                </div>
-                <div
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontSize: '16px',
-                    fontWeight: '500',
-                    lineHeight: '18.75px',
-                    textAlign: 'left',
-                  }}>
-                  Ready to ship
-                </div>
-              </div>
-              <div className="col-sm">
-                <button
-                  style={{
-                    height: '44px',
-                    width: '110px',
-                    color: '#fff',
-                    backgroundColor: '#0060B8',
-                    borderRadius: '10px',
-                  }}>
-                  Track
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {proposalQuotationsData &&
+          proposalQuotationsData.map((data: IProposalQuotation, index: number) => (
+            <ShippementDetails
+              orderNumber={index + 1}
+              trackingId={data.trackingId}
+              amount={data.amount}
+              origin={data.origin}
+              destination={data.destination}
+              dimension={data.dimentions}
+              weight={data.weight}
+              status={data.status}
+            />
+          ))}
       </div>
     </div>
   );

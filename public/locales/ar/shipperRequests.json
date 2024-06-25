@@ -1,0 +1,11 @@
+{
+  "createNewRequest": "إنشاء طلب جديد",
+  "showLabel": "عرض",
+  "entriesLabel": "عناصر",
+  "searchPlaceholder": "بحث",
+  "successToast": "نجاح",
+  "dangerToast": "خطر",
+  "updateRequestConfirmation": "هل أنت متأكد من أنك تريد تحديث هذا الطلب؟",
+  "deleteRequestConfirmation": "هل أنت متأكد من أنك تريد حذف هذا الطلب؟",
+  "createNewRequestConfirmation": "هل أنت متأكد من أنك تريد إنشاء طلب جديد؟"
+}

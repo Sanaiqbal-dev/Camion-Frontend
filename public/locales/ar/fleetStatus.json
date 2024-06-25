@@ -1,0 +1,8 @@
+{
+  "fleetStatus": "حالة الأسطول",
+  "running": "يعمل",
+  "idle": "خامل",
+  "stopper": "متوقف",
+  "inactive": "غير نشط",
+  "noData": "لا توجد بيانات"
+}

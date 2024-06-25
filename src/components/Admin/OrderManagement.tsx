@@ -14,8 +14,12 @@ import { IOrderResponseData } from '@/interface/orderDetail';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useGetOrderStatusesQuery } from '@/services/orderStatus';
+import { useTranslation } from 'react-i18next';
 
 const OrderManagement = () => {
+  const { t } = useTranslation(['adminOrderManagement']);
+
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -37,6 +41,7 @@ const OrderManagement = () => {
 
   const [deleteOrder, { isSuccess: isOrderDeleted }] = useDeleteOrderMutation();
   const [updateOrderStatus, { isSuccess: isOrderStatusUpdated }] = useUpdateOrderMutation();
+  const { data: orderStatuses } = useGetOrderStatusesQuery();
 
   const [orderTableData, setOrderTableData] = useState<IOrder[]>([]);
 
@@ -76,6 +81,7 @@ const OrderManagement = () => {
   const columns: ColumnDef<IOrder>[] = OrderColumns({
     onDelete,
     onUpdateStatus,
+    orderStatuses,
   });
 
   const DeleteOrder = async () => {
@@ -137,7 +143,7 @@ const OrderManagement = () => {
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -153,7 +159,7 @@ const OrderManagement = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -162,7 +168,7 @@ const OrderManagement = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -176,12 +182,7 @@ const OrderManagement = () => {
           <img src={NextIcon} />
         </Button>
       </div>
-      <ConfirmationModal
-        promptMessage={'Are you sure, you want to delete this order?'}
-        show={showDeleteForm}
-        handleClose={() => setShowDeleteForm(false)}
-        performOperation={() => DeleteOrder()}
-      />
+      <ConfirmationModal promptMessage={t('deleteOrderPrompt')} show={showDeleteForm} handleClose={() => setShowDeleteForm(false)} performOperation={() => DeleteOrder()} />
     </div>
   );
 };

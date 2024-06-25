@@ -1,0 +1,21 @@
+
+{
+  "editVehicle": "تعديل المركبة",  
+  "vehicleType": "نوع المركبة",  
+  "selectVehicleType": "اختر نوع المركبة",  
+  "modelYear": "سنة الصنع",  
+  "enterModelYear": "أدخل سنة الصنع",  
+  "plateType": "نوع اللوحة",  
+  "selectPlateType": "اختر نوع اللوحة",  
+  "plateNumber": "رقم اللوحة",  
+  "enterNumberPlate": "أدخل رقم اللوحة",  
+  "color": "اللون",  
+  "enterColor": "أدخل اللون",  
+  "registrationNumber": "رقم التسجيل",  
+  "enterRegistrationNumber": "أدخل رقم التسجيل",  
+  "imeiNumber": "رقم IMEI",  
+  "enterIMEINumber": "أدخل رقم IMEI",  
+  "vehicleRegistration": "تسجيل المركبة",  
+  "selectFile": "اختر الملف",  
+  "updateVehicle": "تحديث المركبة"  
+  }

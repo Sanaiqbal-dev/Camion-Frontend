@@ -13,9 +13,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import { useLazyDownloadFileQuery } from '@/services/fileHandling';
 import { Toast } from '../ui/toast';
 import { PAGER_SIZE } from '@/config/constant';
-import { QueryPager } from '@/interface/common';
+import { IDownloadState, QueryPager } from '@/interface/common';
+import { useTranslation } from 'react-i18next';
 
 const Profiles = () => {
+  const { t } = useTranslation(['reportManagement']);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [showToast, setshowToast] = useState(false);
   const [pager, setPager] = useState<QueryPager>({
@@ -24,21 +26,24 @@ const Profiles = () => {
   });
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const [updateCompanyAccount, { isSuccess: isCoumpanyAccountUpdated }] = useUpdateCompanyAccountMutation();
+  const [updateCompanyAccount, { isSuccess: isCompanyAccountUpdated, isLoading: isAccountUpdating }] = useUpdateCompanyAccountMutation();
 
   const companyProfiles = useGetCompanyProfilesListQuery({ page: pager.page - 1, pageCount: pager.pageSize, term: searchTerm });
   // const [selectedFile, setSelectedFile] = useState<any>();
-  const [downloadFile, { isSuccess: isFileDownlaoded }] = useLazyDownloadFileQuery();
+  const [downloadFile] = useLazyDownloadFileQuery();
   const ProfilesTableData: IProfileResponseData[] = companyProfiles.data?.result.result;
   const getStatusColumn = (accountStatus: null | number, isActive: boolean) => {
     if (accountStatus === null) {
-      return 'Not Approved';
+      return t('notApproved');
     } else if (accountStatus == 1 && isActive) {
-      return 'Active';
+      return t('active');
     } else if (accountStatus == 1 && !isActive) {
-      return 'Deactivated';
+      return t('deactivated');
     }
   };
+  const [isDownloading, setIsDownloading] = useState<IDownloadState>();
+
+  const isDisabled = isAccountUpdating;
 
   const profilesData: Iprofiles[] = ProfilesTableData?.map((item) => ({
     id: item.userId,
@@ -64,7 +69,7 @@ const Profiles = () => {
         }).unwrap();
         setshowToast(true);
       } catch (e) {
-        setshowToast(true);
+        console.log(e);
       }
     }
   };
@@ -119,17 +124,20 @@ const Profiles = () => {
       }
     }
   };
-  const downloadSelectedFile = async (file: any) => {
+  const downloadSelectedFile = async (file: any, profileId: string) => {
+    console.log(file.fileName);
     try {
+      setIsDownloading({ status: true, id: profileId });
       await downloadFile(file.fileName).unwrap();
       setshowToast(true);
+      setIsDownloading({ status: false, id: profileId });
     } catch (error) {
       setshowToast(true);
+      setIsDownloading({ status: false, id: profileId });
     }
   };
-  const onSelectFile = (file: any) => {
-    // setSelectedFile(file);
-    downloadSelectedFile(file);
+  const onSelectFile = (file: any, profileId: string) => {
+    downloadSelectedFile(file, profileId);
   };
 
   const columns: ColumnDef<Iprofiles>[] = ProfileColumns({
@@ -138,6 +146,8 @@ const Profiles = () => {
     onDeactivateButtonClick,
     onDeleteButtonClick,
     onRejectButtonClick,
+    isDisabled,
+    documentDownloading:isDownloading,
   });
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -170,14 +180,15 @@ const Profiles = () => {
       setTotalPageCount(maxPageCount);
     }
   }, [entriesValue, companyProfiles]);
+  console.log('isDisabled', isDisabled);
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setshowToast} variant={isFileDownlaoded || isCoumpanyAccountUpdated ? 'success' : 'danger'} />}
+      {showToast && isCompanyAccountUpdated && <Toast showToast={showToast} setShowToast={setshowToast} variant={isCompanyAccountUpdated ? 'success' : 'danger'} />}
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -193,7 +204,7 @@ const Profiles = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -202,7 +213,7 @@ const Profiles = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={handleInputChange}></FormControl>
+              <FormControl type="text" placeholder={t('searchPlaceholder')} className="form-control" onChange={handleInputChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>

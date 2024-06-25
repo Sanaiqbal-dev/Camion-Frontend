@@ -1,0 +1,12 @@
+{
+  "trackingId": "معرف التتبع:",
+  "origin": "المصدر",
+  "destination": "الوجهة",
+  "weight": "الوزن",
+  "dimension": "الأبعاد",
+  "accept": "قبول",
+  "reject": "رفض",
+  "status": "الحالة",
+  "amount": "المبلغ",
+  "trackAction": "تتبع"
+}

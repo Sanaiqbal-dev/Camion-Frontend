@@ -1,0 +1,13 @@
+{
+  "dashboard": "Dashboard",
+  "tracking": "Tracking",
+  "orderManagement": "Order Management",
+  "requests": "Requests",
+  "orders": "Orders",
+  "fleetManagement": "Fleet Management",
+  "driverManagement": "Driver Management",
+  "vehicleManagement": "Vehicle Management",
+  "bayan": "Bayan",
+  "settings": "Settings",
+  "logout": "Logout"
+}

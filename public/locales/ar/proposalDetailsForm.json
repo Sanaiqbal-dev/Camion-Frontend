@@ -1,0 +1,16 @@
+{
+  "proposalDetails": "تفاصيل العرض",
+  "amount": "المبلغ",
+  "enterAmount": "أدخل المبلغ",
+  "expectedDeliveryDate": "تاريخ التسليم المتوقع",
+  "selectDate": "اختر تاريخًا",
+  "otherDetails": "تفاصيل أخرى",
+  "enterText": "أدخل النص هنا",
+  "uploadDocument": "تحميل وثيقة (إن وجدت)",
+  "uploadTheDocument": "تحميل الوثيقة",
+  "submitProposal": "إرسال العرض",
+  "validationErrorAmount": "يجب أن يكون المبلغ أكبر من 100 وأقل من 100000",
+  "validationAmmountNumber": "يجب أن يكون المبلغ رقمًا",
+  "validationErrorDeliveryDate": "يجب أن يكون التاريخ أكبر من اليوم وليس أكثر من 5 أيام من اليوم.",
+  "validationErrorOtherDetails": "أدخل تفاصيل إضافية حول عرض الطلب."
+}

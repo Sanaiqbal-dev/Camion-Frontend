@@ -1,0 +1,16 @@
+{
+  "driverName": "اسم السائق",
+  "driverNotAssigned": "لم يتم تعيين السائق",
+  "vehicleType": "نوع المركبة",
+  "modelYear": "سنة الطراز",
+  "vehicleNumber": "رقم المركبة",
+  "color": "اللون",
+  "registrationNumber": "رقم التسجيل",
+  "imeiNumber": "رقم IMEI",
+  "vehicleRegistration": "تسجيل المركبة",
+  "viewDocument": "عرض المستند",
+  "action": "عمل",
+  "edit": "تحرير",
+  "delete": "حذف",
+  "assignDriver": "تعيين سائق"
+  }

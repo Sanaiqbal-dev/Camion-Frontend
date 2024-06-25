@@ -3,71 +3,83 @@ import IconEdit from '../../../assets/icons/ic-edit.svg';
 import IconDelete from '../../../assets/icons/ic-delete.svg';
 import { Link } from 'react-router-dom';
 import { IDriver } from '../../../interface/carrier';
+import { useTranslation } from 'react-i18next';
+import LoadingAnimation from '@/components/ui/LoadingAnimation';
+import { IDownloadState } from '@/interface/common';
 
 interface DriverActionProps {
   onDeleteDriver: (id: number) => void;
   onUpdateDriver: (id: number) => void;
   onIqamaDownloadClick: (id: number) => void;
+  iqamaDownloading?: IDownloadState;
 }
 
-export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick }: DriverActionProps): ColumnDef<IDriver>[] => [
-  {
-    accessorKey: 'name',
-    header: 'Driver Name',
-  },
-  {
-    accessorKey: 'iqamaId',
-    header: 'Driver ID/Iqama',
-  },
-  {
-    accessorKey: 'licenseNumber',
-    header: 'License Number',
-  },
-  {
-    accessorKey: 'dob',
-    header: 'Date Of Birth',
-  },
-  {
-    accessorKey: 'driverNationality.name',
-    header: 'Nationality',
-  },
+export const DriverManagementColumns = ({ onDeleteDriver, onUpdateDriver, onIqamaDownloadClick, iqamaDownloading }: DriverActionProps): ColumnDef<IDriver>[] => {
+  const { t } = useTranslation(['driverManagementColumn']);
 
-  {
-    accessorKey: 'phoneNumber',
-    header: 'Mobile Number',
-  },
-
-  {
-    accessorKey: 'viewIqama',
-    header: 'Iqama/Id',
-    cell: ({ row }) => {
-      const driverId = row.original.id;
-
-      return (
-        <div onClick={() => onIqamaDownloadClick(parseInt(driverId))}>
-          <Link to={''}>View Iqama/ID</Link>
-        </div>
-      );
+  return [
+    {
+      accessorKey: 'name',
+      header: t('driverName'),
     },
-  },
-
-  {
-    accessorKey: 'action',
-    header: 'Action',
-    cell: ({ row }) => {
-      const driverId = row.original.id;
-      return (
-        <div className="action-container" style={{ justifyContent: 'start' }}>
-          <div onClick={() => onUpdateDriver(parseInt(driverId))}>
-            <img src={IconEdit} />
-            <span style={{ color: '#27AE60' }}>Edit</span>
-          </div>
-          <div onClick={() => onDeleteDriver(parseInt(driverId))}>
-            <img src={IconDelete} />
-            <span style={{ color: '#EB5757' }}>Delete</span>
-          </div>
-        </div>
-      );
+    {
+      accessorKey: 'iqamaId',
+      header: t('driverIdIqama'),
     },
-  },
-];
+    {
+      accessorKey: 'licenseNumber',
+      header: t('licenseNumber'),
+    },
+    {
+      accessorKey: 'dob',
+      header: t('dateOfBirth'),
+    },
+    {
+      accessorKey: 'driverNationality.name',
+      header: t('nationality'),
+    },
+    {
+      accessorKey: 'phoneNumber',
+      header: t('mobileNumber'),
+    },
+    {
+      accessorKey: 'viewIqama',
+      header: t('viewIqamaId'),
+      cell: ({ row }) => {
+        const driverId = row.original.id;
+
+        return (iqamaDownloading?.status==true && iqamaDownloading?.id==driverId)  ? (
+          <LoadingAnimation />
+        ) : (
+          <div
+            onClick={() => {
+              if (row.original.fileName !== t('noFileUploaded')) onIqamaDownloadClick(parseInt(driverId));
+            }}>
+            <Link to={''} className={`${row.original.fileName === t('noFileUploaded') ? 'tw-text-gray-400 tw-cursor-default' : ''}`}>
+              {t('viewIqamaId')}
+            </Link>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'action',
+      header: t('action'),
+      cell: ({ row }) => {
+        const driverId = row.original.id;
+        return (
+          <div className="action-container" style={{ justifyContent: 'start' }}>
+            <div onClick={() => onUpdateDriver(parseInt(driverId))}>
+              <img src={IconEdit} />
+              <span style={{ color: '#27AE60' }}>{t('edit')}</span>
+            </div>
+            <div onClick={() => onDeleteDriver(parseInt(driverId))}>
+              <img src={IconDelete} />
+              <span style={{ color: '#EB5757' }}>{t('delete')}</span>
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
+};

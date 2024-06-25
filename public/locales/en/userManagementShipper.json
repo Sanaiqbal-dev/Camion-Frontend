@@ -1,0 +1,10 @@
+{
+    "createNewUser": "Create New User",
+    "showLabel": "Show",
+    "entriesLabel": "entries",
+    "searchPlaceholder": "Search",
+    "noUsersFound": "No Users Found!",
+    "areYouSure": "Are you sure?",
+    "successToast": "Success",
+    "dangerToast": "Danger"
+}

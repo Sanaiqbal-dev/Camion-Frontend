@@ -24,8 +24,8 @@ export function DataTable<TData, TValue>({ isAction, columns, data }: DataTableP
 
   return (
     <div className="table-contents" style={isAction ? { height: `calc(100vh - 250px)` } : { height: `calc(100vh - 200px)` }}>
-      <Table className={tableColumnStyle}>
-        <TableHeader className="tw-border-none text-nowrap">
+      <Table className={clsx('auto-width-columns', tableColumnStyle)}>
+                <TableHeader className="tw-border-none text-nowrap">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -41,7 +41,7 @@ export function DataTable<TData, TValue>({ isAction, columns, data }: DataTableP
         <TableBody className="gap-10">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm hover:tw-cursor-pointer" key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow className="tw-rounded-md tw-bg-white tw-whitespace-nowrap tw-text-sm" key={row.id} data-state={row.getIsSelected() && 'selected'}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell className="tw-border-none" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -15,8 +15,11 @@ import ConfirmationModal from '../Modals/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
 import { debounce } from '@/util/debounce';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const ShipperOrders = () => {
+  const { t } = useTranslation(['order']);
+
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -58,6 +61,15 @@ const ShipperOrders = () => {
     }
     setEntriesValue(values[currentIndex]);
   }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1; // getMonth() returns month from 0 to 11
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${month}/${day}/${year}`;
+  };
   const FilterDataForTable = (orderItems: IOrderResponseData[]) => {
     setOrderTableData([]);
     try {
@@ -70,7 +82,7 @@ const ShipperOrders = () => {
           weight: currentOrderObject.weight,
           type: currentOrderObject.type,
           status: currentOrderObject.status ? currentOrderObject.status : '-',
-          ETA: currentOrderObject.estimatedDeliveryTime,
+          ETA: formatDate(currentOrderObject.estimatedDeliveryTime),
           action: '',
         }));
 
@@ -142,7 +154,7 @@ const ShipperOrders = () => {
       <div className="tw-flex tw-justify-between tw-items-center">
         <Row className="tw-items-center">
           <Col xs="auto" className="tw-text-secondary">
-            Show
+            {t('show')}
           </Col>
           <Col xs="auto">
             <div className="tw-flex tw-justify-center tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2.5 tw-py-0 tw-gap-1 tw-w-max tw-h-10">
@@ -158,7 +170,7 @@ const ShipperOrders = () => {
             </div>
           </Col>
           <Col xs="auto" className="tw-text-secondary">
-            entries
+            {t('entries')}
           </Col>
         </Row>
         <Row className="tw-mt-3">
@@ -167,7 +179,7 @@ const ShipperOrders = () => {
               <InputGroup.Text>
                 <Image src={SearchIcon} />
               </InputGroup.Text>
-              <FormControl type="text" placeholder="Search" className="form-control" onChange={onSearchChange}></FormControl>
+              <FormControl type="text" placeholder={t('search')} className="form-control" onChange={onSearchChange}></FormControl>
             </InputGroup>
           </Col>
         </Row>
@@ -182,7 +194,7 @@ const ShipperOrders = () => {
         </Button>
       </div>
       <ConfirmationModal
-        promptMessage={isDeleteOrder ? 'Are you sure, you want to delete this order?' : ''}
+        promptMessage={isDeleteOrder ? t('confirmationMessage') : ''}
         show={showConfirmationModal}
         handleClose={() => setShowConfirmationModal(false)}
         performOperation={() => {

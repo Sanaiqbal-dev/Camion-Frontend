@@ -9,8 +9,11 @@ import { Button } from 'react-bootstrap';
 import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import { Toast } from '../ui/toast';
+import { useTranslation } from 'react-i18next';
 
 const Proposals = () => {
+  const { t } = useTranslation(['proposal']);
+
   const [pager, setPager] = useState<QueryPager>({
     page: 1,
     pageSize: PAGER_SIZE,
@@ -40,7 +43,7 @@ const Proposals = () => {
     if (!isLoading) {
       const quotations: IProposalQuotation[] = data?.statusCode === 200 && data.result.total > 0 ? data?.result?.result : [];
       setQuotationProposals(quotations);
-      const maxPageCount = data.result.total / entriesValue + 1;
+      const maxPageCount = data?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
   }, [isLoading]);
@@ -49,14 +52,8 @@ const Proposals = () => {
     try {
       const updatedQuotation = {
         id: quotation.id,
-        // trackingId: quotation.trackingId,
         status: quotation.status,
-        // origin: quotation.origin,
-        // destination: quotation.destination,
-        // weight: quotation.weight,
-        // dimentions: quotation.dimentions,
         proposalQuotationStatusId: isAccepted ? 1 : 0,
-        // amount: quotation.amount,
       };
       await updateQuotationStatus(updatedQuotation).unwrap();
       setShowToast(true);
@@ -69,18 +66,18 @@ const Proposals = () => {
 
   return (
     <div className="table-container">
-      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? 'success' : 'danger'} />}
+      {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? t('toastSuccess') : t('toastDanger')} />}
       <div style={{ height: '100vh', overflowY: 'scroll' }}>
-        {(!quotationProposals || quotationProposals.length == 0) && <span style={{}}>No Results</span>}
+        {(!quotationProposals || quotationProposals.length === 0) && <span style={{}}>{t('noResults')}</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} />)}
       </div>
 
       <div className="tw-flex tw-items-center tw-justify-end tw-space-x-2 tw-pb-4 tw-mb-5 tw-bottom-0">
         <Button className="img-prev" variant="outline" size="sm" disabled={pager.page < 2} onClick={() => updatePage(-1)}>
-          <img src={PreviousIcon} />
+          <img src={PreviousIcon} alt={t('previousButton')} />
         </Button>
         <Button className="img-next" variant="outline" size="sm" onClick={() => updatePage(+1)} disabled={pager.page >= Math.floor(totalPageCount)}>
-          <img src={NextIcon} />
+          <img src={NextIcon} alt={t('nextButton')} />
         </Button>
       </div>
     </div>

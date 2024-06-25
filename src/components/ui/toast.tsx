@@ -7,10 +7,11 @@ interface IAlertProps {
   setShowToast: React.Dispatch<React.SetStateAction<boolean>>;
   autoClose?: boolean;
   duration?: number;
+  message?: string;
 }
 
 export const Toast = (props: IAlertProps) => {
-  const { showToast, variant, setShowToast, autoClose = true, duration = 1500 } = props;
+  const { showToast, variant, setShowToast, autoClose = true, duration = 3000, message } = props;
 
   const handleCloseAlert = useCallback(() => {
     setShowToast(false);
@@ -40,8 +41,14 @@ export const Toast = (props: IAlertProps) => {
   }, [autoClose, duration, handleCloseAlert]);
 
   return (
-    <Alert show={showToast} className={`tw-fixed tw-top-2 tw-right-2 d-inline-block m-1 ${variant}`} variant={variant} onClose={handleCloseAlert} transition dismissible>
-      <span>{variant === 'success' ? 'Request has been processed.' : 'Something went wrong.'}</span>
+    <Alert
+      show={showToast}
+      className={`tw-fixed tw-top-2 tw-right-2 tw-max-w-sm tw-max-h-auto d-inline-block m-1 ${variant}`}
+      variant={variant}
+      onClose={handleCloseAlert}
+      transition
+      dismissible>
+      {message ? <span>{message}</span> : <span>{variant === 'success' ? 'Request has been processed.' : 'Something went wrong.'}</span>}
     </Alert>
   );
 };

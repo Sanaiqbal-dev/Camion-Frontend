@@ -56,3 +56,24 @@ export interface ICreateBayan {
   weight: number;
   dimentions: string;
 }
+
+export interface TripData {
+  id: number;
+  tripId: number;
+  data: string;
+}
+
+interface Waybill {
+  Id: number;
+  BayanId: number;
+  WaybillId: number;
+  SenderName: string;
+  SenderFullAddress: string;
+  RecipientName: string;
+  RecipientFullAddress: string;
+}
+
+export interface TripData {
+  Id: number;
+  Waybills: Waybill[];
+}

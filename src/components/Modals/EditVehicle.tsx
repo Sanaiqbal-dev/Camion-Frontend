@@ -3,9 +3,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button, Form, Modal } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { useUploadFileMutation } from '@/services/fileHandling';
+// import { useUploadFileMutation } from '@/services/fileHandling';
 import { IVehicleType } from '@/interface/common';
 import { useGetPlateTypeQuery } from '@/services/vahicles';
+import { useTranslation } from 'react-i18next';
 
 interface IVehicle {
   color: string;
@@ -20,20 +21,28 @@ interface IVehicle {
 interface EditUserModalProps {
   show: boolean;
   handleClose: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vehicle: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   vehicleTypes: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmitForm: (requestData: any) => void;
 }
 
 const schema = z.object({
-  color: z.string().min(1, 'Enter Color'),
-  imeiNumber: z.string().min(1, 'Enter imeiNumber'),
-  registrationNumber: z.string().min(1, 'Enter registrationNumber'),
-  numberPlate: z.string().min(1, 'Enter Number plate'),
-  modelYear: z.string().min(1, 'Enter Model Year'),
-  vehicleType: z.string().min(1, 'Select Vehicle Type'),
-  PlateTypeId: z.string().min(1, 'Select Plate Type'),
+  color: z.string().min(1, 'Enter color.'),
+  imeiNumber: z.string().min(1, 'Enter IMEI number.'),
+  registrationNumber: z.string().min(1, 'Enter registration number.'),
+  numberPlate: z
+    .string()
+    // .regex(/^[A-Z]{3,4} \d{4}$/, 'e.g. AAA 1234')
+    // .regex(/^[\u0600-\u06FF]{3} \d{1,4}$/, 'e.g. ثلاث 1234')
+    .regex(/^(?:[\u0600-\u06FF] ){2}[\u0600-\u06FF] \d{1,4}$/, 'e.g. ا ب ج 2024')
+    .min(1, 'Enter valid number plate.'),
+  modelYear: z.string().min(1, 'Enter model year.'),
+  vehicleType: z.string().min(1, 'Select vehicle type.'),
+  PlateTypeId: z.string().min(1, 'Select plate type.'),
 });
 
 const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle, vehicleTypes, onSubmitForm }) => {
@@ -49,58 +58,44 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
     reset();
   }, [vehicle]);
 
-  const fileType = 4;
-  const [uploadFile] = useUploadFileMutation();
   const { data: plateTypes } = useGetPlateTypeQuery();
   const [selectedFile, setSeletedFile] = useState<File>();
-
-  useEffect(() => {
-    if (selectedFile) {
-      try {
-        const response = uploadFile({
-          fileType,
-          uploadFile: selectedFile.name,
-        });
-        console.log('File uploaded successfully:', response);
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      }
-    }
-  }, [fileType, selectedFile, uploadFile]);
+  const { t } = useTranslation(['editVehicle']);
 
   const onSubmit: SubmitHandler<IVehicle> = async (data) => {
-    const { vehicleType, modelYear, ...rest } = data;
-    const requestData = {
-      ...rest,
-      modelYear: modelYear,
-      fileName: selectedFile ? selectedFile.name : null,
-      filePath: 'This has to be a path when The file upload Api is completed',
-      vehicleTypeId: vehicleType,
-      vehicleId: vehicle?.id,
-    };
-    onSubmitForm(requestData);
+    const formData = new FormData();
+    formData.append('PlateTypeId', data.PlateTypeId.toString());
+    formData.append('Color', data.color);
+    formData.append('VehicleId', vehicle.id);
+    formData.append('FileName', vehicle.fileName);
+    formData.append('FilePath', vehicle.filePath);
+    formData.append('ImeiNumber', data.imeiNumber);
+    formData.append('ModelYear', data.modelYear.toString());
+    formData.append('NumberPlate', data.numberPlate);
+    formData.append('RegistrationNumber', data.registrationNumber);
+    formData.append('VehicleTypeId', data.vehicleType.toString());
+
+    if (selectedFile) {
+      formData.append('UploadFile', selectedFile);
+    }
+
+    onSubmitForm(formData);
     reset();
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered backdrop="static" keyboard={false}>
+    <Modal show={show} onHide={handleClose} centered size="lg" backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit Vehicle</Modal.Title>
+        <Modal.Title>{t('editVehicle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <div className="tw-flex tw-flex-col  tw-mb-10">
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Vehicle Type</Form.Label>
-                <Form.Control
-                  defaultValue={vehicle?.vehicleType?.id}
-                  style={{ width: '270px', height: '50px' }}
-                  as="select"
-                  {...register('vehicleType', {
-                    // required: "Vehicle type is required",
-                  })}>
-                  <option value="">Select Vehicle Type</option>
+          <div className="tw-flex tw-flex-col tw-mb-10">
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formVehicleType">
+                <Form.Label>{t('vehicleType')}</Form.Label>
+                <Form.Control defaultValue={vehicle?.vehicleType?.id} style={{ width: '270px', height: '50px' }} as="select" {...register('vehicleType')}>
+                  <option value="">{t('selectVehicleType')}</option>
                   {vehicleTypes?.map((vType: IVehicleType, index: number) => (
                     <option key={'type_' + index} value={vType.id}>
                       {vType.typeName}
@@ -109,12 +104,12 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.vehicleType?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Model Year</Form.Label>
+              <Form.Group className="mb-3" controlId="formModelYear">
+                <Form.Label>{t('modelYear')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.modelYear}
                   type="number"
-                  placeholder="Enter Model Year"
+                  placeholder={t('enterModelYear')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('modelYear')}
                   isInvalid={!!errors.modelYear}
@@ -122,21 +117,16 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 <Form.Control.Feedback type="invalid">{errors.modelYear?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group
-                className="mb-3"
-                // style={{ minWidth: "436px" }}
-                controlId="formBasicEmail">
-                <Form.Label>Palte Type</Form.Label>
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formPlateType">
+                <Form.Label>{t('plateType')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.plateType?.id}
                   style={{ width: '270px', height: '50px' }}
                   as="select"
-                  {...register('PlateTypeId', {
-                    required: 'Vehicle type is required',
-                  })}>
-                  <option value="">Select Plate Type</option>
-                  {plateTypes?.result.map((plateType, index: number) => (
+                  {...register('PlateTypeId', { required: 'Vehicle type is required' })}>
+                  <option value="">{t('selectPlateType')}</option>
+                  {plateTypes?.result.map((plateType, index) => (
                     <option key={'type_' + index} value={plateType.id}>
                       {plateType.name}
                     </option>
@@ -144,12 +134,12 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 </Form.Control>
                 <Form.Control.Feedback type="invalid">{errors.PlateTypeId?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Plate Number</Form.Label>
+              <Form.Group className="mb-3" controlId="formNumberPlate">
+                <Form.Label>{t('plateNumber')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.numberPlate}
                   type="text"
-                  placeholder="Enter Number Plate"
+                  placeholder={t('enterNumberPlate')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('numberPlate')}
                   isInvalid={!!errors.numberPlate}
@@ -157,25 +147,25 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 <Form.Control.Feedback type="invalid">{errors.numberPlate?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>color</Form.Label>
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formColor">
+                <Form.Label>{t('color')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.color}
                   type="text"
-                  placeholder="Enter color"
+                  placeholder={t('enterColor')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('color')}
                   isInvalid={!!errors.color}
                 />
                 <Form.Control.Feedback type="invalid">{errors.color?.message}</Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Registration Number</Form.Label>
+              <Form.Group className="mb-3" controlId="formRegistrationNumber">
+                <Form.Label>{t('registrationNumber')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.registrationNumber}
                   type="text"
-                  placeholder="Enter Registration Number"
+                  placeholder={t('enterRegistrationNumber')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('registrationNumber')}
                   isInvalid={!!errors.registrationNumber}
@@ -183,13 +173,13 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 <Form.Control.Feedback type="invalid">{errors.registrationNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>imeiNumber</Form.Label>
+            <div className="tw-gap-5 tw-flex tw-flex-row">
+              <Form.Group className="mb-3" controlId="formIMEINumber">
+                <Form.Label>{t('imeiNumber')}</Form.Label>
                 <Form.Control
                   defaultValue={vehicle?.imeiNumber}
                   type="text"
-                  placeholder="Enter imeiNumber"
+                  placeholder={t('enterIMEINumber')}
                   style={{ width: '270px', height: '50px' }}
                   {...register('imeiNumber')}
                   isInvalid={!!errors.imeiNumber}
@@ -197,12 +187,12 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
                 <Form.Control.Feedback type="invalid">{errors.imeiNumber?.message}</Form.Control.Feedback>
               </Form.Group>
             </div>
-            <div className="tw-gap-5  tw-flex tw-flex-row">
+            <div className="tw-gap-5 tw-flex tw-flex-row">
               <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument">
-                <Form.Label className="tw-text-sm">Vehicle Registration</Form.Label>
+                <Form.Label>{t('vehicleRegistration')}</Form.Label>
                 <Form.Control
                   type="file"
-                  placeholder="Select File"
+                  placeholder={t('selectFile')}
                   style={{ width: '560px', height: '40px' }}
                   onChange={(e) => {
                     const files = (e.target as HTMLInputElement).files;
@@ -216,7 +206,7 @@ const EditVehicle: React.FC<EditUserModalProps> = ({ show, handleClose, vehicle,
             </div>
           </div>
           <Button variant="primary" type="submit">
-            Update Vehicle
+            {t('updateVehicle')}
           </Button>
         </Form>
       </Modal.Body>

@@ -1,0 +1,20 @@
+{
+  "fillInInfoTitle": "Fill in the {{infoType}} information",
+  "searchAddressLabel": "Search your address to auto fill all the details",
+  "startWithStreetName": "Start with street name",
+  "buildingNumberLabel": "Building number",
+  "enterBuildingNumber": "12345",
+  "streetNameLabel": "Street name",
+  "enterStreetName": "Any street name",
+  "districtNameLabel": "District name",
+  "enterDistrictName": "Any district name",
+  "cityNameLabel": "City name",
+  "enterCityName": "Any city name",
+  "zipCodeLabel": "Zip code",
+  "enterZipCode": "Enter zip code",
+  "additionalNumberLabel": "Additional number",
+  "enterAdditionalNumber": "121212",
+  "unitNoLabel": "Unit no",
+  "enterUnitNo": "121212",
+  "nextButton": "Next"
+}

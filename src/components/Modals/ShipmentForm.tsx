@@ -6,24 +6,27 @@ import { IProposalDetailResponseData, IShipmentDetails } from '@/interface/propo
 import { useEffect } from 'react';
 import { useGetAllGoodTypesQuery } from '@/services/proposal';
 import { IGoodType } from '@/interface/goodType';
+import { useTranslation } from 'react-i18next';
 
-const schema = z.object({
-  numberOfPallets: z.coerce.number().int().min(1, 'Enter number of items'),
-  length: z.coerce.number().int().min(1, 'Enter length in centimeters'),
-  width: z.coerce.number().int().min(1, 'Enter width in centimeters'),
-  weightPerItem: z.string().min(1, 'Please enter weight per item'),
-  isCargoItemsStackable: z.boolean().optional().default(false),
-  isIncludingItemsARGood: z.boolean().optional().default(false),
-  goodTypeId: z.string().min(1, 'Good Type is required.'),
-});
-
-interface IPalletForm {
+interface IShipmentForm {
   isEdit: boolean;
   proposalObject?: IProposalDetailResponseData;
   // shipmentTypeId: number;
-  onSubmitShipmentForm: (data: IShipmentDetails, shipmentType: string) => void;
+  onSubmitShipmentForm: (data: IShipmentDetails) => void;
 }
-const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
+const ShipmentForm: React.FC<IShipmentForm> = ({ isEdit, proposalObject, onSubmitShipmentForm }) => {
+  const { t } = useTranslation(['shipmentForm']);
+
+  const schema = z.object({
+    quantity: z.coerce.number().int().min(1, t('enterNumberOfItems')),
+    length: z.coerce.number().int().min(1, t('enterLengthInCm')),
+    width: z.coerce.number().int().min(1, t('enterWidthInCm')),
+    height: z.coerce.number().int().min(1, t('enterHeightInCm')),
+    weightPerItem: z.coerce.number().int().min(1, t('enterWeightPerItem')),
+    isCargoItemsStackable: z.boolean().optional().default(false),
+    isIncludingItemsARGood: z.boolean().optional().default(false),
+    goodTypeId: z.coerce.number().min(1, t('goodTypeRequired')),
+  });
   const {
     register,
     handleSubmit,
@@ -38,13 +41,14 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
   useEffect(() => {
     if (isEdit && proposalObject) {
       const currentObj = {
-        numberOfPallets: proposalObject.shipmentQuantity,
+        quantity: proposalObject.shipmentQuantity,
         length: proposalObject.length,
         width: proposalObject.width,
-        // shipmentTypeId: proposalObject.shipmentTypeId,
+        height: proposalObject.height,
         weightPerItem: Number(proposalObject.weight),
         isCargoItemsStackable: proposalObject.isCargoItemsStackable,
         isIncludingItemsARGood: proposalObject.isIncludingItemsARGood,
+        goodTypeId: proposalObject.goodTypeId,
       };
 
       Object.entries(currentObj).forEach(([key, value]) => {
@@ -52,10 +56,10 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
         setValue(key as keyof IShipmentDetails, valueToUse);
       });
     }
-  }, [isEdit, setValue]);
+  }, [isEdit, setValue, allGoodTypes]);
 
   const onSubmit: SubmitHandler<IShipmentDetails> = async (data) => {
-    onSubmitShipmentForm(data, 'Pallet');
+    onSubmitShipmentForm(data);
   };
 
   const onerror = (error: any) => {
@@ -66,22 +70,18 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
       <Form onSubmit={handleSubmit(onSubmit, onerror)}>
         <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10">
           <Form.Group className="mb-3">
-            <Form.Label>Good Type</Form.Label>
+            <Form.Label>{t('goodType')}</Form.Label>
             <Form.Control
               as="select"
-              placeholder="Select district"
+              placeholder={t('selectGoodType')}
               style={{
                 width: '100%',
                 height: '59px',
-                // borderTop: 'none',
-                // borderRight: 'none',
-                // borderLeft: 'none',
               }}
               {...register('goodTypeId', { required: true })}
               isInvalid={!!errors.goodTypeId}
-              // onChange={(e) => setSelectedDistrict(Number(e.target.value))}
               readOnly>
-              <option value="">Select Good Type</option>
+              <option value="">{t('selectGoodType')}</option>
               {allGoodTypes &&
                 allGoodTypes.result.map((goodType: IGoodType) => (
                   <option key={goodType.id} value={goodType.id}>
@@ -92,56 +92,76 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
             <Form.Control.Feedback type="invalid">{errors.goodTypeId?.message}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>No. of Pallets</Form.Label>
+            <Form.Label>{t('quantity')}</Form.Label>
             <Form.Control
               type="number"
+              min={1}
               placeholder="1"
               style={{
-                width: '560px',
+                width: '100%',
                 height: '59px',
               }}
-              isInvalid={!!errors.numberOfPallets}
-              {...register('numberOfPallets')}
+              isInvalid={!!errors.quantity}
+              {...register('quantity')}
             />
-            <Form.Control.Feedback type="invalid">{errors.numberOfPallets?.message}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.quantity?.message}</Form.Control.Feedback>
           </Form.Group>
-          <div style={{ display: 'flex', gap: '18px' }}>
-            <Form.Group className="mb-3">
-              <Form.Label>Length</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="1"
-                style={{
-                  width: '270px',
-                  height: '50px',
-                }}
-                isInvalid={!!errors.length}
-                {...register('length')}
-              />
-              <Form.Control.Feedback type="invalid">{errors.length?.message}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Width</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="1"
-                style={{
-                  width: '270px',
-                  height: '50px',
-                }}
-                isInvalid={!!errors.width}
-                {...register('width')}
-              />
-              <Form.Control.Feedback type="invalid">{errors.width?.message}</Form.Control.Feedback>
-            </Form.Group>
-          </div>
-          <Form.Group className="mb-3">
-            <Form.Label>Weight per item</Form.Label>
+          <Form.Group className="mb-3 d-flex">
             <Form.Control
-              type="text"
+              type="number"
+              min={1}
+              placeholder={t('length')}
+              style={{
+                width: 'auto',
+                height: '59px',
+              }}
+              isInvalid={!!errors.length}
+              {...register('length')}
+            />
+            <Form.Control
+              type="number"
+              min={1}
+              placeholder={t('width')}
+              style={{
+                width: 'auto',
+                height: '59px',
+                margin: '0 -2px 0 -2px',
+              }}
+              isInvalid={!!errors.width}
+              {...register('width')}
+            />
+            <Form.Control
+              type="number"
+              min={1}
+              placeholder={t('height')}
+              style={{
+                width: 'auto',
+                height: '59px',
+              }}
+              isInvalid={!!errors.height}
+              {...register('height')}
+            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '59px',
+                width: '68px',
+                backgroundColor: '#E0E0E0',
+                color: '#7A7A7A',
+              }}>
+              {t('cm')}
+            </div>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>{t('weightPerItem')}</Form.Label>
+            <Form.Control
+              type="number"
+              min={1}
               placeholder="1"
               style={{
-                width: '560px',
+                width: '100%',
                 height: '59px',
               }}
               isInvalid={!!errors.weightPerItem}
@@ -158,17 +178,17 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
               }}>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" {...register('isCargoItemsStackable')} />
-                <label className="form-check-label">Cargo item are stackable</label>
+                <label className="form-check-label">{t('stackableCargo')}</label>
               </div>
               <div className="form-check form-switch">
                 <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {...register('isIncludingItemsARGood')} />
-                <label>Including ADR goods</label>
+                <label>{t('includingADR')}</label>
               </div>
             </div>
           </Form.Group>
 
           <Button className="tw-ml-auto tw-mr-auto" variant="primary" type="submit">
-            Submit
+            {t('submit')}
           </Button>
         </div>
       </Form>
@@ -176,4 +196,4 @@ const PalletForm: React.FC<IPalletForm> = ({ isEdit, proposalObject, onSubmitShi
   );
 };
 
-export default PalletForm;
+export default ShipmentForm;

@@ -1,20 +1,19 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import AdminSider from '../../components/Admin/AdminSider';
-import ProfileIcon from '../../assets/icons/ic-profile.svg';
-import NotificationIcon from '../../assets/icons/ic-notification.svg';
-import MenuIcon from '../../assets/icons/ic-menu.svg';
-import { Image } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { RxAvatar } from 'react-icons/rx';
+import { useAppSelector } from '@/state/hooks';
+import { useTranslation } from 'react-i18next';
 
 const AdminHomePage = () => {
-  const token = useSelector((state: any) => state.session.token);
+  const { t } = useTranslation(['adminHomePage']);
+  const token = useAppSelector((state) => state.session.token);
   const currentRouteLocation = useLocation();
   const pageTitleMap = [
-    { pathname: '/admin/profiles', title: 'Profiles' },
-    { pathname: '/admin/orderManagement', title: 'Order Managment' },
-    { pathname: '/admin/reportManagement', title: 'Reports' },
-    { pathname: '/admin/settings', title: 'Settings' },
-    { pathname: '/admin/adminUserManagement', title: 'Admin User Management' },
+    { pathname: '/admin/profiles', title: t('profiles') },
+    { pathname: '/admin/orderManagement', title: t('orderManagement') },
+    { pathname: '/admin/reportManagement', title: t('reports') },
+    { pathname: '/admin/settings', title: t('settings') },
+    { pathname: '/admin/adminUserManagement', title: t('adminUserManagement') },
   ];
   const GetPageTitle = () => {
     const pageObject = pageTitleMap.find((page) => page.pathname === currentRouteLocation.pathname);
@@ -45,10 +44,8 @@ const AdminHomePage = () => {
 
           <div className="menu-group ml-3 d-flex flex-row-reverse justify-content-center align-items-center">
             <Link to={'/admin/adminUserManagement'}>
-              <Image className="profile-img" src={ProfileIcon} />
+              <RxAvatar style={{ height: '100%', width: '100%', color: 'black' }} />
             </Link>
-            <Image className="notification-icon" src={NotificationIcon} alt="Notifications" width="22" height="22" />
-            <Image className="menu-icon" src={MenuIcon} alt="Menu" width="22" height="22" />
           </div>
         </header>
         <Outlet />
