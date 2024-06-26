@@ -64,6 +64,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
   const nationalityList = useGetNationalityListQuery();
   const nationalityListData = nationalityList.data?.result || [];
   const [file, setFile] = useState<File>();
+  const [showFileError, setShowFileError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileInputClick = (inputRef: React.RefObject<HTMLInputElement>) => {
@@ -108,6 +109,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
         setShowToast(true);
       } else {
+        !file && setShowFileError(true);
         const formData = new FormData();
 
         formData.append('Name', data.name);
@@ -120,6 +122,8 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
 
         if (file) {
           formData.append('UploadFile', file);
+        } else {
+          return;
         }
 
         await addNewDriver(formData).unwrap();
@@ -270,7 +274,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
             </Form.Group>
             <Form.Group className="tw-flex tw-flex-col" style={{ flex: 1, width: '80%' }}>
               <Form.Label className="tw-text-sm">{t('uploadDocumentLabel')}</Form.Label>
-              <div className="tw-flex">
+              <div className="tw-flex-flex">
                 <Button
                   variant="default"
                   onClick={() => handleFileInputClick(fileInputRef)}
@@ -280,9 +284,14 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
                     height: '50px',
                     display: 'flex',
                     alignItems: 'center',
+                    backgroundColor: '#E0E0E0',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    maxWidth: '324px',
                   }}>
                   {file ? file.name : t('uploadButton')}
                 </Button>
+                {showFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
               </div>
               <Form.Control
                 type="file"

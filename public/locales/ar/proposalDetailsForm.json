@@ -6,11 +6,12 @@
   "selectDate": "اختر تاريخًا",
   "otherDetails": "تفاصيل أخرى",
   "enterText": "أدخل النص هنا",
-  "uploadDocument": "تحميل وثيقة (إن وجدت)",
+  "uploadDocument": "تحميل وثيقة",
   "uploadTheDocument": "تحميل الوثيقة",
   "submitProposal": "إرسال العرض",
   "validationErrorAmount": "يجب أن يكون المبلغ أكبر من 100 وأقل من 100000",
   "validationAmmountNumber": "يجب أن يكون المبلغ رقمًا",
   "validationErrorDeliveryDate": "يجب أن يكون التاريخ أكبر من اليوم وليس أكثر من 5 أيام من اليوم.",
-  "validationErrorOtherDetails": "أدخل تفاصيل إضافية حول عرض الطلب."
+  "validationErrorOtherDetails": "أدخل تفاصيل إضافية حول عرض الطلب.",
+  "mandatoryFileMessage": "هذا الملف إلزامي"
 }

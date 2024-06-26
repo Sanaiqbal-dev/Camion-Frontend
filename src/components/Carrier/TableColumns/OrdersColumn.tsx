@@ -125,8 +125,13 @@ export const OrderColumns = ({
             {!row.original.bayanId &&
               (bayanCreating ? (
                 <LoadingAnimation />
-              ) : (
+              ) : row.original.vehicleId > 0 ? (
                 <div style={{ marginLeft: '10px' }} onClick={() => onCreateBayan(row.original.id)}>
+                  <img src={IconPrintBill} />
+                  <span style={{ color: '#F48031' }}>{t('createBayan')}</span>
+                </div>
+              ) : (
+                <div style={{ marginLeft: '10px', opacity: 0.5, cursor: 'not-allowed' }}>
                   <img src={IconPrintBill} />
                   <span style={{ color: '#F48031' }}>{t('createBayan')}</span>
                 </div>

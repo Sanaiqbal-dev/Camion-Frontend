@@ -366,6 +366,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
+                          backgroundColor: '#E0E0E0',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          maxWidth: '324px',
                         }}>
                         {vatFile ? vatFile.name : t('uploadDocument')}
                       </Button>
@@ -395,6 +399,10 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                           height: '50px',
                           display: 'flex',
                           alignItems: 'center',
+                          backgroundColor: '#E0E0E0',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          maxWidth: '324px',
                         }}>
                         {crFile ? crFile.name : t('uploadDocument')}
                       </Button>
@@ -428,6 +436,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
+                            maxWidth: '324px',
                           }}>
                           {tlFile ? tlFile.name : t('uploadDocument')}
                         </Button>
@@ -457,6 +466,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
+                            maxWidth: '324px',
                           }}>
                           {cliFile ? cliFile.name : t('uploadDocument')}
                         </Button>
@@ -488,6 +498,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
+                            maxWidth: '324px',
                           }}>
                           {clFile ? clFile.name : t('uploadDocument')}
                         </Button>
@@ -517,6 +528,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
                             height: '50px',
                             display: 'flex',
                             alignItems: 'center',
+                            maxWidth: '324px',
                           }}>
                           {brFile ? brFile.name : t('uploadDocument')}
                         </Button>

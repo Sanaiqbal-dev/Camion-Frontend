@@ -413,7 +413,12 @@ div[dir='ltr'] .accordion {
   border: 0;
   border-radius: 10px;
   overflow-anchor: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out,
+    border-radius 0.15s ease;
 }
 
 .accordion-button {
@@ -651,7 +656,9 @@ div[dir='ltr'] .accordion-button:not(.collapsed)::after {
 }
 
 .custom-file-upload-button {
-  background-color: #f2f2f2;
+  background-color: '#E0E0E0';
+  white-space: 'nowrap';
+  overflow: 'hidden';
   color: black;
   border: 1px solid #e0e0e0;
   padding: 7px 20px !important;
@@ -1029,7 +1036,9 @@ div[dir='ltr'] .modal {
   border-bottom-right-radius: 6px !important;
 }
 
-div[dir='rtl'] input[name="phoneNumber"], div[dir='rtl'] input[name="phoneNumber"].form-control, div[dir='rtl'] .phoneNumber {
+div[dir='rtl'] input[name='phoneNumber'],
+div[dir='rtl'] input[name='phoneNumber'].form-control,
+div[dir='rtl'] .phoneNumber {
   direction: ltr;
   text-align: right;
 }

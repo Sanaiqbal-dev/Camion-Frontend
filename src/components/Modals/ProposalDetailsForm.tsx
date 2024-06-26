@@ -64,8 +64,10 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
   const [addNewProposal, { isSuccess: isProposalSubmitted, isLoading: isSubmittingProposal, error }] = useAddNewProposalMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSeletedFile] = useState<File>();
+  const [showFileError, setShowFileError] = useState(false);
 
   const onSubmit: SubmitHandler<IProposalForm> = async (data) => {
+    !selectedFile && setShowFileError(true);
     const proposalFormData = new FormData();
     proposalFormData.append('Amount', data.Amount);
     proposalFormData.append('DelieveryDate', data.DelievryDate);
@@ -76,6 +78,8 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
     proposalFormData.append('UserId', userId);
     if (selectedFile) {
       proposalFormData.append('UploadFile', selectedFile);
+    } else {
+      return;
     }
 
     try {
@@ -96,6 +100,12 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
     fileInputRef.current?.click();
   };
 
+  const handleCloseWithReset = () => {
+    reset();
+    handleClose();
+    setShowFileError(false);
+  };
+
   return (
     <>
       {showToast && (
@@ -106,13 +116,12 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
           setShowToast={setShowToast}
         />
       )}
-      <Modal show={show} onHide={handleClose} size="lg" centered backdrop="static" keyboard={false}>
+      <Modal show={show} onHide={handleCloseWithReset} size="lg" centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>{t('proposalDetails')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            {/* <div className="tw-flex tw-flex-col tw-gap-5 tw-mb-10"> */}
             <div className="singleLineControl tw-flex tw-gap-5" style={{ flex: 1, width: '100%' }}>
               <Form.Group className="tw-mb-3 tw-flex-1" controlId="formBasicAmount" style={{ flex: 1, width: '100%' }}>
                 <Form.Label className="tw-text-sm">{t('amount')}</Form.Label>
@@ -138,13 +147,25 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
               <Form.Control.Feedback type="invalid">{errors.OtherDetails?.message}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument" style={{ flex: 1, width: '100%' }}>
+            <Form.Group className="tw-flex tw-flex-col" controlId="formBasicUploadDocument" style={{ flex: 1, width: '100%', marginTop: '10px', marginBottom: '10px' }}>
               <Form.Label className="tw-text-sm">{t('uploadDocument')}</Form.Label>
-              <div className="tw-flex">
-                <Button variant="default" onClick={handleFileInputClick} className="custom-file-upload-button">
-                  {t('uploadTheDocument')}
+              <div className="tw-flex-column">
+                <Button
+                  variant="default"
+                  onClick={handleFileInputClick}
+                  className="custom-file-upload-button"
+                  style={{
+                    height: '50px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    backgroundColor: '#E0E0E0',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    maxWidth: '324px',
+                  }}>
+                  {selectedFile ? selectedFile.name : t('uploadDocument')}
                 </Button>
-                <p className="tw-mt-auto tw-mb-auto tw-ml-1">{selectedFile?.name}</p>
+                {showFileError && <div style={{ color: 'red' }}>{t('mandatoryFileMessage')}</div>}
               </div>
               <Form.Control
                 type="file"
@@ -160,7 +181,6 @@ const ProposalDetailsForm: React.FC<ProposalDetailsModalProps> = ({ show, handle
                 }}
               />
             </Form.Group>
-            {/* </div>   */}
             <Button variant="primary" type="submit" disabled={isSubmittingProposal}>
               {t('submitProposal')}
             </Button>
