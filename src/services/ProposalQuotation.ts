@@ -8,6 +8,11 @@ export const proposalApi = baseApi.injectEndpoints({
     GetProposalQuotations: builder.query<any, any>({
       query: (queryParams) => `api/ProposalQuotations/GetAllProposalQuotations${queryParams !== null ? '?' + CreateQueryParams(queryParams) : ''}`,
     }),
+    GetProposalQuotationsById: builder.query<any, { orderRequestId: number }>({
+      query: ({ orderRequestId }) => `api/ProposalQuotations/GetProposalQuotationByRequestId?orderRequestId=${orderRequestId}`,
+      providesTags: ['Order'],
+    }),
+
     updateQuotation: builder.mutation<any, IProposalQuotationUpdateBody>({
       query: (body) => ({
         url: '/api/ProposalQuotations/UpdateProposalQuotation',
@@ -27,4 +32,4 @@ export const proposalApi = baseApi.injectEndpoints({
 });
 
 // Export hooks for use in the app
-export const { useGetProposalQuotationsQuery, useUpdateQuotationMutation, useUpdateQuotationStatusMutation } = proposalApi;
+export const { useGetProposalQuotationsQuery, useGetProposalQuotationsByIdQuery, useUpdateQuotationMutation, useUpdateQuotationStatusMutation } = proposalApi;

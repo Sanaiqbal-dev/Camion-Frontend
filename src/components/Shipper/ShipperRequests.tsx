@@ -153,6 +153,7 @@ const ShipperRequests = () => {
   };
 
   const onEdit = async (proposalItemId: number) => {
+    console.log(proposalItem);
     setSelectedProposalItem(proposalItemId);
     setIsEditProposal(true);
     SetShowCreateUserModalFirstStep(true);
@@ -163,8 +164,16 @@ const ShipperRequests = () => {
     setShowConfirmationModal(true);
   };
 
-  const onProposalList = () => {
-    navigate('/shipper/proposals');
+  const onProposalList = (proposalId: number) => {
+    console.log('proposalId is ', proposalId);
+    const requestObject = requestTableData.find((item) => item.id === proposalId);
+    console.log('OBJECT', requestObject);
+    navigate('/shipper/proposals', {
+      replace: true,
+      state: {
+        requestObject,
+      },
+    });
   };
   const columns: ColumnDef<IRequestTable>[] = RequestColumns({
     onEdit,

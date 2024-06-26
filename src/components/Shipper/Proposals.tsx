@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/state';
 import ProposalColumns from './TableColumns/ProposalColumns';
-import { useGetProposalQuotationsQuery, useUpdateQuotationStatusMutation } from '@/services/ProposalQuotation';
+import { useGetProposalQuotationsQuery, useGetProposalQuotationsByIdQuery, useUpdateQuotationStatusMutation } from '@/services/ProposalQuotation';
 import { useEffect, useState } from 'react';
 import { IProposalQuotation } from '@/interface/proposalQuotation';
 import { QueryPager } from '@/interface/common';
@@ -10,29 +10,36 @@ import PreviousIcon from '../../assets/icons/ic-previous.svg';
 import NextIcon from '../../assets/icons/ic-next.svg';
 import { Toast } from '../ui/toast';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
-const Proposals = () => {
+interface IproposalQuotationById {
+  requestObject?: IProposalQuotation;
+}
+
+const Proposals: React.FC<IproposalQuotationById> = () => {
   const { t } = useTranslation(['proposal']);
+  const location = useLocation();
+  const { requestObject } = location.state || {};
+  console.log('requestObjectdata', requestObject);
 
-  const [pager, setPager] = useState<QueryPager>({
-    page: 1,
-    pageSize: PAGER_SIZE,
-  });
+  const [pager, setPager] = useState<QueryPager>({ page: 1, pageSize: PAGER_SIZE });
   const [totalPageCount, setTotalPageCount] = useState(0);
-
   const { childProposal: { filterKeys = {} } = {} } = useAppSelector((state) => state.childObj);
 
   const [quotationProposals, setQuotationProposals] = useState<IProposalQuotation[]>([]);
   const [showToast, setShowToast] = useState(false);
-
   const [updateQuotationStatus, { isSuccess: isQuotationStatusUpdated }] = useUpdateQuotationStatusMutation();
   const [loading, setLoading] = useState(false);
 
-  const { data, isLoading } = useGetProposalQuotationsQuery({
-    page: pager.page - 1,
-    pageCount: pager.pageSize,
-    ...filterKeys,
-  });
+  const { data: idData, isLoading: isIdLoading } = useGetProposalQuotationsByIdQuery({ orderRequestId: requestObject && requestObject.id }, { skip: !requestObject });
+  const { data: allData, isLoading: isAllLoading } = useGetProposalQuotationsQuery(
+    {
+      page: pager.page - 1,
+      pageCount: pager.pageSize,
+      ...filterKeys,
+    },
+    { skip: !!requestObject },
+  );
 
   const [entriesValue] = useState(10);
 
@@ -41,13 +48,16 @@ const Proposals = () => {
   };
 
   useEffect(() => {
-    if (!isLoading) {
-      const quotations: IProposalQuotation[] = data?.statusCode === 200 && data.result.total > 0 ? data?.result?.result : [];
+    if (requestObject && !isIdLoading) {
+      const quotations: IProposalQuotation[] = idData?.result.result;
       setQuotationProposals(quotations);
-      const maxPageCount = data?.result.total / entriesValue + 1;
+    } else if (!isAllLoading) {
+      const quotations: IProposalQuotation[] = allData?.statusCode === 200 && allData.result.total > 0 ? allData?.result?.result : [];
+      setQuotationProposals(quotations);
+      const maxPageCount = allData?.result.total / entriesValue + 1;
       setTotalPageCount(maxPageCount);
     }
-  }, [isLoading]);
+  }, [requestObject, idData, allData, isIdLoading, isAllLoading, entriesValue]);
 
   const quotationClickHandler = async (quotation: IProposalQuotation, isAccepted: boolean) => {
     try {
@@ -64,7 +74,7 @@ const Proposals = () => {
     } catch (e) {
       setShowToast(true);
     } finally {
-      setLoading(false); // Add this line
+      setLoading(false);
     }
   };
 
@@ -72,7 +82,7 @@ const Proposals = () => {
     <div className="table-container">
       {showToast && <Toast showToast={showToast} setShowToast={setShowToast} variant={isQuotationStatusUpdated ? 'success' : 'danger'} />}
       <div style={{ height: '100vh', overflowY: 'scroll' }}>
-        {(!quotationProposals || quotationProposals.length === 0) && <span style={{}}>{t('noResults')}</span>}
+        {(!quotationProposals || quotationProposals.length === 0) && <span>{t('noResults')}</span>}
         {quotationProposals?.map((quotation: IProposalQuotation, index: number) => (
           <ProposalColumns key={index} quotation={quotation} onClick={quotationClickHandler} loading={loading} />
         ))}

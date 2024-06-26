@@ -54,7 +54,6 @@ const Orders = () => {
 
   const [orderTableData, setOrderTableData] = useState<IOrderTable[]>([]);
   const [selectedOrderId, setSelectedOrderId] = useState<number>();
-  const [selectedStatusId, setSelectedStatusId] = useState<number>();
   const [showToast, setShowToast] = useState(false);
   const [showCreateBayanToast, setShowCreateBayanToast] = useState(false);
   const [showPrintBayanToast, setShowPrintBayanToast] = useState(false);
@@ -118,9 +117,19 @@ const Orders = () => {
   };
 
   const onUpdateStatus = async (id: number, statusId: number) => {
-    setSelectedOrderId(id);
-    setSelectedStatusId(statusId);
-    UpdateStatus();
+    if (id && statusId) {
+      try {
+        const response = await updateOrderStatus({
+          orderId: id,
+          orderStatusId: statusId,
+        }).unwrap();
+        console.log('status update:', response);
+        setShowToast(true);
+      } catch (error) {
+        console.log('status update error: ', error);
+        setShowToast(true);
+      }
+    }
   };
 
   const columns: ColumnDef<IOrderTable>[] = OrderColumns({
@@ -157,20 +166,6 @@ const Orders = () => {
       setShowToast(true);
     } catch (error) {
       console.error('Error deleting proposal:', error);
-      setShowToast(true);
-    }
-  };
-
-  const UpdateStatus = async () => {
-    try {
-      const response = await updateOrderStatus({
-        orderId: selectedOrderId,
-        orderStatusId: selectedStatusId,
-      }).unwrap();
-      console.log('status update:', response);
-      setShowToast(true);
-    } catch (error) {
-      console.log('status update error: ', error);
       setShowToast(true);
     }
   };

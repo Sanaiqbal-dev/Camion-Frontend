@@ -778,7 +778,6 @@ div[dir='ltr'] .accordion-button:not(.collapsed)::after {
   margin-top: 20px;
   border-collapse: separate;
   border-spacing: 0 10px;
-  overflow-y: auto;
 }
 
 .data-table tr td:first-child,

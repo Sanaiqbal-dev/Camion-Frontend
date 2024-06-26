@@ -148,6 +148,7 @@ const AddDriver: React.FC<CreateUserModalProps> = ({ modal, handleClose, driverE
     setFormData(null);
     setFile(undefined);
     handleClose();
+    setShowFileError(false);
   };
   useEffect(() => {
     setValue('phoneNumber', formData?.phoneNumber || '+966');
