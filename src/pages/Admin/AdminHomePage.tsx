@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import AdminSider from '../../components/Admin/AdminSider';
 import { RxAvatar } from 'react-icons/rx';
@@ -29,6 +29,14 @@ const AdminHomePage = () => {
   if (!token) {
     return <Navigate to="/login" state={{ from: { currentRouteLocation } }} replace />;
   }
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setSidebarVisible(false);
+    //  console.log('Route changed to:', location.pathname);
+    // You can perform any action here, such as sending analytics data, resetting state, etc.
+  }, [location]);
 
   return (
     <div className={`wrapper ${isSidebarVisible ? 'sidebar-visible' : ''}`}>

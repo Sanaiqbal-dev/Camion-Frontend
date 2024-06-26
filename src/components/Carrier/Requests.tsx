@@ -16,6 +16,7 @@ import { QueryPager } from '@/interface/common';
 import { IProposalResponseData } from '@/interface/proposal';
 import { debounce } from '@/util/debounce';
 import { useTranslation } from 'react-i18next';
+import useWindowWidth from '@/hooks/useWindowWidth';
 
 const Requests = () => {
   const [pager, setPager] = useState<QueryPager>({
@@ -32,6 +33,10 @@ const Requests = () => {
   });
   const [requestTableData, setRequestTableData] = useState<IRequest[]>([]);
 
+  const windowWidh = useWindowWidth();
+  useEffect(() => {
+    console.log(windowWidh);
+  }, [windowWidh]);
   const values = [10, 20, 30, 40, 50];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entriesValue, setEntriesValue] = useState(10);

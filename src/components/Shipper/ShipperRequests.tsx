@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 const ShipperRequests = () => {
   const { t } = useTranslation(['shipperRequests']);
-
+  
   const userData = useAppSelector((state) => state.session);
   const [sendProposalRequest, setSendProposalRequest] = useState(false);
 

@@ -29,7 +29,13 @@ $grid-breakpoints: (
   background-color: #f3f3f3;
 }
 
-@media (max-width: 768px) {
+.google-map {
+  width: calc(100vw - 360px);
+  height: calc(100vh - 90px);
+  margin-top: 15px;
+  position: absolute;
+}
+@media (max-width: 576px) {
   .wrapper {
     padding-left: 0;
   }
@@ -37,6 +43,10 @@ $grid-breakpoints: (
   .AdminSider {
     display: none;
   }
+  
+.google-map {
+  width: calc(100vw - 0px);
+}
 }
 
 .responsive-container {
@@ -382,7 +392,7 @@ tr {
   justify-content: space-between;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 576px) {
   .sidebar-admin {
     display: none;
     padding-left: 0;
@@ -454,7 +464,7 @@ div[dir='ltr'] .accordion-button:not(.collapsed)::after {
 .burger-menu {
   display: none;
 }
-@media (max-width: 768px) {
+@media (max-width: 576px) {
   .burger-menu {
     display: block;
   }
@@ -784,10 +794,6 @@ div[dir='ltr'] .accordion-button:not(.collapsed)::after {
   border-spacing: 0 10px;
   overflow-y: auto;
 }
-// .data-table tbody tr:hover {
-//   background-color: #dbd9d9;
-// }
-
 .data-table tr td:first-child,
 thead th:first-child {
   border-top-left-radius: 8px;
@@ -815,6 +821,88 @@ thead th:last-child {
   padding-top: 0px;
   padding-bottom: 0px;
 }
+
+.card-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-self: center;
+  width: 100%;
+}
+
+.card-cell {
+  flex: 1 1 30%;
+  margin-bottom: 8px;
+  min-width: 100px;
+}
+.card-cell-header {
+  font-weight: bold;
+  display: block;
+}
+
+.card-cell-content {
+  display: block;
+  margin-top: 4px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.card-action {
+  flex: 1 1 100%; /* Ensure action content spans the full width */
+  text-align: center;
+  align-self: center;
+  margin: 8px 0px;
+  display: flex;
+  justify-content: center;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 16px;
+  padding: 16px;
+}
+
+/* Media query for small screens */
+@media (max-width: 576px) {
+  .table {
+    display: none;
+  }
+
+  .card-layout {
+    display: flex;
+  }
+}
+
+/* Media query for larger screens */
+@media (min-width: 577px) {
+  .card-layout {
+    display: none;
+  }
+
+  .table {
+    display: table;
+  }
+}
+
 .equal-columns {
   table-layout: fixed;
 }
@@ -1055,11 +1143,11 @@ div[dir='rtl'] {
     padding-right: 270px;
     padding-left: initial;
   }
-  @media (max-width: 768px) {
-    .wrapper {
-      padding-right: 0;
-    }
-  }
+  // @media (max-width: 576px) {
+  //   .wrapper {
+  //     padding-right: 0;
+  //   }
+  // }
 
   .parent-row {
     padding-right: 50%;
