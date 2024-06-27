@@ -42,9 +42,9 @@ export function DataTable<TData, TValue>({ isAction, columns, data }: DataTableP
             table.getRowModel().rows.map((row) => (
               <div className="card" key={row.id}>
                 {row.getVisibleCells().map((cell) =>
-                  cell.column.columnDef.header != 'Action' ? (
+                  (cell.column.columnDef.header != 'Action' && cell.column.columnDef.header  != 'خيارات') ? (
                     <div className="card-cell" key={cell.id}>
-                      <span className="card-cell-header">{renderHeaderForCell(cell)}</span>
+                      {cell.column.columnDef.header != 'Report' && cell.column.columnDef.header  != 'تقرير' && <span className="card-cell-header">{renderHeaderForCell(cell)}</span>}
                       <span className="card-cell-content">{flexRender(cell.column.columnDef.cell, cell.getContext())}</span>
                     </div>
                   ) : (
