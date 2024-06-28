@@ -127,9 +127,7 @@ const ShipperSider = () => {
           </div>
         </NavLink>
       </div>
-      {showActivateProfile && (
-        <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
-      )}
+      <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
     </div>
   );
 };
