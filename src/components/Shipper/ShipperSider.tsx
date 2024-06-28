@@ -19,6 +19,7 @@ import LanguageIcon from '../../assets/icons/ic-language.svg';
 import { useLocale } from '@/i18n';
 import { AVAILABLE_LANGUAGES } from '@/config/app'; // Make sure this import path is correct
 import { ILanguage } from '@/interface/common';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 
 const ShipperSider = () => {
   const { t } = useTranslation(['shipperSider']);
@@ -36,6 +37,7 @@ const ShipperSider = () => {
   };
 
   const [showActivateProfile, setShowActivateProfile] = useState(false);
+  const [showAdminContactInfo, setShowAdminContactInfo] = useState(false);
 
   const handleReplaceNavigate = () => {
     dispatch(setLogout());
@@ -127,7 +129,19 @@ const ShipperSider = () => {
           </div>
         </NavLink>
       </div>
-      <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
+      <ActivateProfile
+        show={showActivateProfile}
+        handleClose={() => setShowActivateProfile(false)}
+        onSuccess={() => setShowAdminContactInfo(true)}
+        submitProfileInfo={() => setShowActivateProfile(false)}
+      />
+      <ConfirmationModal
+        show={showAdminContactInfo}
+        promptMessage={'Your request against company account submission/Update is sussefully update. For further updates please contact +923451514236 or AsimKhalil@outlook.'}
+        handleClose={() => setShowAdminContactInfo(false)}
+        performOperation={() => setShowAdminContactInfo(false)}
+        messageHeading="Update Successful"
+      />
     </div>
   );
 };

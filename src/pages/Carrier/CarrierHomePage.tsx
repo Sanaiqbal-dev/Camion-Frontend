@@ -6,10 +6,12 @@ import { useState } from 'react';
 import { useAppSelector } from '@/state';
 import { RxAvatar } from 'react-icons/rx';
 import { useTranslation } from 'react-i18next';
+import ConfirmationModal from '@/components/Modals/ConfirmationModal';
 
 const CarrierHomePage = () => {
   const { t } = useTranslation(['carrierHomePage']);
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showActivateProfile, setShowActivateProfile] = useState(false);
+  const [showAdminContactInfo, setShowAdminContactInfo] = useState(false);
   const token = useAppSelector((state) => state.session.token);
   const currentRouteLocation = useLocation();
   const profileImage = useAppSelector((state) => state.session?.profileImage);
@@ -72,7 +74,19 @@ const CarrierHomePage = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} />
+          <ActivateProfile
+            show={showActivateProfile}
+            handleClose={() => setShowActivateProfile(false)}
+            onSuccess={() => setShowAdminContactInfo(true)}
+            submitProfileInfo={() => setShowActivateProfile(false)}
+          />
+          <ConfirmationModal
+            show={showAdminContactInfo}
+            promptMessage={'Your request against company account submission/Update is sussefully update. For further updates please contact +923451514236 or AsimKhalil@outlook.'}
+            handleClose={() => setShowAdminContactInfo(false)}
+            performOperation={() => setShowAdminContactInfo(false)}
+            messageHeading="Update Successful"
+          />{' '}
         </header>
         <Outlet />
       </div>

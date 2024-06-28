@@ -32,9 +32,10 @@ interface CreateUserModalProps {
   show: boolean;
   handleClose: () => void;
   submitProfileInfo: (proposal: IUser) => void;
+  onSuccess: () => void;
 }
 
-const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) => {
+const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose, onSuccess }) => {
   const { t } = useTranslation(['activateProfile']);
 
   const schema = z
@@ -185,6 +186,7 @@ const ActivateProfile: React.FC<CreateUserModalProps> = ({ show, handleClose }) 
       console.log(newProfileResponse);
       handleClose();
       reset();
+      onSuccess();
     } catch (error) {
       setShowToast(true);
       throw error;

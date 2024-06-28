@@ -4,9 +4,12 @@ import ActivateProfile from './Modals/ActivateProfile';
 import ShipperSider from './Shipper/ShipperSider';
 import { useNavigate } from 'react-router-dom';
 import CarrierSider from './Carrier/CarrierSider';
+import ConfirmationModal from './Modals/ConfirmationModal';
 
 export const ProfilePage = () => {
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showActivateProfile, setShowActivateProfile] = useState(false);
+  const [showAdminContactInfo, setShowAdminContactInfo] = useState(false);
+
   const session = useAppSelector((state) => state.session);
 
   const navigate = useNavigate();
@@ -42,7 +45,7 @@ export const ProfilePage = () => {
               <div className="tw-flex tw-w-full tw-justify-center tw-align-middle tw-p-2 tw-rounded-md tw-bg-red-400">
                 <span className="tw-text-lg">
                   To activate your profile please complete your profile details,{' '}
-                  <strong className="tw-underline hover:tw-cursor-pointer hover:tw-text-white tw-transition-all tw-duration-200" onClick={() => setShowProfileModal(true)}>
+                  <strong className="tw-underline hover:tw-cursor-pointer hover:tw-text-white tw-transition-all tw-duration-200" onClick={() => setShowActivateProfile(true)}>
                     Click Here
                   </strong>
                 </span>
@@ -50,7 +53,19 @@ export const ProfilePage = () => {
             )}
           </div>
         </header>
-        <ActivateProfile show={showProfileModal} handleClose={() => setShowProfileModal(false)} submitProfileInfo={() => setShowProfileModal(false)} />
+        <ActivateProfile
+          show={showActivateProfile}
+          handleClose={() => setShowActivateProfile(false)}
+          onSuccess={() => setShowAdminContactInfo(true)}
+          submitProfileInfo={() => setShowActivateProfile(false)}
+        />
+        <ConfirmationModal
+          show={showAdminContactInfo}
+          promptMessage={'Your request against company account submission/Update is sussefully update. For further updates please contact +923451514236 or AsimKhalil@outlook.'}
+          handleClose={() => setShowAdminContactInfo(false)}
+          performOperation={() => setShowAdminContactInfo(false)}
+          messageHeading="Update Successful"
+        />{' '}
       </div>
     </div>
   );

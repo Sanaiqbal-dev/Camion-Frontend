@@ -3,20 +3,21 @@ import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 interface IConfirmationModal {
-  promptMessage: string;
+  promptMessage?: string;
+  messageHeading?: string;
   show: boolean;
   handleClose: () => void;
   performOperation: () => void;
 }
-const ConfirmationModal: React.FC<IConfirmationModal> = ({ show, handleClose, performOperation }) => {
+const ConfirmationModal: React.FC<IConfirmationModal> = ({ show, handleClose, performOperation, promptMessage, messageHeading }) => {
   const { t } = useTranslation(['confirmationModal']);
   return (
     <Modal show={show} onHide={handleClose} centered style={{ minWidth: '500px', boxShadow: '0px 20px 50px 0px #dce0f980', border: 'none' }} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>{t('modal.confirmAction.title')}</Modal.Title>
+        <Modal.Title>{messageHeading ? messageHeading : t('modal.confirmAction.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="tw-flex tw-flex-col tw-gap-5">
-        <p style={{ minWidth: '400px', fontSize: '18px', fontWeight: '700' }}>{t('modal.confirmAction.message')}</p>
+        <p style={{ minWidth: '400px', fontSize: '18px' }}>{promptMessage ? promptMessage : t('modal.confirmAction.message')}</p>
         <div className="tw-flex tw-flex-row-reverse tw-gap-3">
           <Button variant="primary" type="submit" style={{ width: '80px' }} onClick={() => performOperation()}>
             {t('modal.confirmAction.okButton')}

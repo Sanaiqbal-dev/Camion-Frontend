@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/i18n';
 import { AVAILABLE_LANGUAGES } from '@/config/app';
 import { ILanguage } from '@/interface/common';
+import ConfirmationModal from '../Modals/ConfirmationModal';
 
 const CarrierSider: React.FC = () => {
   const [showActivateProfile, setShowActivateProfile] = useState(false);
@@ -29,6 +30,7 @@ const CarrierSider: React.FC = () => {
   const { t } = useTranslation(['carrierSider']);
   const { language, changeLanguage } = useLocale();
   const dispatch = useDispatch();
+  const [showAdminContactInfo, setShowAdminContactInfo] = useState(false);
 
   const handleReplaceNavigate = () => {
     dispatch(setLogout());
@@ -142,7 +144,6 @@ const CarrierSider: React.FC = () => {
           </Accordion>
         )}
       </div>
-
       <div>
         <div className="accordion-not-collapsing-item tw-flex tw-gap-3">
           <img src={LanguageIcon} style={{ height: '35px', width: '35px', marginLeft: '-5px', borderRadius: '50%' }} />
@@ -168,7 +169,19 @@ const CarrierSider: React.FC = () => {
           </div>
         </NavLink>
       </div>
-      <ActivateProfile show={showActivateProfile} handleClose={() => setShowActivateProfile(false)} submitProfileInfo={() => setShowActivateProfile(false)} />
+      <ActivateProfile
+        show={showActivateProfile}
+        handleClose={() => setShowActivateProfile(false)}
+        onSuccess={() => setShowAdminContactInfo(true)}
+        submitProfileInfo={() => setShowActivateProfile(false)}
+      />
+      <ConfirmationModal
+        show={showAdminContactInfo}
+        promptMessage={'Your request against company account submission/Update is sussefully update. For further updates please contact +923451514236 or AsimKhalil@outlook.'}
+        handleClose={() => setShowAdminContactInfo(false)}
+        performOperation={() => setShowAdminContactInfo(false)}
+        messageHeading="Update Successful"
+      />
     </div>
   );
 };
