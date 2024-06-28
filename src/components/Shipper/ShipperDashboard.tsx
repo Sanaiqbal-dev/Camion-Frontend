@@ -22,7 +22,7 @@ const ShipperDashboard = () => {
         <div className="col stats-item border-right overflow-auto">
           <span className="stats-value">{ordersCount?.totalOrders}</span>
           <span className="stats-label">{t('totalOrders')}</span>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
+          <div className="stats-progress">
             {t('orderIncrease')}
             <span
               style={{
@@ -38,7 +38,7 @@ const ShipperDashboard = () => {
         <div className="col stats-item border-right overflow-auto">
           <span className="stats-value">{ordersCount?.activeOrders}</span>
           <span className="stats-label">{t('activeOrders')}</span>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
+          <div className="stats-progress">
             {t('orderIncrease')}
             <span
               style={{
@@ -58,7 +58,7 @@ const ShipperDashboard = () => {
         <div className="col stats-item">
           <span className="stats-value">{ordersCount?.orderThisMonth}</span>
           <span className="stats-label">{t('ordersThisMonth')}</span>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap', fontSize: '12px' }}>
+          <div className="stats-progress">
             {t('orderDecrease')}
             <span
               style={{
@@ -74,7 +74,7 @@ const ShipperDashboard = () => {
       </div>
 
       <div className="responsive-container">
-        <div className="section border-right">
+        <div className="section border-right" style={{ flex:'2', minWidth: '300px' }}>
           <div className="title">{t('pending')}</div>
           <div className="items">
             <div className="item">
@@ -88,7 +88,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
 
-        <div className="section border-right">
+        <div className="section border-right" style={{flex:'3', minWidth: '400px' }}>
           <div className="title">{t('inProgress')}</div>
           <div className="items">
             <div className="item">
@@ -110,7 +110,7 @@ const ShipperDashboard = () => {
           </div>
         </div>
 
-        <div className="section">
+        <div className="section" style={{flex:'1', minWidth: '150px' }}>
           <div className="title">{t('delivered')}</div>
           <div className="items">
             <div className="item">
@@ -121,15 +121,8 @@ const ShipperDashboard = () => {
       </div>
 
       <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          background: '#FFF',
-          borderRadius: '16px',
-          boxShadow: '#DCE0F980',
-          padding: '10px',
-        }}>
+      className='dashboard-shippment-container'
+        >
         <div
           style={{
             display: 'flex',

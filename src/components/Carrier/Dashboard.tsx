@@ -84,7 +84,7 @@ const Dashboard = () => {
           <FleetUsage />
         </div>
       </div>
-      <div className="row additional-stats" style={{ backgroundColor: '#F3F3F3' }}>
+      <div className="additional-stats" style={{ backgroundColor: '#F3F3F3' }}>
         <div className="col additional-stats-item border-right" style={{ backgroundColor: '#FFC5C5' }}>
           <span style={{ alignSelf: 'flex-start', fontSize: '14px' }}>{t('overspeed')}</span>
           <span
